@@ -1,0 +1,463 @@
+<div class="login-page-wrapper">
+  {% comment %} 登录区域主体 {% endcomment %}
+  <div class="login-container">
+    <h1 class="login-title">Login</h1>
+
+    {% form 'customer_login', class: 'login-form' %}
+      {{ form.errors | default_errors }}
+
+      <div class="form-field">
+        <label for="customer_email" class="form-label visually-hidden">Email</label>
+        <input
+          type="email"
+          name="customer[email]"
+          id="customer_email"
+          class="form-input"
+          placeholder="Email"
+          spellcheck="false"
+          autocapitalize="off"
+          autocomplete="email"
+          {% if form.errors contains "email" %}
+            aria-invalid="true"
+            aria-describedby="LoginEmail-error"
+          {% endif %}
+        >
+        {% if form.errors contains "email" %}
+          <small id="LoginEmail-error" class="form-error-message">
+            <span class="visually-hidden">{{ 'general.form.error_message' | t }}</span>
+            <span>{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}</span>
+          </small>
+        {% endif %}
+      </div>
+
+      <div class="form-field">
+        <label for="customer_password" class="form-label visually-hidden">Password</label>
+        <input
+          type="password"
+          name="customer[password]"
+          id="customer_password"
+          class="form-input"
+          placeholder="Password"
+          {% if form.errors contains "password" %}
+            aria-invalid="true"
+            aria-describedby="LoginPassword-error"
+          {% endif %}
+        >
+        {% if form.errors contains "password" %}
+          <small id="LoginPassword-error" class="form-error-message">
+            <span class="visually-hidden">{{ 'general.form.error_message' | t }}</span>
+            <span>{{ form.errors.translated_fields['password'] | capitalize }} {{ form.errors.messages['password'] }}</span>
+          </small>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="button button--primary login-button">Sign In</button>
+
+      <a href="{{ routes.account_recover_url }}" class="forgot-password-link">Forgot your password?</a>
+
+    {% endform %}
+
+    <div class="login-or-divider">
+      <span class="or-text">OR</span>
+    </div>
+
+    <div class="login-actions">
+      <p class="login-note">Need an account?</p>
+      <a href="{{ routes.account_register_url }}" class="button button--secondary login-action-button">Create an Account</a>
+      <p class="login-note">Subscribed without an account?</p>
+      <a href="#" class="button button--secondary login-action-button">Manage Subscription</a> {# 这里的链接可能需要根据您的实际应用调整 #}
+    </div>
+  </div>
+</div>
+/* --- 通用变量 (假设您有这些，否则直接写颜色值) --- */
+:root {
+  --color-text-dark: #000;
+  --color-text-light: #fff;
+  --color-background-light: #f7f1e7; /* 接近图片背景色 */
+  --color-primary-button: #8b684c; /* 登录按钮背景色 */
+  --color-primary-button-hover: #7a5a41;
+  --color-secondary-button: #ddd; /* 注册/管理订阅按钮背景色 */
+  --color-secondary-button-hover: #ccc;
+  --color-divider: #ccc;
+  --font-family-body: 'Arial', sans-serif; /* 替换为您的主题字体 */
+  --font-family-heading: 'Georgia', serif; /* 替换为您的主题标题字体 */
+}
+
+/* --- 登录页面容器 --- */
+.login-page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - var(--header-height, 100px) - var(--footer-height, 200px)); /* 调整高度以适应头部和底部 */
+  background-color: var(--color-background-light);
+  padding: 40px 20px;
+}
+
+.login-container {
+  max-width: 450px; /* 调整宽度以匹配图片 */
+  width: 100%;
+  background-color: var(--color-background-light); /* 背景色与页面一致 */
+  padding: 40px;
+  text-align: center;
+}
+
+.login-title {
+  font-family: var(--font-family-heading);
+  font-size: 2.8em;
+  font-weight: normal;
+  color: var(--color-text-dark);
+  margin-bottom: 50px; /* 标题与表单之间的间距 */
+  text-transform: capitalize; /* 首字母大写 */
+}
+
+/* --- 登录表单样式 --- */
+.login-form {
+  margin-bottom: 30px;
+}
+
+.form-field {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.form-label {
+  display: block;
+  text-align: left;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: var(--color-text-dark);
+}
+
+/* 隐藏视觉标签，但对屏幕阅读器可用 */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.form-input {
+  width: 100%;
+  padding: 15px 20px;
+  border: 1px solid #ccc;
+  border-radius: 0; /* 移除默认圆角 */
+  font-size: 1em;
+  font-family: var(--font-family-body);
+  background-color: var(--color-background-light); /* 与背景色一致 */
+  color: var(--color-text-dark);
+  box-sizing: border-box; /* 确保 padding 不增加宽度 */
+}
+
+.form-input::placeholder {
+  color: #aaa; /* 占位符颜色 */
+}
+
+.form-input:focus {
+  border-color: var(--color-primary-button);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--color-primary-button);
+}
+
+.form-error-message {
+  color: #e00;
+  font-size: 0.85em;
+  text-align: left;
+  margin-top: 5px;
+  display: block;
+}
+
+/* --- 登录按钮 --- */
+.button {
+  display: inline-block;
+  padding: 15px 30px;
+  font-size: 1.1em;
+  font-family: var(--font-family-body);
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  border-radius: 0;
+  transition: background-color 0.3s ease;
+  width: 100%; /* 登录按钮宽度 */
+  box-sizing: border-box;
+}
+
+.button--primary {
+  background-color: var(--color-primary-button);
+  color: var(--color-text-light);
+  margin-top: 15px; /* 按钮与密码输入框的间距 */
+}
+
+.button--primary:hover {
+  background-color: var(--color-primary-button-hover);
+}
+
+/* --- 忘记密码链接 --- */
+.forgot-password-link {
+  display: block;
+  text-align: right;
+  margin-top: 15px;
+  font-size: 0.95em;
+  color: var(--color-primary-button);
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.forgot-password-link:hover {
+  color: var(--color-primary-button-hover);
+}
+
+/* --- OR 分隔线 --- */
+.login-or-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 40px 0; /* OR 分隔线的上下间距 */
+}
+
+.login-or-divider::before,
+.login-or-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.or-text {
+  padding: 0 15px;
+  font-size: 0.9em;
+  color: #888;
+}
+
+/* --- 其他登录操作按钮 --- */
+.login-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* 按钮和文字之间的间距 */
+}
+
+.login-note {
+  font-size: 0.95em;
+  color: var(--color-text-dark);
+  margin-bottom: -5px; /* 调整与下面按钮的间距 */
+}
+
+.button--secondary {
+  background-color: var(--color-secondary-button);
+  color: var(--color-text-dark);
+  border: 1px solid #ccc; /* 添加边框以更接近图片 */
+  padding: 12px 25px; /* 稍小一点的 padding */
+  font-weight: normal; /* 注册按钮字体不像登录那么粗 */
+  font-size: 1em;
+}
+
+.button--secondary:hover {
+  background-color: var(--color-secondary-button-hover);
+}
+
+/* --- 头部和底部样式 (需要单独处理，这里仅作示意) --- */
+/*
+  根据您的主题结构，您可能需要确保头部和底部也与图片风格匹配。
+  例如，顶部的导航菜单、logo、购物车图标、搜索图标等。
+  底部的 Newsletter 订阅、联系信息、版权信息等。
+  这些通常在 `sections/header.liquid` 和 `sections/footer.liquid` 中定义，
+  或者在 `layout/theme.liquid` 中包含这些 sections。
+*/
+
+/* 示例头部样式 (需要根据您的实际 HTML 结构调整) */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: var(--color-background-light);
+  border-bottom: 1px solid #eee; /* 根据图片微调 */
+  font-family: var(--font-family-body);
+}
+
+.site-header .logo {
+  font-family: 'Times New Roman', serif; /* 示例 Logo 字体 */
+  font-size: 1.8em;
+  font-weight: bold;
+  color: var(--color-text-dark);
+  text-decoration: none;
+}
+
+.site-header .main-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 30px;
+}
+
+.site-header .main-nav a {
+  text-decoration: none;
+  color: var(--color-text-dark);
+  font-size: 1.1em;
+  transition: color 0.3s ease;
+}
+
+.site-header .main-nav a:hover {
+  color: var(--color-primary-button);
+}
+
+.site-header .header-icons {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.site-header .header-icon {
+  font-size: 1.3em; /* 调整图标大小 */
+  color: var(--color-text-dark);
+  text-decoration: none;
+}
+
+/* 示例底部样式 */
+.site-footer {
+  background-color: #000;
+  color: #fff;
+  padding: 60px 40px 20px;
+  font-family: var(--font-family-body);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 四列布局 */
+  gap: 40px;
+  max-width: 1200px; /* 限制宽度 */
+  margin: 0 auto 40px;
+}
+
+.footer-column h3 {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column li {
+  margin-bottom: 10px;
+}
+
+.footer-column a {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.95em;
+}
+
+.footer-column a:hover {
+  color: #fff;
+}
+
+.newsletter-form {
+  display: flex;
+  margin-top: 15px;
+}
+
+.newsletter-input {
+  flex-grow: 1;
+  padding: 10px 15px;
+  border: 1px solid #555;
+  background-color: #333;
+  color: #fff;
+  border-radius: 0;
+  font-size: 1em;
+}
+
+.newsletter-input::placeholder {
+  color: #bbb;
+}
+
+.newsletter-submit {
+  padding: 10px 20px;
+  background-color: var(--color-primary-button); /* 使用主题主色 */
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+.newsletter-submit:hover {
+  background-color: var(--color-primary-button-hover);
+}
+
+.social-links {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.social-link {
+  color: #ccc;
+  font-size: 1.5em;
+  text-decoration: none;
+}
+
+.social-link:hover {
+  color: #fff;
+}
+
+.footer-copyright {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 0.85em;
+  color: #888;
+}
+
+/* 媒体查询 (响应式设计) */
+@media (max-width: 768px) {
+  .login-container {
+    padding: 30px 20px;
+    max-width: 100%;
+  }
+
+  .login-title {
+    font-size: 2.2em;
+    margin-bottom: 30px;
+  }
+
+  .login-or-divider {
+    margin: 30px 0;
+  }
+
+  .site-header {
+    flex-direction: column;
+    padding: 15px 20px;
+  }
+
+  .site-header .main-nav ul {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .site-header .header-icons {
+    margin-top: 15px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr; /* 单列布局 */
+    gap: 30px;
+    text-align: center;
+  }
+
+  .newsletter-form {
+    justify-content: center;
+  }
+
+  .social-links {
+    justify-content: center;
+  }
+}

@@ -1,0 +1,262 @@
+{% liquid
+  assign block_settings = block.settings
+  assign use_inverse_logo = false
+
+  if section.settings.enable_transparent_header_home and template.name == 'index' and section.settings.home_color_scheme == 'inverse'
+    assign use_inverse_logo = true
+  elsif section.settings.enable_transparent_header_product and template.name == 'product' and section.settings.product_color_scheme == 'inverse'
+    assign use_inverse_logo = true
+  elsif section.settings.enable_transparent_header_collection and template.name == 'collection' and section.settings.collection_color_scheme == 'inverse'
+    assign use_inverse_logo = true
+  endif
+
+  if use_inverse_logo
+    if settings.logo_inverse != blank
+      assign inverse_logo = settings.logo_inverse
+    else
+      assign inverse_logo = settings.logo
+    endif
+  endif
+%}
+
+<a
+  {% if template.name == 'index' and block_settings.hide_logo_on_home_page %}
+    data-hidden-on-home-page
+  {% endif %}
+  href="{{ routes.root_url }}"
+  class="size-style spacing-style header-logo"
+  style="
+    {% render 'size-style', settings: block_settings %}
+    {% render 'spacing-style', settings: block_settings %}
+    --font-family: var(--font-body--family);
+    --font-style: var(--font-body--style);
+    --font-weight: 600;
+  "
+  {{ block.shopify_attributes }}
+>
+  {% liquid
+    assign logo_width = block_settings.custom_height | times: settings.logo.aspect_ratio | ceil
+    assign logo_width_mobile = block_settings.custom_height_mobile | times: settings.logo.aspect_ratio | ceil
+    assign inverse_logo_width = block_settings.custom_height | times: inverse_logo.aspect_ratio | ceil
+    assign inverse_logo_width_mobile = block_settings.custom_height_mobile | times: inverse_logo.aspect_ratio | ceil
+    assign logo_style = '--header-logo-image-width: ' | append: logo_width | append: 'px;' | append: '--header-logo-image-width-mobile: ' | append: logo_width_mobile | append: 'px; --header-logo-image-height: ' | append: block_settings.custom_height | append: 'px; --header-logo-image-height-mobile: ' | append: block_settings.custom_height_mobile | append: 'px;'
+    assign inverse_logo_style = '--header-logo-image-width: ' | append: inverse_logo_width | append: 'px;' | append: '--header-logo-image-width-mobile: ' | append: inverse_logo_width_mobile | append: 'px; --header-logo-image-height: ' | append: block_settings.custom_height | append: 'px; --header-logo-image-height-mobile: ' | append: block_settings.custom_height_mobile | append: 'px;'
+  %}
+
+  <div
+    class="header-logo__image-container header-logo__image-container--original"
+    data-testid="header-logo"
+  >
+    {% render 'image',
+      image: settings.logo,
+      class: 'header-logo__image',
+      height: block_settings.custom_height,
+      text_fallback: shop.name,
+      style: logo_style
+    %}
+  </div>
+
+  {% if use_inverse_logo %}
+    <div
+      class="header-logo__image-container header-logo__image-container--inverse"
+      data-testid="header-logo-inverse"
+    >
+      {% render 'image',
+        image: inverse_logo,
+        class: 'header-logo__image',
+        height: block_settings.custom_height,
+        text_fallback: shop.name,
+        style: inverse_logo_style
+      %}
+    </div>
+  {% endif %}
+</a>
+
+{% stylesheet %}
+  /*
+  ================================================================================================================
+  SENIOR SHOPIFY DEVELOPER // HEADER LAYOUT OVERHAUL
+  This stylesheet now controls the ENTIRE header layout using CSS Grid.
+  It targets parent and sibling elements from within the logo snippet.
+  ================================================================================================================
+  */
+
+  /*
+   *  STEP 1: Define the Grid Layout on the Header's Main Container
+   *  We assume the parent container has a class like `.header__inner`.
+   *  If not, you may need to inspect your site and adjust this selector.
+   */
+  @media screen and (min-width: 990px) { /* Apply this layout only on larger screens */
+    .header__inner {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr; /* The magic for perfect centering */
+      grid-template-rows: auto auto;
+      align-items: center;
+      row-gap: 1rem; /* Adjust space between rows */
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+  }
+
+  /*
+   *  STEP 2: Place Each Header Element into the Grid
+   */
+
+  /* The Logo (this element) */
+  @media screen and (min-width: 990px) {
+    .header-logo {
+      grid-column: 2 / 3; /* Place in the middle column */
+      grid-row: 1 / 2; /* Place in the first row */
+      margin: 0; /* Override any previous margin */
+      padding: 0; /* Override any previous padding */
+      height: auto; /* Override previous height: 100% */
+    }
+  }
+
+  /* The Navigation Menu */
+  /* Common selectors are `nav.header__navigation` or `.header-menu-drawer`. Adjust if needed. */
+  @media screen and (min-width: 990px) {
+    nav.header__navigation {
+      grid-column: 1 / -1; /* Span all columns */
+      grid-row: 2 / 3; /* Place in the second row */
+      justify-self: center; /* Center the element within the grid area */
+    }
+  }
+
+  /* The Icons Group */
+  /* Common selector is `.header__icons`. Adjust if needed. */
+  @media screen and (min-width: 990px) {
+    .header__icons {
+      grid-column: 3 / 4; /* Place in the right column */
+      grid-row: 1 / 2; /* Place in the first row */
+      justify-self: end; /* Align to the right edge */
+      margin-left: auto; /* Push it to the right in flex contexts */
+      height: auto; /* Ensure vertical alignment is correct */
+    }
+  }
+
+  /*
+   *  STEP 3: Original Logo Styles (Slightly cleaned up)
+   */
+  .header-logo {
+    display: flex;
+    font-size: var(--font-size--md);
+    font-family: var(--font-family);
+    font-weight: var(--font-weight);
+    font-style: var(--font-style);
+    color: var(--color-foreground);
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .header-logo__image {
+    object-fit: contain;
+    height: var(--header-logo-image-height-mobile);
+    width: var(--header-logo-image-width-mobile);
+
+    @media screen and (min-width: 750px) {
+      height: var(--header-logo-image-height);
+      width: var(--header-logo-image-width);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.logo",
+  "tag": null,
+  "class": "header-logo",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:content.edit_logo_in_theme_settings"
+    },
+    {
+      "type": "header",
+      "content": "t:content.visibility"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_logo_on_home_page",
+      "label": "t:settings.hide_logo_on_home_page",
+      "info": "t:info.hide_logo_on_home_page_help"
+    },
+    {
+      "type": "header",
+      "content": "t:content.size",
+      "visible_if": "{{ settings.logo != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "custom_height",
+      "label": "t:settings.desktop_height",
+      "min": 12,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20,
+      "visible_if": "{{ settings.logo != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "custom_height_mobile",
+      "label": "t:settings.mobile_height",
+      "min": 12,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20,
+      "visible_if": "{{ settings.logo != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding_desktop"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "t:settings.left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "t:settings.right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}
