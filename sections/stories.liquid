@@ -1,176 +1,33 @@
 <!-- sections/stories.liquid -->
-<div class="stories-section">
+<link rel="stylesheet" href="{{ 'stories.css' | asset_url }}">
+
+<section id="stories" class="stories-section">
   <div class="stories-container">
     <div class="stories-content">
       <h2 class="stories-title">Stories of the Four Elements</h2>
       <p class="stories-description">
         Ancient wisdom meets modern energy—explore the origins and significance of fire, water, earth, and air in astrology and metaphysics.
       </p>
-      
-      {% for block in section.blocks %}
-        <div class="story-item" style="background-color: {{ block.settings.bg_color }}; border-color: {{ block.settings.border_color }};">
-          <div class="story-icon" style="background-color: {{ block.settings.border_color }}; color: {{ block.settings.text_color }};">
-            <i class="fa {{ block.settings.icon_class }}"></i>
-          </div>
-          <div class="story-text">
-            <h3>{{ block.settings.title }}</h3>
-            <p>{{ block.settings.description }}</p>
-            <a href="{{ block.settings.link }}" style="color: {{ block.settings.text_color }};">Read More <i class="fa fa-long-arrow-right"></i></a>
-          </div>
+
+      {% assign default_stories = 
+        "[{'title':'The Fire: Transformation & Passion','description':'Discover how fire represents our life force, creativity, and ability to transform energy into action.','icon':'fa-fire','bg':'#fdecef','border':'#fcdcdc','text':'#e63946','link':'#'},{'title':'The Water: Emotion & Intuition','description':'Explore the depths of water energy, governing our emotions, intuition, and subconscious mind.','icon':'fa-tint','bg':'#e0f7fd','border':'#b3e0f5','text':'#00b4d8','link':'#'},{'title':'The Earth: Stability & Abundance','description':'Understand how earth energy grounds us, providing stability, practicality, and connection to nature.','icon':'fa-leaf','bg':'#e8f5e9','border':'#c8e6c9','text':'#43a047','link':'#'},{'title':'The Air: Intellect & Communication','description':'Learn about air energy\'s connection to our thoughts, communication style, and intellectual pursuits.','icon':'fa-wind','bg':'#f0f4ff','border':'#d6e0ff','text':'#3f51b5','link':'#'}]" | parse_json %}
+
+      {% for story in default_stories %}
+      <div class="story-item" style="background-color: {{ story.bg }}; border-color: {{ story.border }};">
+        <div class="story-icon" style="background-color: {{ story.border }}; color: {{ story.text }};">
+          <i class="fa {{ story.icon }}"></i>
         </div>
+        <div class="story-text">
+          <h3>{{ story.title }}</h3>
+          <p>{{ story.description }}</p>
+          <a href="{{ story.link }}" style="color: {{ story.text }};">Read More <i class="fa fa-long-arrow-right"></i></a>
+        </div>
+      </div>
       {% endfor %}
     </div>
 
     <div class="stories-image">
-      {% if section.settings.side_image %}
-        <img src="{{ section.settings.side_image | img_url: '800x960' }}" alt="Four elements illustration with cosmic background">
-      {% endif %}
+      <img src="https://picsum.photos/id/1050/800/960" alt="Four elements illustration with cosmic background">
     </div>
   </div>
-</div>
-
-{% schema %}
-{
-  "name": "Stories",
-  "settings": [
-    {
-      "type": "image_picker",
-      "id": "side_image",
-      "label": "Right side image",
-      "default": "https://picsum.photos/id/1050/800/960"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "element",
-      "name": "Element Story",
-      "settings": [
-        { "type": "text", "id": "title", "label": "Title", "default": "The Fire: Transformation & Passion" },
-        { "type": "textarea", "id": "description", "label": "Description", "default": "Discover how fire represents our life force, creativity, and ability to transform energy into action." },
-        { "type": "text", "id": "icon_class", "label": "FontAwesome Icon Class", "default": "fa-fire" },
-        { "type": "color", "id": "bg_color", "label": "Background Color", "default": "#fdecef" },
-        { "type": "color", "id": "border_color", "label": "Border Color", "default": "#fcdcdc" },
-        { "type": "url", "id": "link", "label": "Read More URL", "default": "#" },
-        { "type": "color", "id": "text_color", "label": "Text Color", "default": "#e63946" }
-      ]
-    }
-  ],
-  "max_blocks": 10,
-  "presets": [
-    {
-      "name": "Stories Section",
-      "category": "Custom",
-      "blocks": [
-        { "type": "element" },
-        { "type": "element",
-          "settings": {
-            "title": "The Water: Emotion & Intuition",
-            "description": "Explore the depths of water energy, governing our emotions, intuition, and subconscious mind.",
-            "icon_class": "fa-tint",
-            "bg_color": "#e0f7fd",
-            "border_color": "#b3e0f5",
-            "text_color": "#00b4d8"
-          }
-        },
-        { "type": "element",
-          "settings": {
-            "title": "The Earth: Stability & Abundance",
-            "description": "Understand how earth energy grounds us, providing stability, practicality, and connection to nature.",
-            "icon_class": "fa-leaf",
-            "bg_color": "#e8f5e9",
-            "border_color": "#c8e6c9",
-            "text_color": "#43a047"
-          }
-        },
-        { "type": "element",
-          "settings": {
-            "title": "The Air: Intellect & Communication",
-            "description": "Learn about air energy's connection to our thoughts, communication style, and intellectual pursuits.",
-            "icon_class": "fa-wind",
-            "bg_color": "#f0f4ff",
-            "border_color": "#d6e0ff",
-            "text_color": "#3f51b5"
-          }
-        }
-      ]
-    }
-  ]
-}
-{% endschema %}
-
-{% stylesheet %}
-/* Pure CSS */
-.stories-section {
-  padding: 80px 16px;
-}
-.stories-container {
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto;
-  gap: 32px;
-}
-.stories-content {
-  flex: 1;
-  min-width: 300px;
-}
-.stories-title {
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
-  font-weight: bold;
-  margin-bottom: 24px;
-  color: #222;
-}
-.stories-description {
-  color: #666;
-  font-size: 1.125rem;
-  margin-bottom: 32px;
-}
-.story-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 16px;
-  border: 1px solid;
-  border-radius: 12px;
-  transition: all 0.3s;
-}
-.story-item:hover {
-  transform: translateY(-2px);
-}
-.story-icon {
-  flex-shrink: 0;
-  padding: 8px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.story-text h3 {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-.story-text p {
-  color: #666;
-  margin-bottom: 8px;
-}
-.story-text a {
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-}
-.stories-image {
-  flex: 1;
-  min-width: 300px;
-}
-.stories-image img {
-  width: 100%;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-@media screen and (max-width: 768px) {
-  .stories-image {
-    display: none;
-  }
-}
-{% endstylesheet %}
+</section>
