@@ -391,6 +391,7 @@
     /* will default to bg from its color scheme unless --header-bg-color is transparent */
     background-color: var(--header-bg-color, var(--color-background));
     height: 96px;
+    display: flex;
   }
 
   .header__row--top:not(.divider--page-width),
@@ -460,7 +461,8 @@
     /* Mobile layout */
     --header-mobile-bookend: 44px;
 
-    display: grid;
+    display: flex;
+    width: min(100vw, 1400px);
     grid-template-areas: 'left center right';
     grid-gap: var(--gap-xl);
     grid-template-columns: var(--header-template-columns);
