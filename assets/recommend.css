@@ -1,85 +1,118 @@
+/* =========================
+   Recommend Section Styles
+   ========================= */
+
 .recommend-section {
-  background-color: #f9fafb;
   padding: 4rem 0;
+  background-color: #f9fafb;
   font-family: sans-serif;
 }
 
+/* Header */
 .recommend-header {
+  max-width: 1280px;
+  margin: 0 auto 4rem auto;
+  padding: 0 1rem;
   text-align: center;
-  margin-bottom: 4rem;
 }
 
 .recommend-header h2 {
   font-size: clamp(1.5rem, 3vw, 2.25rem);
   font-weight: bold;
-  color: #111827;
+  color: #111827; /* stars color */
   margin-bottom: 1rem;
 }
 
 .recommend-header p {
-  color: #4b5563;
-  font-size: 1.125rem;
-  max-width: 42rem;
+  color: #4b5563; /* gray-600 */
+  font-size: 1.125rem; /* text-lg */
+  max-width: 640px;
   margin: 0 auto;
 }
 
+/* -------------------------
+   Crystal Items Grid
+   ------------------------- */
 .crystal-item {
-  background-color: #fff;
   margin-bottom: 4rem;
 }
 
 .crystal-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0;
-}
-
-.crystal-image {
-  grid-column: span 3;
-  position: relative;
-}
-
-.crystal-text {
-  grid-column: span 2;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 3rem;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.image-right .crystal-image {
-  order: 2;
+/* 奇偶切换：奇数默认，偶数反转 */
+.recommend-section .crystal-item:nth-child(odd) .crystal-grid {
+  flex-direction: row;
 }
 
-.image-right .crystal-text {
-  order: 1;
+.recommend-section .crystal-item:nth-child(even) .crystal-grid {
+  flex-direction: row-reverse;
 }
 
+/* 响应式：小屏幕上下排列 */
+@media screen and (max-width: 768px) {
+  .recommend-section .crystal-item .crystal-grid {
+    flex-direction: column !important;
+  }
+}
+
+/* 图片和文字各占 50% */
+.crystal-grid .crystal-image,
+.crystal-grid .crystal-text {
+  flex: 1;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* 图片容器 */
 .crystal-img-container {
   position: relative;
-  overflow: hidden;
   border-radius: 1rem;
+  overflow: hidden;
 }
 
 .crystal-img-container img {
   width: 100%;
   height: auto;
   display: block;
-  border-radius: 1rem;
 }
 
+/* 元素徽章 */
 .element-badge {
   position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #fff;
+  top: 1rem;
+  left: 1rem;
   padding: 0.5rem 1rem;
   border-radius: 9999px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
 }
 
-/* 功能列表 */
+/* 元素颜色 */
+.fire { background-color: #f87171; }
+.water { background-color: #60a5fa; }
+.earth { background-color: #a78bfa; }
+.air { background-color: #34d399; }
+
+/* 文字区域 */
+.crystal-text h3 {
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.crystal-text p {
+  color: #4b5563;
+  font-size: 1.125rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.75rem;
+}
+
+/* 特性列表 */
 .features {
   display: flex;
   flex-wrap: wrap;
@@ -91,46 +124,47 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #4b5563;
+  font-size: 1rem;
+  color: #111827;
 }
 
 .feature-icon {
-  color: inherit;
+  color: currentColor;
 }
 
 /* 操作按钮 */
 .crystal-actions {
   display: flex;
-  gap: 1rem;
   align-items: center;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
-.price {
+.crystal-actions .price {
   font-size: 1.5rem;
   font-weight: bold;
   color: #111827;
 }
 
-.btn {
+.crystal-actions .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 500;
-  border-radius: 0.5rem;
   padding: 0.75rem 1.5rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
   text-decoration: none;
+  transition: all 0.3s ease;
 }
 
 .btn-add {
-  background-color: #f87171;
+  background-color: #f87171; /* fire color */
   color: #fff;
 }
 
 .btn-add:hover {
-  background-color: #ef4444;
+  background-color: #f87171cc;
 }
 
 .btn-view {
@@ -139,18 +173,14 @@
 }
 
 .btn-view:hover {
-  background-color: rgba(248, 113, 113, 0.1);
+  background-color: #f871711a;
 }
 
-/* 响应式 */
-@media (max-width: 768px) {
-  .crystal-grid {
-    grid-template-columns: 1fr;
-  }
-  .crystal-image,
-  .crystal-text {
-    grid-column: 1 / -1;
-    order: unset !important;
-    padding: 2rem;
+/* 调整小屏幕按钮和文字间距 */
+@media screen and (max-width: 768px) {
+  .crystal-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
 }
