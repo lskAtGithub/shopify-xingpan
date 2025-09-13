@@ -1,85 +1,36 @@
-/* =========================
-   Recommend Section Styles
-   ========================= */
-
 .recommend-section {
   padding: 4rem 0;
   background-color: #f9fafb;
-  font-family: sans-serif;
 }
 
-.recommend-header {
-  max-width: 1280px;
-  margin: 0 auto 4rem auto;
-  padding: 0 1rem;
-  text-align: center;
-}
-
-.recommend-header h2 {
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
-  font-weight: bold;
-  color: #111827;
-  margin-bottom: 1rem;
-}
-
-.recommend-header p {
-  color: #4b5563;
-  font-size: 1.125rem;
-  max-width: 640px;
-  margin: 0 auto;
-}
-
-/* -------------------------
-   Crystal Items Grid
-   ------------------------- */
-.crystal-item {
+.crystal-block {
   margin-bottom: 4rem;
+  background-color: #fff;
 }
 
 .crystal-grid {
   display: flex;
-  gap: 1rem;
   flex-wrap: wrap;
 }
 
-/* 奇偶切换 */
-.recommend-section .crystal-item:nth-child(odd) .crystal-grid {
-  flex-direction: row;
-}
-
-.recommend-section .crystal-item:nth-child(even) .crystal-grid {
+.crystal-grid.reverse {
   flex-direction: row-reverse;
 }
 
-/* 响应式 */
-@media screen and (max-width: 768px) {
-  .recommend-section .crystal-item .crystal-grid {
-    flex-direction: column !important;
-  }
-}
-
-/* 图片和文字各占 50% */
-.crystal-grid .crystal-image,
-.crystal-grid .crystal-text {
+.crystal-image, .crystal-text {
   flex: 1;
-  padding: 1.5rem;
-  box-sizing: border-box;
+  padding: 2rem;
 }
 
-/* 图片容器 */
-.crystal-img-container {
+.crystal-image {
   position: relative;
-  border-radius: 1rem;
-  overflow: hidden;
 }
 
-.crystal-img-container img {
+.crystal-image img {
   width: 100%;
-  height: auto;
-  display: block;
+  border-radius: 0.75rem;
 }
 
-/* 元素徽章 */
 .element-badge {
   position: absolute;
   top: 1rem;
@@ -88,30 +39,8 @@
   border-radius: 9999px;
   color: #fff;
   font-weight: bold;
-  font-size: 1rem;
 }
 
-/* 元素颜色 */
-.fire { background-color: #f87171; }
-.water { background-color: #60a5fa; }
-.earth { background-color: #a78bfa; }
-.air { background-color: #34d399; }
-
-/* 文字区域 */
-.crystal-text h3 {
-  font-size: 1.875rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
-.crystal-text p {
-  color: #4b5563;
-  font-size: 1.125rem;
-  margin-bottom: 1.5rem;
-  line-height: 1.75rem;
-}
-
-/* 特性列表 */
 .features {
   display: flex;
   flex-wrap: wrap;
@@ -119,70 +48,60 @@
   margin-bottom: 2rem;
 }
 
-.features div {
+.feature-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1rem;
-  color: #111827;
 }
 
-.feature-icon {
-  color: currentColor;
-}
-
-/* 按钮区域 */
-.crystal-actions {
+.price-btns {
   display: flex;
   align-items: center;
   gap: 1rem;
-  flex-wrap: wrap;
 }
 
-.crystal-actions .price {
+.price {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #111827;
 }
 
-.crystal-actions .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.add-to-cart-btn,
+.view-btn {
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  text-decoration: none;
-  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-/* 按钮自动颜色匹配元素 */
-.crystal-item.fire .btn-add { background-color: #f87171; color: #fff; }
-.crystal-item.fire .btn-add:hover { background-color: #f87171cc; }
-.crystal-item.fire .btn-view { border: 2px solid #f87171; color: #f87171; }
-.crystal-item.fire .btn-view:hover { background-color: #f871711a; }
+/* 元素颜色示例，可扩展 */
+.add-to-cart-btn.fire, .element-badge.fire, .fa-check-circle.fire {
+  background-color: #f87171;
+  color: #fff;
+}
 
-.crystal-item.water .btn-add { background-color: #60a5fa; color: #fff; }
-.crystal-item.water .btn-add:hover { background-color: #60a5facc; }
-.crystal-item.water .btn-view { border: 2px solid #60a5fa; color: #60a5fa; }
-.crystal-item.water .btn-view:hover { background-color: #60a5fa1a; }
+.add-to-cart-btn.water, .element-badge.water, .fa-check-circle.water {
+  background-color: #60a5fa;
+  color: #fff;
+}
 
-.crystal-item.earth .btn-add { background-color: #a78bfa; color: #fff; }
-.crystal-item.earth .btn-add:hover { background-color: #a78bface; }
-.crystal-item.earth .btn-view { border: 2px solid #a78bfa; color: #a78bfa; }
-.crystal-item.earth .btn-view:hover { background-color: #a78bfa1a; }
+.add-to-cart-btn.earth, .element-badge.earth, .fa-check-circle.earth {
+  background-color: #a3e635;
+  color: #fff;
+}
 
-.crystal-item.air .btn-add { background-color: #34d399; color: #fff; }
-.crystal-item.air .btn-add:hover { background-color: #34d399cc; }
-.crystal-item.air .btn-view { border: 2px solid #34d399; color: #34d399; }
-.crystal-item.air .btn-view:hover { background-color: #34d3991a; }
+.add-to-cart-btn.air, .element-badge.air, .fa-check-circle.air {
+  background-color: #38bdf8;
+  color: #fff;
+}
 
-/* 小屏幕按钮堆叠 */
-@media screen and (max-width: 768px) {
-  .crystal-actions {
+/* 响应式，小屏幕上下布局 */
+@media screen and (max-width: 767px) {
+  .crystal-grid {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+  }
+
+  .crystal-grid.reverse {
+    flex-direction: column-reverse;
   }
 }
