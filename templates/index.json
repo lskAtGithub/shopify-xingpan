@@ -65,6 +65,29 @@
       "name": "Recommend Section",
       "settings": {}
     },
+    "stories_Bh4WrV": {
+      "type": "stories",
+      "blocks": {
+        "story_36XgXY": {
+          "type": "story",
+          "settings": {
+            "title": "The Fire: Transformation & Passion",
+            "description": "Discover how fire represents our life force, creativity, and ability to transform energy into action.",
+            "icon": "fa-fire",
+            "bg_color": "#fff0f0",
+            "border_color": "#ffcccc",
+            "text_color": "#ff0000"
+          }
+        }
+      },
+      "block_order": [
+        "story_36XgXY"
+      ],
+      "name": "Stories of Elements",
+      "settings": {
+        "right_image": "shopify://shop_images/blok1.jpg"
+      }
+    },
     "product_list_fa6P9H": {
       "type": "product-list",
       "blocks": {
@@ -263,6 +286,7 @@
   "order": [
     "get_report_d7rwzM",
     "recommend_gpKTB6",
+    "stories_Bh4WrV",
     "product_list_fa6P9H"
   ]
 }
