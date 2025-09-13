@@ -14,7 +14,9 @@
       "name": "图片 + 表单布局",
       "settings": {
         "heading": "联系我们",
-        "text": "留下联系方式，我们会尽快回复您。",
+        "subheading": "Uncover your strongest & weakest elements—find your perfect crystal art to balance your energy.",
+        "note_text": "Free personalized report for first-time visitors",
+        "top_image": "shopify://shop_images/top.jpg",
         "button_text": "提交"
       }
     },
