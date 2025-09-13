@@ -1,107 +1,44 @@
 .recommend-section {
-  padding: 4rem 0;
+  padding: 4rem 1rem;
   background-color: #f9fafb;
 }
 
 .crystal-block {
+  display: flex;
+  justify-content: center;
   margin-bottom: 4rem;
-  background-color: #fff;
 }
 
-.crystal-grid {
+.crystal-item {
   display: flex;
+  max-width: 1200px;
+  width: 100%;
+  gap: 2rem;
   flex-wrap: wrap;
 }
 
-.crystal-grid.reverse {
+.crystal-item.reverse {
   flex-direction: row-reverse;
 }
 
-.crystal-image, .crystal-text {
+.crystal-image,
+.crystal-text {
   flex: 1;
-  padding: 2rem;
-}
-
-.crystal-image {
-  position: relative;
 }
 
 .crystal-image img {
   width: 100%;
-  border-radius: 0.75rem;
-}
-
-.element-badge {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
-  color: #fff;
-  font-weight: bold;
-}
-
-.features {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.feature-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.price-btns {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.price {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.add-to-cart-btn,
-.view-btn {
-  padding: 0.75rem 1.5rem;
+  height: auto;
+  display: block;
   border-radius: 0.5rem;
-  border: none;
-  cursor: pointer;
-  transition: 0.3s;
 }
 
-/* 元素颜色示例，可扩展 */
-.add-to-cart-btn.fire, .element-badge.fire, .fa-check-circle.fire {
-  background-color: #f87171;
-  color: #fff;
-}
-
-.add-to-cart-btn.water, .element-badge.water, .fa-check-circle.water {
-  background-color: #60a5fa;
-  color: #fff;
-}
-
-.add-to-cart-btn.earth, .element-badge.earth, .fa-check-circle.earth {
-  background-color: #a3e635;
-  color: #fff;
-}
-
-.add-to-cart-btn.air, .element-badge.air, .fa-check-circle.air {
-  background-color: #38bdf8;
-  color: #fff;
-}
-
-/* 响应式，小屏幕上下布局 */
+/* 响应式，小屏幕上下排列 */
 @media screen and (max-width: 767px) {
-  .crystal-grid {
+  .crystal-item {
     flex-direction: column;
   }
-
-  .crystal-grid.reverse {
+  .crystal-item.reverse {
     flex-direction: column-reverse;
   }
 }
