@@ -79,9 +79,14 @@
     /* Responsive tweaks if needed */
     .container {
       background-color: #111827;
+      color: #fff;
+    }
+    .container > div {
+      flex: 1;
     }
     .footer-content-box {
       display: flex;
+      justify-content: space-between;
       gap: 24px;
       flex-wrap: wrap;
       width: min(100vw, 1200px);
@@ -89,7 +94,7 @@
       color: #fff;
       gap: 24px;
     }
-    list {
+    li {
       list-style: none;
     }
   </style>
