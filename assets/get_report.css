@@ -36,19 +36,19 @@
 }
 
 /* 网格布局 */
-.get-report-section .grid {
+.get-report-section .flex-wrap {
   display: flex;
   gap: 16px; /* 左右间距 */
   flex-wrap: wrap; /* 小屏幕换行 */
 }
 
-.grid > .left-content,
-.grid > .form-container {
+.flex-wrap > .left-content,
+.flex-wrap > .form-container {
   flex: 1; /* 左右平分宽度 */
   padding: 3rem;
 }
 
-.grid > .form-container {
+.flex-wrap > .form-container {
   background-color: #fff;
 }
 
@@ -59,7 +59,7 @@ label.checkbox-label {
 }
 
 @media screen and (max-width: 768px) {
-  .get-report-section .grid {
+  .get-report-section .flex-wrap {
     flex-direction: column;
   }
 }
