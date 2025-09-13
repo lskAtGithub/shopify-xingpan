@@ -1,93 +1,121 @@
+/* assets/stories.css - Stories section styles (pure CSS) */
+
 .stories-section {
   padding: 80px 16px;
-  background-color: #fff;
+  background: #fff;
+  box-sizing: border-box;
 }
 
-.stories-container {
-  display: flex;
-  flex-wrap: wrap;
+.stories-wrap {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.stories-grid {
+  display: flex;
   gap: 32px;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 
-.stories-content {
-  flex: 1;
-  min-width: 300px;
+/* 左右列 */
+.stories-left {
+  flex: 1 1 0%;
+  min-width: 320px;
 }
 
+.stories-right {
+  flex: 0 0 420px;
+}
+
+/* 标题/副标题 */
 .stories-title {
   font-size: clamp(1.5rem, 3vw, 2.25rem);
-  font-weight: bold;
-  margin-bottom: 24px;
-  color: #222;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  color: #111;
 }
 
-.stories-description {
-  color: #666;
+.stories-intro {
+  color: #4b5563;
   font-size: 1.125rem;
-  margin-bottom: 32px;
+  margin: 0 0 24px 0;
 }
 
-.story-item {
+/* 列表项 */
+.story-list {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
   gap: 16px;
+}
+
+/* 单个卡片 */
+.story-card {
+  border: 1px solid transparent;
   padding: 16px;
-  border: 1px solid;
   border-radius: 12px;
-  transition: all 0.3s;
+  transition: transform .18s ease, border-color .18s ease;
 }
 
-.story-item:hover {
-  transform: translateY(-2px);
+.story-card:hover {
+  transform: translateY(-4px);
 }
 
+/* 卡片内部布局 */
+.story-flex {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+/* 圆形图标容器 */
 .story-icon {
-  flex-shrink: 0;
-  padding: 8px;
-  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  flex-shrink: 0;
+  font-size: 18px;
 }
 
-.story-text h3 {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 8px;
+/* 文本 */
+.story-body { flex: 1; }
+.story-title {
+  margin: 0 0 6px 0;
+  font-size: 1.125rem;
+  font-weight: 700;
 }
-
-.story-text p {
-  color: #666;
-  margin-bottom: 8px;
+.story-desc {
+  margin: 0 0 8px 0;
+  color: #4b5563;
+  line-height: 1.6;
 }
-
-.story-text a {
+.story-link {
+  font-weight: 600;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  font-weight: 500;
+  gap: 8px;
 }
 
-.stories-image {
-  flex: 1;
-  min-width: 300px;
-}
-
-.stories-image img {
+/* 右侧图 */
+.story-img {
   width: 100%;
+  display: block;
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
 }
 
-@media screen and (max-width: 768px) {
-  .stories-container {
+/* 响应式：小于 768px 隐藏右侧图片，左侧纵向排列 */
+@media screen and (max-width: 767px) {
+  .stories-grid {
     flex-direction: column;
   }
-
-  .stories-image {
+  .stories-right {
     display: none;
   }
 }

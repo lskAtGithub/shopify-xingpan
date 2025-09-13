@@ -1,3 +1,99 @@
+<!-- sections/stories.liquid -->
+{{ 'stories.css' | asset_url | stylesheet_tag }}
+
+<section id="stories" class="stories-section" aria-labelledby="stories-heading">
+  <div class="stories-wrap">
+    <div class="stories-grid">
+      <!-- 左侧：标题 + 列表 -->
+      <div class="stories-left">
+        <h2 id="stories-heading" class="stories-title">{{ section.settings.heading }}</h2>
+        <p class="stories-intro">{{ section.settings.subheading }}</p>
+
+        <div class="story-list">
+          {% if section.blocks.size > 0 %}
+            {% for block in section.blocks %}
+              <article class="story-card" style="background-color: {{ block.settings.bg_color }}; border-color: {{ block.settings.border_color }};">
+                <div class="story-flex">
+                  <div class="story-icon" style="background-color: {{ block.settings.border_color }}; color: {{ block.settings.text_color }};">
+                    <i class="{{ block.settings.icon }}"></i>
+                  </div>
+                  <div class="story-body">
+                    <h3 class="story-title">{{ block.settings.title }}</h3>
+                    <p class="story-desc">{{ block.settings.description }}</p>
+                    {% if block.settings.link != blank %}
+                      <a class="story-link" href="{{ block.settings.link }}" style="color: {{ block.settings.text_color }};">
+                        Read More <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                      </a>
+                    {% endif %}
+                  </div>
+                </div>
+              </article>
+            {% endfor %}
+          {% else %}
+            <!-- fallback 默认 4 条（确保刚添加能看到） -->
+            <article class="story-card" style="background-color:#fdecef; border-color:#fcdcdc;">
+              <div class="story-flex">
+                <div class="story-icon" style="background-color:#fcdcdc; color:#e63946;"><i class="fa fa-fire"></i></div>
+                <div class="story-body">
+                  <h3 class="story-title">The Fire: Transformation & Passion</h3>
+                  <p class="story-desc">Discover how fire represents our life force, creativity, and ability to transform energy into action.</p>
+                  <a class="story-link" href="#" style="color:#e63946;">Read More <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+                </div>
+              </div>
+            </article>
+
+            <article class="story-card" style="background-color:#e0f7fd; border-color:#b3e0f5;">
+              <div class="story-flex">
+                <div class="story-icon" style="background-color:#b3e0f5; color:#00b4d8;"><i class="fa fa-tint"></i></div>
+                <div class="story-body">
+                  <h3 class="story-title">The Water: Emotion & Intuition</h3>
+                  <p class="story-desc">Explore the depths of water energy, governing our emotions, intuition, and subconscious mind.</p>
+                  <a class="story-link" href="#" style="color:#00b4d8;">Read More <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+                </div>
+              </div>
+            </article>
+
+            <article class="story-card" style="background-color:#e8f5e9; border-color:#c8e6c9;">
+              <div class="story-flex">
+                <div class="story-icon" style="background-color:#c8e6c9; color:#43a047;"><i class="fa fa-leaf"></i></div>
+                <div class="story-body">
+                  <h3 class="story-title">The Earth: Stability & Abundance</h3>
+                  <p class="story-desc">Understand how earth energy grounds us, providing stability, practicality, and connection to nature.</p>
+                  <a class="story-link" href="#" style="color:#43a047;">Read More <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+                </div>
+              </div>
+            </article>
+
+            <article class="story-card" style="background-color:#f0f4ff; border-color:#d6e0ff;">
+              <div class="story-flex">
+                <div class="story-icon" style="background-color:#d6e0ff; color:#3f51b5;"><i class="fa fa-wind"></i></div>
+                <div class="story-body">
+                  <h3 class="story-title">The Air: Intellect & Communication</h3>
+                  <p class="story-desc">Learn about air energy's connection to our thoughts, communication style, and intellectual pursuits.</p>
+                  <a class="story-link" href="#" style="color:#3f51b5;">Read More <i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+                </div>
+              </div>
+            </article>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- 右侧：图（小屏隐藏） -->
+      <div class="stories-right" role="img" aria-hidden="true">
+        {% if section.settings.right_image != blank %}
+          <div class="story-img-container">
+            <img src="{{ section.settings.right_image | image_url: width: 800 }}" alt="{{ section.settings.heading | escape }}" class="story-img" loading="lazy">
+          </div>
+        {% else %}
+          <div class="story-img-container">
+            <img src="https://picsum.photos/id/1050/800/960" alt="Four elements illustration" class="story-img" loading="lazy">
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
 {% schema %}
 {
   "name": "Stories",
@@ -5,7 +101,7 @@
     {
       "type": "text",
       "id": "heading",
-      "label": "Main Heading",
+      "label": "Heading",
       "default": "Stories of the Four Elements"
     },
     {
@@ -17,7 +113,7 @@
     {
       "type": "image_picker",
       "id": "right_image",
-      "label": "Right Side Image"
+      "label": "Right side image"
     }
   ],
   "blocks": [
@@ -25,39 +121,20 @@
       "type": "story",
       "name": "Story",
       "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Story Title"
-        },
-        {
-          "type": "textarea",
-          "id": "description",
-          "label": "Story Description"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Story Link"
-        },
-        {
-          "type": "text",
-          "id": "icon",
-          "label": "Icon class (FontAwesome)",
-          "default": "fa fa-fire"
-        },
-        {
-          "type": "color",
-          "id": "color",
-          "label": "Theme Color",
-          "default": "#e25822"
-        }
+        { "type": "text", "id": "title", "label": "Title", "default": "The Fire: Transformation & Passion" },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "Discover how fire represents our life force, creativity, and ability to transform energy into action." },
+        { "type": "text", "id": "icon", "label": "Icon class (FontAwesome)", "default": "fa fa-fire" },
+        { "type": "url", "id": "link", "label": "Read more link" },
+        { "type": "color", "id": "bg_color", "label": "Background color", "default": "#fdecef" },
+        { "type": "color", "id": "border_color", "label": "Border / icon background", "default": "#fcdcdc" },
+        { "type": "color", "id": "text_color", "label": "Accent text color", "default": "#e63946" }
       ]
     }
   ],
+  "max_blocks": 4,
   "presets": [
     {
-      "name": "Stories",
+      "name": "Stories (default)",
       "category": "Custom",
       "blocks": [
         {
@@ -65,9 +142,10 @@
           "settings": {
             "title": "The Fire: Transformation & Passion",
             "description": "Discover how fire represents our life force, creativity, and ability to transform energy into action.",
-            "link": "#",
             "icon": "fa fa-fire",
-            "color": "#e25822"
+            "bg_color": "#fdecef",
+            "border_color": "#fcdcdc",
+            "text_color": "#e63946"
           }
         },
         {
@@ -75,9 +153,10 @@
           "settings": {
             "title": "The Water: Emotion & Intuition",
             "description": "Explore the depths of water energy, governing our emotions, intuition, and subconscious mind.",
-            "link": "#",
             "icon": "fa fa-tint",
-            "color": "#1e90ff"
+            "bg_color": "#e0f7fd",
+            "border_color": "#b3e0f5",
+            "text_color": "#00b4d8"
           }
         },
         {
@@ -85,9 +164,10 @@
           "settings": {
             "title": "The Earth: Stability & Abundance",
             "description": "Understand how earth energy grounds us, providing stability, practicality, and connection to nature.",
-            "link": "#",
             "icon": "fa fa-leaf",
-            "color": "#228b22"
+            "bg_color": "#e8f5e9",
+            "border_color": "#c8e6c9",
+            "text_color": "#43a047"
           }
         },
         {
@@ -95,9 +175,10 @@
           "settings": {
             "title": "The Air: Intellect & Communication",
             "description": "Learn about air energy's connection to our thoughts, communication style, and intellectual pursuits.",
-            "link": "#",
             "icon": "fa fa-wind",
-            "color": "#00bfff"
+            "bg_color": "#f0f4ff",
+            "border_color": "#d6e0ff",
+            "text_color": "#3f51b5"
           }
         }
       ]
