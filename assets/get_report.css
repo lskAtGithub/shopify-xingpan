@@ -1,86 +1,164 @@
-.custom-image-form {
-  padding: 60px 20px;
+/* 整体 Section 间距 */
+.get-report-section {
+  padding-top: 8rem; /* pt-32 */
+  padding-bottom: 5rem; /* pb-20 */
+  padding-left: 1rem; /* px-4 */
+  padding-right: 1rem;
 }
 
-.custom-image-form .container {
-  max-width: 1280px;
-  margin: 0 auto;
-}
-
-.custom-image-form .flex-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-}
-
-@media (max-width: 768px) {
-  .custom-image-form .flex-wrapper {
-    flex-direction: column;
-    text-align: center;
+@media (min-width: 640px) {
+  .get-report-section {
+    padding-left: 1.5rem; /* sm:px-6 */
+    padding-right: 1.5rem;
   }
 }
 
-.custom-image-form .image-side {
-  flex: 1;
+@media (min-width: 1024px) {
+  .get-report-section {
+    padding-left: 2rem; /* lg:px-8 */
+    padding-right: 2rem;
+  }
 }
 
-.custom-image-form .image-side img {
+/* 容器 */
+.get-report-section .container {
+  max-width: 1280px; /* max-w-7xl */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 背景卡片 */
+.get-report-section .bg-gradient-to-br {
+  background: linear-gradient(to bottom right, #f9fafb, #f3f4f6); /* from-gray-50 to-gray-100 */
+  border-radius: 1rem; /* rounded-2xl */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* shadow-xl */
+  overflow: hidden;
+}
+
+/* 网格布局 */
+.get-report-section .grid {
+  display: grid;
+  gap: 2rem; /* gap-8 */
+}
+
+@media (min-width: 768px) {
+  .get-report-section .grid {
+    grid-template-columns: repeat(2, 1fr); /* md:grid-cols-2 */
+  }
+}
+
+/* 左侧文本内容 */
+.get-report-section h2 {
+  font-weight: 700; /* font-bold */
+  color: #1c1c1c; /* text-stars 可以自定义色值 */
+  margin-bottom: 1rem; /* mb-4 */
+  line-height: 1.2; /* leading-tight */
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.get-report-section p {
+  color: #4b5563; /* text-gray-600 */
+  font-size: 1.125rem; /* text-lg */
+  margin-bottom: 1.5rem; /* mb-6 */
+}
+
+/* 提示条 */
+.get-report-section .flex.items-center {
+  color: #6b7280; /* text-gray-500 */
+  margin-bottom: 1.5rem; /* mb-6 */
+}
+
+.get-report-section .flex.items-center i {
+  color: #f97316; /* text-fire */
+}
+
+/* 顶部图片容器 */
+.get-report-section .top-img-container {
+  border-radius: 0.5rem; /* rounded-lg */
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.get-report-section .top-img-container img {
   width: 100%;
   height: auto;
-  border-radius: 12px;
   display: block;
 }
 
-.custom-image-form .image-side .placeholder {
+/* 表单容器 */
+.get-report-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* space-y-6 */
+}
+
+/* 表单元素 */
+.get-report-section input,
+.get-report-section select {
   width: 100%;
-  height: 300px;
-  background: #f4f4f4;
+  padding: 0.75rem 1rem; /* py-3 px-4 */
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  border-radius: 0.5rem; /* rounded-lg */
+  transition: all 0.2s;
+}
+
+.get-report-section input:focus,
+.get-report-section select:focus {
+  outline: none;
+  border-color: #f97316; /* focus:border-fire */
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.3); /* focus:ring-fire */
+}
+
+/* 网格子元素 */
+.get-report-section .grid-cols-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem; /* gap-4 */
+}
+
+.get-report-section .grid-cols-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem; /* gap-4 */
+}
+
+/* checkbox */
+.get-report-section input[type='checkbox'] {
+  height: 1.25rem; /* h-5 */
+  width: 1.25rem; /* w-5 */
+  border-radius: 0.25rem;
+  border: 1px solid #d1d5db;
+}
+
+/* 按钮 */
+.get-report-section .gradient-btn {
+  background: linear-gradient(90deg, #f97316, #f59e0b); /* 可自定义渐变 */
+  color: #fff;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem; /* py-3 px-6 */
+  border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #888;
-  border-radius: 12px;
+  font-size: 1.125rem; /* text-lg */
+  transition: all 0.3s;
 }
 
-.custom-image-form .form-side {
-  flex: 1;
+.get-report-section .gradient-btn:hover {
+  opacity: 0.9;
 }
 
-.custom-image-form .form-side h2 {
-  font-size: 28px;
-  margin-bottom: 12px;
-}
+/* 响应式移动端调整 */
+@media (max-width: 767px) {
+  .get-report-section .grid {
+    grid-template-columns: 1fr;
+  }
 
-.custom-image-form .form-side p {
-  font-size: 16px;
-  margin-bottom: 24px;
-}
+  .get-report-section .hidden.md\:block {
+    display: none !important;
+  }
 
-.custom-image-form .form-side form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.custom-image-form .form-side form input {
-  padding: 12px 16px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-}
-
-.custom-image-form .form-side form button {
-  padding: 12px 16px;
-  background: #ff5722;
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.custom-image-form .form-side form button:hover {
-  background: #e64a19;
+  .get-report-section .p-8 {
+    padding: 2rem; /* md:p-12 对应小屏缩小 */
+  }
 }
