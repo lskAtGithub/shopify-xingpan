@@ -1,0 +1,39 @@
+.stories-section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.story-item {
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+.story-item:hover {
+  border-color: inherit;
+}
+
+.story-icon {
+  min-width: 40px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.story-title {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+}
+
+.story-desc {
+  font-size: 1rem;
+}
+
+.story-readmore i {
+  margin-left: 0.5rem;
+}
+
+.story-img-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 0.5rem;
+}
