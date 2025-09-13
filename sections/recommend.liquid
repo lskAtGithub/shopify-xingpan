@@ -1,5 +1,9 @@
 <!-- sections/recommend.liquid -->
 <section class="recommend-section">
+  <div class="title-box">
+    <div class="title-text">Elemental Crystal Art</div>
+    <div class="sub-title-text">Each piece is infused with energy to balance your elemental composition, handcrafted with natural crystals and premiumdivterials.</div>
+  </div>
   {% for crystal in section.blocks %}
     {% assign is_even = forloop.index | modulo: 2 %}
     <div class="crystal-block">

@@ -161,6 +161,7 @@ label.checkbox-label {
   font-size: 1.125rem; /* text-lg */
   transition: background-position 0.5s ease;
   cursor: pointer;
+  border: none;
 }
 
 .get-report-section .gradient-btn:hover {
