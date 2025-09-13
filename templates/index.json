@@ -70,10 +70,12 @@
       "blocks": {
         "story_36XgXY": {
           "type": "story",
+          "disabled": true,
           "settings": {
             "title": "The Fire: Transformation & Passion",
             "description": "Discover how fire represents our life force, creativity, and ability to transform energy into action.",
             "icon": "fa-fire",
+            "link": "",
             "bg_color": "#fff0f0",
             "border_color": "#ffcccc",
             "text_color": "#ff0000"
@@ -85,6 +87,8 @@
       ],
       "name": "Stories of Elements",
       "settings": {
+        "heading": "Stories of the Four Elements",
+        "subheading": "Ancient wisdom meets modern energy—explore the origins and significance of fire, water, earth, and air in astrology and metaphysics.",
         "right_image": "shopify://shop_images/blok1.jpg"
       }
     },
