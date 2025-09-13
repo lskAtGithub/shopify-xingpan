@@ -31,7 +31,8 @@
 
         <div class="features">
           {% for i in (1..3) %}
-            {% assign feature = block.settings['feature_' | append: i ] %}
+            {% assign feature_id = 'feature_' | append: i %}
+            {% assign feature = block.settings[feature_id] %}
             {% if feature != blank %}
               <div>
                 <span class="feature-icon">✔</span>
