@@ -26,65 +26,33 @@
         "crystal_9DC7mq": {
           "type": "crystal",
           "settings": {
-            "element_name": "Fire Element",
-            "element_color": "fire",
-            "image_position": "left",
+            "image": "shopify://shop_images/item1.jpg",
             "title": "Ignite Passion",
-            "description": "Our Fire Element crystal art captures the essence of transformation and vitality...",
-            "feature_1": "Natural citrine",
-            "feature_2": "16\" × 20\" framed",
-            "feature_3": "Handcrafted",
-            "price": "$129",
-            "add_to_cart_link": "",
-            "view_link": ""
+            "description": "Our Fire Element crystal art captures the essence of transformation and vitality..."
           }
         },
         "crystal_bjCg3M": {
           "type": "crystal",
           "settings": {
-            "element_name": "Fire Element",
-            "element_color": "fire",
-            "image_position": "left",
+            "image": "shopify://shop_images/item2.jpg",
             "title": "Ignite Passion",
-            "description": "Our Fire Element crystal art captures the essence of transformation and vitality...",
-            "feature_1": "Natural citrine",
-            "feature_2": "16\" × 20\" framed",
-            "feature_3": "Handcrafted",
-            "price": "$129",
-            "add_to_cart_link": "",
-            "view_link": ""
+            "description": "Our Fire Element crystal art captures the essence of transformation and vitality..."
           }
         },
         "crystal_WtHUKb": {
           "type": "crystal",
           "settings": {
-            "element_name": "Fire Element",
-            "element_color": "fire",
-            "image_position": "left",
+            "image": "shopify://shop_images/item3.jpg",
             "title": "Ignite Passion",
-            "description": "Our Fire Element crystal art captures the essence of transformation and vitality...",
-            "feature_1": "Natural citrine",
-            "feature_2": "16\" × 20\" framed",
-            "feature_3": "Handcrafted",
-            "price": "$129",
-            "add_to_cart_link": "",
-            "view_link": ""
+            "description": "Our Fire Element crystal art captures the essence of transformation and vitality..."
           }
         },
         "crystal_fpVtdq": {
           "type": "crystal",
           "settings": {
-            "element_name": "Fire Element",
-            "element_color": "fire",
-            "image_position": "left",
+            "image": "shopify://shop_images/item4.jpg",
             "title": "Ignite Passion",
-            "description": "Our Fire Element crystal art captures the essence of transformation and vitality...",
-            "feature_1": "Natural citrine",
-            "feature_2": "16\" × 20\" framed",
-            "feature_3": "Handcrafted",
-            "price": "$129",
-            "add_to_cart_link": "",
-            "view_link": ""
+            "description": "Our Fire Element crystal art captures the essence of transformation and vitality..."
           }
         }
       },
@@ -95,10 +63,7 @@
         "crystal_fpVtdq"
       ],
       "name": "Recommend Section",
-      "settings": {
-        "heading": "Elemental Crystal Art",
-        "subheading": "Each piece is infused with energy to balance your elemental composition, handcrafted with natural crystals and premium materials."
-      }
+      "settings": {}
     },
     "product_list_fa6P9H": {
       "type": "product-list",
