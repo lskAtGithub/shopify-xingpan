@@ -165,18 +165,3 @@ label.checkbox-label {
 .get-report-section .gradient-btn:hover {
   background-position: 100% 0;
 }
-
-/* 响应式移动端调整 */
-@media (max-width: 767px) {
-  .get-report-section .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .get-report-section .hidden.md\:block {
-    display: none !important;
-  }
-
-  .get-report-section .p-8 {
-    padding: 2rem; /* md:p-12 对应小屏缩小 */
-  }
-}
