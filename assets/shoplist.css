@@ -1,0 +1,26 @@
+.shop-list-section .card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.shop-list-section .card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.shop-list-section .zodiac-img-container {
+  position: relative;
+}
+
+.shop-list-section .zodiac-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.shop-list-section .add-to-cart-btn {
+  cursor: pointer;
+}
+
+.shop-list-section .view-all-btn {
+  display: inline-block;
+}
