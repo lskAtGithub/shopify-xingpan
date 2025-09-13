@@ -39,9 +39,6 @@
   .crystal-item {
     flex-direction: column;
   }
-  .crystal-item.reverse {
-    flex-direction: column-reverse;
-  }
 }
 
 .title-box {
