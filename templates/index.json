@@ -74,17 +74,59 @@
             "title": "The Fire: Transformation & Passion",
             "description": "Discover how fire represents our life force, creativity, and ability to transform energy into action.",
             "icon": "fa-fire",
-            "bg_color": "#fff0f0",
-            "border_color": "#ffcccc",
-            "text_color": "#ff0000"
+            "link": "",
+            "bg_color": "#fffdf2",
+            "border_color": "#ffd100",
+            "text_color": "#ffd100"
+          }
+        },
+        "story_atd4jz": {
+          "type": "story",
+          "settings": {
+            "title": "The Water: Emotion & Intuition",
+            "description": "Explore the depths of water energy, governing our emotions, intuition, and subconscious mind.",
+            "icon": "fa fa-fire",
+            "link": "",
+            "bg_color": "#e0f7fd",
+            "border_color": "#4a90e2",
+            "text_color": "#4a90e2"
+          }
+        },
+        "story_gECyBL": {
+          "type": "story",
+          "settings": {
+            "title": "The Earth: Stability & Abundance",
+            "description": "Understand how earth energy grounds us, providing stability, practicality, and connection to nature.",
+            "icon": "fa fa-fire",
+            "link": "",
+            "bg_color": "#f9f7f4",
+            "border_color": "#8b5a2b",
+            "text_color": "#8b5a2b"
+          }
+        },
+        "story_n6K4BJ": {
+          "type": "story",
+          "settings": {
+            "title": "The Air: Intellect & Communication",
+            "description": "Learn about air energy's connection to our thoughts, communication style, and intellectual pursuits.",
+            "icon": "fa fa-fire",
+            "link": "",
+            "bg_color": "#f6fbf6",
+            "border_color": "#4caf50",
+            "text_color": "#4caf50"
           }
         }
       },
       "block_order": [
-        "story_36XgXY"
+        "story_36XgXY",
+        "story_atd4jz",
+        "story_gECyBL",
+        "story_n6K4BJ"
       ],
       "name": "Stories of Elements",
       "settings": {
+        "heading": "Stories of the Four Elements",
+        "subheading": "Ancient wisdom meets modern energy—explore the origins and significance of fire, water, earth, and air in astrology and metaphysics.",
         "right_image": "shopify://shop_images/blok1.jpg"
       }
     },
