@@ -77,18 +77,13 @@
                     <option value="">Select Country</option>
                     <option value="usa">United States</option>
                     <option value="uk">United Kingdom</option>
-                    <option value="can">Canada</option>
-                    <option value="aus">Australia</option>
-                    <option value="de">Germany</option>
-                    <option value="fr">France</option>
-                    <option value="jp">Japan</option>
                     <option value="cn">China</option>
                   </select>
                 </div>
                 <div>
                   <label for="state">State/Province</label>
                   <select id="state" name="state" disabled required>
-                    <option value="">Select State</option>
+                    <option value="">Select State/Province</option>
                   </select>
                 </div>
                 <div>
@@ -116,6 +111,72 @@
       </div>
     </div>
   </div>
+
+  <!-- 国家-州-城市联动脚本 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const countrySelect = document.getElementById('country');
+      const stateSelect = document.getElementById('state');
+      const citySelect = document.getElementById('city');
+
+      const locations = {
+        'usa': {
+          'California': ['Los Angeles', 'San Francisco', 'San Diego'],
+          'New York': ['New York City', 'Buffalo', 'Rochester'],
+          'Texas': ['Houston', 'Dallas', 'Austin']
+        },
+        'uk': {
+          'England': ['London', 'Manchester', 'Birmingham'],
+          'Scotland': ['Edinburgh', 'Glasgow', 'Aberdeen'],
+          'Wales': ['Cardiff', 'Swansea', 'Newport']
+        },
+        'cn': {
+          'Beijing': ['Beijing', 'Haidian', 'Chaoyang'],
+          'Shanghai': ['Shanghai', 'Pudong', 'Xuhui'],
+          'Guangdong': ['Guangzhou', 'Shenzhen', 'Dongguan']
+        }
+      };
+
+      function resetSelect(select, placeholder) {
+        select.innerHTML = `<option value="">${placeholder}</option>`;
+        select.disabled = true;
+      }
+
+      function populateSelect(select, items) {
+        items.forEach(item => {
+          const option = document.createElement('option');
+          option.value = item;
+          option.textContent = item;
+          select.appendChild(option);
+        });
+        select.disabled = false;
+      }
+
+      // 初始化
+      resetSelect(stateSelect, 'Select State/Province');
+      resetSelect(citySelect, 'Select City');
+
+      countrySelect.addEventListener('change', function() {
+        const country = this.value;
+        resetSelect(stateSelect, 'Select State/Province');
+        resetSelect(citySelect, 'Select City');
+
+        if (country && locations[country]) {
+          populateSelect(stateSelect, Object.keys(locations[country]));
+        }
+      });
+
+      stateSelect.addEventListener('change', function() {
+        const country = countrySelect.value;
+        const state = this.value;
+        resetSelect(citySelect, 'Select City');
+
+        if (country && state && locations[country][state]) {
+          populateSelect(citySelect, locations[country][state]);
+        }
+      });
+    });
+  </script>
 
   {% schema %}
   {
