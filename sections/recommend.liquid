@@ -1,0 +1,91 @@
+<section class="recommend-section">
+  {{ 'recommend.css' | asset_url | stylesheet_tag }}
+
+  <div class="recommend-header">
+    <h2>{{ section.settings.heading }}</h2>
+    <p>{{ section.settings.subheading }}</p>
+  </div>
+
+  {% for block in section.blocks %}
+  <div class="crystal-item">
+    <div class="crystal-grid {% if block.settings.image_position == 'right' %}image-right{% endif %}">
+
+      <!-- 图片区域 -->
+      <div class="crystal-image">
+        {% if block.settings.image %}
+        <div class="crystal-img-container">
+          <img src="{{ block.settings.image | image_url: width:1200 }}" alt="{{ block.settings.title }}">
+          {% if block.settings.element_name %}
+          <div class="element-badge {{ block.settings.element_color }}">
+            {{ block.settings.element_name }}
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- 文字区域 -->
+      <div class="crystal-text">
+        <h3>{{ block.settings.title }}</h3>
+        <p>{{ block.settings.description }}</p>
+
+        {% if block.settings.features != blank %}
+        <div class="features">
+          {% for feature in block.settings.features %}
+          <div>
+            <span class="feature-icon">✔</span>
+            <span>{{ feature }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="crystal-actions">
+          {% if block.settings.price %}
+          <span class="price">{{ block.settings.price }}</span>
+          {% endif %}
+          {% if block.settings.add_to_cart_link %}
+          <a href="{{ block.settings.add_to_cart_link }}" class="btn btn-add">Add to Cart</a>
+          {% endif %}
+          {% if block.settings.view_link %}
+          <a href="{{ block.settings.view_link }}" class="btn btn-view">View</a>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+  {% endfor %}
+
+  {% schema %}
+  {
+    "name": "Recommend Section",
+    "settings": [
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Elemental Crystal Art" },
+      { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Each piece is infused with energy to balance your elemental composition, handcrafted with natural crystals and premium materials." }
+    ],
+    "blocks": [
+      {
+        "type": "crystal",
+        "name": "Crystal Item",
+        "settings": [
+          { "type": "image_picker", "id": "image", "label": "Image" },
+          { "type": "text", "id": "element_name", "label": "Element Name", "default": "Fire Element" },
+          { "type": "text", "id": "element_color", "label": "Element Color Class", "default": "fire" },
+          { "type": "select", "id": "image_position", "label": "Image Position", "options": [{"value":"left","label":"Left"},{"value":"right","label":"Right"}], "default":"left" },
+          { "type": "text", "id": "title", "label": "Title", "default": "Ignite Passion" },
+          { "type": "textarea", "id": "description", "label": "Description", "default": "Our Fire Element crystal art captures the essence of transformation and vitality..." },
+          { "type": "list", "id": "features", "label": "Features", "default": ["Natural citrine", "16\" × 20\" framed", "Handcrafted"] },
+          { "type": "text", "id": "price", "label": "Price", "default": "$129" },
+          { "type": "url", "id": "add_to_cart_link", "label": "Add to Cart Link" },
+          { "type": "url", "id": "view_link", "label": "View Link" }
+        ]
+      }
+    ],
+    "max_blocks": 10,
+    "presets": [
+      { "name": "Recommend Section", "category": "Custom Sections", "blocks": [{ "type": "crystal" }, { "type": "crystal" }, { "type": "crystal" }, { "type": "crystal" }] }
+    ]
+  }
+  {% endschema %}
+</section>
