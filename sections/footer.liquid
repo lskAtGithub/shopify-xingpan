@@ -70,22 +70,20 @@
   <!-- CSS -->
   <style>
     .footer a { text-decoration: none; }
-    .footer a:hover { color: #ff5722; } /* fire color */
-    .footer .text-fire { color: #ff5722; }
+    .footer a:hover { color: #ffd110; } /* fire color */
+    .footer .text-fire { color: #ffd110; }
     .footer .transition-colors { transition: color 0.3s ease; }
     .footer .footer-logo i { font-size: 1.25rem; }
     .footer .footer-links li a { display: block; }
     .footer .footer-bottom p { margin: 0.25rem 0; }
     /* Responsive tweaks if needed */
-    @media screen and (max-width: 768px) {
-      .footer .footer-content-box { grid-template-columns: 1fr !important; }
-      .footer .footer-logo { justify-content: center; }
-      .footer .footer-social { justify-content: center; }
-    }
-    container {
+    .container {
       background-color: #111827;
     }
     .footer-content-box {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
       width: min(100vw, 1200px);
       margin: 0 auto;
       color: #fff;
