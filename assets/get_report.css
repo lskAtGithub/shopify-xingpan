@@ -37,13 +37,26 @@
 
 /* 网格布局 */
 .get-report-section .grid {
-  display: grid;
-  gap: 2rem; /* gap-8 */
+  display: flex;
+  gap: 16px; /* 左右间距 */
+  flex-wrap: wrap; /* 小屏幕换行 */
+}
+
+.grid > .left-content,
+.grid > .form-container {
+  flex: 1; /* 左右平分宽度 */
+  padding: 3rem;
+}
+
+label.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 @media (min-width: 768px) {
   .get-report-section .grid {
-    grid-template-columns: repeat(2, 1fr); /* md:grid-cols-2 */
+    flex-direction: column;
   }
 }
 
