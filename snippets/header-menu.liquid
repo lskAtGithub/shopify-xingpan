@@ -91,3 +91,14 @@
     {% render 'overflow-list', class: class, ref: 'overflowMenu', children: children, minimum-items: 2, defer: true %}
   </div>
 </nav>
+
+
+{% stylesheet %}
+.menu-list__link-title {
+  color: #1a1a2e;
+  &:hover,
+  &:focus {
+    color: #ffd413;
+  }
+}
+{% endstylesheet %}
