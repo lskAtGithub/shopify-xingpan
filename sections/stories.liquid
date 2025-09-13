@@ -4,30 +4,161 @@
 <section id="stories" class="stories-section">
   <div class="stories-container">
     <div class="stories-content">
-      <h2 class="stories-title">Stories of the Four Elements</h2>
-      <p class="stories-description">
-        Ancient wisdom meets modern energy—explore the origins and significance of fire, water, earth, and air in astrology and metaphysics.
-      </p>
+      <h2 class="stories-title">{{ section.settings.heading }}</h2>
+      <p class="stories-description">{{ section.settings.description }}</p>
 
-      {% assign default_stories = 
-        "[{'title':'The Fire: Transformation & Passion','description':'Discover how fire represents our life force, creativity, and ability to transform energy into action.','icon':'fa-fire','bg':'#fdecef','border':'#fcdcdc','text':'#e63946','link':'#'},{'title':'The Water: Emotion & Intuition','description':'Explore the depths of water energy, governing our emotions, intuition, and subconscious mind.','icon':'fa-tint','bg':'#e0f7fd','border':'#b3e0f5','text':'#00b4d8','link':'#'},{'title':'The Earth: Stability & Abundance','description':'Understand how earth energy grounds us, providing stability, practicality, and connection to nature.','icon':'fa-leaf','bg':'#e8f5e9','border':'#c8e6c9','text':'#43a047','link':'#'},{'title':'The Air: Intellect & Communication','description':'Learn about air energy\'s connection to our thoughts, communication style, and intellectual pursuits.','icon':'fa-wind','bg':'#f0f4ff','border':'#d6e0ff','text':'#3f51b5','link':'#'}]" | parse_json %}
-
-      {% for story in default_stories %}
-      <div class="story-item" style="background-color: {{ story.bg }}; border-color: {{ story.border }};">
-        <div class="story-icon" style="background-color: {{ story.border }}; color: {{ story.text }};">
-          <i class="fa {{ story.icon }}"></i>
+      {% for block in section.blocks %}
+        <div class="story-item" style="background-color: {{ block.settings.bg_color }}; border-color: {{ block.settings.border_color }};">
+          <div class="story-icon" style="background-color: {{ block.settings.border_color }}; color: {{ block.settings.text_color }};">
+            <i class="fa {{ block.settings.icon }}"></i>
+          </div>
+          <div class="story-text">
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.text }}</p>
+            <a href="{{ block.settings.link }}" style="color: {{ block.settings.text_color }};">
+              Read More <i class="fa fa-long-arrow-right"></i>
+            </a>
+          </div>
         </div>
-        <div class="story-text">
-          <h3>{{ story.title }}</h3>
-          <p>{{ story.description }}</p>
-          <a href="{{ story.link }}" style="color: {{ story.text }};">Read More <i class="fa fa-long-arrow-right"></i></a>
-        </div>
-      </div>
       {% endfor %}
     </div>
 
-    <div class="stories-image">
-      <img src="https://picsum.photos/id/1050/800/960" alt="Four elements illustration with cosmic background">
-    </div>
+    {% if section.settings.image != blank %}
+      <div class="stories-image">
+        <img src="{{ section.settings.image | img_url: '800x960' }}" alt="{{ section.settings.heading }}">
+      </div>
+    {% endif %}
   </div>
 </section>
+
+{% schema %}
+{
+  "name": "Stories Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Stories of the Four Elements"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Section Description",
+      "default": "Ancient wisdom meets modern energy—explore the origins and significance of fire, water, earth, and air in astrology and metaphysics."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Right Side Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "story",
+      "name": "Story Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "The Fire: Transformation & Passion"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "Discover how fire represents our life force, creativity, and ability to transform energy into action."
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "FontAwesome Icon (e.g. fa-fire)",
+          "default": "fa-fire"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Read More Link",
+          "default": "#"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background Color",
+          "default": "#fdecef"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border/Icon Background",
+          "default": "#fcdcdc"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Accent Text Color",
+          "default": "#e63946"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Stories of Elements",
+      "category": "Custom Sections",
+      "blocks": [
+        {
+          "type": "story",
+          "settings": {
+            "title": "The Fire: Transformation & Passion",
+            "text": "Discover how fire represents our life force, creativity, and ability to transform energy into action.",
+            "icon": "fa-fire",
+            "link": "#",
+            "bg_color": "#fdecef",
+            "border_color": "#fcdcdc",
+            "text_color": "#e63946"
+          }
+        },
+        {
+          "type": "story",
+          "settings": {
+            "title": "The Water: Emotion & Intuition",
+            "text": "Explore the depths of water energy, governing our emotions, intuition, and subconscious mind.",
+            "icon": "fa-tint",
+            "link": "#",
+            "bg_color": "#e0f7fd",
+            "border_color": "#b3e0f5",
+            "text_color": "#00b4d8"
+          }
+        },
+        {
+          "type": "story",
+          "settings": {
+            "title": "The Earth: Stability & Abundance",
+            "text": "Understand how earth energy grounds us, providing stability, practicality, and connection to nature.",
+            "icon": "fa-leaf",
+            "link": "#",
+            "bg_color": "#e8f5e9",
+            "border_color": "#c8e6c9",
+            "text_color": "#43a047"
+          }
+        },
+        {
+          "type": "story",
+          "settings": {
+            "title": "The Air: Intellect & Communication",
+            "text": "Learn about air energy's connection to our thoughts, communication style, and intellectual pursuits.",
+            "icon": "fa-wind",
+            "link": "#",
+            "bg_color": "#f0f4ff",
+            "border_color": "#d6e0ff",
+            "text_color": "#3f51b5"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
