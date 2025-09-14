@@ -346,8 +346,9 @@
           "type": "product",
           "settings": {
             "product": "rams-passion",
-            "secondary_tag_bg_color": "#ffffff",
-            "secondary_tag_text_color": "#e53e3e"
+            "secondary_tag_bg_color": "#ffd100",
+            "secondary_tag_text_color": "#ffffff",
+            "add_to_cart_bg_color": "#ffd100"
           }
         },
         "product_KDgFJF": {
@@ -355,7 +356,8 @@
           "settings": {
             "product": "rams-passion",
             "secondary_tag_bg_color": "#ffd100",
-            "secondary_tag_text_color": "#ffffff"
+            "secondary_tag_text_color": "#ffffff",
+            "add_to_cart_bg_color": "#e53e3e"
           }
         }
       },
