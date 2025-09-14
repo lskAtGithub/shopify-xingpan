@@ -74,7 +74,7 @@
       "settings": {
         "heading": "Elemental Crystal Art",
         "subheading": "<p>Each piece is infused with energy to balance your elemental composition, handcrafted with natural crystals and premium materials.</p>",
-        "background_color": "#FFFFFF",
+        "background_color": "#ffffff",
         "text_color": "#333333",
         "padding_top": 36,
         "padding_bottom": 36
@@ -338,12 +338,25 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "zodiac_collection_grid_f8JLgc": {
+      "type": "zodiac-collection-grid",
+      "name": "星座产品系列",
+      "settings": {
+        "heading": "Zodiac Crystal Collections",
+        "subheading": "<p>Discover crystal art aligned with your zodiac sign, combining astrological energy with natural crystal properties.</p>",
+        "collection": "zodiac-crystal-collections",
+        "products_to_show": 8,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
     "get_report_d7rwzM",
     "custom_featured_product_Win7PL",
     "stories_Bh4WrV",
-    "product_list_fa6P9H"
+    "product_list_fa6P9H",
+    "zodiac_collection_grid_f8JLgc"
   ]
 }
