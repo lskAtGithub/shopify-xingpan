@@ -20,6 +20,66 @@
         "button_text": "提交"
       }
     },
+    "custom_featured_product_Win7PL": {
+      "type": "custom-featured-product",
+      "blocks": {
+        "featured_product_6ERABi": {
+          "type": "featured_product",
+          "settings": {
+            "featured_product": "ignite-passion",
+            "badge_text": "New Element",
+            "product_title_override": "",
+            "product_description_override": "",
+            "features_list": ""
+          }
+        },
+        "featured_product_Vxc96U": {
+          "type": "featured_product",
+          "settings": {
+            "featured_product": "flow-harmony",
+            "badge_text": "New Element",
+            "product_title_override": "",
+            "product_description_override": "",
+            "features_list": ""
+          }
+        },
+        "featured_product_KzKFgm": {
+          "type": "featured_product",
+          "settings": {
+            "featured_product": "grounded-stability",
+            "badge_text": "New Element",
+            "product_title_override": "",
+            "product_description_override": "",
+            "features_list": ""
+          }
+        },
+        "featured_product_C77FRX": {
+          "type": "featured_product",
+          "settings": {
+            "featured_product": "clarity-insight",
+            "badge_text": "New Element",
+            "product_title_override": "",
+            "product_description_override": "",
+            "features_list": ""
+          }
+        }
+      },
+      "block_order": [
+        "featured_product_6ERABi",
+        "featured_product_Vxc96U",
+        "featured_product_KzKFgm",
+        "featured_product_C77FRX"
+      ],
+      "name": "特色产品集合",
+      "settings": {
+        "heading": "Elemental Crystal Art",
+        "subheading": "<p>Each piece is infused with energy to balance your elemental composition, handcrafted with natural crystals and premium materials.</p>",
+        "background_color": "#FFFFFF",
+        "text_color": "#333333",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "recommend_gpKTB6": {
       "type": "recommend",
       "blocks": {
@@ -323,73 +383,13 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
-    },
-    "custom_featured_product_Win7PL": {
-      "type": "custom-featured-product",
-      "blocks": {
-        "featured_product_6ERABi": {
-          "type": "featured_product",
-          "settings": {
-            "featured_product": "ignite-passion",
-            "badge_text": "New Element",
-            "product_title_override": "",
-            "product_description_override": "",
-            "features_list": ""
-          }
-        },
-        "featured_product_Vxc96U": {
-          "type": "featured_product",
-          "settings": {
-            "featured_product": "flow-harmony",
-            "badge_text": "New Element",
-            "product_title_override": "",
-            "product_description_override": "",
-            "features_list": ""
-          }
-        },
-        "featured_product_KzKFgm": {
-          "type": "featured_product",
-          "settings": {
-            "featured_product": "grounded-stability",
-            "badge_text": "New Element",
-            "product_title_override": "",
-            "product_description_override": "",
-            "features_list": ""
-          }
-        },
-        "featured_product_C77FRX": {
-          "type": "featured_product",
-          "settings": {
-            "featured_product": "clarity-insight",
-            "badge_text": "New Element",
-            "product_title_override": "",
-            "product_description_override": "",
-            "features_list": ""
-          }
-        }
-      },
-      "block_order": [
-        "featured_product_6ERABi",
-        "featured_product_Vxc96U",
-        "featured_product_KzKFgm",
-        "featured_product_C77FRX"
-      ],
-      "name": "特色产品集合",
-      "settings": {
-        "heading": "Elemental Crystal Art",
-        "subheading": "<p>Each piece is infused with energy to balance your elemental composition, handcrafted with natural crystals and premium materials.</p>",
-        "background_color": "#FFFFFF",
-        "text_color": "#333333",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
     }
   },
   "order": [
     "get_report_d7rwzM",
+    "custom_featured_product_Win7PL",
     "recommend_gpKTB6",
     "stories_Bh4WrV",
-    "product_list_fa6P9H",
-    "custom_featured_product_Win7PL"
+    "product_list_fa6P9H"
   ]
 }
