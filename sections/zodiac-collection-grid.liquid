@@ -1,0 +1,278 @@
+{% comment %}
+  Zodiac Collection Grid Section
+  - Displays products from a selected collection in a responsive grid.
+  - Uses product metafields for custom badge text and subtitle.
+{% endcomment %}
+
+<style>
+  .section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+</style>
+
+<div class="page-width section-{{ section.id }}">
+  <div class="zodiac-collection__header">
+    {% if section.settings.heading != blank %}
+      <h2>{{ section.settings.heading }}</h2>
+    {% endif %}
+    {% if section.settings.subheading != blank %}
+      <div class="rte">{{ section.settings.subheading }}</div>
+    {% endif %}
+  </div>
+
+  {%- assign collection = section.settings.collection -%}
+  <div class="zodiac-collection__grid">
+    {% for product in collection.products limit: section.settings.products_to_show %}
+      <div class="zodiac-card">
+        <a href="{{ product.url }}" class="zodiac-card__image-wrapper">
+          {% if product.metafields.custom.zodiac_sign.value != blank %}
+            {%- assign zodiac_class = product.metafields.custom.zodiac_sign.value | downcase -%}
+            <div class="zodiac-card__badge badge--{{ zodiac_class }}">
+              {{ product.metafields.custom.zodiac_sign.value }}
+            </div>
+          {% endif %}
+          
+          {% if product.featured_media %}
+            {{ product.featured_media | image_url: width: 500 | image_tag: loading: 'lazy', widths: '200, 300, 400, 500', sizes: '(max-width: 768px) 50vw, 25vw' }}
+          {% else %}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          {% endif %}
+        </a>
+
+        <div class="zodiac-card__info">
+          <h3 class="zodiac-card__title">
+            <a href="{{ product.url }}">{{ product.title }}</a>
+          </h3>
+
+          {% if product.metafields.custom.subtitle.value != blank %}
+            <p class="zodiac-card__subtitle">{{ product.metafields.custom.subtitle.value }}</p>
+          {% endif %}
+
+          <div class="zodiac-card__footer">
+            <span class="zodiac-card__price">{{ product.price | money }}</span>
+            {%- assign current_variant = product.selected_or_first_available_variant -%}
+            <form method="post" action="/cart/add" accept-charset="UTF-8" enctype="multipart/form-data" novalidate="novalidate">
+               <input type="hidden" name="id" value="{{ current_variant.id }}">
+               <button type="submit" class="button button--primary button--{{ zodiac_class }}">Add to Cart</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      {% for i in (1..4) %}
+        <div class="zodiac-card">
+           <div class="zodiac-card__image-wrapper">
+            {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
+           </div>
+           <div class="zodiac-card__info">
+             <h3 class="zodiac-card__title">Example Product</h3>
+             <p class="zodiac-card__subtitle">Example subtitle for product.</p>
+             <div class="zodiac-card__footer">
+                <span class="zodiac-card__price">$99</span>
+                <button type="button" class="button button--primary" disabled>Add to Cart</button>
+             </div>
+           </div>
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+
+
+{% stylesheet %}
+/* Header Styles */
+.zodiac-collection__header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.zodiac-collection__header h2 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+.zodiac-collection__header .rte {
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Grid Layout */
+.zodiac-collection__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Mobile: 2 columns */
+  gap: 20px;
+}
+
+@media (min-width: 769px) {
+  .zodiac-collection__grid {
+    grid-template-columns: repeat(3, 1fr); /* Tablet: 3 columns */
+    gap: 25px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .zodiac-collection__grid {
+    grid-template-columns: repeat(4, 1fr); /* Desktop: 4 columns */
+  }
+}
+
+/* Card Styles */
+.zodiac-card {
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.zodiac-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.zodiac-card__image-wrapper {
+  position: relative;
+  display: block;
+}
+.zodiac-card__image-wrapper img {
+  width: 100%;
+  height: 250px; /* Or use aspect-ratio: 1 / 1; for square */
+  object-fit: cover;
+  display: block;
+}
+
+.zodiac-card__info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Allows footer to stick to bottom */
+}
+.zodiac-card__title {
+  font-size: 1.1rem;
+  margin: 0 0 5px 0;
+}
+.zodiac-card__title a {
+  text-decoration: none;
+  color: inherit;
+}
+.zodiac-card__subtitle {
+  font-size: 0.9rem;
+  color: #6B7280;
+  margin: 0;
+  flex-grow: 1; /* Pushes footer down */
+  margin-bottom: 15px;
+}
+
+.zodiac-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto; /* Pushes footer to bottom */
+}
+.zodiac-card__price {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Badge & Button Colors */
+.zodiac-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #fff;
+  z-index: 2;
+}
+.button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+.button:hover { opacity: 0.85; }
+
+/* Zodiac Colors */
+.badge--aries, .button--aries { background-color: #FBBF24; color: #1F2937; }
+.badge--taurus, .button--taurus { background-color: #6D4C41; }
+.badge--gemini, .button--gemini { background-color: #81C784; }
+.badge--cancer, .button--cancer { background-color: #64B5F6; }
+.badge--leo, .button--leo { background-color: #FFB74D; }
+.badge--virgo, .button--virgo { background-color: #A1887F; }
+.badge--libra, .button--libra { background-color: #F06292; }
+.badge--scorpio, .button--scorpio { background-color: #424242; }
+.badge--sagittarius, .button--sagittarius { background-color: #7E57C2; }
+.badge--capricorn, .button--capricorn { background-color: #78909C; }
+.badge--aquarius, .button--aquarius { background-color: #29B6F6; }
+.badge--pisces, .button--pisces { background-color: #4DB6AC; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "星座产品系列",
+  "tag": "section",
+  "class": "section-zodiac-collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "标题",
+      "default": "Zodiac Crystal Collections"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "副标题",
+      "default": "<p>Discover crystal art aligned with your zodiac sign, combining astrological energy with natural crystal properties.</p>"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "选择产品系列"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "label": "显示产品数量",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "布局设置"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "顶部内边距",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "底部内边距",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "星座产品系列"
+    }
+  ]
+}
+{% endschema %}
