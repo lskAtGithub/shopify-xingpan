@@ -78,7 +78,9 @@
             {%- assign current_variant = product.selected_or_first_available_variant -%}
             <form method="post" action="/cart/add" accept-charset="UTF-8" enctype="multipart/form-data" novalidate="novalidate">
                <input type="hidden" name="id" value="{{ current_variant.id }}">
-               <button type="submit" class="button button--primary button--{{ zodiac_class }}">Add to Cart</button>
+               <button type="submit" class="button button--primary button--{{ zodiac_class }}"
+                style="background-color: {{ block.settings.add_to_cart_bg_color }};"
+              >Add to Cart</button>
             </form>
           </div>
         </div>
@@ -191,6 +193,12 @@
           "type": "color",
           "id": "secondary_tag_text_color",
           "label": "副标签文本色",
+          "default": "#E53E3E"
+        },
+        {
+          "type": "color",
+          "id": "add_to_cart_bg_color",
+          "label": "加入购物车按钮背景色",
           "default": "#E53E3E"
         }
       ]
