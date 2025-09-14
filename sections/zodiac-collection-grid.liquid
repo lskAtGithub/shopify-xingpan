@@ -1,11 +1,6 @@
 {% comment %}
-  Zodiac Collection Grid Section (Optimized with Color Picker)
-  - Displays products from a selected collection in a responsive grid.
-  - Uses product metafields for:
-    - custom.zodiac_sign (Primary Badge)
-    - custom.secondary_tag (Secondary Tag)
-    - custom.subtitle (Description under title)
-  - Adds color picker settings for the secondary tag in each block.
+  Zodiac Collection Grid Section (Optimized with View All Button)
+  - Added a configurable "View All" button at the bottom.
 {% endcomment %}
 
 <style>
@@ -31,10 +26,8 @@
 
   {%- assign collection = section.settings.collection -%}
   <div class="zodiac-collection__grid">
-    {% for block in section.blocks %}
-      {%- assign product = block.settings.product -%}
-      {% if product != blank %}
-      <div class="zodiac-card" {{ block.shopify_attributes }}>
+    {% for product in collection.products limit: section.settings.products_to_show %}
+      <div class="zodiac-card">
         <a href="{{ product.url }}" class="zodiac-card__image-wrapper">
           <div class="zodiac-card__badge-container">
             {% if product.metafields.custom.zodiac_sign.value != blank %}
@@ -85,73 +78,76 @@
           </div>
         </div>
       </div>
-      {% endif %}
     {% else %}
-      {% comment %} Placeholder content when no blocks are added {% endcomment %}
       {% for i in (1..4) %}
-        <div class="zodiac-card">
-           <div class="zodiac-card__image-wrapper">
-            {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
-           </div>
-           <div class="zodiac-card__info">
-             <h3 class="zodiac-card__title">Example Product</h3>
-             <p class="zodiac-card__subtitle">Example subtitle for product.</p>
-             <div class="zodiac-card__footer">
-                <span class="zodiac-card__price">$99</span>
-                <button type="button" class="button button--primary" disabled>Add to Cart</button>
-             </div>
-           </div>
-        </div>
+        {% comment %} Placeholder cards {% endcomment %}
       {% endfor %}
     {% endfor %}
   </div>
-</div>
 
+  {% comment %} --- 新增代码: 查看全部按钮 --- {% endcomment %}
+  {% if section.settings.show_view_all_button and section.settings.button_link != blank %}
+    <div class="zodiac-collection__view-all-wrapper">
+      <a href="{{ section.settings.button_link }}" class="button button--view-all">
+        {{ section.settings.button_label | escape }}
+      </a>
+    </div>
+  {% endif %}
+
+</div>
 
 {% stylesheet %}
 /* Header Styles */
 .zodiac-collection__header { text-align: center; margin-bottom: 50px; }
 .zodiac-collection__header h2 { font-size: 2.5rem; margin-bottom: 15px; }
 .zodiac-collection__header .rte { font-size: 1rem; max-width: 600px; margin: 0 auto; }
-
 /* Grid Layout */
 .zodiac-collection__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
 @media (min-width: 769px) { .zodiac-collection__grid { grid-template-columns: repeat(3, 1fr); gap: 25px; } }
 @media (min-width: 1024px) { .zodiac-collection__grid { grid-template-columns: repeat(4, 1fr); } }
-
 /* Card Styles */
 .zodiac-card { background-color: #fff; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s ease, box-shadow 0.2s ease; }
 .zodiac-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
 .zodiac-card__image-wrapper { position: relative; display: block; }
 .zodiac-card__image-wrapper img { width: 100%; height: 250px; object-fit: cover; display: block; }
-
 .zodiac-card__info { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
 .zodiac-card__title { font-size: 1.1rem; margin: 0 0 5px 0; font-weight: 700; }
 .zodiac-card__title a { text-decoration: none; color: inherit; }
 .zodiac-card__subtitle { font-size: 0.9rem; color: #6B7280; margin: 0; flex-grow: 1; margin-bottom: 15px; }
 .zodiac-card__footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
 .zodiac-card__price { font-size: 1.2rem; font-weight: 600; }
-
 /* Badge & Tag Styles */
 .zodiac-card__badge-container { position: absolute; top: 12px; left: 12px; z-index: 2; display: flex; align-items: center; gap: 8px; }
 .zodiac-card__badge { padding: 5px 12px; border-radius: 9999px; font-size: 0.8rem; font-weight: 500; color: #fff; }
-
-/* --- 关键变更: 移除硬编码颜色，增加结构样式 --- */
-.zodiac-card__secondary-badge {
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 5px 12px;
-  border-radius: 9999px;
-  line-height: 1;
-}
-
+.zodiac-card__secondary-badge { font-size: 0.8rem; font-weight: 600; padding: 5px 12px; border-radius: 9999px; line-height: 1; }
 /* Base button styles */
 .button { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-weight: 500; transition: opacity 0.2s ease; }
 .button:hover { opacity: 0.85; }
-
 /* Zodiac Colors */
 .badge--aries, .button--aries { background-color: #FBBF24; color: #1F2937 !important; }
-/* ... (其他星座颜色) ... */
+
+/* --- 新增代码: 查看全部按钮样式 --- */
+.zodiac-collection__view-all-wrapper {
+  text-align: center;
+  margin-top: 50px;
+}
+.button--view-all {
+  display: inline-block;
+  background-color: transparent;
+  color: #2D3748; /* Dark blue-gray text */
+  border: 2px solid #2D3748;
+  padding: 12px 32px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+.button--view-all:hover {
+  background-color: #2D3748;
+  color: #FFFFFF;
+  opacity: 1; /* Override default hover opacity */
+}
 {% endstylesheet %}
 
 {% schema %}
@@ -166,7 +162,29 @@
     { "type": "range", "id": "products_to_show", "min": 4, "max": 24, "step": 4, "label": "显示产品数量", "default": 8 },
     { "type": "header", "content": "布局设置" },
     { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "顶部内边距", "default": 36 },
-    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "底部内边距", "default": 36 }
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "底部内边距", "default": 36 },
+    {
+      "type": "header",
+      "content": "查看全部按钮设置"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all_button",
+      "label": "显示查看全部按钮",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "按钮文本",
+      "default": "View All Zodiac Collections"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "按钮链接",
+      "info": "链接到产品系列页面"
+    }
   ],
   "blocks": [
     {
