@@ -41,7 +41,7 @@
               {% comment %} --- 关键变更: 添加内联样式来应用颜色设置 --- {% endcomment %}
               <div
                 class="zodiac-card__secondary-badge"
-                style="background-color: {{ block.settings.secondary_tag_bg_color }}; color: {{ block.settings.secondary_tag_text_color }};"
+                style="background-color: {{ product.metafields.custom.secondary_tag_bg_color }}; color: {{ product.metafields.custom.secondary_tag_text_color }};"
               >
                 {{ product.metafields.custom.secondary_tag.value }}
               </div>
