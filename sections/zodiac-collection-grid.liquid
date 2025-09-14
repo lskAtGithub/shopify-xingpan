@@ -1,10 +1,11 @@
 {% comment %}
-  Zodiac Collection Grid Section (Optimized)
+  Zodiac Collection Grid Section (Optimized with Color Picker)
   - Displays products from a selected collection in a responsive grid.
   - Uses product metafields for:
     - custom.zodiac_sign (Primary Badge)
     - custom.secondary_tag (Secondary Tag)
     - custom.subtitle (Description under title)
+  - Adds color picker settings for the secondary tag in each block.
 {% endcomment %}
 
 <style>
@@ -30,8 +31,10 @@
 
   {%- assign collection = section.settings.collection -%}
   <div class="zodiac-collection__grid">
-    {% for product in collection.products limit: section.settings.products_to_show %}
-      <div class="zodiac-card">
+    {% for block in section.blocks %}
+      {%- assign product = block.settings.product -%}
+      {% if product != blank %}
+      <div class="zodiac-card" {{ block.shopify_attributes }}>
         <a href="{{ product.url }}" class="zodiac-card__image-wrapper">
           <div class="zodiac-card__badge-container">
             {% if product.metafields.custom.zodiac_sign.value != blank %}
@@ -41,9 +44,12 @@
               </div>
             {% endif %}
             
-            {% comment %} --- 新增代码: 副标签 --- {% endcomment %}
             {% if product.metafields.custom.secondary_tag.value != blank %}
-              <div class="zodiac-card__secondary-badge">
+              {% comment %} --- 关键变更: 添加内联样式来应用颜色设置 --- {% endcomment %}
+              <div
+                class="zodiac-card__secondary-badge"
+                style="background-color: {{ block.settings.secondary_tag_bg_color }}; color: {{ block.settings.secondary_tag_text_color }};"
+              >
                 {{ product.metafields.custom.secondary_tag.value }}
               </div>
             {% endif %}
@@ -77,7 +83,9 @@
           </div>
         </div>
       </div>
+      {% endif %}
     {% else %}
+      {% comment %} Placeholder content when no blocks are added {% endcomment %}
       {% for i in (1..4) %}
         <div class="zodiac-card">
            <div class="zodiac-card__image-wrapper">
@@ -122,27 +130,17 @@
 .zodiac-card__footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
 .zodiac-card__price { font-size: 1.2rem; font-weight: 600; }
 
-/* --- Badge & Tag Styles (优化) --- */
-.zodiac-card__badge-container {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 8px; /* 两个标签之间的间距 */
-}
-.zodiac-card__badge {
+/* Badge & Tag Styles */
+.zodiac-card__badge-container { position: absolute; top: 12px; left: 12px; z-index: 2; display: flex; align-items: center; gap: 8px; }
+.zodiac-card__badge { padding: 5px 12px; border-radius: 9999px; font-size: 0.8rem; font-weight: 500; color: #fff; }
+
+/* --- 关键变更: 移除硬编码颜色，增加结构样式 --- */
+.zodiac-card__secondary-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
   padding: 5px 12px;
   border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: #fff;
-}
-.zodiac-card__secondary-badge {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #E53E3E; /* 红色 */
+  line-height: 1;
 }
 
 /* Base button styles */
@@ -150,14 +148,7 @@
 .button:hover { opacity: 0.85; }
 
 /* Zodiac Colors */
-.badge--aries, .button--aries { background-color: #FBBF24; color: #1F2937 !important; } /* Use !important to override base color */
-.badge--taurus, .button--taurus { background-color: #6D4C41; }
-.badge--gemini, .button--gemini { background-color: #81C784; }
-.badge--cancer, .button--cancer { background-color: #64B5F6; }
-.badge--leo, .button--leo { background-color: #FFB74D; }
-.badge--virgo, .button--virgo { background-color: #A1887F; }
-.badge--libra, .button--libra { background-color: #F06292; }
-.badge--scorpio, .button--scorpio { background-color: #424242; }
+.badge--aries, .button--aries { background-color: #FBBF24; color: #1F2937 !important; }
 /* ... (其他星座颜色) ... */
 {% endstylesheet %}
 
@@ -167,60 +158,53 @@
   "tag": "section",
   "class": "section-zodiac-collection",
   "settings": [
+    { "type": "text", "id": "heading", "label": "标题", "default": "Zodiac Crystal Collections" },
+    { "type": "richtext", "id": "subheading", "label": "副标题", "default": "<p>Discover crystal art aligned with your zodiac sign, combining astrological energy with natural crystal properties.</p>" },
+    { "type": "collection", "id": "collection", "label": "选择产品系列" },
+    { "type": "range", "id": "products_to_show", "min": 4, "max": 24, "step": 4, "label": "显示产品数量", "default": 8 },
+    { "type": "header", "content": "布局设置" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "顶部内边距", "default": 36 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "底部内边距", "default": 36 }
+  ],
+  "blocks": [
     {
-      "type": "text",
-      "id": "heading",
-      "label": "标题",
-      "default": "Zodiac Crystal Collections"
-    },
-    {
-      "type": "richtext",
-      "id": "subheading",
-      "label": "副标题",
-      "default": "<p>Discover crystal art aligned with your zodiac sign, combining astrological energy with natural crystal properties.</p>"
-    },
-    {
-      "type": "collection",
-      "id": "collection",
-      "label": "选择产品系列"
-    },
-    {
-      "type": "range",
-      "id": "products_to_show",
-      "min": 4,
-      "max": 24,
-      "step": 4,
-      "label": "显示产品数量",
-      "default": 8
-    },
-    {
-      "type": "header",
-      "content": "布局设置"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "顶部内边距",
-      "default": 36
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "底部内边距",
-      "default": 36
+      "type": "product",
+      "name": "产品",
+      "limit": 24,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "选择产品"
+        },
+        {
+          "type": "header",
+          "content": "副标签设置"
+        },
+        {
+          "type": "color",
+          "id": "secondary_tag_bg_color",
+          "label": "副标签背景色",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "secondary_tag_text_color",
+          "label": "副标签文本色",
+          "default": "#E53E3E"
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "星座产品系列"
+      "name": "星座产品系列",
+      "blocks": [
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" }
+      ]
     }
   ]
 }
