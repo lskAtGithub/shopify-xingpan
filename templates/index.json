@@ -341,6 +341,28 @@
     },
     "zodiac_collection_grid_f8JLgc": {
       "type": "zodiac-collection-grid",
+      "blocks": {
+        "product_REWQwU": {
+          "type": "product",
+          "settings": {
+            "product": "rams-passion",
+            "secondary_tag_bg_color": "#ffffff",
+            "secondary_tag_text_color": "#e53e3e"
+          }
+        },
+        "product_KDgFJF": {
+          "type": "product",
+          "settings": {
+            "product": "rams-passion",
+            "secondary_tag_bg_color": "#ffd100",
+            "secondary_tag_text_color": "#ffffff"
+          }
+        }
+      },
+      "block_order": [
+        "product_REWQwU",
+        "product_KDgFJF"
+      ],
       "name": "星座产品系列",
       "settings": {
         "heading": "Zodiac Crystal Collections",
