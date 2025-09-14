@@ -59,8 +59,8 @@
           </h3>
           
           {% comment %} "描述" 对应 subtitle 元字段 {% endcomment %}
-          {% if product.metafields.custom.subtitle.value != blank %}
-            <p class="zodiac-card__subtitle">{{ product.metafields.custom.subtitle.value }}</p>
+          {% if product.description != blank %}
+            <p class="zodiac-card__subtitle">{{ product.description }}</p>
           {% endif %}
 
           <div class="zodiac-card__footer">
