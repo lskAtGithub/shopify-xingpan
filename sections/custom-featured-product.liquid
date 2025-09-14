@@ -1,12 +1,15 @@
-{% comment %}
-  在这里我们将填充 HTML/Liquid 代码
-{% endcomment %}
 <style>
   .section-{{ section.id }} {
     --background-color: {{ section.settings.background_color }};
     --text-color: {{ section.settings.text_color }};
     background-color: var(--background-color);
     color: var(--text-color);
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+  .section-{{ section.id }}.page-width {
+    max-width: 1440px;
+    margin: 0 auto;
   }
 </style>
 
@@ -20,91 +23,198 @@
     {% endif %}
   </div>
 
-  {%- assign product = section.settings.featured_product -%}
-
-  {% if product != blank %}
-    <div class="custom-featured-product__content-grid">
-      <div class="custom-featured-product__image-wrapper">
-        {% if section.settings.badge_text != blank %}
-          <div class="custom-featured-product__badge">{{ section.settings.badge_text }}</div>
-        {% endif %}
-
-        {% if product.featured_media %}
-          {{
-            product.featured_media
-            | image_url: width: 1000
-            | image_tag: loading: 'lazy', widths: '300, 400, 600, 800, 1000', sizes: '(max-width: 768px) 100vw, 50vw'
-          }}
-        {% else %}
-          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-        {% endif %}
-      </div>
-
-      <div class="custom-featured-product__info">
-        {%- assign title = section.settings.product_title_override | default: product.title -%}
-        <h3>{{ title }}</h3>
-
-        {%- assign description = section.settings.product_description_override | default: product.description -%}
-        <div class="rte">{{ description }}</div>
-
-        {% if section.blocks.size > 0 %}
-          <ul class="custom-featured-product__features-list">
-            {% for block in section.blocks %}
-              <li>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="icon-checkmark"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                <span>{{ block.settings.text }}</span>
-              </li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-
-        <div class="custom-featured-product__price-and-cta">
-          <span class="price">{{ product.price | money }}</span>
-          <div class="buttons-wrapper">
-            {%- assign current_variant = product.selected_or_first_available_variant -%}
-            <form
-              method="post"
-              action="/cart/add"
-              accept-charset="UTF-8"
-              enctype="multipart/form-data"
-              novalidate="novalidate"
-            >
-              <input type="hidden" name="id" value="{{ current_variant.id }}">
-              <button type="submit" class="button button--primary">Add to Cart</button>
-            </form>
-            <a href="{{ product.url }}" class="button button--secondary">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="icon-eye"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
-            </a>
+  <div class="custom-featured-product__list">
+    {% for block in section.blocks %}
+      {%- assign product = block.settings.featured_product -%}
+      {% if product != blank %}
+        <div class="custom-featured-product__item {% cycle 'layout--normal', 'layout--reversed' %}" {{ block.shopify_attributes }}>
+          <div class="custom-featured-product__image-wrapper">
+            {% if block.settings.badge_text != blank %}
+              <div class="custom-featured-product__badge">{{ block.settings.badge_text }}</div>
+            {% endif %}
+            
+            {% if product.featured_media %}
+              {{ product.featured_media | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '300, 400, 600, 800, 1000', sizes: '(max-width: 768px) 100vw, 50vw' }}
+            {% else %}
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {% endif %}
+          </div>
+    
+          <div class="custom-featured-product__info">
+            {%- assign title = block.settings.product_title_override | default: product.title -%}
+            <h3>{{ title }}</h3>
+    
+            {%- assign description = block.settings.product_description_override | default: product.description -%}
+            <div class="rte">{{ description }}</div>
+    
+            {%- assign features = block.settings.features_list | split: newline -%}
+            {% if features.size > 0 %}
+              <ul class="custom-featured-product__features-list">
+                {% for feature in features %}
+                  {% if feature != blank %}
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon-checkmark" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>{{ feature }}</span>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            {% endif %}
+            
+            <div class="custom-featured-product__price-and-cta">
+              <span class="price">{{ product.price | money }}</span>
+              <div class="buttons-wrapper">
+                {%- assign current_variant = product.selected_or_first_available_variant -%}
+                <form method="post" action="/cart/add" accept-charset="UTF-8" enctype="multipart/form-data" novalidate="novalidate">
+                   <input type="hidden" name="id" value="{{ current_variant.id }}">
+                   <button type="submit" class="button button--primary">Add to Cart</button>
+                </form>
+                <a href="{{ product.url }}" class="button button--secondary">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon-eye" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  {% else %}
-    <p>请在后台设置中选择一个特色产品。</p>
-  {% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% if section.blocks.size == 0 %}
+      <p>请在后台添加产品特色块。</p>
+    {% endif %}
+  </div>
 </div>
+
+{% stylesheet %}
+.custom-featured-product__header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.custom-featured-product__header h2 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+.custom-featured-product__header .rte {
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.custom-featured-product__list {
+  display: flex;
+  flex-direction: column;
+  gap: 80px; /* Space between product rows */
+}
+
+.custom-featured-product__item {
+  display: grid;
+  grid-template-columns: 1fr; /* Mobile first: single column */
+  gap: 40px;
+  align-items: center;
+}
+
+/* Desktop layout */
+@media (min-width: 769px) {
+  .custom-featured-product__item {
+    grid-template-columns: 1fr 1fr; /* Two columns on desktop */
+    gap: 60px;
+  }
+  .custom-featured-product__item.layout--reversed .custom-featured-product__image-wrapper {
+    order: 2; /* Move image to the right */
+  }
+  .custom-featured-product__item.layout--reversed .custom-featured-product__info {
+    order: 1; /* Move info to the left */
+  }
+}
+
+.custom-featured-product__image-wrapper {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.custom-featured-product__image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.custom-featured-product__badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #FBBF24;
+  color: #1F2937;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-weight: 600;
+  z-index: 2;
+}
+/* Adjust badge for reversed layout */
+.layout--reversed .custom-featured-product__badge {
+    left: auto;
+    right: 20px;
+}
+
+
+.custom-featured-product__info h3 {
+  font-size: 2.2rem;
+  margin-bottom: 15px;
+}
+.custom-featured-product__info .rte {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+.custom-featured-product__features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px 0;
+}
+.custom-featured-product__features-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.custom-featured-product__features-list .icon-checkmark {
+  width: 20px;
+  height: 20px;
+  color: #FBBF24;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+.custom-featured-product__price-and-cta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.custom-featured-product__price-and-cta .price {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.custom-featured-product__price-and-cta .buttons-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+/* Base button styles - adjust to your theme */
+.button { padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; border: 1px solid transparent; cursor: pointer; transition: all 0.2s ease; }
+.button--primary { background-color: #FBBF24; color: #1F2937; }
+.button--primary:hover { opacity: 0.85; }
+.button--secondary { background-color: transparent; border-color: #E5E7EB; padding: 10px; display: flex; align-items: center; justify-content: center; }
+.button--secondary .icon-eye { width: 24px; height: 24px; }
+.button--secondary:hover { border-color: #D1D5DB; }
+{% endstylesheet %}
+
 {% schema %}
 {
-  "name": "特色产品展示",
+  "name": "特色产品集合",
   "tag": "section",
   "class": "section-custom-featured-product",
   "settings": [
@@ -121,31 +231,8 @@
       "default": "<p>Each piece is infused with energy to balance your elemental composition, handcrafted with natural crystals and premium materials.</p>"
     },
     {
-      "type": "product",
-      "id": "featured_product",
-      "label": "选择特色产品"
-    },
-    {
-      "type": "text",
-      "id": "badge_text",
-      "label": "图片徽章文本",
-      "default": "Fire Element"
-    },
-    {
-      "type": "text",
-      "id": "product_title_override",
-      "label": "产品标题 (覆盖)",
-      "info": "留空则使用产品的默认标题"
-    },
-    {
-      "type": "richtext",
-      "id": "product_description_override",
-      "label": "产品描述 (覆盖)",
-      "info": "留空则使用产品的默认描述"
-    },
-    {
       "type": "header",
-      "content": "颜色设置"
+      "content": "样式设置"
     },
     {
       "type": "color",
@@ -158,172 +245,74 @@
       "id": "text_color",
       "label": "文本颜色",
       "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "顶部内边距",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "底部内边距",
+      "default": 36
     }
   ],
   "blocks": [
     {
-      "type": "feature",
-      "name": "特性",
-      "limit": 4,
+      "type": "featured_product",
+      "name": "特色产品",
+      "limit": 6,
       "settings": [
         {
+          "type": "product",
+          "id": "featured_product",
+          "label": "选择产品"
+        },
+        {
           "type": "text",
-          "id": "text",
-          "label": "特性描述",
-          "default": "Handcrafted"
+          "id": "badge_text",
+          "label": "图片徽章文本",
+          "default": "New Element"
+        },
+        {
+          "type": "text",
+          "id": "product_title_override",
+          "label": "产品标题 (覆盖)",
+          "info": "留空则使用产品的默认标题"
+        },
+        {
+          "type": "richtext",
+          "id": "product_description_override",
+          "label": "产品描述 (覆盖)",
+          "info": "留空则使用产品的默认描述"
+        },
+        {
+          "type": "textarea",
+          "id": "features_list",
+          "label": "特性列表",
+          "info": "每行一个特性"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "特色产品展示",
+      "name": "特色产品集合",
       "blocks": [
-        { "type": "feature" },
-        { "type": "feature" },
-        { "type": "feature" }
+        { "type": "featured_product" },
+        { "type": "featured_product" }
       ]
     }
   ]
 }
 {% endschema %}
-
-{% stylesheet %}
-.custom-featured-product__header {
-  text-align: center;
-  margin-bottom: 50px;
-}
-
-.custom-featured-product__header h2 {
-  font-size: 2.5rem;
-  margin-bottom: 15px;
-}
-
-.custom-featured-product__header .rte {
-  font-size: 1rem;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.custom-featured-product__content-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: center;
-}
-
-.custom-featured-product__image-wrapper {
-  position: relative;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.custom-featured-product__image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.custom-featured-product__badge {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background-color: #FBBF24; /* Yellow color from image */
-  color: #1F2937;
-  padding: 8px 16px;
-  border-radius: 9999px;
-  font-weight: 600;
-  z-index: 2;
-}
-
-.custom-featured-product__info h3 {
-  font-size: 2.2rem;
-  margin-bottom: 15px;
-}
-
-.custom-featured-product__info .rte {
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 25px;
-}
-
-.custom-featured-product__features-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 30px 0;
-}
-
-.custom-featured-product__features-list li {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.custom-featured-product__features-list .icon-checkmark {
-  width: 20px;
-  height: 20px;
-  color: #FBBF24;
-  margin-right: 10px;
-  flex-shrink: 0;
-}
-
-.custom-featured-product__price-and-cta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.custom-featured-product__price-and-cta .price {
-  font-size: 2rem;
-  font-weight: 700;
-}
-
-.custom-featured-product__price-and-cta .buttons-wrapper {
-  display: flex;
-  gap: 10px;
-}
-
-/* Base button styles - adjust to your theme */
-.button {
-  padding: 12px 24px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.button--primary {
-  background-color: #FBBF24;
-  color: #1F2937;
-}
-.button--primary:hover {
-  opacity: 0.85;
-}
-.button--secondary {
-  background-color: transparent;
-  border-color: #E5E7EB;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.button--secondary .icon-eye {
-  width: 24px;
-  height: 24px;
-}
-.button--secondary:hover {
-  border-color: #D1D5DB;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .custom-featured-product__content-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-}
-{% endstylesheet %}
