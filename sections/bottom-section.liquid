@@ -20,33 +20,41 @@
     </form>
 
     <div class="features">
-      <div class="feature">
-        <i class="fa fa-moon-o"></i>
-        <h3>Monthly Horoscopes</h3>
-        <p>Personalized insights based on your chart</p>
+      <div class="p-5 bg-white/5 rounded-lg feature">
+        {% if section.settings.feature1_icon != blank %}
+          <img src="{{ section.settings.feature1_icon | image_url: width: 64 }}" alt="{{ section.settings.feature1_title }}" class="feature-icon" />
+        {% else %}
+          <i class="fa fa-moon-o text-3xl text-fire mb-4"></i>
+        {% endif %}
+        <h3 class="font-bold mb-2">{{ section.settings.feature1_title }}</h3>
+        <p class="text-sm text-gray-400">{{ section.settings.feature1_text }}</p>
       </div>
-      <div class="feature">
-        <i class="fa fa-gem"></i>
-        <h3>Crystal Guides</h3>
-        <p>Learn about crystal properties & uses</p>
+      <div class="p-5 bg-white/5 rounded-lg feature">
+        {% if section.settings.feature2_icon != blank %}
+          <img src="{{ section.settings.feature2_icon | image_url: width: 64 }}" alt="{{ section.settings.feature2_title }}" class="feature-icon" />
+        {% else %}
+          <i class="fa fa-moon-o text-3xl text-fire mb-4"></i>
+        {% endif %}
+        <h3 class="font-bold mb-2">{{ section.settings.feature2_title }}</h3>
+        <p class="text-sm text-gray-400">{{ section.settings.feature2_text }}</p>
       </div>
-      <div class="feature">
-        <i class="fa fa-users"></i>
-        <h3>Community Events</h3>
-        <p>Virtual workshops and crystal circles</p>
+      <div class="p-5 bg-white/5 rounded-lg feature">
+        {% if section.settings.feature3_icon != blank %}
+          <img src="{{ section.settings.feature3_icon | image_url: width: 64 }}" alt="{{ section.settings.feature3_title }}" class="feature-icon" />
+        {% else %}
+          <i class="fa fa-moon-o text-3xl text-fire mb-4"></i>
+        {% endif %}
+        <h3 class="font-bold mb-2">{{ section.settings.feature3_title }}</h3>
+        <p class="text-sm text-gray-400">{{ section.settings.feature3_text }}</p>
       </div>
-      <div class="feature">
-        <div class="feature">
-          {% if section.settings.feature4_icon != blank %}
-            <img src="{{ section.settings.feature4_icon | image_url: width: 64 }}" alt="Exclusive Offers" class="feature-icon" />
-          {% else %}
-            <i class="fa fa-gift"></i>
-          {% endif %}
-          <h3>Exclusive Offers</h3>
-          <p>Member-only discounts and promotions</p>
-        </div>
-        <h3>Exclusive Offers</h3>
-        <p>Member-only discounts and promotions</p>
+      <div class="p-5 bg-white/5 rounded-lg feature">
+        {% if section.settings.feature4_icon != blank %}
+          <img src="{{ section.settings.feature4_icon | image_url: width: 64 }}" alt="{{ section.settings.feature4_title }}" class="feature-icon" />
+        {% else %}
+          <i class="fa fa-moon-o text-3xl text-fire mb-4"></i>
+        {% endif %}
+        <h3 class="font-bold mb-2">{{ section.settings.feature4_title }}</h3>
+        <p class="text-sm text-gray-400">{{ section.settings.feature4_text }}</p>
       </div>
     </div>
 
@@ -69,8 +77,74 @@
   "settings": [
     {
       "type": "image_picker",
+      "id": "feature1_icon",
+      "label": "Feature 1 Icon"
+    },
+    {
+      "type": "text",
+      "id": "feature1_title",
+      "label": "Feature 1 Title",
+      "default": "Monthly Horoscopes"
+    },
+    {
+      "type": "text",
+      "id": "feature1_text",
+      "label": "Feature 1 Description",
+      "default": "Personalized insights based on your chart"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "feature2_icon",
+      "label": "Feature 2 Icon"
+    },
+    {
+      "type": "text",
+      "id": "feature2_title",
+      "label": "Feature 2 Title",
+      "default": "Crystal Guides"
+    },
+    {
+      "type": "text",
+      "id": "feature2_text",
+      "label": "Feature 2 Description",
+      "default": "Learn about crystal properties & uses"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "feature3_icon",
+      "label": "Feature 3 Icon"
+    },
+    {
+      "type": "text",
+      "id": "feature3_title",
+      "label": "Feature 3 Title",
+      "default": "Community Events"
+    },
+    {
+      "type": "text",
+      "id": "feature3_text",
+      "label": "Feature 3 Description",
+      "default": "Virtual workshops and crystal circles"
+    },
+
+    {
+      "type": "image_picker",
       "id": "feature4_icon",
-      "label": "Exclusive Offers Icon"
+      "label": "Feature 4 Icon"
+    },
+    {
+      "type": "text",
+      "id": "feature4_title",
+      "label": "Feature 4 Title",
+      "default": "Exclusive Offers"
+    },
+    {
+      "type": "text",
+      "id": "feature4_text",
+      "label": "Feature 4 Description",
+      "default": "Member-only discounts and promotions"
     }
   ],
   "presets": [
