@@ -159,12 +159,18 @@
         "button_label": "View All Zodiac Collections",
         "button_link": "shopify://collections/zodiac-crystal-collections"
       }
+    },
+    "bottom_section_8hMqLq": {
+      "type": "bottom-section",
+      "name": "Bottom Section",
+      "settings": {}
     }
   },
   "order": [
     "get_report_d7rwzM",
     "custom_featured_product_Win7PL",
     "stories_Bh4WrV",
-    "zodiac_collection_grid_f8JLgc"
+    "zodiac_collection_grid_f8JLgc",
+    "bottom_section_8hMqLq"
   ]
 }
