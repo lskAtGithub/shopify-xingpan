@@ -1,11 +1,10 @@
 .bottom-section {
-  padding: 5rem 1rem;
-  background: #0b0b0b; /* 背景色可以换成你原来的 bg-stars */
   color: #fff;
   text-align: center;
+  background-color: #1a1a2e;
 }
 
-.bottom-section .container {
+.bottom-section .bottom-section-container {
   max-width: 960px;
   margin: 0 auto;
 }
@@ -24,7 +23,6 @@
 
 .bottom-section .newsletter-form {
   display: flex;
-  flex-direction: column;
   gap: 1rem;
   max-width: 480px;
   margin: 0 auto 2.5rem;
@@ -38,7 +36,8 @@
 }
 
 .bottom-section .newsletter-form button {
-  background: linear-gradient(90deg, #ff512f, #dd2476);
+  background: linear-gradient(90deg, #FFD100, #4A90E2, #8B5A2B, #4CAF50); /* 可自定义渐变 */
+  background-size: 300% 100%;
   color: #fff;
   font-weight: 500;
   padding: 0.75rem 1.5rem;
@@ -49,7 +48,7 @@
 }
 
 .bottom-section .newsletter-form button:hover {
-  opacity: 0.85;
+  background-position: 100% 0;
 }
 
 .bottom-section .features {
