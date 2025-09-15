@@ -113,61 +113,64 @@
   </div>
 
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const countrySelect = document.getElementById('country');
-      const stateSelect = document.getElementById('state');
-      const citySelect = document.getElementById('city');
+<script>
+document.addEventListener('DOMContentLoaded', async function() {
+  const countrySelect = document.getElementById('country');
+  const stateSelect = document.getElementById('state');
+  const citySelect = document.getElementById('city');
 
-      function resetSelect(select, placeholder) {
-        select.innerHTML = `<option value="">${placeholder}</option>`;
-        select.disabled = true;
-      }
+  // 从 assets 读取 JSON
+  const url = "{{ 'countries-states-cities.json' | asset_url }}";
+  let locations = {};
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Failed to load JSON');
+    locations = await response.json();
+  } catch (err) {
+    console.error('Error loading location data:', err);
+    return;
+  }
 
-      function populateSelect(select, items, valueKey = 'name', labelKey = 'name') {
-        items.forEach(item => {
-          const option = document.createElement('option');
-          option.value = item[valueKey] || item;
-          option.textContent = item[labelKey] || item;
-          select.appendChild(option);
-        });
-        select.disabled = false;
-      }
+  function resetSelect(select, placeholder) {
+    select.innerHTML = `<option value="">${placeholder}</option>`;
+    select.disabled = true;
+  }
 
-      // 初始化
-      resetSelect(stateSelect, 'Select State/Province');
-      resetSelect(citySelect, 'Select City');
-
-      // 先加载 JSON 数据
-      fetch('{{ "countries+states+cities.json" | asset_url }}')
-        .then(res => res.json())
-        .then(data => {
-          // 填充国家
-          populateSelect(countrySelect, data, 'iso2', 'country');
-
-          // 国家变化
-          countrySelect.addEventListener('change', function() {
-            const selected = data.find(c => c.iso2 === this.value);
-            resetSelect(stateSelect, 'Select State/Province');
-            resetSelect(citySelect, 'Select City');
-            if (selected && selected.states) {
-              populateSelect(stateSelect, selected.states, 'state_code', 'name');
-            }
-          });
-
-          // 州变化
-          stateSelect.addEventListener('change', function() {
-            const country = data.find(c => c.iso2 === countrySelect.value);
-            const state = country?.states.find(s => s.state_code === this.value);
-            resetSelect(citySelect, 'Select City');
-            if (state && state.cities) {
-              populateSelect(citySelect, state.cities, null, null); // cities 是字符串数组
-            }
-          });
-        })
-        .catch(err => console.error('加载地区数据失败:', err));
+  function populateSelect(select, items) {
+    items.forEach(item => {
+      const option = document.createElement('option');
+      option.value = item;
+      option.textContent = item;
+      select.appendChild(option);
     });
-  </script>
+    select.disabled = false;
+  }
+
+  resetSelect(stateSelect, 'Select State/Province');
+  resetSelect(citySelect, 'Select City');
+
+  countrySelect.addEventListener('change', function() {
+    const country = this.value;
+    resetSelect(stateSelect, 'Select State/Province');
+    resetSelect(citySelect, 'Select City');
+
+    if (country && locations[country]) {
+      populateSelect(stateSelect, Object.keys(locations[country]));
+    }
+  });
+
+  stateSelect.addEventListener('change', function() {
+    const country = countrySelect.value;
+    const state = this.value;
+    resetSelect(citySelect, 'Select City');
+
+    if (country && state && locations[country][state]) {
+      populateSelect(citySelect, locations[country][state]);
+    }
+  });
+});
+</script>
+
 
 
   {% schema %}
