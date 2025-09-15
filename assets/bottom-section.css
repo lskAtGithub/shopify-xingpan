@@ -2,6 +2,7 @@
   color: #fff;
   text-align: center;
   background-color: #1a1a2e;
+  padding: 4rem 0;
 }
 
 .bottom-section .bottom-section-container {
@@ -49,6 +50,15 @@
 
 .bottom-section .newsletter-form button:hover {
   background-position: 100% 0;
+}
+
+.bottom-section .feature .feature-icon {
+  width: 2.5rem;   /* 大概 40px */
+  height: auto;
+  margin-bottom: 0.75rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .bottom-section .features {

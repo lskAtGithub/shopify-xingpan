@@ -36,7 +36,15 @@
         <p>Virtual workshops and crystal circles</p>
       </div>
       <div class="feature">
-        <i class="fa fa-gift"></i>
+        <div class="feature">
+          {% if section.settings.feature4_icon != blank %}
+            <img src="{{ section.settings.feature4_icon | image_url: width: 64 }}" alt="Exclusive Offers" class="feature-icon" />
+          {% else %}
+            <i class="fa fa-gift"></i>
+          {% endif %}
+          <h3>Exclusive Offers</h3>
+          <p>Member-only discounts and promotions</p>
+        </div>
         <h3>Exclusive Offers</h3>
         <p>Member-only discounts and promotions</p>
       </div>
@@ -58,7 +66,13 @@
 {% schema %}
 {
   "name": "Bottom Section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "feature4_icon",
+      "label": "Exclusive Offers Icon"
+    }
+  ],
   "presets": [
     {
       "name": "Bottom Section"
