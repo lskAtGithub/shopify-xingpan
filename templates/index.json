@@ -163,7 +163,20 @@
     "bottom_section_8hMqLq": {
       "type": "bottom-section",
       "name": "Bottom Section",
-      "settings": {}
+      "settings": {
+        "feature1_icon": "shopify://shop_images/2.jpg",
+        "feature1_title": "Monthly Horoscopes",
+        "feature1_text": "Personalized insights based on your chart",
+        "feature2_icon": "shopify://shop_images/1.jpg",
+        "feature2_title": "Crystal Guides",
+        "feature2_text": "Learn about crystal properties & uses",
+        "feature3_icon": "shopify://shop_images/1_61e2561c-bfb1-49a9-9785-949af319aeed.jpg",
+        "feature3_title": "Community Events",
+        "feature3_text": "Virtual workshops and crystal circles",
+        "feature4_icon": "shopify://shop_images/item3.jpg",
+        "feature4_title": "Exclusive Offers",
+        "feature4_text": "Member-only discounts and promotions"
+      }
     }
   },
   "order": [
