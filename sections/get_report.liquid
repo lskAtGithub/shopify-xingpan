@@ -75,9 +75,6 @@
                   <label for="country">Country</label>
                   <select id="country" name="country" required>
                     <option value="">Select Country</option>
-                    <option value="usa">United States</option>
-                    <option value="uk">United Kingdom</option>
-                    <option value="cn">China</option>
                   </select>
                 </div>
                 <div>
@@ -113,63 +110,74 @@
   </div>
 
 
-<script>
-document.addEventListener('DOMContentLoaded', async function() {
-  const countrySelect = document.getElementById('country');
-  const stateSelect = document.getElementById('state');
-  const citySelect = document.getElementById('city');
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      const countrySelect = document.getElementById('country');
+      const stateSelect = document.getElementById('state');
+      const citySelect = document.getElementById('city');
 
-  // 从 assets 读取 JSON
-  const url = "{{ 'countries-states-cities.json' | asset_url }}";
-  let locations = {};
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Failed to load JSON');
-    locations = await response.json();
-  } catch (err) {
-    console.error('Error loading location data:', err);
-    return;
-  }
+      const url = "{{ 'countries-states-cities.json' | asset_url }}";
+      let data = [];
+      try {
+        const res = await fetch(url);
+        data = await res.json();
+      } catch (err) {
+        console.error('Error loading JSON:', err);
+        return;
+      }
 
-  function resetSelect(select, placeholder) {
-    select.innerHTML = `<option value="">${placeholder}</option>`;
-    select.disabled = true;
-  }
+      function resetSelect(select, placeholder) {
+        select.innerHTML = `<option value="">${placeholder}</option>`;
+        select.disabled = true;
+      }
 
-  function populateSelect(select, items) {
-    items.forEach(item => {
-      const option = document.createElement('option');
-      option.value = item;
-      option.textContent = item;
-      select.appendChild(option);
+      function populateSelect(select, items) {
+        items.forEach(item => {
+          const option = document.createElement('option');
+          option.value = item;
+          option.textContent = item;
+          select.appendChild(option);
+        });
+        select.disabled = false;
+      }
+
+      // 初始化
+      resetSelect(stateSelect, 'Select State/Province');
+      resetSelect(citySelect, 'Select City');
+
+      // 填充国家下拉
+      const countries = data.map(c => c.name);
+      populateSelect(countrySelect, countries);
+
+      countrySelect.addEventListener('change', function() {
+        const selectedCountry = this.value;
+        resetSelect(stateSelect, 'Select State/Province');
+        resetSelect(citySelect, 'Select City');
+
+        const countryObj = data.find(c => c.name === selectedCountry);
+        if (countryObj && countryObj.states) {
+          const states = countryObj.states.map(s => s.name);
+          populateSelect(stateSelect, states);
+        }
+      });
+
+      stateSelect.addEventListener('change', function() {
+        const selectedCountry = countrySelect.value;
+        const selectedState = this.value;
+        resetSelect(citySelect, 'Select City');
+
+        const countryObj = data.find(c => c.name === selectedCountry);
+        if (!countryObj || !countryObj.states) return;
+
+        const stateObj = countryObj.states.find(s => s.name === selectedState);
+        if (!stateObj || !stateObj.cities) return;
+
+        const cities = stateObj.cities.map(c => c.name);
+        populateSelect(citySelect, cities);
+      });
     });
-    select.disabled = false;
-  }
+  </script>
 
-  resetSelect(stateSelect, 'Select State/Province');
-  resetSelect(citySelect, 'Select City');
-
-  countrySelect.addEventListener('change', function() {
-    const country = this.value;
-    resetSelect(stateSelect, 'Select State/Province');
-    resetSelect(citySelect, 'Select City');
-
-    if (country && locations[country]) {
-      populateSelect(stateSelect, Object.keys(locations[country]));
-    }
-  });
-
-  stateSelect.addEventListener('change', function() {
-    const country = countrySelect.value;
-    const state = this.value;
-    resetSelect(citySelect, 'Select City');
-
-    if (country && state && locations[country][state]) {
-      populateSelect(citySelect, locations[country][state]);
-    }
-  });
-});
-</script>
 
 
 
