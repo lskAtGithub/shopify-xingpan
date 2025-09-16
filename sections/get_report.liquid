@@ -45,7 +45,7 @@
                   <select id="birth-month" name="birth_month" required>
                     <option value="">Select</option>
                     {% for m in (1..12) %}
-                      <option value="{{ "%02d" | format: m }}">{{ m | date: "%B" }}</option>
+                      <option value="{{ m }}</option>
                     {% endfor %}
                   </select>
                 </div>
