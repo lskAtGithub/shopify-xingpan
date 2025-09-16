@@ -181,7 +181,6 @@
           // 兜底返回空数组
           return [];
         } catch (err) {
-          console.error('fetchFromApi error:', err);
           return [];
         }
       }
@@ -246,25 +245,24 @@
         if (!year || !month || !day) return alert("请输入完整的出生年月日");
         if (!hour && hour !== "0") return alert("请输入出生小时");
         if (!minute && minute !== "0") return alert("请输入出生分钟");
-        if (!country) return alert("请选择国家");
-        if (!state) return alert("请选择省份/州");
-        if (!city) return alert("请选择城市");
+        // if (!country) return alert("请选择国家");
+        // if (!state) return alert("请选择省份/州");
+        // if (!city) return alert("请选择城市");
 
         // 3. 拼接时间 "YYYY-MM-DD HH:mm:ss"
         const time = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")} ${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00`;
 
-        // 4. 拼接地址
         const address = `${country} ${state} ${city}`;
 
         // 5. 组织请求参数
         const payload = {
           time: time,
-          lat: 31.887503,   // TODO: 可以换成实际坐标
-          lon: 117.30746,   // TODO: 可以换成实际坐标
+          lat: 31.887503,
+          lon: 117.30746,
           name: name,
           address: address,
-          ztime: 8,         // 固定
-          tid: 4,           // 固定
+          ztime: 8,
+          tid: 4,
           daylight_saving: daylightSaving ? 1 : 0
         };
 
@@ -272,15 +270,12 @@
         const query = new URLSearchParams(payload).toString();
         const url = "http://nacos.heartbuy.cn/astrology/astrology?" + query;
 
-        console.log("请求地址：", url);
 
         try {
           const res = await fetch(url);
           const data = await res.json();
           console.log("返回结果：", data);
-          alert("提交成功，请查看控制台结果");
         } catch (err) {
-          console.error("请求出错：", err);
           alert("请求失败，请稍后再试");
         }
       });
