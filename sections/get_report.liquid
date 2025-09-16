@@ -27,7 +27,7 @@
 
         <!-- 右侧表单 -->
         <div class="form-container">
-          <form method="post" action="#">
+          <form>
             <div class="form-group">
               <label for="name">Full Name <span class="required">*</span></label>
               <input type="text" id="name" name="name" placeholder="Enter your full name" required>
@@ -99,7 +99,7 @@
               </label>
             </div>
 
-            <button type="submit" class="gradient-btn">
+            <button id="submit" class="gradient-btn">
               <span>{{ section.settings.button_text }}</span>
               <i class="fa fa-arrow-right"></i>
             </button>
@@ -225,10 +225,56 @@
         const cities = await fetchFromApi({ countryId: countryId, stateId: stateId });
         populateSelectWithObjects(citySelect, cities, 'name', 'id');
       });
+      //  提交表单
+      const submitBtn = document.getElementById('submit');
+      submitBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
 
-      // 可选：表单提交前检查必填（不强制，你自己表单逻辑如果有）
-      // const form = document.querySelector('.get-report-section form');
-      // if (form) { form.addEventListener('submit', e => { ... }) }
+        // 取表单值
+        const name = document.getElementById('name').value.trim();
+        const year = document.getElementById('birth-year').value;
+        const month = document.getElementById('birth-month').value;
+        const day = document.getElementById('birth-day').value;
+        const hour = document.getElementById('birth-hour').value || '00';
+        const minute = document.getElementById('birth-minute').value || '00';
+
+        const country = document.getElementById('country').selectedOptions[0]?.text || '';
+        const state = document.getElementById('state').selectedOptions[0]?.text || '';
+        const city = document.getElementById('city').selectedOptions[0]?.text || '';
+        const address = [country, state, city].filter(Boolean).join(' ');
+
+        // 拼接 time
+        const time = `${year}-${month}-${day} ${hour}:${minute}:00`;
+
+        // 固定参数
+        const lat = '31.887503';
+        const lon = '117.30746';
+        const ztime = 8;
+        const tid = 4;
+
+        // 构造 URL
+        const baseUrl = 'http://nacos.heartbuy.cn/astrology/astrology';
+        const params = new URLSearchParams({
+          time,
+          lat,
+          lon,
+          name,
+          address,
+          ztime,
+          tid
+        });
+
+        const url = `${baseUrl}?${params.toString()}`;
+
+        try {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error('HTTP error ' + res.status);
+          const data = await res.json();
+          console.log('Astrology API 返回:', data);
+        } catch (err) {
+          console.error('Astrology API 请求失败:', err);
+        }
+      });
     });
   </script>
 
