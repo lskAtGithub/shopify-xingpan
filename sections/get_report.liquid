@@ -252,7 +252,7 @@
         // 3. 拼接时间 "YYYY-MM-DD HH:mm:ss"
         const time = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")} ${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00`;
 
-        const address = `${country} ${state} ${city}`;
+        const address = `${country} ${state} ${city}` || '中国深圳南山';
 
         // 5. 组织请求参数
         const payload = {
