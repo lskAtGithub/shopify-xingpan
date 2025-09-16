@@ -224,37 +224,25 @@
       const form = document.querySelector("form");
       form.addEventListener("submit", async function (e) {
         e.preventDefault();
-
-        // 1. 获取表单数据
         const name = document.getElementById("name").value.trim();
-
         const year = document.getElementById("birth-year").value;
         const month = document.getElementById("birth-month").value;
         const day = document.getElementById("birth-day").value;
         const hour = document.getElementById("birth-hour").value;
         const minute = document.getElementById("birth-minute").value;
-
         const country = document.getElementById("country").value;
         const state = document.getElementById("state").value;
         const city = document.getElementById("city").value;
 
-        const daylightSaving = document.getElementById("daylight-saving").checked;
-
-        // 2. 表单验证
-        if (!name) return alert("请输入姓名");
-        if (!year || !month || !day) return alert("请输入完整的出生年月日");
-        if (!hour && hour !== "0") return alert("请输入出生小时");
-        if (!minute && minute !== "0") return alert("请输入出生分钟");
         // if (!country) return alert("请选择国家");
         // if (!state) return alert("请选择省份/州");
         // if (!city) return alert("请选择城市");
 
         // 3. 拼接时间 "YYYY-MM-DD HH:mm:ss"
-        const time = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")} ${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00`;
+        // const time = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")} ${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00`;
 
-        const address = `${country} ${state} ${city};
+        // const address = `${country} ${state} ${city};
 
-        // 5. 组织请求参数
         const payload = {
           time: time,
           lat: 31.887503,
@@ -263,7 +251,6 @@
           address: '中国深圳南山',
           ztime: 8,
           tid: 4,
-          daylight_saving: daylightSaving ? 1 : 0
         };
 
         // 6. 拼接 GET 参数
