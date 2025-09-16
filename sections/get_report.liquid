@@ -114,8 +114,6 @@
       const countrySelect = document.getElementById('country');
       const stateSelect = document.getElementById('state');
       const citySelect = document.getElementById('city');
-
-      // 你的接口（保持和你提供的一致）
       const API_URL = 'http://nacos.heartbuy.cn/city/creatReport';
 
       const PLACEHOLDERS = {
@@ -209,7 +207,6 @@
 
         setLoading(stateSelect);
         const states = await fetchFromApi({ countryId: countryId });
-        // 如果接口返回了 {code:.., data: [...]}, fetchFromApi 已处理过，states 是数组
         populateSelectWithObjects(stateSelect, states, 'name', 'id');
       });
 
@@ -217,7 +214,6 @@
       stateSelect.addEventListener('change', async function() {
         const stateId = this.value;
         const countryId = countrySelect.value;
-        // 清空市
         resetSelect(citySelect, PLACEHOLDERS.city);
         if (!countryId || !stateId) return;
 
@@ -226,53 +222,65 @@
         populateSelectWithObjects(citySelect, cities, 'name', 'id');
       });
       //  提交表单
-      const submitBtn = document.getElementById('submit');
-      submitBtn.addEventListener('click', async function(e) {
+      form.addEventListener("submit", async function (e) {
         e.preventDefault();
 
-        // 取表单值
-        const name = document.getElementById('name').value.trim();
-        const year = document.getElementById('birth-year').value;
-        const month = document.getElementById('birth-month').value;
-        const day = document.getElementById('birth-day').value;
-        const hour = document.getElementById('birth-hour').value || '00';
-        const minute = document.getElementById('birth-minute').value || '00';
+        // 1. 获取表单数据
+        const name = document.getElementById("name").value.trim();
 
-        const country = document.getElementById('country').selectedOptions[0]?.text || '';
-        const state = document.getElementById('state').selectedOptions[0]?.text || '';
-        const city = document.getElementById('city').selectedOptions[0]?.text || '';
-        const address = [country, state, city].filter(Boolean).join(' ');
+        const year = document.getElementById("birth-year").value;
+        const month = document.getElementById("birth-month").value;
+        const day = document.getElementById("birth-day").value;
+        const hour = document.getElementById("birth-hour").value;
+        const minute = document.getElementById("birth-minute").value;
 
-        // 拼接 time
-        const time = `${year}-${month}-${day} ${hour}:${minute}:00`;
+        const country = document.getElementById("country").value;
+        const state = document.getElementById("state").value;
+        const city = document.getElementById("city").value;
 
-        // 固定参数
-        const lat = '31.887503';
-        const lon = '117.30746';
-        const ztime = 8;
-        const tid = 4;
+        const daylightSaving = document.getElementById("daylight-saving").checked;
 
-        // 构造 URL
-        const baseUrl = 'http://nacos.heartbuy.cn/astrology/astrology';
-        const params = new URLSearchParams({
-          time,
-          lat,
-          lon,
-          name,
-          address,
-          ztime,
-          tid
-        });
+        // 2. 表单验证
+        if (!name) return alert("请输入姓名");
+        if (!year || !month || !day) return alert("请输入完整的出生年月日");
+        if (!hour && hour !== "0") return alert("请输入出生小时");
+        if (!minute && minute !== "0") return alert("请输入出生分钟");
+        if (!country) return alert("请选择国家");
+        if (!state) return alert("请选择省份/州");
+        if (!city) return alert("请选择城市");
 
-        const url = `${baseUrl}?${params.toString()}`;
+        // 3. 拼接时间 "YYYY-MM-DD HH:mm:ss"
+        const time = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")} ${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00`;
+
+        // 4. 拼接地址
+        const address = `${country} ${state} ${city}`;
+
+        // 5. 组织请求参数
+        const payload = {
+          time: time,
+          lat: 31.887503,   // TODO: 可以换成实际坐标
+          lon: 117.30746,   // TODO: 可以换成实际坐标
+          name: name,
+          address: address,
+          ztime: 8,         // 固定
+          tid: 4,           // 固定
+          daylight_saving: daylightSaving ? 1 : 0
+        };
+
+        // 6. 拼接 GET 参数
+        const query = new URLSearchParams(payload).toString();
+        const url = "http://nacos.heartbuy.cn/astrology/astrology?" + query;
+
+        console.log("请求地址：", url);
 
         try {
           const res = await fetch(url);
-          if (!res.ok) throw new Error('HTTP error ' + res.status);
           const data = await res.json();
-          console.log('Astrology API 返回:', data);
+          console.log("返回结果：", data);
+          alert("提交成功，请查看控制台结果");
         } catch (err) {
-          console.error('Astrology API 请求失败:', err);
+          console.error("请求出错：", err);
+          alert("请求失败，请稍后再试");
         }
       });
     });
