@@ -109,76 +109,129 @@
     </div>
   </div>
 
-
   <script>
-    document.addEventListener('DOMContentLoaded', async function() {
+    document.addEventListener('DOMContentLoaded', function() {
       const countrySelect = document.getElementById('country');
       const stateSelect = document.getElementById('state');
       const citySelect = document.getElementById('city');
 
-      const url = "{{ 'countries-states-cities.json' | asset_url }}";
-      let data = [];
-      try {
-        const res = await fetch(url);
-        data = await res.json();
-      } catch (err) {
-        console.error('Error loading JSON:', err);
-        return;
+      // 你的接口（保持和你提供的一致）
+      const API_URL = 'http://nacos.heartbuy.cn/city/creatReport';
+
+      const PLACEHOLDERS = {
+        country: 'Select Country',
+        state: 'Select State/Province',
+        city: 'Select City'
+      };
+
+      function createOption(text, value = '') {
+        const opt = document.createElement('option');
+        opt.value = value;
+        opt.textContent = text;
+        return opt;
       }
 
-      console.log(data)
-
       function resetSelect(select, placeholder) {
-        select.innerHTML = `<option value="">${placeholder}</option>`;
+        select.innerHTML = '';
+        select.appendChild(createOption(placeholder, ''));
         select.disabled = true;
       }
 
-      function populateSelect(select, items) {
+      function setLoading(select) {
+        select.innerHTML = '';
+        select.appendChild(createOption('Loading...', ''));
+        select.disabled = true;
+      }
+
+      function populateSelectWithObjects(select, items, textKey = 'name', valueKey = 'id') {
+        select.innerHTML = '';
+        select.appendChild(createOption(select === countrySelect ? PLACEHOLDERS.country : (select === stateSelect ? PLACEHOLDERS.state : PLACEHOLDERS.city), ''));
+        if (!items || !items.length) {
+          select.disabled = true;
+          return;
+        }
         items.forEach(item => {
-          const option = document.createElement('option');
-          option.value = item;
-          option.textContent = item;
-          select.appendChild(option);
+          const text = (item && (item[textKey] || item.name || String(item))) || '';
+          const value = (item && (item[valueKey] !== undefined ? item[valueKey] : (item.id !== undefined ? item.id : item))) || '';
+          const opt = createOption(text, value);
+          select.appendChild(opt);
         });
         select.disabled = false;
       }
 
-      // 初始化
-      resetSelect(stateSelect, 'Select State/Province');
-      resetSelect(citySelect, 'Select City');
+      async function fetchFromApi(params = {}) {
+        // 构造带查询串的 URL
+        const url = new URL(API_URL);
+        Object.keys(params).forEach(k => {
+          if (params[k] !== undefined && params[k] !== null && params[k] !== '') url.searchParams.append(k, params[k]);
+        });
 
-      // 填充国家下拉
-      const countries = data.map(c => c.name);
-      populateSelect(countrySelect, countries);
-
-      countrySelect.addEventListener('change', function() {
-        const selectedCountry = this.value;
-        resetSelect(stateSelect, 'Select State/Province');
-        resetSelect(citySelect, 'Select City');
-
-        const countryObj = data.find(c => c.name === selectedCountry);
-        if (countryObj && countryObj.states) {
-          const states = countryObj.states.map(s => s.name);
-          populateSelect(stateSelect, states);
+        try {
+          const res = await fetch(url.toString(), { method: 'GET', mode: 'cors' });
+          if (!res.ok) {
+            throw new Error('HTTP ' + res.status);
+          }
+          const json = await res.json();
+          // 兼容：返回包裹 { code, message, data: [...] } 的情形
+          if (json && Array.isArray(json.data)) {
+            return json.data;
+          }
+          // 有些接口可能直接返回数组
+          if (Array.isArray(json)) {
+            return json;
+          }
+          // 兜底返回空数组
+          return [];
+        } catch (err) {
+          console.error('fetchFromApi error:', err);
+          return [];
         }
+      }
+
+      // 初始化：清空下级
+      resetSelect(stateSelect, PLACEHOLDERS.state);
+      resetSelect(citySelect, PLACEHOLDERS.city);
+
+      // 加载国家列表（页面加载时）
+      (async function loadCountries() {
+        setLoading(countrySelect);
+        const countries = await fetchFromApi(); // 不传参数 => 返回国家列表（你给的示例即为此）
+        populateSelectWithObjects(countrySelect, countries, 'name', 'id');
+      })();
+
+      // 当国家改变时，加载州/省
+      countrySelect.addEventListener('change', async function() {
+        const countryId = this.value;
+        // 清空州和市
+        resetSelect(stateSelect, PLACEHOLDERS.state);
+        resetSelect(citySelect, PLACEHOLDERS.city);
+        if (!countryId) return;
+
+        setLoading(stateSelect);
+        const states = await fetchFromApi({ countryId: countryId });
+        // 如果接口返回了 {code:.., data: [...]}, fetchFromApi 已处理过，states 是数组
+        populateSelectWithObjects(stateSelect, states, 'name', 'id');
       });
 
-      stateSelect.addEventListener('change', function() {
-        const selectedCountry = countrySelect.value;
-        const selectedState = this.value;
-        resetSelect(citySelect, 'Select City');
+      // 当州/省改变时，加载城市
+      stateSelect.addEventListener('change', async function() {
+        const stateId = this.value;
+        const countryId = countrySelect.value;
+        // 清空市
+        resetSelect(citySelect, PLACEHOLDERS.city);
+        if (!countryId || !stateId) return;
 
-        const countryObj = data.find(c => c.name === selectedCountry);
-        if (!countryObj || !countryObj.states) return;
-
-        const stateObj = countryObj.states.find(s => s.name === selectedState);
-        if (!stateObj || !stateObj.cities) return;
-
-        const cities = stateObj.cities.map(c => c.name);
-        populateSelect(citySelect, cities);
+        setLoading(citySelect);
+        const cities = await fetchFromApi({ countryId: countryId, stateId: stateId });
+        populateSelectWithObjects(citySelect, cities, 'name', 'id');
       });
+
+      // 可选：表单提交前检查必填（不强制，你自己表单逻辑如果有）
+      // const form = document.querySelector('.get-report-section form');
+      // if (form) { form.addEventListener('submit', e => { ... }) }
     });
   </script>
+
 
 
 
