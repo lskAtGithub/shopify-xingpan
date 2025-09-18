@@ -327,38 +327,6 @@ a[data-type="danger"]:hover {
     color: #ff7875;
 }
 
-/* 按钮样式 */
-button {
-    height: 32px;
-    padding: 4px 15px;
-    font-size: 14px;
-    border-radius: 6px;
-    border: 1px solid #d9d9d9;
-    background: #fff;
-    color: rgba(0, 0, 0, 0.88);
-    cursor: pointer;
-    transition: all 0.3s;
-    line-height: 22px;
-    margin: 0 4px;
-}
-
-button:hover {
-    border-color: #40a9ff;
-    color: #40a9ff;
-}
-
-/* 主要按钮 */
-button[data-type="primary"] {
-    background: #1890ff;
-    border-color: #1890ff;
-    color: #fff;
-}
-
-button[data-type="primary"]:hover {
-    background: #40a9ff;
-    border-color: #40a9ff;
-}
-
 /* 状态标签样式 */
 span {
     display: inline-block;
