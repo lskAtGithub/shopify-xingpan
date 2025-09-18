@@ -173,7 +173,6 @@
           return;
         }
         items.forEach((item) => {
-          console.log(item);
           const text = (item && (item[textKey] || item.name || String(item))) || '';
           const value =
             (item && (item[valueKey] !== undefined ? item[valueKey] : item.id !== undefined ? item.id : item)) || '';
@@ -249,11 +248,9 @@
         populateSelectWithObjects(citySelect, cities, 'name', 'id');
       });
       citySelect.addEventListener('change', async function () {
-        const city = this.dataset;
-        if (city) {
-          lat = city.latitude;
-          lon = city.longitude;
-        }
+        console.log(this);
+        lat = this.dataset.latitude;
+        lon = this.dataset.longitude;
       });
       //  提交表单
       const form = document.querySelector('form');
