@@ -35,7 +35,7 @@
           <form action="#">
             <div class="form-group">
               <label for="name">Full Name <span class="required">*</span></label>
-              <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+              <input type="text" id="name" name="name" placeholder="Enter your full name" required value="jack">
             </div>
 
             <div class="form-group">
@@ -51,11 +51,12 @@
                     max="2023"
                     placeholder="YYYY"
                     required
+                    value="2000"
                   >
                 </div>
                 <div>
                   <label for="birth-month">Month</label>
-                  <select id="birth-month" name="birth_month" required>
+                  <select id="birth-month" name="birth_month" required value="1">
                     <option value="">Select</option>
                     {% for m in (1..12) %}
                       <option value="{{ m }}">{{ m }}</option>
@@ -64,18 +65,18 @@
                 </div>
                 <div>
                   <label for="birth-day">Day</label>
-                  <input type="number" id="birth-day" name="birth_day" min="1" max="31" placeholder="DD" required>
+                  <input type="number" id="birth-day" name="birth_day" min="1" max="31" placeholder="DD" required  value="1">
                 </div>
               </div>
 
               <div class="grid-cols-2">
                 <div>
                   <label for="birth-hour">Hour (24h)</label>
-                  <input type="number" id="birth-hour" name="birth_hour" min="0" max="23" placeholder="HH" required>
+                  <input type="number" id="birth-hour" name="birth_hour" min="0" max="23" placeholder="HH" required  value="1">
                 </div>
                 <div>
                   <label for="birth-minute">Minute</label>
-                  <input type="number" id="birth-minute" name="birth_minute" min="0" max="59" placeholder="MM" required>
+                  <input type="number" id="birth-minute" name="birth_minute" min="0" max="59" placeholder="MM" required  value="1">
                 </div>
               </div>
             </div>
@@ -343,8 +344,8 @@
       const closeBtn = document.querySelector('.report-close');
       const tableBody = document.querySelector('#report-table tbody');
 
-      function renderCanvas(data) {
-        const data = data.itemScore;
+      function renderCanvas(res) {
+        const data = res.itemScore;
 
         const colors = ['#4A90E2', '#E94E77', '#50E3C2', '#F5A623']; // 给每个元素分配颜色
         const canvas = document.getElementById('chartCanvas');
