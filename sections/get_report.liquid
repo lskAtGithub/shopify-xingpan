@@ -179,8 +179,8 @@
             (item && (item[valueKey] !== undefined ? item[valueKey] : item.id !== undefined ? item.id : item)) || '';
           const opt = createOption(text, value);
           select.appendChild(opt);
-          opt.city.latitude = item.latitude;
-          opt.city.longitude = item.longitude;
+          opt.dataset.latitude = item.latitude;
+          opt.dataset.longitude = item.longitude;
         });
         select.disabled = false;
       }
@@ -249,7 +249,7 @@
         populateSelectWithObjects(citySelect, cities, 'name', 'id');
       });
       citySelect.addEventListener('change', async function () {
-        const city = this.city;
+        const city = this.dataset;
         if (city) {
           lat = city.latitude;
           lon = city.longitude;
