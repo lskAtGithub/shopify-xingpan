@@ -2,7 +2,6 @@
   <div class="report-container">
     <div class="bg-gradient-to-br">
       <div class="flex-wrap">
-        
         <!-- 左侧内容 -->
         <div class="left-content">
           {% if section.settings.heading != blank %}
@@ -20,7 +19,13 @@
 
           {% if section.settings.top_image != blank %}
             <div class="top-img-container">
-              <img src="{{ section.settings.top_image | image_url: width: 800 }}" alt="{{ section.settings.heading }}" class="top-img">
+              <img
+                src="{{ section.settings.top_image | image_url: width: 800 }}"
+                alt="{{ section.settings.heading }}"
+                class="top-img"
+                width="800"
+                height="{{ section.settings.top_image.height | times: 800 | divided_by: section.settings.top_image.width }}"
+              >
             </div>
           {% endif %}
         </div>
@@ -38,7 +43,15 @@
               <div class="grid-cols-3">
                 <div>
                   <label for="birth-year">Year</label>
-                  <input type="number" id="birth-year" name="birth_year" min="1900" max="2023" placeholder="YYYY" required>
+                  <input
+                    type="number"
+                    id="birth-year"
+                    name="birth_year"
+                    min="1900"
+                    max="2023"
+                    placeholder="YYYY"
+                    required
+                  >
                 </div>
                 <div>
                   <label for="birth-month">Month</label>
@@ -110,6 +123,7 @@
   </div>
 
   <script>
+    let  
     document.addEventListener('DOMContentLoaded', function() {
       const countrySelect = document.getElementById('country');
       const stateSelect = document.getElementById('state');
@@ -269,21 +283,27 @@
     });
   </script>
 
-
-
-
-
   {% schema %}
-  {
-    "name": "Get Report Section",
-    "settings": [
-      {"type": "text", "id": "heading", "label": "标题", "default": "Discover Your Elemental Energy"},
-      {"type": "textarea", "id": "subheading", "label": "副标题/描述", "default": "Uncover your strongest & weakest elements—find your perfect crystal art to balance your energy."},
-      {"type": "text", "id": "note_text", "label": "提示文字", "default": "Free personalized report for first-time visitors"},
-      {"type": "image_picker", "id": "top_image", "label": "顶部图片"},
-      {"type": "text", "id": "button_text", "label": "按钮文字", "default": "Get Your Free Mini Report"}
-    ],
-    "presets": [{"name": "Get Report Section", "category": "Custom"}]
-  }
+{
+  "name": "Get Report Section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "标题", "default": "Discover Your Elemental Energy" },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "副标题/描述",
+      "default": "Uncover your strongest & weakest elements—find your perfect crystal art to balance your energy."
+    },
+    {
+      "type": "text",
+      "id": "note_text",
+      "label": "提示文字",
+      "default": "Free personalized report for first-time visitors"
+    },
+    { "type": "image_picker", "id": "top_image", "label": "顶部图片" },
+    { "type": "text", "id": "button_text", "label": "按钮文字", "default": "Get Your Free Mini Report" }
+  ],
+  "presets": [{ "name": "Get Report Section", "category": "Custom" }]
+}
   {% endschema %}
 </section>
