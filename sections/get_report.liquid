@@ -123,7 +123,9 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    let lat = '31.887503';
+    let lon = '117.30746';
+    document.addEventListener('DOMContentLoaded', function () {
       const countrySelect = document.getElementById('country');
       const stateSelect = document.getElementById('state');
       const citySelect = document.getElementById('city');
@@ -132,7 +134,7 @@
       const PLACEHOLDERS = {
         country: 'Select Country',
         state: 'Select State/Province',
-        city: 'Select City'
+        city: 'Select City',
       };
 
       function createOption(text, value = '') {
@@ -156,14 +158,24 @@
 
       function populateSelectWithObjects(select, items, textKey = 'name', valueKey = 'id') {
         select.innerHTML = '';
-        select.appendChild(createOption(select === countrySelect ? PLACEHOLDERS.country : (select === stateSelect ? PLACEHOLDERS.state : PLACEHOLDERS.city), ''));
+        select.appendChild(
+          createOption(
+            select === countrySelect
+              ? PLACEHOLDERS.country
+              : select === stateSelect
+              ? PLACEHOLDERS.state
+              : PLACEHOLDERS.city,
+            ''
+          )
+        );
         if (!items || !items.length) {
           select.disabled = true;
           return;
         }
-        items.forEach(item => {
+        items.forEach((item) => {
           const text = (item && (item[textKey] || item.name || String(item))) || '';
-          const value = (item && (item[valueKey] !== undefined ? item[valueKey] : (item.id !== undefined ? item.id : item))) || '';
+          const value =
+            (item && (item[valueKey] !== undefined ? item[valueKey] : item.id !== undefined ? item.id : item)) || '';
           const opt = createOption(text, value);
           select.appendChild(opt);
         });
@@ -173,7 +185,7 @@
       async function fetchFromApi(params = {}) {
         // 构造带查询串的 URL
         const url = new URL(API_URL);
-        Object.keys(params).forEach(k => {
+        Object.keys(params).forEach((k) => {
           if (params[k] !== undefined && params[k] !== null && params[k] !== '') url.searchParams.append(k, params[k]);
         });
 
@@ -210,7 +222,7 @@
       })();
 
       // 当国家改变时，加载州/省
-      countrySelect.addEventListener('change', async function() {
+      countrySelect.addEventListener('change', async function () {
         const countryId = this.value;
         // 清空州和市
         resetSelect(stateSelect, PLACEHOLDERS.state);
@@ -223,7 +235,7 @@
       });
 
       // 当州/省改变时，加载城市
-      stateSelect.addEventListener('change', async function() {
+      stateSelect.addEventListener('change', async function () {
         const stateId = this.value;
         const countryId = countrySelect.value;
         resetSelect(citySelect, PLACEHOLDERS.city);
@@ -233,50 +245,54 @@
         const cities = await fetchFromApi({ countryId: countryId, stateId: stateId });
         populateSelectWithObjects(citySelect, cities, 'name', 'id');
       });
+      citySelect.addEventListener('change', async function () {
+        const city = this.value;
+        if (city) {
+          lat = city.lat;
+          lon = city.lon;
+        }
+      });
       //  提交表单
-      const form = document.querySelector("form");
-      form.addEventListener("submit", async function (e) {
+      const form = document.querySelector('form');
+      form.addEventListener('submit', async function (e) {
         e.preventDefault();
-        const name = document.getElementById("name").value.trim();
-        const year = document.getElementById("birth-year").value;
-        const month = document.getElementById("birth-month").value;
-        const day = document.getElementById("birth-day").value;
-        const hour = document.getElementById("birth-hour").value;
-        const minute = document.getElementById("birth-minute").value;
-        const country = document.getElementById("country").value;
-        const state = document.getElementById("state").value;
-        const city = document.getElementById("city").value;
+        const name = document.getElementById('name').value.trim();
+        const year = document.getElementById('birth-year').value;
+        const month = document.getElementById('birth-month').value;
+        const day = document.getElementById('birth-day').value;
+        const hour = document.getElementById('birth-hour').value;
+        const minute = document.getElementById('birth-minute').value;
+        const country = document.getElementById('country').value;
+        const state = document.getElementById('state').value;
+        const city = document.getElementById('city').value;
 
-        // if (!country) return alert("请选择国家");
-        // if (!state) return alert("请选择省份/州");
-        // if (!city) return alert("请选择城市");
+        const time = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} ${String(hour).padStart(
+          2,
+          '0'
+        )}:${String(minute).padStart(2, '0')}:00`;
 
-        // 3. 拼接时间 "YYYY-MM-DD HH:mm:ss"
-        const time = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")} ${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00`;
-
-        // const address = `${country} ${state} ${city};
+        const address = `${country} ${state} ${city}`;
 
         const payload = {
           time: time,
-          lat: 31.887503,
-          lon: 117.30746,
+          lat: lat,
+          lon: lon,
           name: name,
-          address: '中国深圳南山',
+          address: address,
           ztime: 8,
           tid: 4,
         };
 
         // 6. 拼接 GET 参数
         const query = new URLSearchParams(payload).toString();
-        const url = "http://nacos.heartbuy.cn/astrology/astrology?" + query;
-
+        const url = 'https://nacos.heartbuy.cn/astrology/astrology?' + query;
 
         try {
           const res = await fetch(url);
           const data = await res.json();
-          console.log("返回结果：", data);
+          console.log('返回结果：', data);
         } catch (err) {
-          alert("请求失败，请稍后再试");
+          alert('请求失败，请稍后再试');
         }
       });
     });
