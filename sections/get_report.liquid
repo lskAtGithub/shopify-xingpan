@@ -247,6 +247,7 @@
       });
       citySelect.addEventListener('change', async function () {
         const city = this.value;
+        console.log(city)
         if (city) {
           lat = city.latitude;
           lon = city.longitude;
