@@ -119,6 +119,35 @@
           </form>
         </div>
       </div>
+
+      <!-- 🔹 弹窗结构 -->
+      <div id="report-modal" class="report-modal">
+        <div class="report-modal-content">
+          <span class="report-close">&times;</span>
+          <h2>✨ 报告结果</h2>
+
+          <!-- 表格 -->
+          <table class="table table-hover" id="report-table">
+            <thead>
+              <tr>
+                <th>星座</th>
+                <th>行星</th>
+                <th>庙旺</th>
+                <th>星座元素</th>
+                <th>行星-元素分</th>
+                <th>庙旺元素分</th>
+                <th>行星所落宫位</th>
+                <th>宫位元素</th>
+                <th>宫位元素分</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+          <!-- 百分比圆形图 -->
+          <canvas id="report-chart" width="200" height="200"></canvas>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -291,9 +320,89 @@
           const res = await fetch(url);
           const data = await res.json();
           console.log('返回结果：', data);
+          renderModal(data);
         } catch (err) {
           alert('请求失败，请稍后再试');
         }
+      });
+
+      const modal = document.getElementById('report-modal');
+      const tableBody = document.querySelector('#report-table tbody');
+      const chartCanvas = document.getElementById('report-chart');
+      const ctx = chartCanvas.getContext('2d');
+
+      async function renderModal (data) {
+        // 1. 渲染表格
+        tableBody.innerHTML = '';
+        if (data.list.length > 0) {
+          data.list.forEach((item, index) => {
+            const miaoWang =
+              item.miao === 0 && item.wang === 0
+                ? '无'
+                : (item.miao > 0 ? '庙' : '') +
+                  (item.miao > 0 && item.wang > 0 ? '/' : '') +
+                  (item.wang > 0 ? '旺' : '');
+
+            const row = `
+          <tr class="${index % 2 === 1 ? 'even-row' : ''}">
+            <td>${item.constellationCN}</td>
+            <td>${item.starNameCN}</td>
+            <td>${miaoWang}</td>
+            <td>${item.zodiacSigns}</td>
+            <td>${item.starScore}</td>
+            <td>${item.miao + item.wang}</td>
+            <td>${item.houses ? item.houses : '/'}</td>
+            <td>${item.houses ? item.housesName : '/'}</td>
+            <td>${item.houses ? item.housesScore : '/'}</td>
+          </tr>`;
+            tableBody.insertAdjacentHTML('beforeend', row);
+          });
+        } else {
+          tableBody.innerHTML = `
+        <tr>
+          <td colspan="9" style="text-align: center; color: #999;">
+            没有找到匹配的数据
+          </td>
+        </tr>`;
+        }
+
+        // 2. 画圆形百分比（用第一行的 starScore 举例）
+        const percent = data.starScore.reduce((acc, cur) => acc + cur, 0);
+        ctx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
+        const centerX = chartCanvas.width / 2;
+        const centerY = chartCanvas.height / 2;
+        const radius = 80;
+
+        // 灰色背景圈
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#eee';
+        ctx.lineWidth = 15;
+        ctx.stroke();
+
+        // 彩色百分比圈
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, -Math.PI / 2, 2 * Math.PI * (percent / 100) - Math.PI / 2);
+        ctx.strokeStyle = '#4caf50';
+        ctx.lineWidth = 15;
+        ctx.stroke();
+
+        // 百分比文字
+        ctx.font = '20px Arial';
+        ctx.fillStyle = '#333';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(percent + '%', centerX, centerY);
+
+        modal.style.display = 'flex';
+      });
+
+      // 关闭弹窗
+      closeBtn.addEventListener('click', function () {
+        modal.style.display = 'none';
+      });
+      window.addEventListener('click', function (e) {
+        if (e.target === modal) modal.style.display = 'none';
       });
     });
   </script>
