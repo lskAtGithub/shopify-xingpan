@@ -250,7 +250,7 @@ thead th:hover {
 }
 
 /* 表头排序图标 */
-thead th::after {
+/* thead th::after {
     content: '↕';
     margin-left: 8px;
     color: #bfbfbf;
@@ -260,7 +260,7 @@ thead th::after {
 
 thead th:hover::after {
     color: #1890ff;
-}
+} */
 
 /* 表体样式 */
 tbody {

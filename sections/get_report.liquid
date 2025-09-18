@@ -65,18 +65,45 @@
                 </div>
                 <div>
                   <label for="birth-day">Day</label>
-                  <input type="number" id="birth-day" name="birth_day" min="1" max="31" placeholder="DD" required  value="1">
+                  <input
+                    type="number"
+                    id="birth-day"
+                    name="birth_day"
+                    min="1"
+                    max="31"
+                    placeholder="DD"
+                    required
+                    value="1"
+                  >
                 </div>
               </div>
 
               <div class="grid-cols-2">
                 <div>
                   <label for="birth-hour">Hour (24h)</label>
-                  <input type="number" id="birth-hour" name="birth_hour" min="0" max="23" placeholder="HH" required  value="1">
+                  <input
+                    type="number"
+                    id="birth-hour"
+                    name="birth_hour"
+                    min="0"
+                    max="23"
+                    placeholder="HH"
+                    required
+                    value="1"
+                  >
                 </div>
                 <div>
                   <label for="birth-minute">Minute</label>
-                  <input type="number" id="birth-minute" name="birth_minute" min="0" max="59" placeholder="MM" required  value="1">
+                  <input
+                    type="number"
+                    id="birth-minute"
+                    name="birth_minute"
+                    min="0"
+                    max="59"
+                    placeholder="MM"
+                    required
+                    value="1"
+                  >
                 </div>
               </div>
             </div>
@@ -146,18 +173,19 @@
           </table>
 
           <!-- 百分比圆形图 -->
-          <canvas id="chartCanvas" width="400" height="400"></canvas>
+          <canvas id="chartCanvas" width="400" height="400" style="width:400px;height:400px;"></canvas>
           <div
             id="tooltip"
             style="
-              position: absolute;
+              position: fixed;
               padding: 6px 10px;
-              background: rgba(0,0,0,0.75);
+              background: rgba(0,0,0,0.8);
               color: #fff;
               border-radius: 4px;
-              font-size: 14px;
+              font-size: 13px;
               pointer-events: none;
               display: none;
+              z-index: 9999;
             "
           ></div>
         </div>
@@ -386,32 +414,75 @@
           i++;
         }
 
-        // hover 事件
-        canvas.addEventListener('mousemove', (e) => {
+        // 判断角度是否落在扇区（处理跨 0 的扇区）
+        function angleInSegment(angle, segStart, segEnd) {
+          // angle, segStart, segEnd 都是 0..2π
+          if (segStart <= segEnd) {
+            return angle >= segStart && angle <= segEnd;
+          } else {
+            // wrap-around
+            return angle >= segStart || angle <= segEnd;
+          }
+        }
+
+        // 事件：mousemove
+        canvas.addEventListener('mousemove', function (e) {
           const rect = canvas.getBoundingClientRect();
-          const x = e.clientX - rect.left - centerX;
-          const y = e.clientY - rect.top - centerY;
-          const angle = Math.atan2(y, x);
-          const dist = Math.sqrt(x * x + y * y);
+          // 处理 canvas 高 DPI 缩放 - 将鼠标坐标转换到 canvas 像素坐标系
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
 
-          // 修正角度范围（确保 0~2π）
-          let hoverAngle = angle >= -Math.PI / 2 ? angle : 2 * Math.PI + angle;
+          const x = (e.clientX - rect.left) * scaleX;
+          const y = (e.clientY - rect.top) * scaleY;
+          const dx = x - cx;
+          const dy = y - cy;
+          const dist = Math.sqrt(dx * dx + dy * dy);
 
-          let found = false;
-          for (let slice of slices) {
-            if (dist <= radius && hoverAngle >= slice.startAngle && hoverAngle <= slice.endAngle) {
+          // 如果鼠标在 donut 区域以内（这里允许任意在圆内触发）
+          if (dist <= radius + 8) {
+            let angle = Math.atan2(dy, dx); // -PI .. PI
+            angle = (angle + Math.PI * 2) % (Math.PI * 2); // 规范化到 0..2PI
+
+            let found = null;
+            for (const seg of entries) {
+              if (angleInSegment(angle, seg._start, seg._end)) {
+                found = seg;
+                break;
+              }
+            }
+
+            if (found) {
+              // 使用 fixed 位置：clientX/Y + offset (12px)
+              const offset = 12;
+              let left = Math.round(e.clientX + offset);
+              let top = Math.round(e.clientY + offset);
+
+              // 边界检测，避免 tooltip 出界（留 8px 空隙）
+              const tw = tooltip.offsetWidth || 120;
+              const th = tooltip.offsetHeight || 32;
+              const viewportW = window.innerWidth;
+              const viewportH = window.innerHeight;
+
+              if (left + tw + 8 > viewportW) left = viewportW - tw - 8;
+              if (top + th + 8 > viewportH) top = viewportH - th - 8;
+              if (left < 8) left = 8;
+              if (top < 8) top = 8;
+
+              tooltip.style.left = left + 'px';
+              tooltip.style.top = top + 'px';
+              tooltip.innerHTML = `<strong style="display:inline-block;margin-right:6px">${found.label}</strong> ${found.value}`;
               tooltip.style.display = 'block';
-              tooltip.style.left = e.pageX + 10 + 'px';
-              tooltip.style.top = e.pageY + 10 + 'px';
-              tooltip.innerHTML = `${slice.label}: ${slice.value}`;
-              found = true;
-              break;
+              return;
             }
           }
 
-          if (!found) {
-            tooltip.style.display = 'none';
-          }
+          // 没命中任何扇区
+          tooltip.style.display = 'none';
+        });
+
+        // mouseout 隐藏
+        canvas.addEventListener('mouseleave', function () {
+          tooltip.style.display = 'none';
         });
       }
 
