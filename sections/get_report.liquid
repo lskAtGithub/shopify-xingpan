@@ -248,7 +248,8 @@
         populateSelectWithObjects(citySelect, cities, 'name', 'id');
       });
       citySelect.addEventListener('change', async function () {
-        console.log(this);
+        console.log(this.dataset);
+        console.log(this.dataset.latitude);
         lat = this.dataset.latitude;
         lon = this.dataset.longitude;
       });
