@@ -181,9 +181,9 @@ label.checkbox-label {
 }
 .report-modal-content {
   background: #fff;
-  padding: 20px;
+  padding: 40px 30px;
   border-radius: 12px;
-  width: 500px;
+  max-width: 80vw;
   max-height: 80vh;
   overflow-y: auto;
   position: relative;
@@ -206,4 +206,525 @@ label.checkbox-label {
 }
 .report-table th {
   background: #f8f8f8;
+}
+
+/* 表格容器 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+/* 表头样式 */
+thead {
+    background: #fafafa;
+}
+
+thead tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+thead th {
+    position: relative;
+    color: rgba(0, 0, 0, 0.88);
+    font-weight: 600;
+    text-align: left;
+    padding: 16px;
+    word-break: break-word;
+    border-right: 1px solid rgba(5, 5, 5, 0.06);
+    transition: background 0.3s;
+    cursor: pointer;
+    user-select: none;
+}
+
+thead th:last-child {
+    border-right: none;
+}
+
+thead th:hover {
+    background: #f5f5f5;
+}
+
+/* 表头排序图标 */
+thead th::after {
+    content: '↕';
+    margin-left: 8px;
+    color: #bfbfbf;
+    font-size: 12px;
+    transition: color 0.3s;
+}
+
+thead th:hover::after {
+    color: #1890ff;
+}
+
+/* 表体样式 */
+tbody {
+    background: #fff;
+}
+
+tbody tr {
+    transition: all 0.3s;
+}
+
+tbody tr:hover {
+    background: #fafafa;
+}
+
+tbody td {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    word-break: break-word;
+    border-right: 1px solid rgba(5, 5, 5, 0.06);
+    transition: background 0.3s;
+}
+
+tbody td:last-child {
+    border-right: none;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* 斑马纹效果 - 通过属性选择器实现 */
+table[data-striped="true"] tbody tr:nth-child(even) {
+    background: #fafafa;
+}
+
+table[data-striped="true"] tbody tr:nth-child(even):hover {
+    background: #f0f0f0;
+}
+
+/* 链接样式 - 操作按钮 */
+a {
+    color: #1890ff;
+    text-decoration: none;
+    padding: 4px 8px;
+    margin: 0 4px;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+a:hover {
+    background: #e6f7ff;
+    color: #40a9ff;
+}
+
+/* 危险操作链接 */
+a[data-type="danger"] {
+    color: #ff4d4f;
+}
+
+a[data-type="danger"]:hover {
+    background: #fff2f0;
+    color: #ff7875;
+}
+
+/* 按钮样式 */
+button {
+    height: 32px;
+    padding: 4px 15px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #d9d9d9;
+    background: #fff;
+    color: rgba(0, 0, 0, 0.88);
+    cursor: pointer;
+    transition: all 0.3s;
+    line-height: 22px;
+    margin: 0 4px;
+}
+
+button:hover {
+    border-color: #40a9ff;
+    color: #40a9ff;
+}
+
+/* 主要按钮 */
+button[data-type="primary"] {
+    background: #1890ff;
+    border-color: #1890ff;
+    color: #fff;
+}
+
+button[data-type="primary"]:hover {
+    background: #40a9ff;
+    border-color: #40a9ff;
+}
+
+/* 状态标签样式 */
+span {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.5;
+}
+
+/* 成功状态 */
+span[data-status="success"] {
+    background: #f6ffed;
+    border: 1px solid #b7eb8f;
+    color: #52c41a;
+}
+
+/* 警告状态 */
+span[data-status="warning"] {
+    background: #fff2e8;
+    border: 1px solid #ffbb96;
+    color: #fa8c16;
+}
+
+/* 错误状态 */
+span[data-status="error"] {
+    background: #fff2f0;
+    border: 1px solid #ffccc7;
+    color: #ff4d4f;
+}
+
+/* 信息状态 */
+span[data-status="info"] {
+    background: #e6f7ff;
+    border: 1px solid #91d5ff;
+    color: #1890ff;
+}
+
+/* 表格标题区域 */
+caption {
+    caption-side: top;
+    padding: 16px;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.88);
+    background: #fafafa;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* 表格脚注 */
+tfoot {
+    background: #fafafa;
+    border-top: 1px solid #f0f0f0;
+}
+
+tfoot td {
+    padding: 12px 16px;
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 14px;
+}
+
+/* 输入框样式 */
+input {
+    padding: 4px 11px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1.5715;
+    color: rgba(0, 0, 0, 0.88);
+    background: #fff;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+input:focus {
+    border-color: #40a9ff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+input:hover {
+    border-color: #40a9ff;
+}
+
+/* 禁用状态 */
+input:disabled {
+    background: #f5f5f5;
+    border-color: #d9d9d9;
+    color: rgba(0, 0, 0, 0.25);
+    cursor: not-allowed;
+}
+
+/* 选择框样式 */
+select {
+    padding: 4px 11px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1.5715;
+    color: rgba(0, 0, 0, 0.88);
+    background: #fff;
+    transition: all 0.3s;
+    min-width: 120px;
+    cursor: pointer;
+}
+
+select:focus {
+    border-color: #40a9ff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+select:hover {
+    border-color: #40a9ff;
+}
+
+/* 复选框样式 */
+input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    background: #fff;
+    position: relative;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+input[type="checkbox"]:checked {
+    background: #1890ff;
+    border-color: #1890ff;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '✓';
+    color: #fff;
+    font-size: 12px;
+    position: absolute;
+    top: -2px;
+    left: 1px;
+}
+
+input[type="checkbox"]:hover {
+    border-color: #40a9ff;
+}
+
+/* 单选框样式 */
+input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+    border: 1px solid #d9d9d9;
+    border-radius: 50%;
+    background: #fff;
+    position: relative;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+input[type="radio"]:checked {
+    border-color: #1890ff;
+}
+
+input[type="radio"]:checked::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: #1890ff;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+}
+
+input[type="radio"]:hover {
+    border-color: #40a9ff;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    thead th,
+    tbody td {
+        padding: 12px 8px;
+        font-size: 13px;
+    }
+    
+    table {
+        font-size: 13px;
+    }
+    
+    caption {
+        padding: 12px;
+        font-size: 15px;
+    }
+    
+    button {
+        height: 28px;
+        padding: 2px 12px;
+        font-size: 13px;
+    }
+    
+    a {
+        padding: 3px 6px;
+        font-size: 13px;
+    }
+}
+
+/* 小屏幕时隐藏某些列 */
+@media (max-width: 480px) {
+    thead th:nth-child(n+4),
+    tbody td:nth-child(n+4) {
+        display: none;
+    }
+}
+
+/* 打印样式 */
+@media print {
+    table {
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    thead th {
+        background: #fff !important;
+        border: 1px solid #000;
+    }
+    
+    tbody td {
+        border: 1px solid #000;
+    }
+    
+    a {
+        color: #000;
+        text-decoration: underline;
+    }
+    
+    button {
+        display: none;
+    }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+    table {
+        border: 2px solid #000;
+    }
+    
+    thead th {
+        background: #000;
+        color: #fff;
+        border: 1px solid #fff;
+    }
+    
+    tbody td {
+        border: 1px solid #000;
+    }
+    
+    tbody tr:hover {
+        background: #f0f0f0;
+    }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #141414;
+        color: rgba(255, 255, 255, 0.85);
+    }
+    
+    table {
+        background: #1f1f1f;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+    }
+    
+    thead {
+        background: #262626;
+    }
+    
+    thead th {
+        color: rgba(255, 255, 255, 0.85);
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    
+    thead th:hover {
+        background: #303030;
+    }
+    
+    tbody td {
+        border-bottom: 1px solid #303030;
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    
+    tbody tr:hover {
+        background: #262626;
+    }
+    
+    table[data-striped="true"] tbody tr:nth-child(even) {
+        background: #262626;
+    }
+    
+    table[data-striped="true"] tbody tr:nth-child(even):hover {
+        background: #303030;
+    }
+    
+    caption,
+    tfoot {
+        background: #262626;
+        color: rgba(255, 255, 255, 0.65);
+    }
+    
+    button {
+        background: #1f1f1f;
+        border-color: #434343;
+        color: rgba(255, 255, 255, 0.85);
+    }
+    
+    button:hover {
+        border-color: #177ddc;
+        color: #177ddc;
+    }
+    
+    button[data-type="primary"] {
+        background: #177ddc;
+        border-color: #177ddc;
+    }
+    
+    input,
+    select {
+        background: #1f1f1f;
+        border-color: #434343;
+        color: rgba(255, 255, 255, 0.85);
+    }
+    
+    input:focus,
+    select:focus {
+        border-color: #177ddc;
+        box-shadow: 0 0 0 2px rgba(23, 125, 220, 0.2);
+    }
+    
+    span[data-status="success"] {
+        background: rgba(82, 196, 26, 0.15);
+        border-color: #389e0d;
+        color: #73d13d;
+    }
+    
+    span[data-status="warning"] {
+        background: rgba(250, 140, 22, 0.15);
+        border-color: #d48806;
+        color: #ffc53d;
+    }
+    
+    span[data-status="error"] {
+        background: rgba(255, 77, 79, 0.15);
+        border-color: #cf1322;
+        color: #ff7875;
+    }
+    
+    span[data-status="info"] {
+        background: rgba(24, 144, 255, 0.15);
+        border-color: #0958d9;
+        color: #69c0ff;
+    }
 }

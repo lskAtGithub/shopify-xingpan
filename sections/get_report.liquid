@@ -119,7 +119,7 @@
           </form>
         </div>
       </div>
-      
+
       <!-- 🔹 弹窗结构 -->
       <div id="report-modal" class="report-modal">
         <div class="report-modal-content">
@@ -145,7 +145,20 @@
           </table>
 
           <!-- 百分比圆形图 -->
-          <canvas id="report-chart" width="200" height="200"></canvas>
+          <canvas id="chartCanvas" width="400" height="400"></canvas>
+          <div
+            id="tooltip"
+            style="
+              position: absolute;
+              padding: 6px 10px;
+              background: rgba(0,0,0,0.75);
+              color: #fff;
+              border-radius: 4px;
+              font-size: 14px;
+              pointer-events: none;
+              display: none;
+            "
+          ></div>
         </div>
       </div>
     </div>
@@ -326,12 +339,83 @@
         }
       });
 
-      const modal = document.getElementById("report-modal");
-      const closeBtn = document.querySelector(".report-close");
-      const tableBody = document.querySelector("#report-table tbody");
-      const chartCanvas = document.getElementById("report-chart");
-      const ctx = chartCanvas.getContext("2d");
-      async function renderModal (data) {
+      const modal = document.getElementById('report-modal');
+      const closeBtn = document.querySelector('.report-close');
+      const tableBody = document.querySelector('#report-table tbody');
+
+      function renderCanvas(data) {
+        const data = data.itemScore;
+
+        const colors = ['#4A90E2', '#E94E77', '#50E3C2', '#F5A623']; // 给每个元素分配颜色
+        const canvas = document.getElementById('chartCanvas');
+        const ctx = canvas.getContext('2d');
+        const tooltip = document.getElementById('tooltip');
+
+        const total = Object.values(data).reduce((a, b) => a + b, 0);
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = 150;
+
+        let startAngle = -Math.PI / 2; // 从12点钟方向开始
+        const slices = []; // 存储每个扇形角度范围，用于 hover 判断
+
+        let i = 0;
+        for (let key in data) {
+          const value = data[key];
+          const sliceAngle = (value / total) * 2 * Math.PI;
+
+          // 绘制扇形
+          ctx.beginPath();
+          ctx.moveTo(centerX, centerY);
+          ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
+          ctx.closePath();
+          ctx.fillStyle = colors[i % colors.length];
+          ctx.fill();
+
+          // 存储扇形信息
+          slices.push({
+            label: key,
+            value: value,
+            startAngle: startAngle,
+            endAngle: startAngle + sliceAngle,
+            color: colors[i % colors.length],
+          });
+
+          startAngle += sliceAngle;
+          i++;
+        }
+
+        // hover 事件
+        canvas.addEventListener('mousemove', (e) => {
+          const rect = canvas.getBoundingClientRect();
+          const x = e.clientX - rect.left - centerX;
+          const y = e.clientY - rect.top - centerY;
+          const angle = Math.atan2(y, x);
+          const dist = Math.sqrt(x * x + y * y);
+
+          // 修正角度范围（确保 0~2π）
+          let hoverAngle = angle >= -Math.PI / 2 ? angle : 2 * Math.PI + angle;
+
+          let found = false;
+          for (let slice of slices) {
+            if (dist <= radius && hoverAngle >= slice.startAngle && hoverAngle <= slice.endAngle) {
+              tooltip.style.display = 'block';
+              tooltip.style.left = e.pageX + 10 + 'px';
+              tooltip.style.top = e.pageY + 10 + 'px';
+              tooltip.innerHTML = `${slice.label}: ${slice.value}`;
+              found = true;
+              break;
+            }
+          }
+
+          if (!found) {
+            tooltip.style.display = 'none';
+          }
+        });
+      }
+
+      async function renderModal(data) {
+        modal.style.display = 'flex';
         // 1. 渲染表格
         tableBody.innerHTML = '';
         if (data.list.length > 0) {
@@ -365,36 +449,8 @@
           </td>
         </tr>`;
         }
-
-        const percent = 20;
-        ctx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
-        const centerX = chartCanvas.width / 2;
-        const centerY = chartCanvas.height / 2;
-        const radius = 80;
-
-        // 灰色背景圈
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-        ctx.strokeStyle = '#eee';
-        ctx.lineWidth = 15;
-        ctx.stroke();
-
-        // 彩色百分比圈
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, -Math.PI / 2, 2 * Math.PI * (percent / 100) - Math.PI / 2);
-        ctx.strokeStyle = '#4caf50';
-        ctx.lineWidth = 15;
-        ctx.stroke();
-
-        // 百分比文字
-        ctx.font = '20px Arial';
-        ctx.fillStyle = '#333';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(percent + '%', centerX, centerY);
-
-        modal.style.display = 'flex';
-      };
+        renderCanvas(data);
+      }
 
       // 关闭弹窗
       closeBtn.addEventListener('click', function () {
