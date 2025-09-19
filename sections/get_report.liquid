@@ -405,33 +405,40 @@
             startAngle: startAngle,
             endAngle: startAngle + sliceAngle,
             color: colors[i % colors.length],
+            centerX,
+            centerY,
+            radius,
           });
 
           startAngle += sliceAngle;
           i++;
         }
 
-        // 判断角度是否落在扇区（处理跨 0 的扇区）
-        function angleInSegment(angle, segStart, segEnd) {
-          // angle, segStart, segEnd 都是 0..2π
-          if (segStart <= segEnd) {
-            return angle >= segStart && angle <= segEnd;
-          } else {
-            // wrap-around
-            return angle >= segStart || angle <= segEnd;
+        function angleInSegment(x, y, slice) {
+          const dx = x - slice.centerX;
+          const dy = y - slice.centerY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          // 判断是否在圆半径内
+          if (distance > slice.radius) return false;
+
+          // 计算点的角度（相对于圆心，0点为 -90°）
+          let angle = Math.atan2(dy, dx);
+          if (angle < -Math.PI / 2) {
+            angle += 2 * Math.PI;
           }
+
+          // 判断是否落在扇区角度范围
+          return angle >= slice.startAngle && angle <= slice.endAngle;
         }
 
         // 事件：mousemove
         canvas.addEventListener('mousemove', function (e) {
-          console.log(e);
           if (e.offsetX > 60 && e.offsetY > 60) {
             tooltip.style.left = e.offsetX + 20 + 'px';
             tooltip.style.top = e.offsetY + 'px';
             // 查找当前鼠标位置所属的扇区
-            const found = slices.find(
-              (slice) => angleInSegment(e.offsetX, slice.startAngle, slice.endAngle)
-            );
+            const found = slices.find(slice => angleInSegment(e.offsetX, e.offsetY, slice));
             if (found) {
               tooltip.innerHTML = `<strong style="display:inline-block;margin-right:6px">${found.label}</strong> ${found.value}`;
               tooltip.style.display = 'block';
