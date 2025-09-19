@@ -150,7 +150,7 @@
 
       <!-- 🔹 弹窗结构 -->
       <div id="report-modal" class="report-modal">
-        <div class="report-modal-content">
+        <div class="report-modal-content" id="modelContent">
           <span class="report-close">&times;</span>
           <h2>✨ 报告结果</h2>
 
@@ -361,14 +361,12 @@
       });
 
       const modal = document.getElementById('report-modal');
+      const modelContent = document.getElementById('modelContent');
       const closeBtn = document.querySelector('.report-close');
       const tableBody = document.querySelector('#report-table tbody');
 
       function scrollToBottom() {
-        const modal = document.getElementById('report-modal');
-        if (modal) {
-          modal.scrollTop = modal.scrollHeight;
-        }
+        modelContent.scrollTop = modelContent.scrollHeight;
       }
 
       function loadStream() {
@@ -389,10 +387,12 @@
                 streamData.innerHTML = marked.parse(content);
               }
 
+              /**
               if (item.reasoning_content != undefined && item.reasoning_content != '') {
                 reason += item.reasoning_content;
                 markdownRea.innerHTML = marked.parse(reason);
               }
+              */
               scrollToBottom();
             }
           } catch (e) {}
