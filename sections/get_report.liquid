@@ -177,6 +177,10 @@
             <div id="tooltip"></div>
             <canvas id="chartCanvas" width="400" height="400" style="width:400px;height:400px;"></canvas>
           </div>
+          <!-- 流数据渲染 -->
+          <div style="font-size: 16px;color: #BBB;" id="markdownRea" >
+            </div>
+          <div id="streamData"></div>
         </div>
       </div>
     </div>
@@ -185,6 +189,8 @@
   <script>
     let lat = '31.887503';
     let lon = '117.30746';
+    let id = '';
+    let reportId = '';
     document.addEventListener('DOMContentLoaded', function () {
       const countrySelect = document.getElementById('country');
       const stateSelect = document.getElementById('state');
@@ -325,14 +331,12 @@
         const country = document.getElementById('country').value;
         const state = document.getElementById('state').value;
         const city = document.getElementById('city').value;
-
         const time = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} ${String(hour).padStart(
           2,
           '0'
         )}:${String(minute).padStart(2, '0')}:00`;
 
         const address = `${country} ${state} ${city}`;
-
         const payload = {
           time: time,
           lat: lat,
@@ -342,8 +346,6 @@
           ztime: 8,
           tid: 4,
         };
-
-        // 6. 拼接 GET 参数
         const query = new URLSearchParams(payload).toString();
         const url = 'https://nacos.heartbuy.cn/astrology/astrology?' + query;
 
@@ -362,6 +364,38 @@
       const closeBtn = document.querySelector('.report-close');
       const tableBody = document.querySelector('#report-table tbody');
 
+      function loadStream() {
+        const streamData = document.getElementById('streamData');
+        const markdownRea = document.getElementById('markdownRea');
+
+        const eventSource = new EventSource(`/astrology/doubao?id=${id}&reportId=${reportId}`);
+        var content = '';
+        var reason = '';
+        eventSource.onmessage = function (eventStream) {
+          try {
+            var json = JSON.parse(eventStream.data);
+            var choices = json.choices;
+            for (var i = 0; i < choices.length; i++) {
+              var item = choices[i].delta;
+              if (item.content != undefined && item.content != '') {
+                content += item.content;
+                streamData.innerHTML = marked.parse(content);
+              }
+
+              if (item.reasoning_content != undefined && item.reasoning_content != '') {
+                reason += item.reasoning_content;
+                markdownRea.innerHTML = marked.parse(reason);
+              }
+              that.scrollToBottom();
+            }
+          } catch (e) {}
+        };
+
+        eventSource.onerror = function (error) {
+          eventSource.close();
+        };
+      }
+
       function renderCanvas(res) {
         const data = res.itemScore;
         const baseColors = ['#059bff', '#ff6384', '#ff9f40', '#ffcd56']; // 原始颜色
@@ -375,7 +409,7 @@
         const centerY = canvas.height / 2;
         const radius = Math.min(canvas.width, canvas.height) * 0.35;
 
-        const gap = 1 / radius; // 1px gap → 弧度
+        const gap = 1 / radius;
 
         let slices = [];
 
@@ -418,7 +452,7 @@
             ctx.closePath();
 
             const baseColor = baseColors[i % baseColors.length];
-            ctx.fillStyle = i === highlightIndex ? lightenColor(baseColor, 10) : baseColor; // hover时提亮25%
+            ctx.fillStyle = i === highlightIndex ? lightenColor(baseColor, 10) : baseColor;
             ctx.fill();
 
             slices.push({
@@ -437,10 +471,8 @@
           }
         }
 
-        // 初始绘制
         draw();
 
-        // hover 判断函数
         function angleInSegment(x, y, slice) {
           const dx = x - slice.centerX;
           const dy = y - slice.centerY;
@@ -454,7 +486,6 @@
           return angle >= slice.startAngle && angle <= slice.endAngle;
         }
 
-        // 鼠标移动
         canvas.addEventListener('mousemove', function (e) {
           let foundIndex = -1;
           slices.forEach((slice, index) => {
@@ -479,11 +510,11 @@
           draw();
           tooltip.style.display = 'none';
         });
+        loadStream();
       }
 
       async function renderModal(data) {
         modal.style.display = 'flex';
-        // 1. 渲染表格
         tableBody.innerHTML = '';
         if (data.list.length > 0) {
           data.list.forEach((item, index) => {
