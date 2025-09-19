@@ -353,7 +353,10 @@
           const res = await fetch(url);
           const data = await res.json();
           console.log('返回结果：', data);
+          id = data.data.uuid;
+          reportId = data.data.reportId;
           renderModal(data.data);
+          loadStream();
         } catch (err) {
           alert('请求失败，请稍后再试');
         }
