@@ -365,7 +365,7 @@
       function renderCanvas(res) {
         const data = res.itemScore;
 
-        const colors = ['#ffcd56', '#059bff', '#ff6384', '#ff9f40']; // 给每个元素分配颜色
+        const colors = ['#ff9f40', '#ff6384', '#059bff', '#ffcd56']; // 给每个元素分配颜色
         const canvas = document.getElementById('chartCanvas');
         const ctx = canvas.getContext('2d');
         const tooltip = document.getElementById('tooltip');
@@ -440,7 +440,7 @@
             // 查找当前鼠标位置所属的扇区
             const found = slices.find(slice => angleInSegment(e.offsetX, e.offsetY, slice));
             if (found) {
-              tooltip.innerHTML = `<strong style="display:inline-block;margin-right:6px">${found.label}</strong> ${found.value}`;
+              tooltip.innerHTML = `<strong style="display:inline-block;margin-right:6px">你的${found.label}元素得分：</strong> ${found.value}`;
               tooltip.style.display = 'block';
               return;
             }

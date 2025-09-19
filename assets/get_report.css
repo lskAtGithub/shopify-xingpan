@@ -32,7 +32,6 @@
 }
 
 .canvas-box #tooltip {
-  position: relative;
   position: absolute;
   padding: 6px 10px;
   background: rgba(0, 0, 0, 0.8);
