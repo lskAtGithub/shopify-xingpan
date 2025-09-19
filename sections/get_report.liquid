@@ -425,12 +425,18 @@
         // 事件：mousemove
         canvas.addEventListener('mousemove', function (e) {
           console.log(e);
-          if (offsetX > 60 && offsetY > 60) {
-            tooltip.style.left = offsetX + 20 + 'px';
-            tooltip.style.top = offsetY + 'px';
-            tooltip.innerHTML = `<strong style="display:inline-block;margin-right:6px">${found.label}</strong> ${found.value}`;
-            tooltip.style.display = 'block';
-            return;
+          if (e.offsetX > 60 && e.offsetY > 60) {
+            tooltip.style.left = e.offsetX + 20 + 'px';
+            tooltip.style.top = e.offsetY + 'px';
+            // 查找当前鼠标位置所属的扇区
+            const found = slices.find(
+              (slice) => angleInSegment(e.offsetX, slice.startAngle, slice.endAngle)
+            );
+            if (found) {
+              tooltip.innerHTML = `<strong style="display:inline-block;margin-right:6px">${found.label}</strong> ${found.value}`;
+              tooltip.style.display = 'block';
+              return;
+            }
           }
 
           // 没命中任何扇区
