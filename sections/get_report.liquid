@@ -386,6 +386,14 @@
         const centerY = canvas.height / 2;
         const radius = 150;
 
+        const dpi = window.devicePixelRatio || 1;
+        const cw = canvas.width;
+        const ch = canvas.height;
+        const cx = cw / 2;
+        const cy = ch / 2;
+        const radius = Math.min(cw, ch) * 0.35;
+        const innerGap = 26;
+
         let startAngle = -Math.PI / 2; // 从12点钟方向开始
         const slices = []; // 存储每个扇形角度范围，用于 hover 判断
 
