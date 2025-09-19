@@ -353,7 +353,6 @@
           console.log('返回结果：', data);
           reportId = data.data.reportId;
           renderModal(data.data);
-          loadStream();
         } catch (err) {
           alert('请求失败，请稍后再试');
         }
@@ -387,12 +386,10 @@
                 streamData.innerHTML = marked.parse(content);
               }
 
-              /**
               if (item.reasoning_content != undefined && item.reasoning_content != '') {
                 reason += item.reasoning_content;
                 markdownRea.innerHTML = marked.parse(reason);
               }
-              */
               scrollToBottom();
             }
           } catch (e) {}
