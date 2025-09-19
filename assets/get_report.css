@@ -469,8 +469,9 @@ input[type="checkbox"]:checked::after {
     color: #fff;
     font-size: 12px;
     position: absolute;
-    top: calc(0.375rem - 5px);
-    left: calc(0.375rem - 5px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 input[type="checkbox"]:hover {
