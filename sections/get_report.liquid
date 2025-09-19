@@ -315,7 +315,7 @@
         if (!countryId || !stateId) return;
 
         setLoading(citySelect);
-        const cities = await fetchFromApi({ countryId: countryId, stateId: stateId });
+        const cities = await fetchFromApi({ stateId: stateId });
         populateSelectWithObjects(citySelect, cities, 'name', 'id');
       });
       citySelect.addEventListener('change', async function () {
