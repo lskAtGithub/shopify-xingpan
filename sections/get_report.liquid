@@ -173,21 +173,10 @@
           </table>
 
           <!-- 百分比圆形图 -->
-          <canvas id="chartCanvas" width="400" height="400" style="width:400px;height:400px;"></canvas>
-          <div
-            id="tooltip"
-            style="
-              position: fixed;
-              padding: 6px 10px;
-              background: rgba(0,0,0,0.8);
-              color: #fff;
-              border-radius: 4px;
-              font-size: 13px;
-              pointer-events: none;
-              display: none;
-              z-index: 9999;
-            "
-          ></div>
+          <div class="canvas-box">
+            <div id="tooltip"></div>
+            <canvas id="chartCanvas" width="400" height="400" style="width:400px;height:400px;"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -376,7 +365,7 @@
       function renderCanvas(res) {
         const data = res.itemScore;
 
-        const colors = ['#4A90E2', '#E94E77', '#50E3C2', '#F5A623']; // 给每个元素分配颜色
+        const colors = ['#ffcd56', '#059bff', '#ff6384', '#ff9f40']; // 给每个元素分配颜色
         const canvas = document.getElementById('chartCanvas');
         const ctx = canvas.getContext('2d');
         const tooltip = document.getElementById('tooltip');
@@ -435,53 +424,13 @@
 
         // 事件：mousemove
         canvas.addEventListener('mousemove', function (e) {
-          const rect = canvas.getBoundingClientRect();
-          // 处理 canvas 高 DPI 缩放 - 将鼠标坐标转换到 canvas 像素坐标系
-          const scaleX = canvas.width / rect.width;
-          const scaleY = canvas.height / rect.height;
-
-          const x = (e.clientX - rect.left) * scaleX;
-          const y = (e.clientY - rect.top) * scaleY;
-          const dx = x - cx;
-          const dy = y - cy;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          // 如果鼠标在 donut 区域以内（这里允许任意在圆内触发）
-          if (dist <= radius + 8) {
-            let angle = Math.atan2(dy, dx); // -PI .. PI
-            angle = (angle + Math.PI * 2) % (Math.PI * 2); // 规范化到 0..2PI
-
-            let found = null;
-            for (const seg of entries) {
-              if (angleInSegment(angle, seg._start, seg._end)) {
-                found = seg;
-                break;
-              }
-            }
-
-            if (found) {
-              // 使用 fixed 位置：clientX/Y + offset (12px)
-              const offset = 12;
-              let left = Math.round(e.clientX + offset);
-              let top = Math.round(e.clientY + offset);
-
-              // 边界检测，避免 tooltip 出界（留 8px 空隙）
-              const tw = tooltip.offsetWidth || 120;
-              const th = tooltip.offsetHeight || 32;
-              const viewportW = window.innerWidth;
-              const viewportH = window.innerHeight;
-
-              if (left + tw + 8 > viewportW) left = viewportW - tw - 8;
-              if (top + th + 8 > viewportH) top = viewportH - th - 8;
-              if (left < 8) left = 8;
-              if (top < 8) top = 8;
-
-              tooltip.style.left = left + 'px';
-              tooltip.style.top = top + 'px';
-              tooltip.innerHTML = `<strong style="display:inline-block;margin-right:6px">${found.label}</strong> ${found.value}`;
-              tooltip.style.display = 'block';
-              return;
-            }
+          console.log(e);
+          if (offsetX > 60 && offsetY > 60) {
+            tooltip.style.left = offsetX + 20 + 'px';
+            tooltip.style.top = offsetY + 'px';
+            tooltip.innerHTML = `<strong style="display:inline-block;margin-right:6px">${found.label}</strong> ${found.value}`;
+            tooltip.style.display = 'block';
+            return;
           }
 
           // 没命中任何扇区
