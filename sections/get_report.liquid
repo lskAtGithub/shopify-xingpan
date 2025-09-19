@@ -364,6 +364,125 @@
 
       function renderCanvas(res) {
         const data = res.itemScore;
+        const baseColors = ['#ff9f40', '#ff6384', '#059bff', '#ffcd56']; // 原始颜色
+
+        const canvas = document.getElementById('chartCanvas');
+        const ctx = canvas.getContext('2d');
+        const tooltip = document.getElementById('tooltip');
+
+        const total = Object.values(data).reduce((a, b) => a + b, 0);
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = Math.min(canvas.width, canvas.height) * 0.35;
+
+        const gap = 1 / radius; // 1px gap → 弧度
+
+        let slices = [];
+
+        // 提亮颜色函数
+        function lightenColor(hex, percent) {
+          let num = parseInt(hex.replace('#', ''), 16),
+            r = (num >> 16) + Math.round(2.55 * percent),
+            g = ((num >> 8) & 0x00ff) + Math.round(2.55 * percent),
+            b = (num & 0x0000ff) + Math.round(2.55 * percent);
+
+          return (
+            '#' +
+            (
+              0x1000000 +
+              (r < 255 ? (r < 0 ? 0 : r) : 255) * 0x10000 +
+              (g < 255 ? (g < 0 ? 0 : g) : 255) * 0x100 +
+              (b < 255 ? (b < 0 ? 0 : b) : 255)
+            )
+              .toString(16)
+              .slice(1)
+          );
+        }
+
+        function draw(highlightIndex = -1) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          let startAngle = -Math.PI / 2;
+          let i = 0;
+          slices = [];
+
+          for (let key in data) {
+            const value = data[key];
+            const sliceAngle = (value / total) * 2 * Math.PI;
+
+            const adjustedStart = startAngle + gap / 2;
+            const adjustedEnd = startAngle + sliceAngle - gap / 2;
+
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, radius, adjustedStart, adjustedEnd);
+            ctx.closePath();
+
+            const baseColor = baseColors[i % baseColors.length];
+            ctx.fillStyle = i === highlightIndex ? lightenColor(baseColor, 25) : baseColor; // hover时提亮25%
+            ctx.fill();
+
+            slices.push({
+              label: key,
+              value,
+              startAngle: adjustedStart,
+              endAngle: adjustedEnd,
+              color: ctx.fillStyle,
+              centerX,
+              centerY,
+              radius,
+            });
+
+            startAngle += sliceAngle;
+            i++;
+          }
+        }
+
+        // 初始绘制
+        draw();
+
+        // hover 判断函数
+        function angleInSegment(x, y, slice) {
+          const dx = x - slice.centerX;
+          const dy = y - slice.centerY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance > slice.radius) return false; // 在圆外
+
+          let angle = Math.atan2(dy, dx);
+          if (angle < -Math.PI / 2) angle += 2 * Math.PI; // 修正角度
+
+          return angle >= slice.startAngle && angle <= slice.endAngle;
+        }
+
+        // 鼠标移动
+        canvas.addEventListener('mousemove', function (e) {
+          let foundIndex = -1;
+          slices.forEach((slice, index) => {
+            if (angleInSegment(e.offsetX, e.offsetY, slice)) {
+              foundIndex = index;
+              tooltip.style.left = e.offsetX + 12 + 'px';
+              tooltip.style.top = e.offsetY + 'px';
+              tooltip.innerHTML = `<strong style="margin-right:6px">${slice.label}</strong> ${slice.value}`;
+              tooltip.style.display = 'block';
+            }
+          });
+
+          if (foundIndex !== -1) {
+            draw(foundIndex); // 高亮
+          } else {
+            draw(); // 恢复
+            tooltip.style.display = 'none';
+          }
+        });
+
+        canvas.addEventListener('mouseleave', function () {
+          draw();
+          tooltip.style.display = 'none';
+        });
+      }
+
+      function renderCanvas1(res) {
+        const data = res.itemScore;
 
         const colors = ['#ff9f40', '#ff6384', '#059bff', '#ffcd56']; // 给每个元素分配颜色
         const canvas = document.getElementById('chartCanvas');
@@ -387,6 +506,7 @@
 
         let i = 0;
         for (let key in data) {
+          console.log(key);
           const value = data[key];
           const sliceAngle = (value / total) * 2 * Math.PI;
 
@@ -438,7 +558,7 @@
             tooltip.style.left = e.offsetX + 20 + 'px';
             tooltip.style.top = e.offsetY + 'px';
             // 查找当前鼠标位置所属的扇区
-            const found = slices.find(slice => angleInSegment(e.offsetX, e.offsetY, slice));
+            const found = slices.find((slice) => angleInSegment(e.offsetX, e.offsetY, slice));
             if (found) {
               tooltip.innerHTML = `<strong style="display:inline-block;margin-right:6px">你的${found.label}元素得分：</strong> ${found.value}`;
               tooltip.style.display = 'block';
