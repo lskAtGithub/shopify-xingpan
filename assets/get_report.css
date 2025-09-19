@@ -202,8 +202,8 @@ label.checkbox-label {
   background: #fff;
   padding: 40px 30px;
   border-radius: 12px;
-  max-width: 80vw;
-  max-height: 80vh;
+  width: 80vw;
+  height: 80vh;
   overflow-y: auto;
   position: relative;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);

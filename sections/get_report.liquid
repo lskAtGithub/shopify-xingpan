@@ -178,8 +178,7 @@
             <canvas id="chartCanvas" width="400" height="400" style="width:400px;height:400px;"></canvas>
           </div>
           <!-- 流数据渲染 -->
-          <div style="font-size: 16px;color: #BBB;" id="markdownRea" >
-            </div>
+          <div style="font-size: 16px;color: #BBB;" id="markdownRea"></div>
           <div id="streamData"></div>
         </div>
       </div>
@@ -365,6 +364,13 @@
       const closeBtn = document.querySelector('.report-close');
       const tableBody = document.querySelector('#report-table tbody');
 
+      function scrollToBottom() {
+        const modal = document.getElementById('report-modal');
+        if (modal) {
+          modal.scrollTop = modal.scrollHeight;
+        }
+      }
+
       function loadStream() {
         const streamData = document.getElementById('streamData');
         const markdownRea = document.getElementById('markdownRea');
@@ -387,7 +393,7 @@
                 reason += item.reasoning_content;
                 markdownRea.innerHTML = marked.parse(reason);
               }
-              that.scrollToBottom();
+              scrollToBottom();
             }
           } catch (e) {}
         };
