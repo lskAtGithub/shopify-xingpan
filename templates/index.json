@@ -145,6 +145,21 @@
         "right_image": "shopify://shop_images/blok1.jpg"
       }
     },
+    "four_elements_stories_9Ti4EU": {
+      "type": "four-elements-stories",
+      "name": "四元素故事",
+      "settings": {
+        "heading": "Stories of the Four Elements",
+        "subheading": "<p>Ancient wisdom meets modern energy—explore the origins and significance of fire, water, earth, and air in astrology and metaphysics.</p>",
+        "image": "shopify://shop_images/blok1.jpg",
+        "fire_article": "新闻/the-fire-transformation-passion",
+        "water_article": "",
+        "earth_article": "",
+        "air_article": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "zodiac_collection_grid_f8JLgc": {
       "type": "zodiac-collection-grid",
       "name": "星座产品系列",
@@ -183,6 +198,7 @@
     "get_report_d7rwzM",
     "custom_featured_product_Win7PL",
     "stories_Bh4WrV",
+    "four_elements_stories_9Ti4EU",
     "zodiac_collection_grid_f8JLgc",
     "bottom_section_8hMqLq"
   ]
