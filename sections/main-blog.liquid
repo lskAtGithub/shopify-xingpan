@@ -23,6 +23,7 @@
     {% if all_tags.size > 0 %}
       <nav class="filter-nav">
         <button class="filter-button active" data-filter="all">All</button>
+        {{ all_tags }}
         {% for tag in all_tags %}
           {% if tag == "Fire" or tag == "water" or tag == "earth" or tag == "air" %}
             <button class="filter-button" data-filter="{{ tag | handle }}">{{ tag }}</button>
