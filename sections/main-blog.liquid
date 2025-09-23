@@ -13,7 +13,7 @@
       <nav class="filter-nav">
         <button class="filter-button active" data-filter="all">All</button>
         {% for tag in all_tags %}
-          {% if tag == "fire" or tag == "water" or tag == "earth" or tag == "air" %}
+          {% if tag == "Fire" or tag == "Water" or tag == "Earth" or tag == "Air" %}
             <button class="filter-button" data-filter="{{ tag | handle }}">{{ tag }}</button>
           {% endif %}
         {% endfor %}
