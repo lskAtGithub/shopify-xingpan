@@ -19,7 +19,17 @@
     style="{% render 'spacing-style', settings: section.settings %}"
   >
     {% content_for 'blocks' %}
-
+ {%- assign all_tags = blog.all_tags -%}
+    {% if all_tags.size > 0 %}
+      <nav class="filter-nav">
+        <button class="filter-button active" data-filter="all">All</button>
+        {% for tag in all_tags %}
+          {% if tag == "fire" or tag == "water" or tag == "earth" or tag == "air" %}
+            <button class="filter-button" data-filter="{{ tag | handle }}">{{ tag }}</button>
+          {% endif %}
+        {% endfor %}
+      </nav>
+    {% endif %}
     {%- paginate blog.articles by 12 -%}
       <span ref="viewMorePrevious"></span>
       <div
