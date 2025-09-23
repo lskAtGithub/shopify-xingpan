@@ -6,7 +6,7 @@
 
 <div class="page-width section-{{ section.id }}">
   <div class="blog-header">
-    <h1>{{ blog }}</h1>
+    <h1>{{ blog.all_tags }}</h1>
 
     {%- assign all_tags = blog.all_tags -%}
     {% if all_tags.size > 0 %}
