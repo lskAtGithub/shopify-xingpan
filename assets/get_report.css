@@ -349,7 +349,7 @@ a[data-type='danger']:hover {
 }
 
 /* 状态标签样式 */
-span {
+.checkbox-check-text {
   display: inline-block;
   padding: 2px 8px;
   border-radius: 4px;
@@ -359,28 +359,28 @@ span {
 }
 
 /* 成功状态 */
-span[data-status='success'] {
+.checkbox-check-text[data-status='success'] {
   background: #f6ffed;
   border: 1px solid #b7eb8f;
   color: #52c41a;
 }
 
 /* 警告状态 */
-span[data-status='warning'] {
+.checkbox-check-text[data-status='warning'] {
   background: #fff2e8;
   border: 1px solid #ffbb96;
   color: #fa8c16;
 }
 
 /* 错误状态 */
-span[data-status='error'] {
+.checkbox-check-text[data-status='error'] {
   background: #fff2f0;
   border: 1px solid #ffccc7;
   color: #ff4d4f;
 }
 
 /* 信息状态 */
-span[data-status='info'] {
+.checkbox-check-text[data-status='info'] {
   background: #e6f7ff;
   border: 1px solid #91d5ff;
   color: #1890ff;
