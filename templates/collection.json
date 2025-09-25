@@ -137,9 +137,37 @@
         "padding-block-start": 0,
         "padding-block-end": 32
       }
+    },
+    "shop_flex_section_Fnf9nA": {
+      "type": "shop-flex-section",
+      "blocks": {
+        "filter_group_8Teb7B": {
+          "type": "filter_group",
+          "settings": {
+            "title": "Element",
+            "options": "选项1\n选项2\n选项3"
+          }
+        },
+        "filter_group_mmdCNe": {
+          "type": "filter_group",
+          "settings": {
+            "title": "tableware",
+            "options": "选项1\n选项2\n选项3"
+          }
+        }
+      },
+      "block_order": [
+        "filter_group_8Teb7B",
+        "filter_group_mmdCNe"
+      ],
+      "name": "Collection with Filters",
+      "settings": {
+        "collection": "zodiac-crystal-collections"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "shop_flex_section_Fnf9nA"
   ]
 }
