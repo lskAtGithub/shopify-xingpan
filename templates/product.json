@@ -456,6 +456,7 @@
         "media": {
           "type": "_media-without-appearance",
           "name": "t:names.product_media",
+          "disabled": true,
           "static": true,
           "settings": {
             "media_type": "image",
@@ -470,6 +471,7 @@
         "featured-product": {
           "type": "_featured-product",
           "name": "t:names.product",
+          "disabled": true,
           "static": true,
           "settings": {},
           "blocks": {
