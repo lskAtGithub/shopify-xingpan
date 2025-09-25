@@ -1,143 +1,202 @@
-{{ 'component-article-card.css' | asset_url | stylesheet_tag }}
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
-{{ 'section-main-blog.css' | asset_url | stylesheet_tag }}
+{% comment %}
+  Filterable Blog Section (FIXED: Load all articles)
+  - Disables pagination to load ALL articles from the blog for JS filtering.
+  - The default limit for blog.articles without pagination is 50.
+  - If you have more than 50 articles, a more advanced solution is needed.
+{% endcomment %}
 
-{%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
+{% paginate blog.articles by 1000 %}
+  {% comment %}
+    We use the paginate tag here NOT for actual pagination links,
+    but as a trick to increase the number of articles loaded.
+    The maximum is 1000 per page.
+  {% endcomment %}
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-{%- endstyle -%}
+  <div class="page-width section-{{ section.id }}">
+    <div class="blog-header">
+      <h1>{{ blog.title }}</h1>
 
-{%- paginate blog.articles by 6 -%}
-  <div class="main-blog page-width section-{{ section.id }}-padding">
-    <h1 class="title--primary{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-      {{ blog.title | escape }}
-    </h1>
-
-    <div class="blog-articles {% if section.settings.layout == 'collage' %}blog-articles--collage{% endif %}">
-      {%- for article in blog.articles -%}
-        <div
-          class="blog-articles__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-          {% if settings.animations_reveal_on_scroll %}
-            data-cascade
-            style="--animation-order: {{ forloop.index }};"
-          {% endif %}
-        >
-          {%- render 'article-card',
-            article: article,
-            media_height: section.settings.image_height,
-            media_aspect_ratio: article.image.aspect_ratio,
-            show_image: section.settings.show_image,
-            show_date: section.settings.show_date,
-            show_author: section.settings.show_author,
-            show_excerpt: true
-          -%}
-        </div>
-      {%- endfor -%}
+      {%- assign all_tags = blog.all_tags -%}
+      {% if all_tags.size > 0 %}
+        <nav class="filter-nav">
+          <button class="filter-button active" data-filter="All">All</button>
+          {% comment %}
+            To ensure the filter menu is always complete, we get tags from ALL articles,
+            not just the paginated ones. The blog.all_tags object thankfully does this.
+          {% endcomment %}
+          {% for tag in all_tags %}
+            {% if tag == "Fire" or tag == "Water" or tag == "Earth" or tag == "Air" %}
+              <button class="filter-button" data-filter="{{ tag | handle }}">{{ tag }}</button>
+            {% endif %}
+          {% endfor %}
+        </nav>
+      {% endif %}
     </div>
 
-    {%- if paginate.pages > 1 -%}
-      {%- render 'pagination', paginate: paginate -%}
-    {%- endif -%}
+    <div class="article-grid">
+      {% for article in blog.articles %}
+        <div class="article-card" data-tags="{{ article.tags | join: ' ' | handle }}">
+          <a href="{{ article.url }}" class="article-card__image-wrapper">
+            {% if article.image %}
+              {{ article.image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 600, 800', sizes: '(max-width: 767px) 100vw, (max-width: 1023px) 33vw, 25vw' }}
+            {% else %}
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {% endif %}
+          </a>
+          <div class="article-card__info">
+            <h2 class="article-card__title">
+              <a href="{{ article.url }}">{{ article.title }}</a>
+            </h2>
+            <div class="article-card__excerpt">
+              {{ article.excerpt_or_content | strip_html | truncate: 150 }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      
+      {% if blog.articles.size == 0 %}
+         {% for i in (1..4) %}
+          <div class="article-card">
+            <div class="article-card__image-wrapper">
+              {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+            <div class="article-card__info">
+              <h2 class="article-card__title">Example Blog Post Title</h2>
+              <div class="article-card__excerpt">
+                This is a placeholder for your blog post's excerpt. Start writing amazing content to engage your customers.
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
   </div>
-{%- endpaginate -%}
+
+  {% if paginate.pages > 1 %}
+    {% comment %} We intentionally leave this empty to hide pagination controls {% endcomment %}
+  {% endif %}
+
+{% endpaginate %}
+
+
+{% stylesheet %}
+/* ... (CSS样式部分保持不变，无需修改) ... */
+.blog-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.blog-header h1 {
+  font-size: 2.8rem;
+  margin-bottom: 30px;
+}
+.filter-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+.filter-button {
+  background-color: transparent;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.filter-button:hover {
+  background-color: #f5f5f5;
+  border-color: #ccc;
+}
+.filter-button.active {
+  background-color: #2D3748;
+  color: #fff;
+  border-color: #2D3748;
+}
+.article-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Mobile: 1 column */
+  gap: 30px;
+}
+.article-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.article-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+.article-card__image-wrapper {
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+.article-card__image-wrapper img,
+.article-card__image-wrapper .placeholder-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.article-card__info {
+  padding: 20px;
+}
+.article-card__title {
+  font-size: 1.2rem;
+  margin: 0 0 10px 0;
+}
+.article-card__title a {
+  text-decoration: none;
+  color: inherit;
+}
+.article-card__excerpt {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+}
+@media (min-width: 768px) {
+  .article-grid {
+    grid-template-columns: repeat(3, 1fr); /* Tablet: 3 columns */
+  }
+}
+@media (min-width: 1024px) {
+  .article-grid {
+    grid-template-columns: repeat(4, 1fr); /* Desktop: 4 columns */
+  }
+}
+{% endstylesheet %}
+
+<script>
+  /* ... (JavaScript部分保持不变，无需修改) ... */
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('.filter-button');
+    const articleCards = document.querySelectorAll('.article-card');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        const filter = button.getAttribute('data-filter');
+        articleCards.forEach(card => {
+          const tags = card.getAttribute('data-tags');
+          if (filter === 'all' || (tags && tags.includes(filter))) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+</script>
 
 {% schema %}
 {
-  "name": "t:sections.main-blog.name",
-  "tag": "section",
-  "class": "section",
-  "settings": [
-    {
-      "type": "select",
-      "id": "layout",
-      "options": [
-        {
-          "value": "grid",
-          "label": "t:sections.main-blog.settings.layout.options__1.label"
-        },
-        {
-          "value": "collage",
-          "label": "t:sections.main-blog.settings.layout.options__2.label"
-        }
-      ],
-      "default": "collage",
-      "label": "t:sections.main-blog.settings.layout.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_image",
-      "default": true,
-      "label": "t:sections.main-blog.settings.show_image.label"
-    },
-    {
-      "type": "select",
-      "id": "image_height",
-      "options": [
-        {
-          "value": "adapt",
-          "label": "t:sections.main-blog.settings.image_height.options__1.label"
-        },
-        {
-          "value": "small",
-          "label": "t:sections.main-blog.settings.image_height.options__2.label"
-        },
-        {
-          "value": "medium",
-          "label": "t:sections.main-blog.settings.image_height.options__3.label"
-        },
-        {
-          "value": "large",
-          "label": "t:sections.main-blog.settings.image_height.options__4.label"
-        }
-      ],
-      "default": "medium",
-      "label": "t:sections.main-blog.settings.image_height.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_date",
-      "default": true,
-      "label": "t:sections.main-blog.settings.show_date.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_author",
-      "default": false,
-      "label": "t:sections.main-blog.settings.show_author.label"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 36
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
-    }
-  ]
+  "name": "Filterable Blog",
+  "settings": []
 }
 {% endschema %}
