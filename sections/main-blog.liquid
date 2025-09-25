@@ -19,15 +19,15 @@
       {%- assign all_tags = blog.all_tags -%}
       {% if all_tags.size > 0 %}
         <nav class="filter-nav">
-          <button class="filter-button active" data-filter="All">All</button>
+          {% comment %} <button class="filter-button active" data-filter="All">All</button> {% endcomment %}
           {% comment %}
             To ensure the filter menu is always complete, we get tags from ALL articles,
             not just the paginated ones. The blog.all_tags object thankfully does this.
           {% endcomment %}
           {% for tag in all_tags %}
-            {% if tag == "Fire" or tag == "Water" or tag == "Earth" or tag == "Air" %}
+            {% comment %} {% if tag == "Fire" or tag == "Water" or tag == "Earth" or tag == "Air" %} {% endcomment %}
               <button class="filter-button" data-filter="{{ tag | handle }}">{{ tag }}</button>
-            {% endif %}
+            {% comment %} {% endif %} {% endcomment %}
           {% endfor %}
         </nav>
       {% endif %}
