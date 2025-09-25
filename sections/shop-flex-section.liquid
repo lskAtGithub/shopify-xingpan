@@ -162,17 +162,17 @@
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+  function initAccordionFilter(container) {
     // 手风琴展开收起
-    document.querySelectorAll('.cw-accordion-toggle').forEach((btn) => {
+    container.querySelectorAll('.cw-accordion-toggle').forEach((btn) => {
       btn.addEventListener('click', () => {
         btn.parentElement.classList.toggle('open');
       });
     });
 
     // 过滤逻辑（基于 tags）
-    const checkboxes = document.querySelectorAll('.filter-checkbox');
-    const products = document.querySelectorAll('.cw-product-card');
+    const checkboxes = container.querySelectorAll('.filter-checkbox');
+    const products = container.querySelectorAll('.cw-product-card');
 
     checkboxes.forEach((cb) => {
       cb.addEventListener('change', () => {
@@ -190,5 +190,18 @@
         });
       });
     });
+  }
+
+  // 初次加载执行
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.collection-with-filters').forEach((section) => {
+      initAccordionFilter(section);
+    });
+  });
+
+  // Shopify 编辑器里动态加载 section 时执行
+  document.addEventListener('shopify:section:load', function (e) {
+    const section = e.target.querySelector('.collection-with-filters');
+    if (section) initAccordionFilter(section);
   });
 </script>
