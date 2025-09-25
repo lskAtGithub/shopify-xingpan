@@ -87,9 +87,17 @@
         "enable_transparent_header_collection": false,
         "collection_color_scheme": "default"
       }
+    },
+    "shop_flex_section_ijm8am": {
+      "type": "shop-flex-section",
+      "name": "Collection with Filters",
+      "settings": {
+        "collection": "zodiac-crystal-collections"
+      }
     }
   },
   "order": [
-    "header_section"
+    "header_section",
+    "shop_flex_section_ijm8am"
   ]
 }
