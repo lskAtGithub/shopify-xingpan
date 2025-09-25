@@ -42,8 +42,8 @@
     <aside class="cw-filters">
       {% for block in section.blocks %}
         <div class="cw-accordion">
-          <button class="cw-accordion-toggle">
-            {{ block.settings.title }}
+          <button class="cw-accordion-toggle" type="button">
+            <span>{{ block.settings.title }}</span>
             <span class="icon">+</span>
           </button>
           <div class="cw-accordion-content">
