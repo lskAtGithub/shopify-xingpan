@@ -29,8 +29,7 @@
           not just the paginated ones. The blog.all_tags object thankfully does this.
         {% endcomment %}
         {% for tag in all_tags %}
-          {% assign downcased_tag = tag | downcase %}
-          {% if downcased_tag != 'All' %}
+          {% if tag != 'All' %}
             <button class="filter-button" data-filter="{{ tag | handle }}">{{ tag }}</button>
           {% endif %}
         {% endfor %}
