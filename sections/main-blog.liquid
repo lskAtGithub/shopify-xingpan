@@ -4,7 +4,12 @@
   - The default limit for blog.articles without pagination is 50.
   - If you have more than 50 articles, a more advanced solution is needed.
 {% endcomment %}
-
+<style>
+  .section-{{ section.id }}.page-width {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+</style>
 {% paginate blog.articles by 1000 %}
   {% comment %}
     We use the paginate tag here NOT for actual pagination links,
