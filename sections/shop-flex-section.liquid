@@ -1,0 +1,152 @@
+{% schema %}
+{
+  "name": "Collection with Filters",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "选择商品集合"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "filter_group",
+      "name": "筛选分组",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "分组标题"
+        },
+        {
+          "type": "textarea",
+          "id": "options",
+          "label": "选项（每行一个）",
+          "default": "选项1\n选项2\n选项3"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection with Filters",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="collection-with-filters">
+  <div class="container">
+    <div class="filters">
+      {% for block in section.blocks %}
+        <div class="accordion">
+          <button class="accordion-toggle">
+            {{ block.settings.title }}
+          </button>
+          <div class="accordion-content">
+            {% assign opts = block.settings.options | newline_to_br | split: '<br />' %}
+            {% for opt in opts %}
+              <label>
+                <input type="checkbox" class="filter-checkbox" value="{{ opt | strip }}">
+                {{ opt }}
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="product-list">
+      {% if section.settings.collection %}
+        {% assign products = collections[section.settings.collection].products %}
+        <div class="grid">
+          {% for product in products %}
+            <div class="product-card" data-tags="{{ product.tags | join: ',' }}">
+              <a href="{{ product.url }}">
+                {{ product.featured_image | image_url: width: 400 | image_tag }}
+                <h3>{{ product.title }}</h3>
+                <p>{{ product.price | money }}</p>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>请在编辑器中选择一个集合</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+.collection-with-filters {
+  display: flex;
+  gap: 20px;
+}
+.collection-with-filters .filters {
+  flex: 0 0 250px;
+}
+.collection-with-filters .accordion {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+.collection-with-filters .accordion-toggle {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  font-weight: bold;
+  cursor: pointer;
+  background: #f7f7f7;
+  border: none;
+}
+.collection-with-filters .accordion-content {
+  display: none;
+  padding: 10px;
+}
+.collection-with-filters .accordion.open .accordion-content {
+  display: block;
+}
+.collection-with-filters .product-list .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+  gap: 15px;
+}
+.product-card {
+  border: 1px solid #eee;
+  padding: 10px;
+  text-align: center;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // 手风琴切换
+  document.querySelectorAll(".accordion-toggle").forEach(btn => {
+    btn.addEventListener("click", () => {
+      btn.parentElement.classList.toggle("open");
+    });
+  });
+
+  // 过滤逻辑
+  const checkboxes = document.querySelectorAll(".filter-checkbox");
+  const products = document.querySelectorAll(".product-card");
+
+  checkboxes.forEach(cb => {
+    cb.addEventListener("change", () => {
+      let activeFilters = Array.from(checkboxes)
+        .filter(c => c.checked)
+        .map(c => c.value.toLowerCase());
+
+      products.forEach(p => {
+        const tags = p.dataset.tags.toLowerCase();
+        if (activeFilters.length === 0 || activeFilters.some(f => tags.includes(f))) {
+          p.style.display = "";
+        } else {
+          p.style.display = "none";
+        }
+      });
+    });
+  });
+});
+</script>
