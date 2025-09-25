@@ -166,7 +166,11 @@
     // 手风琴展开收起
     container.querySelectorAll('.cw-accordion-toggle').forEach((btn) => {
       btn.addEventListener('click', () => {
+        e.preventDefault(); // 阻止默认行为
+        e.stopPropagation(); // 阻止冒泡，避免被别的脚本接管
+        console.log('点击了:', btn, '原class:', btn.parentElement.className);
         btn.parentElement.classList.toggle('open');
+        console.log('切换后class:', btn.parentElement.className);
       });
     });
 
