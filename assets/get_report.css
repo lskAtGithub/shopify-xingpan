@@ -321,33 +321,6 @@ table[data-striped='true'] tbody tr:nth-child(even):hover {
   background: #f0f0f0;
 }
 
-/* 链接样式 - 操作按钮 */
-a {
-  color: #1890ff;
-  text-decoration: none;
-  padding: 4px 8px;
-  margin: 0 4px;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: all 0.3s;
-  display: inline-block;
-}
-
-a:hover {
-  background: #e6f7ff;
-  color: #40a9ff;
-}
-
-/* 危险操作链接 */
-a[data-type='danger'] {
-  color: #ff4d4f;
-}
-
-a[data-type='danger']:hover {
-  background: #fff2f0;
-  color: #ff7875;
-}
-
 /* 状态标签样式 */
 .checkbox-check-text {
   display: inline-block;
@@ -411,7 +384,7 @@ tfoot td {
 }
 
 /* 输入框样式 */
-input {
+.ipt {
   padding: 4px 11px;
   border: 1px solid #d9d9d9;
   border-radius: 6px;
@@ -423,18 +396,18 @@ input {
   width: 100%;
 }
 
-input:focus {
+.ipt:focus {
   border-color: #40a9ff;
   outline: none;
   box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
 }
 
-input:hover {
+.ipt:hover {
   border-color: #40a9ff;
 }
 
 /* 禁用状态 */
-input:disabled {
+.ipt:disabled {
   background: #f5f5f5;
   border-color: #d9d9d9;
   color: rgba(0, 0, 0, 0.25);
@@ -466,7 +439,7 @@ select:hover {
 }
 
 /* 复选框样式 */
-input[type='checkbox'] {
+.ipt[type='checkbox'] {
   width: 16px;
   height: 16px;
   margin: 0;
@@ -480,12 +453,12 @@ input[type='checkbox'] {
   -moz-appearance: none;
 }
 
-input[type='checkbox']:checked {
+.ipt[type='checkbox']:checked {
   background: #1890ff;
   border-color: #1890ff;
 }
 
-input[type='checkbox']:checked::after {
+.ipt[type='checkbox']:checked::after {
   content: '✓';
   color: #fff;
   font-size: 12px;
@@ -495,12 +468,12 @@ input[type='checkbox']:checked::after {
   transform: translate(-50%, -50%);
 }
 
-input[type='checkbox']:hover {
+.ipt[type='checkbox']:hover {
   border-color: #40a9ff;
 }
 
 /* 单选框样式 */
-input[type='radio'] {
+.ipt[type='radio'] {
   width: 16px;
   height: 16px;
   margin: 0;
@@ -514,11 +487,11 @@ input[type='radio'] {
   -moz-appearance: none;
 }
 
-input[type='radio']:checked {
+.ipt[type='radio']:checked {
   border-color: #1890ff;
 }
 
-input[type='radio']:checked::after {
+.ipt[type='radio']:checked::after {
   content: '';
   width: 8px;
   height: 8px;
@@ -529,7 +502,7 @@ input[type='radio']:checked::after {
   left: 3px;
 }
 
-input[type='radio']:hover {
+.ipt[type='radio']:hover {
   border-color: #40a9ff;
 }
 
