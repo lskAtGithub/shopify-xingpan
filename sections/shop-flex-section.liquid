@@ -162,44 +162,73 @@
 </style>
 
 <script>
+(function () {
+  // 初始化单个 section（用 dataset 标记防止重复）
   function initAccordionFilter(container) {
-    // 手风琴展开收起
-    container.querySelectorAll('.cw-accordion-toggle').forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault(); // 阻止默认行为
-        e.stopPropagation(); // 阻止冒泡，避免被别的脚本接管
-        console.log('点击了:', btn, '原class:', btn.parentElement.className);
-        btn.parentElement.classList.toggle('open');
-        console.log('切换后class:', btn.parentElement.className);
-      });
+    if (!container || container.dataset.accordionInit === 'true') return;
+    container.dataset.accordionInit = 'true';
+
+    // 事件委托：只在 container 上挂一个 click 处理手风琴
+    container.addEventListener('click', function (e) {
+      const btn = e.target.closest('.cw-accordion-toggle');
+      if (!btn || !container.contains(btn)) return;
+
+      e.preventDefault();
+      const parent = btn.parentElement;
+      parent.classList.toggle('open');
+
+      // 如果要切换 + / - 图标
+      const icon = btn.querySelector('.icon');
+      if (icon) icon.textContent = parent.classList.contains('open') ? '−' : '+';
     });
 
-    // 过滤逻辑（基于 tags）
-    const checkboxes = container.querySelectorAll('.filter-checkbox');
-    const products = container.querySelectorAll('.cw-product-card');
+    // 事件委托：只在 container 上挂一个 change 处理复选过滤
+    container.addEventListener('change', function (e) {
+      if (!e.target.matches('.filter-checkbox')) return;
 
-    checkboxes.forEach((cb) => {
-      cb.addEventListener('change', () => {
-        let activeFilters = Array.from(checkboxes)
-          .filter((c) => c.checked)
-          .map((c) => c.value.toLowerCase());
+      const checkboxes = container.querySelectorAll('.filter-checkbox');
+      const activeFilters = Array.from(checkboxes)
+        .filter(c => c.checked)
+        .map(c => c.value.toLowerCase());
 
-        products.forEach((p) => {
-          const tags = p.dataset.tags.toLowerCase();
-          if (activeFilters.length === 0 || activeFilters.some((f) => tags.includes(f))) {
-            p.style.display = '';
-          } else {
-            p.style.display = 'none';
-          }
-        });
+      const products = container.querySelectorAll('.cw-product-card');
+      products.forEach(p => {
+        const tags = (p.dataset.tags || '').toLowerCase();
+        p.style.display = (activeFilters.length === 0 || activeFilters.some(f => tags.includes(f))) ? '' : 'none';
       });
     });
   }
 
-  // 初次加载执行
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.collection-with-filters').forEach((section) => {
-      initAccordionFilter(section);
-    });
+  // 初始化页面内所有该 section
+  function initAll() {
+    document.querySelectorAll('.collection-with-filters').forEach(initAccordionFilter);
+  }
+
+  // 监听常见入口（有 guard 防重）
+  document.addEventListener('DOMContentLoaded', initAll);
+
+  document.addEventListener('shopify:section:load', function (e) {
+    // e.target 可能是 section 根节点，也可能包含多个 section
+    if (e.target && e.target.matches && e.target.matches('.collection-with-filters')) {
+      initAccordionFilter(e.target);
+    } else if (e.target && e.target.querySelectorAll) {
+      e.target.querySelectorAll('.collection-with-filters').forEach(initAccordionFilter);
+    } else {
+      initAll();
+    }
   });
+
+  // 当 section 被卸载时，清除初始化标记（编辑器里会重新加载时需要重新 init）
+  document.addEventListener('shopify:section:unload', function (e) {
+    const section = (e.target && e.target.matches && e.target.matches('.collection-with-filters')) ? e.target :
+                    (e.target && e.target.querySelector && e.target.querySelector('.collection-with-filters'));
+    if (section && section.dataset) {
+      delete section.dataset.accordionInit;
+    }
+  });
+
+  // 可选：便于调试（打开控制台看初始化次数）
+  console.log('Accordion filter script loaded');
+})();
 </script>
+
