@@ -202,10 +202,4 @@
       initAccordionFilter(section);
     });
   });
-
-  // Shopify 编辑器里动态加载 section 时执行
-  document.addEventListener('shopify:section:load', function (e) {
-    const section = e.target.querySelector('.collection-with-filters');
-    if (section) initAccordionFilter(section);
-  });
 </script>
