@@ -195,7 +195,7 @@
         const products = container.querySelectorAll('.cw-product-card');
         products.forEach((p) => {
           const tags = (p.dataset.tags || '').toLowerCase();
-          p.style.display = activeFilters.length === 0 || activeFilters.some((f) => tags.includes(f)) ? '' : 'none';
+          p.style.display = activeFilters.length === 0 || activeFilters.every((f) => tags.includes(f)) ? '' : 'none';
         });
       });
     }
