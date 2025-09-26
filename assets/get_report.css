@@ -321,33 +321,6 @@ table[data-striped='true'] tbody tr:nth-child(even):hover {
   background: #f0f0f0;
 }
 
-/* 链接样式 - 操作按钮 */
-a {
-  color: #1890ff;
-  text-decoration: none;
-  padding: 4px 8px;
-  margin: 0 4px;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: all 0.3s;
-  display: inline-block;
-}
-
-a:hover {
-  background: #e6f7ff;
-  color: #40a9ff;
-}
-
-/* 危险操作链接 */
-a[data-type='danger'] {
-  color: #ff4d4f;
-}
-
-a[data-type='danger']:hover {
-  background: #fff2f0;
-  color: #ff7875;
-}
-
 /* 状态标签样式 */
 .checkbox-check-text {
   display: inline-block;
