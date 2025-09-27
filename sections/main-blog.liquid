@@ -16,7 +16,7 @@
     {% else %}
       <!-- 用户未登录 -->
       <!-- 在这里放置登录/注册链接 -->
-    
+      <p>Please <a href="/account/login">login</a> or <a href="/account/register">register</a> to continue.</p>
     {% endif %}
     {%- assign all_tags = blog.all_tags -%}
     {% if all_tags.size > 0 %}
