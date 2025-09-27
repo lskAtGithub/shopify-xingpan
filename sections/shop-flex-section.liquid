@@ -87,6 +87,7 @@
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
+    align-items: flex-start;
     gap: 20px;
   }
 
@@ -94,21 +95,21 @@
   .cw-filters {
     width: 260px;
     flex-shrink: 0;
-  }
-  .cw-accordion {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #f3f3f3;
   }
   .cw-accordion-toggle {
     width: 100%;
-    padding: 12px;
-    background: #f7f7f7;
+    padding: 20px 12px;
+    background: #fff !important;
     border: none;
+    border-top: 1px solid #f3f3f3;
+    top: 1px solid #ddd;
     text-align: left;
-    font-weight: bold;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 14px;
   }
   .cw-accordion-content {
     display: none;
@@ -194,7 +195,7 @@
         const products = container.querySelectorAll('.cw-product-card');
         products.forEach((p) => {
           const tags = (p.dataset.tags || '').toLowerCase();
-          p.style.display = activeFilters.length === 0 || activeFilters.some((f) => tags.includes(f)) ? '' : 'none';
+          p.style.display = activeFilters.length === 0 || activeFilters.every((f) => tags.includes(f)) ? '' : 'none';
         });
       });
     }

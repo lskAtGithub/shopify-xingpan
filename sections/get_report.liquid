@@ -193,11 +193,12 @@
     let lat = '';
     let lon = '';
     let reportId = '';
+    const BASE_URL = 'https://api.11starsastro.com';
     document.addEventListener('DOMContentLoaded', function () {
       const countrySelect = document.getElementById('country');
       const stateSelect = document.getElementById('state');
       const citySelect = document.getElementById('city');
-      const API_URL = 'https://nacos.heartbuy.cn/city/getInfo';
+      const API_URL = BASE_URL + '/city/getInfo';
 
       const PLACEHOLDERS = {
         country: 'Select Country',
@@ -287,7 +288,7 @@
       // 加载国家列表（页面加载时）
       (async function loadCountries() {
         setLoading(countrySelect);
-        const countries = await fetchFromApi(); // 不传参数 => 返回国家列表（你给的示例即为此）
+        const countries = await fetchFromApi(); // 不传参数 => 返回国家列表
         populateSelectWithObjects(countrySelect, countries, 'name', 'id');
       })();
 
@@ -349,7 +350,7 @@
           tid: 4,
         };
         const query = new URLSearchParams(payload).toString();
-        const url = 'https://nacos.heartbuy.cn/astrology/astrology?' + query;
+        const url = BASE_URL + '/astrology/astrology?' + query;
 
         try {
           const res = await fetch(url);
