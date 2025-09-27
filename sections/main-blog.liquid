@@ -13,16 +13,6 @@
 <div class="page-width section-{{ section.id }}">
   <div class="blog-header">
     <h1>{{ blog.title }}</h1>
-    {% if customer %}
-      <!-- 用户已登录 -->
-      <!-- 在这里放置欢迎信息、账户链接等 -->
-      <p>Welcome back, {{ customer.first_name }}!{{ customer.id }}</p>
-    
-    {% else %}
-      <!-- 用户未登录 -->
-      <!-- 在这里放置登录/注册链接 -->
-      <p>Please <a href="/account/login">login</a> or <a href="/account/register">register</a> to continue.</p>
-    {% endif %}
     {%- assign all_tags = blog.all_tags -%}
     {% if all_tags.size > 0 %}
       <nav class="filter-nav">
