@@ -1,5 +1,5 @@
 <!-- footer.liquid -->
-<footer class="footer bg-gray-900 text-gray-300 py-12 px-4 sm:px-6 lg:px-8">
+<footer class="page-width section-{{ section.id }} footer bg-gray-900 text-gray-300 py-12 px-4 sm:px-6 lg:px-8">
   <div class="container mx-auto max-w-7xl">
     <div class="footer-content-box">
       
@@ -69,6 +69,10 @@
 
   <!-- CSS -->
   <style>
+    .page-width {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
     .footer a { text-decoration: none; color: #fff; }
     .footer a:hover { color: #ffd110; } /* fire color */
     .footer .text-fire { color: #ffd110; }
