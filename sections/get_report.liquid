@@ -377,7 +377,7 @@
         const streamData = document.getElementById('streamData');
         const markdownRea = document.getElementById('markdownRea');
 
-        const eventSource = new EventSource(`http://nacos.heartbuy.cn/astrology/doubao?id=4&reportId=${reportId}`);
+        const eventSource = new EventSource(`${BASE_URL}/astrology/doubao?id=4&reportId=${reportId}`);
         var content = '';
         var reason = '';
         eventSource.onmessage = function (eventStream) {
