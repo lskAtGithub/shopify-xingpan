@@ -39,11 +39,8 @@
       class="account-button__icon"
       aria-hidden="true"
     >
-
-      222222
-      {% comment %} {{- 'icon-account.svg' | inline_asset_content -}} {% endcomment %}
+      {{- 'icon-account.svg' | inline_asset_content -}}
     </span>
-    <span> 123456 </span>
   {%- endif -%}
 </{{ tag }}>
 
@@ -84,7 +81,6 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    pointer-events: visiblePainted !important;
     cursor: pointer;
   }
 
