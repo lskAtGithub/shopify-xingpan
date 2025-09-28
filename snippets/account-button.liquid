@@ -90,26 +90,3 @@
     pointer-events: none;
   }
 {% endstylesheet %}
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('.account-button');
-
-    buttons.forEach((btn) => {
-      // 使用捕获阶段
-      btn.addEventListener(
-        'click',
-        (e) => {
-          // Shopify 主题 JS 可能调用 stopPropagation，在捕获阶段仍然能捕获
-          const isLoggedIn = !!window.customerId; // 根据 Liquid 注入
-          if (isLoggedIn) {
-            window.location.href = '/account';
-          } else {
-            window.location.href = '/account/login';
-          }
-        },
-        true
-      ); // 注意第三个参数 true -> 捕获阶段
-    });
-  });
-</script>
