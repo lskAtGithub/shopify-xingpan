@@ -164,10 +164,18 @@
       "settings": {
         "collection": "zodiac-crystal-collections"
       }
+    },
+    "shop_flex_section_7pTBwA": {
+      "type": "shop-flex-section",
+      "name": "Collection with Filters",
+      "settings": {
+        "collection": ""
+      }
     }
   },
   "order": [
     "main",
-    "shop_flex_section_Fnf9nA"
+    "shop_flex_section_Fnf9nA",
+    "shop_flex_section_7pTBwA"
   ]
 }
