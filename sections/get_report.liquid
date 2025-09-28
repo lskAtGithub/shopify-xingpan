@@ -351,7 +351,7 @@
           name: name,
           address: address,
           ztime: 8,
-          tid: 4,
+          tid: window.customerId,
         };
         const query = new URLSearchParams(payload).toString();
         const url = BASE_URL + '/astrology/astrology?' + query;
@@ -381,7 +381,7 @@
         const streamData = document.getElementById('streamData');
         const markdownRea = document.getElementById('markdownRea');
 
-        const eventSource = new EventSource(`${BASE_URL}/astrology/doubao?id=4&reportId=${reportId}`);
+        const eventSource = new EventSource(`${BASE_URL}/astrology/doubao?id=${window.customerId}&reportId=${reportId}`);
         var content = '';
         var reason = '';
         eventSource.onmessage = function (eventStream) {
