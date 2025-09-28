@@ -93,17 +93,23 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.querySelector('.account-button__icon');
-    if (!btn) return;
+    const buttons = document.querySelectorAll('.account-button');
 
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const isLoggedIn = !!window.customerId; // 根据 Liquid 注入
-      if (isLoggedIn) {
-        window.location.href = '/account';
-      } else {
-        window.location.href = '/account/login';
-      }
+    buttons.forEach((btn) => {
+      // 使用捕获阶段
+      btn.addEventListener(
+        'click',
+        (e) => {
+          // Shopify 主题 JS 可能调用 stopPropagation，在捕获阶段仍然能捕获
+          const isLoggedIn = !!window.customerId; // 根据 Liquid 注入
+          if (isLoggedIn) {
+            window.location.href = '/account';
+          } else {
+            window.location.href = '/account/login';
+          }
+        },
+        true
+      ); // 注意第三个参数 true -> 捕获阶段
     });
   });
 </script>
