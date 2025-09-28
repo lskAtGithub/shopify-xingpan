@@ -1,0 +1,345 @@
+{% comment %}
+  Filterable Collection Grid Section
+  - Implements a two-column layout with faceted search filters.
+  - Uses Fetch API for instant, no-reload filtering and pagination.
+  - Fully responsive for mobile, tablet, and desktop.
+{% endcomment %}
+
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+  assign products_per_page = section.settings.products_per_page
+  paginate collection.products by products_per_page
+-%}
+
+<div class="filterable-collection page-width" id="main-collection-product-grid" data-id="{{ section.id }}">
+  <div class="filterable-collection__header">
+    <h1>{{ collection.title }}</h1>
+    <button type="button" class="mobile-filter-button">
+      {% render 'icon-filter' %}
+      Filter
+    </button>
+  </div>
+
+  <div class="filterable-collection__layout">
+    <!-- Left Sidebar: Filters -->
+    <div class="filterable-collection__sidebar">
+      <div class="sidebar-content">
+        <div class="sidebar-header">
+          <span>Filter by</span>
+          <button type="button" class="close-sidebar-button">{% render 'icon-close' %}</button>
+        </div>
+
+        <form id="CollectionFiltersForm" class="sidebar-form">
+          <!-- Product Type Filter -->
+          {%- assign product_types = collection.all_types -%}
+          {% if product_types.size > 0 %}
+          <div class="filter-group">
+            <h3 class="filter-group__title">Product type</h3>
+            <ul class="filter-group__list">
+              {% for type in product_types %}
+                <li>
+                  <label>
+                    <input type="checkbox" name="filter.p.product_type" value="{{ type | url_encode }}">
+                    {{ type }}
+                  </label>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+
+          <!-- Color Filter -->
+          {% for filter in collection.filters %}
+            {% if filter.type == 'list' and filter.label == 'Color' %}
+              <div class="filter-group">
+                <h3 class="filter-group__title">Color</h3>
+                <ul class="filter-group__list">
+                  {% for value in filter.values %}
+                    <li>
+                      <label>
+                        <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %}>
+                        {{ value.label }}
+                      </label>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+          {% endfor %}
+          <input type="hidden" name="sort_by" value="{{ sort_by }}">
+        </form>
+      </div>
+    </div>
+
+    <!-- Right Content: Product Grid & Sorting -->
+    <div class="filterable-collection__main">
+      <div class="collection-toolbar">
+        <span class="product-count">{{ collection.products_count }} products</span>
+        <!-- Sorting dropdown can be added here if needed -->
+      </div>
+
+      <div id="product-grid" class="product-grid">
+        {% for product in collection.products %}
+          <div class="product-card-wrapper">
+            {% render 'product-card', product: product %}
+          </div>
+        {% else %}
+          <p>No products found.</p>
+        {% endfor %}
+      </div>
+      
+      {% render 'pagination', paginate: paginate %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+:root {
+  --sidebar-width-desktop: 280px;
+}
+
+.filterable-collection {
+  position: relative;
+}
+
+.filterable-collection__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.mobile-filter-button {
+  display: none; /* Hidden on desktop */
+  align-items: center;
+  gap: 8px;
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.filterable-collection__layout {
+  display: grid;
+  grid-template-columns: 1fr; /* Mobile */
+  gap: 2rem;
+}
+
+/* Sidebar Styles */
+.filterable-collection__sidebar {
+  /* Hidden on mobile by default, shown via JS */
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+.filterable-collection__sidebar.open {
+  display: block;
+}
+
+.sidebar-content {
+  width: 300px;
+  max-width: 80%;
+  height: 100%;
+  background-color: white;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+.close-sidebar-button {
+  background: none; border: none; cursor: pointer;
+}
+
+.filter-group {
+  margin-bottom: 2rem;
+}
+.filter-group__title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.filter-group__list {
+  list-style: none;
+  padding: 0;
+}
+.filter-group__list li {
+  margin-bottom: 0.5rem;
+}
+.filter-group__list label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+/* Main Content Styles */
+.collection-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.product-count {
+  color: #555;
+}
+
+.product-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(2, 1fr); /* Mobile: 2 columns */
+}
+
+/* Product Card Interactive Styles */
+.product-card {
+  position: relative;
+  overflow: hidden;
+}
+.product-card-add-to-cart {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1rem;
+  text-align: center;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+.product-card:hover .product-card-add-to-cart {
+  transform: translateY(0);
+}
+.product-card-add-to-cart button {
+  width: 100%;
+  padding: 12px;
+  background-color: #2D3748;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* --- Tablet Styles (768px - 1024px) --- */
+@media (min-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* --- Desktop Styles (> 1024px) --- */
+@media (min-width: 1024px) {
+  .mobile-filter-button {
+    display: none;
+  }
+  .filterable-collection__layout {
+    grid-template-columns: var(--sidebar-width-desktop) 1fr;
+    gap: 3rem;
+  }
+  .filterable-collection__sidebar {
+    display: block;
+    position: static;
+    width: auto;
+    height: auto;
+    background-color: transparent;
+    z-index: 1;
+  }
+  .sidebar-content {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    background-color: transparent;
+    padding: 0;
+    overflow-y: visible;
+  }
+  .sidebar-header {
+    display: none;
+  }
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr); /* Desktop grid columns */
+  }
+}
+{% endstylesheet %}
+
+<script>
+class CollectionFilters extends HTMLElement {
+  constructor() {
+    super();
+    this.form = this.querySelector('form');
+    this.form.addEventListener('change', this.onFormChange.bind(this));
+
+    const mobileButton = document.querySelector('.mobile-filter-button');
+    const closeButton = document.querySelector('.close-sidebar-button');
+    this.sidebar = document.querySelector('.filterable-collection__sidebar');
+    
+    mobileButton.addEventListener('click', () => this.sidebar.classList.add('open'));
+    closeButton.addEventListener('click', () => this.sidebar.classList.remove('open'));
+  }
+
+  onFormChange() {
+    this.renderPage(new FormData(this.form));
+  }
+  
+  renderPage(formData) {
+    const params = new URLSearchParams(formData).toString();
+    const url = `${window.location.pathname}?section_id={{ section.id }}&${params}`;
+
+    fetch(url)
+      .then(response => response.text())
+      .then(responseText => {
+        const html = new DOMParser().parseFromString(responseText, 'text/html');
+        const productGrid = html.getElementById('product-grid');
+        const pagination = html.querySelector('.pagination-wrapper');
+
+        if (productGrid) {
+          document.getElementById('product-grid').innerHTML = productGrid.innerHTML;
+        }
+        
+        const currentPagination = document.querySelector('.pagination-wrapper');
+        if (pagination && currentPagination) {
+          currentPagination.innerHTML = pagination.innerHTML;
+        } else if (currentPagination) {
+          currentPagination.innerHTML = '';
+        }
+        
+        // Update URL
+        history.pushState({params}, '', `${window.location.pathname}?${params}`);
+      })
+      .catch(e => {
+        console.error(e);
+      });
+  }
+}
+customElements.define('collection-filters', CollectionFilters);
+
+</script>
+
+{% schema %}
+{
+  "name": "Filterable Collection Grid",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "label": "Products per page",
+      "default": 16
+    }
+  ]
+}
+{% endschema %}
