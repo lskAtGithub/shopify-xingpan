@@ -42,6 +42,7 @@ export class DialogComponent extends Component {
    * Shows the dialog.
    */
   showDialog() {
+    console.log('open dialog')
     const { dialog } = this.refs;
 
     if (dialog.open) return;

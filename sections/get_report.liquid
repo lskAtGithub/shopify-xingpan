@@ -190,6 +190,7 @@
   </div>
 
   <script>
+    window.customerId = {% if customer %}{{ customer.id | json }}{% else %}null{% endif %};
     let lat = '';
     let lon = '';
     let reportId = '';
@@ -325,6 +326,9 @@
       const form = document.querySelector('#report-form');
       form.addEventListener('submit', async function (e) {
         e.preventDefault();
+        if (!window.customerId) {
+          return alert('请先登录');
+        }
         const name = document.getElementById('name').value.trim();
         const year = document.getElementById('birth-year').value;
         const month = document.getElementById('birth-month').value;
