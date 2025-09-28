@@ -8,41 +8,48 @@
 {%- enddoc -%}
 
 {%- assign tag = tag | default: 'button' -%}
-<{{ tag }}
-  class="account-button header-actions__action"
-  aria-label="{{ 'accessibility.account' | t }}"
-  {%- if popover_id -%}
-    popovertarget="{{ popover_id }}"
-    popovertargetaction="{{ popover_action | default: 'toggle' }}"
-  {%- endif -%}
-  ref="trigger"
-  {{ attributes }}
->
-  {%- if customer.has_avatar? -%}
-    {{ customer | avatar }}
-  {%- elsif customer.first_name or customer.email -%}
-    {%- liquid
-      assign initial = customer.email | first
-
-      if customer.first_name != blank
-        assign initial = customer.first_name | first
-      endif
-    -%}
-    <span
-      class="account-button__avatar"
-      aria-hidden="true"
-    >
-      {{- initial -}}
-    </span>
-  {%- else -%}
-    <span
-      class="account-button__icon"
-      aria-hidden="true"
-    >
+{% if customer %}
+  <!-- 已登录：跳转到 /account -->
+  <a
+    class="account-button header-actions__action"
+    aria-label="{{ 'accessibility.account' | t }}"
+    href="/account"
+    ref="trigger"
+    {{ attributes }}
+  >
+    {% if customer.has_avatar? %}
+      {{ customer | avatar }}
+    {% elsif customer.first_name or customer.email %}
+      {% liquid
+        assign initial = customer.email | first
+        if customer.first_name != blank
+          assign initial = customer.first_name | first
+        endif
+      %}
+      <span class="account-button__avatar" aria-hidden="true">
+        {{- initial -}}
+      </span>
+    {% else %}
+      <span class="account-button__icon" aria-hidden="true">
+        {{- 'icon-account.svg' | inline_asset_content -}}
+      </span>
+    {% endif %}
+  </a>
+{% else %}
+  <!-- 未登录：跳转到 /account/login -->
+  <a
+    class="account-button header-actions__action"
+    aria-label="{{ 'accessibility.account' | t }}"
+    href="/account/login"
+    ref="trigger"
+    {{ attributes }}
+  >
+    <span class="account-button__icon" aria-hidden="true">
       {{- 'icon-account.svg' | inline_asset_content -}}
     </span>
-  {%- endif -%}
-</{{ tag }}>
+  </a>
+{% endif %}
+
 
 {% stylesheet %}
   .account-button {
