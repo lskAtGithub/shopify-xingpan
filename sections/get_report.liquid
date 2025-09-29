@@ -343,7 +343,7 @@
       const form = document.querySelector('#report-form');
       form.addEventListener('submit', async function (e) {
         e.preventDefault();
-        if (!window.customerId) {
+        if (!window.customer.id) {
           return alert('请先登录');
         }
         const name = document.getElementById('name').value.trim();
@@ -362,13 +362,13 @@
 
         const address = `${country} ${state} ${city}`;
         const payload = {
-          key: window.customerId,
+          key: window.customer.id,
           tid: 4,
           us: 'cn',
           userBirthday: time,
-          userCity: '',
-          userEmail: '',
-          userName: '',
+          userCity: window.customer.addresses,
+          userEmail: window.customer.email,
+          userName: window.customer.first_name + window.customer.last_name,
           ztime: 8,
           lat: lat,
           lon: lon,
@@ -403,7 +403,7 @@
         const streamData = document.getElementById('streamData');
         const markdownRea = document.getElementById('markdownRea');
 
-        const eventSource = new EventSource(`${BASE_URL}/astrology/doubao?id=${window.customerId}&reportId=${reportId}`);
+        const eventSource = new EventSource(`${BASE_URL}/astrology/doubao?id=${window.customer.id}&reportId=${reportId}`);
         var content = '';
         var reason = '';
         eventSource.onmessage = function (eventStream) {
