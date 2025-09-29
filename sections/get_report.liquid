@@ -402,7 +402,7 @@
         const streamData = document.getElementById('streamData');
         const markdownRea = document.getElementById('markdownRea');
 
-        const eventSource = new EventSource(`${BASE_URL}/astrology/doubao?id=${window.customer.id}&reportId=${reportId}`);
+        const eventSource = new EventSource(`${BASE_URL}/astrology/doubao?id=4&reportId=${reportId}`);
         var content = '';
         var reason = '';
         eventSource.onmessage = function (eventStream) {
