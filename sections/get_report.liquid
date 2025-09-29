@@ -412,7 +412,9 @@
             var choices = json.choices;
             for (var i = 0; i < choices.length; i++) {
               var item = choices[i].delta;
+              console.log(item)
               if(item.finish_reason == 'stop'){
+                alert(11)
                 renderRecommendedProducts(data)
                 break;
               }
