@@ -190,7 +190,8 @@
   </div>
 
   <script>
-    window.customerId = {% if customer %}{{ customer.id | json }}{% else %}null{% endif %};
+    window.customer = {% if customer %}{{ customer | json }}{% else %}null{% endif %};
+    console.log(window.customer)
     let lat = '';
     let lon = '';
     let reportId = '';
@@ -345,13 +346,18 @@
 
         const address = `${country} ${state} ${city}`;
         const payload = {
-          time: time,
+          key: window.customerId,
+          tid: 4,
+          us: 'cn',
+          userBirthday: time,
+          userCity: '',
+          userEmail: '',
+          userName: '',
+          ztime: 8,
           lat: lat,
           lon: lon,
           name: name,
           address: address,
-          ztime: 8,
-          tid: window.customerId,
         };
         const query = new URLSearchParams(payload).toString();
         const url = BASE_URL + '/astrology/astrology?' + query;
