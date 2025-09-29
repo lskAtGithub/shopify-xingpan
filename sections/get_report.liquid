@@ -184,6 +184,8 @@
           <!-- 流数据渲染 -->
           <div style="font-size: 16px;color: #BBB;" id="markdownRea"></div>
           <div id="streamData"></div>
+          <!-- 推荐一个商品 -->
+          <div id="recommended-products"></div>
         </div>
       </div>
     </div>
@@ -363,7 +365,7 @@
         const payload = {
           key: window.customer.id,
           tid: 4,
-          us: 'cn',
+          us: 'zh-CN',
           userBirthday: time,
           userCity: window.customer.addresses,
           userEmail: window.customer.email,
@@ -380,7 +382,6 @@
         try {
           const res = await fetch(url);
           const data = await res.json();
-          console.log('返回结果：', data);
           reportId = data.data.reportId;
           renderModal(data.data);
         } catch (err) {
@@ -398,7 +399,7 @@
         modelContent.scrollTop = modelContent.scrollHeight;
       }
 
-      function loadStream() {
+      function loadStream(data) {
         const streamData = document.getElementById('streamData');
         const markdownRea = document.getElementById('markdownRea');
 
@@ -428,6 +429,9 @@
         eventSource.onerror = function (error) {
           eventSource.close();
         };
+        eventSource.onclose = function () {
+          renderRecommendedProducts(data)
+        };.
       }
 
       function renderCanvas(res) {
@@ -458,7 +462,7 @@
             '#' +
             (
               0x1000000 +
-              (r < 255 ? (r < 0 ? 0 : r) : 255) * 0x10000 +
+              (r < 255 ? (r < 0 ? 0 : r) : 255) * 0x10000 + 
               (g < 255 ? (g < 0 ? 0 : g) : 255) * 0x100 +
               (b < 255 ? (b < 0 ? 0 : b) : 255)
             )
@@ -544,7 +548,7 @@
           draw();
           tooltip.style.display = 'none';
         });
-        loadStream();
+        loadStream(data);
       }
 
       async function renderModal(data) {
@@ -582,6 +586,60 @@
         </tr>`;
         }
         renderCanvas(data);
+      }
+
+      /**
+      * 推荐商品渲染，这里沟通确定只要渲染一条商品数据， key不定，通过下标获取
+      * @param {Object} productsMap
+      */
+      async function renderRecommendedProducts(productsMap) {
+        const container = document.getElementById('recommended-products');
+
+        for (const key in productsMap) {
+          if (!productsMap.hasOwnProperty(key)) continue;
+
+          const productTitle = productsMap[key].title;
+
+          try {
+            // Shopify 前端通过 title 获取 handle，再请求 JSON
+            const handle = productTitle
+              .toLowerCase()
+              .replace(/\s+/g, '-')
+              .replace(/[^a-z0-9-]/g, '');
+            
+            const res = await fetch(`/products/${handle}.js`);
+            if (!res.ok) continue;
+            const product = await res.json();
+
+            // 构建HTML
+            const card = document.createElement('div');
+            card.className = 'recommended-card';
+            card.innerHTML = `
+              <div class="card-left">
+                <img src="${product.images[0] || ''}" alt="${product.title}" />
+              </div>
+              <div class="card-right">
+                <span class="product-tag">${product.tags}</span>
+                <h3>${product.title}</h3>
+                <p class="product-price">$${product.variants[0].price}</p>
+                <p class="product-desc">${product.body_html || ''}</p>
+                <button class="add-to-cart" onclick="addToCart(${product.variants[0].id})">Add to Cart</button>
+              </div>
+            `;
+            container.appendChild(card);
+          } catch (e) {
+            console.error('Failed to load product', productTitle, e);
+          }
+        }
+      }
+
+      // 模拟购物车函数
+      function addToCart(variantId) {
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({id: variantId, quantity: 1})
+        }).then(res => res.json()).then(data => alert('Added to cart!'));
       }
 
       // 关闭弹窗
