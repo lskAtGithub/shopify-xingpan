@@ -630,7 +630,10 @@
                 <span class="product-tag">${product.tags}</span>
                 <p class="product-price" style="font-size: 2rem;font-weight: 700; color: #333333;">$${product.variants[0].price}</p>
                 <p class="product-desc">${product.body_html || ''}</p>
-                <button class="button button--primary" onclick="addToCart(${product.variants[0].id})">Add to Cart</button>
+                <form method="post" action="/cart/add" accept-charset="UTF-8" enctype="multipart/form-data" novalidate="novalidate">
+                   <input type="hidden" name="id" value="${product.id}">
+                   <button type="submit" class="button button--primary">Add to Cart</button>
+                </form>
               </div>
             `;
             container.appendChild(card);
@@ -638,15 +641,6 @@
             console.error('Failed to load product', productTitle, e);
           }
         }
-      }
-
-      // 模拟购物车函数
-      function addToCart(variantId) {
-        fetch('/cart/add.js', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({id: variantId, quantity: 1})
-        }).then(res => res.json()).then(data => alert('Added to cart!'));
       }
 
       // 关闭弹窗
