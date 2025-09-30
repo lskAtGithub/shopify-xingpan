@@ -374,17 +374,18 @@
           lon: lon,
           userName: name,
         };
-        const paramsForm = new URLSearchParams()
+        const paramsForm = new URLSearchParams();
         Object.keys(payload).forEach((k) => {
           paramsForm.append(k, payload[k]);
-        })
+        });
+        console.log(paramsForm);
         try {
           const res = await fetch(`${BASE_URL}/sysUser/creatReport`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: JSON.stringify(paramsForm),
+            body: paramsForm,
           });
           const data = await res.json();
           reportId = data.data.reportId;
