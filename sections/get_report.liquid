@@ -376,7 +376,7 @@
           name: name,
           address: address,
         };
-        const paramsForm = new FormData()
+        const paramsForm = new URLSearchParams()
         Object.keys(payload).forEach((k) => {
           paramsForm.append(k, payload[k]);
         })
