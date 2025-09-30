@@ -691,3 +691,16 @@ select:hover {
     color: #69c0ff;
   }
 }
+
+/* 推荐商品样式 */
+#recommended-products .recommended-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 20px;
+}
+
+#recommended-products .card-right {
+  flex: 1;
+}

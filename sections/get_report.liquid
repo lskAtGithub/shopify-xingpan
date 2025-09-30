@@ -606,7 +606,6 @@
         const productsMap = res.scoreProduct
         for (const key in productsMap) {
           const productTitle = productsMap[key].title;
-          console.log(productTitle)
           try {
             // Shopify 前端通过 title 获取 handle，再请求 JSON
             const handle = productTitle
@@ -615,23 +614,23 @@
               .replace(/[^a-z0-9-]/g, '');
             
             const res = await fetch(`/products/${handle}.js`);
-            console.log(res);
             if (!res.ok) continue;
             const product = await res.json();
 
             // 构建HTML
             const card = document.createElement('div');
+            console.log(product);
             card.className = 'recommended-card';
             card.innerHTML = `
               <div class="card-left">
                 <img src="${product.images[0] || ''}" alt="${product.title}" />
               </div>
               <div class="card-right">
+                <h3 style="font-size: 2.2rem;margin-bottom: 15px;">${product.title}</h3>
                 <span class="product-tag">${product.tags}</span>
-                <h3>${product.title}</h3>
-                <p class="product-price">$${product.variants[0].price}</p>
+                <p class="product-price" style="font-size: 2rem;font-weight: 700; color: #333333;">$${product.variants[0].price}</p>
                 <p class="product-desc">${product.body_html || ''}</p>
-                <button class="add-to-cart" onclick="addToCart(${product.variants[0].id})">Add to Cart</button>
+                <button class="button button--primary" onclick="addToCart(${product.variants[0].id})">Add to Cart</button>
               </div>
             `;
             container.appendChild(card);
