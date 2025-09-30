@@ -147,10 +147,11 @@
   }
   .cw-products .cw-cart-btn {
     position: absolute;
-    left: calc(50% - 102px);
+    left: 0;
     width: 100%;
     opacity: 0;
     height: 0;
+    text-align: center;
     overflow: hidden;
     bottom: 12px;
   }
@@ -170,8 +171,8 @@
   }
   .cw-product-card:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    transform: scaleY(1.2); /* 高度放大 1.5 倍 */
-    transform-origin: bottom; /* 从顶部开始放大，不居中 */
+    transform: scaleY(1.2);
+    transform-origin: top;
   }
   .cw-img {
     max-width: 100%;
