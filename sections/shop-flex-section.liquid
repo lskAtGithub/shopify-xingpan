@@ -156,6 +156,10 @@
     position: relative;
     padding: 12px;
     transition: all 0.3s ease;
+    z-index: 1;
+  }
+  .cw-product-card .inner {
+    transition: none;
   }
   .cw-product-card:hover .inner {
     transform: scaleY(calc(1 / 1.2));
@@ -165,6 +169,7 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     transform: scaleY(1.2);
     transform-origin: top;
+    z-index: 3;
   }
   .cw-product-card:hover .cw-cart-btn {
     opacity: 1;
