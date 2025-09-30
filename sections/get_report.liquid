@@ -385,7 +385,7 @@
             headers: {
               'Content-Type': 'x-www-form-urlencoded',
             },
-            data: JSON.stringify(payload),
+            body: JSON.stringify(payload),
           });
           const data = await res.json();
           reportId = data.data.reportId;
