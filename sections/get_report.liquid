@@ -321,6 +321,9 @@
 
         setLoading(stateSelect);
         const states = await fetchFromApi({ countryId: countryId });
+        const opt = this.options[this.selectedIndex];
+        lat = opt.dataset.latitude;
+        lon = opt.dataset.longitude;
         populateSelectWithObjects(stateSelect, states, 'name', 'id');
       });
 
@@ -330,7 +333,9 @@
         const countryId = countrySelect.value;
         resetSelect(citySelect, PLACEHOLDERS.city);
         if (!countryId || !stateId) return;
-
+        const opt = this.options[this.selectedIndex];
+        lat = opt.dataset.latitude;
+        lon = opt.dataset.longitude;
         setLoading(citySelect);
         const cities = await fetchFromApi({ countryId: '', stateId: stateId });
         populateSelectWithObjects(citySelect, cities, 'name', 'id');
