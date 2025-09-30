@@ -604,7 +604,7 @@
       async function renderRecommendedProducts(productsMap) {
         const container = document.getElementById('recommended-products');
 
-        for (const key in productsMap) {
+        for (const key in productsMap.scoreProduct) {
           if (!productsMap.hasOwnProperty(key)) continue;
 
           const productTitle = productsMap[key].title;
