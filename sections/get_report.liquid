@@ -611,7 +611,10 @@
 
           try {
             // Shopify 前端通过 title 获取 handle，再请求 JSON
-            const handle = productTitle;
+            const handle = productTitle
+              .toLowerCase()
+              .replace(/\s+/g, '-')
+              .replace(/[^a-z0-9-]/g, '');
             
             const res = await fetch(`/products/${handle}.js`);
             console.log(res);
