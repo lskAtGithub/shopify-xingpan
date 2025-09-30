@@ -377,7 +377,7 @@
           address: address,
         };
         const query = new URLSearchParams(payload).toString();
-        const url = BASE_URL + '/sysUser/creatReport?' + query;
+        const url = BASE_URL + '/sysUser/createReport?' + query;
 
         try {
           const res = await fetch(url);
