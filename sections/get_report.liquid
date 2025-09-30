@@ -363,7 +363,7 @@
 
         const address = `${country} ${state} ${city}`;
         const payload = {
-          key: '123456789' ||window.customer.id,
+          key: '123456789' || window.customer.id,
           tid: 4,
           us: 'zh-CN',
           userBirthday: time,
@@ -376,30 +376,13 @@
           name: name,
           address: address,
         };
-        const formData = new FormData(form);
-        formData.append('key', payload.key)
-        formData.append('tid', payload.tid)
-        formData.append('us', payload.us)
-        formData.append('userBirthday', payload.userBirthday)
-        formData.append('userCity', payload.userCity)
-        formData.append('userEmail', payload.userEmail)
-        formData.append('userName', payload.userName)
-        formData.append('ztime', payload.ztime)
-        formData.append('lat', payload.lat)
-        formData.append('lon', payload.lon)
-        formData.append('name', payload.name)
-        formData.append('address', payload.address)
-
-        const query = new URLSearchParams(payload).toString();
-        {% comment %} const url = BASE_URL + '/sysUser/creatReport?' + query; {% endcomment %}
-
         try {
           const res = await fetch('/sysUser/creatReport', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: JSON.stringify(payload),
+            body: payload,
           });
           const data = await res.json();
           reportId = data.data.reportId;
