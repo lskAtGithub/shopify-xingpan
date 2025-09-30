@@ -363,7 +363,7 @@
 
         const address = `${country} ${state} ${city}`;
         const payload = {
-          key: '123456789' || window.customer.id,
+          key: window.customer.id,
           tid: 4,
           us: 'zh-CN',
           userBirthday: time,
@@ -376,13 +376,17 @@
           name: name,
           address: address,
         };
+        const paramsForm = new FormData()
+        Object.keys(payload).forEach((k) => {
+          paramsForm.append(k, payload[k]);
+        })
         try {
           const res = await fetch('/sysUser/creatReport', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: payload,
+            body: paramsForm,
           });
           const data = await res.json();
           reportId = data.data.reportId;
