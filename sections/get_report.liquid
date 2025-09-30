@@ -601,11 +601,10 @@
       * 推荐商品渲染，这里沟通确定只要渲染一条商品数据， key不定，通过下标获取
       * @param {Object} productsMap
       */
-      async function renderRecommendedProducts(productsMap) {
-        console.log(productsMap)
+      async function renderRecommendedProducts(res) {
         const container = document.getElementById('recommended-products');
-
-        for (const key in productsMap.scoreProduct) {
+        const productsMap = res.scoreProduct
+        for (const key in productsMap) {
           const productTitle = productsMap[key].title;
           console.log(productTitle)
           try {
