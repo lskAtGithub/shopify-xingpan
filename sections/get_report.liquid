@@ -383,7 +383,7 @@
           const res = await fetch('/sysUser/creatReport', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'x-www-form-urlencoded',
             },
             body: payload,
           });
