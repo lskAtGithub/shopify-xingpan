@@ -382,9 +382,6 @@
         try {
           const res = await fetch('/sysUser/creatReport', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'x-www-form-urlencoded',
-            },
             body: JSON.stringify(payload),
           });
           const data = await res.json();
