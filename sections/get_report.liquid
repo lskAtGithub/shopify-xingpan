@@ -377,10 +377,16 @@
           address: address,
         };
         const query = new URLSearchParams(payload).toString();
-        const url = BASE_URL + '/sysUser/createReport?' + query;
+        {% comment %} const url = BASE_URL + '/sysUser/creatReport?' + query; {% endcomment %}
 
         try {
-          const res = await fetch(url);
+          const res = await fetch('/sysUser/creatReport', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
           const data = await res.json();
           reportId = data.data.reportId;
           renderModal(data.data);
