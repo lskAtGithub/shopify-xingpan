@@ -71,6 +71,18 @@
                 <h3 class="cw-title">{{ product.title }}</h3>
                 <p class="cw-price">{{ product.price | money }}</p>
               </a>
+              <div class="cw-cart-btn">
+                <form
+                  method="post"
+                  action="/cart/add"
+                  accept-charset="UTF-8"
+                  enctype="multipart/form-data"
+                  novalidate="novalidate"
+                >
+                  <input type="hidden" name="id" value="{{product.id}}">
+                  <button type="submit" class="button button--primary">Add to Cart</button>
+                </form>
+              </div>
             </div>
           {% endfor %}
         </div>
@@ -131,6 +143,20 @@
   /* 右侧商品 */
   .cw-products {
     flex: 1;
+    position: relative;
+  }
+  .cw-products .cw-cart-btn {
+    position: absolute;
+    left: calc(50% - 102px);
+    width: 100%;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    bottom: 12px;
+  }
+  .cw-products:hover .cw-cart-btn {
+    opacity: 1;
+    height: auto;
   }
   .cw-grid {
     display: grid;
@@ -140,10 +166,12 @@
     border: 1px solid #eee;
     padding: 12px;
     text-align: center;
-    transition: box-shadow 0.2s ease;
+    transition: all 0.3s ease;
   }
   .cw-product-card:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transform: scaleY(1.2); /* 高度放大 1.5 倍 */
+    transform-origin: bottom; /* 从顶部开始放大，不居中 */
   }
   .cw-img {
     max-width: 100%;
