@@ -385,7 +385,7 @@
             headers: {
               'Content-Type': 'application/json',
             },
-            data: payload,
+            body: payload,
           });
           const data = await res.json();
           reportId = data.data.reportId;
