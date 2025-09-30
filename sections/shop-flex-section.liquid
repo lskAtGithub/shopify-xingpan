@@ -66,22 +66,24 @@
         <div class="cw-grid">
           {% for product in products %}
             <div class="cw-product-card" data-tags="{{ product.tags | join: ',' }}">
-              <a href="{{ product.url }}">
-                {{ product.featured_image | image_url: width: 400 | image_tag: class: 'cw-img' }}
-                <h3 class="cw-title">{{ product.title }}</h3>
-                <p class="cw-price">{{ product.price | money }}</p>
-              </a>
-              <div class="cw-cart-btn">
-                <form
-                  method="post"
-                  action="/cart/add"
-                  accept-charset="UTF-8"
-                  enctype="multipart/form-data"
-                  novalidate="novalidate"
-                >
-                  <input type="hidden" name="id" value="{{product.id}}">
-                  <button type="submit" class="button button--primary">Add to Cart</button>
-                </form>
+              <div class=inner>
+                <a href="{{ product.url }}">
+                  {{ product.featured_image | image_url: width: 400 | image_tag: class: 'cw-img' }}
+                  <h3 class="cw-title">{{ product.title }}</h3>
+                  <p class="cw-price">{{ product.price | money }}</p>
+                </a>
+                <div class="cw-cart-btn">
+                  <form
+                    method="post"
+                    action="/cart/add"
+                    accept-charset="UTF-8"
+                    enctype="multipart/form-data"
+                    novalidate="novalidate"
+                  >
+                    <input type="hidden" name="id" value="{{product.id}}">
+                    <button type="submit" class="button button--primary">Add to Cart</button>
+                  </form>
+                </div>
               </div>
             </div>
           {% endfor %}
@@ -166,7 +168,7 @@
     text-align: center;
     transition: all 0.3s ease;
   }
-  .cw-product-card:hover .cw-grid {
+  .cw-product-card:hover .inner {
     transform: scaleY(calc(1/1.3));
   }
   .cw-product-card:hover {
