@@ -418,11 +418,6 @@
             var choices = json.choices;
             for (var i = 0; i < choices.length; i++) {
               var item = choices[i].delta;
-              if(item.finish_reason == 'stop'){
-                alert(11)
-                renderRecommendedProducts(data)
-                break;
-              }
               if (item.content != undefined && item.content != '') {
                 content += item.content;
                 streamData.innerHTML = marked.parse(content);
@@ -438,7 +433,7 @@
         };
 
         eventSource.onerror = function (error) {
-          alert(11111)
+          renderRecommendedProducts(data);
           eventSource.close();
         };
       }
