@@ -138,9 +138,11 @@
   }
   .newsletter-form__input {
     flex-grow: 1; /* Input takes available space */
+    min-width: 300px;
   }
   .newsletter-form__button {
     flex-shrink: 0; /* Button keeps its size */
+    max-width: 200px;
   }
 }
 
