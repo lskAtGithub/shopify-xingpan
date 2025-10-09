@@ -1,195 +1,352 @@
-<section class="get-report-section">
-  <div class="report-container">
-    <div class="bg-gradient-to-br">
-      <div class="flex-wrap">
-        <!-- 左侧内容 -->
-        <div class="left-content">
-          {% if section.settings.heading != blank %}
-            <h2>{{ section.settings.heading }}</h2>
-          {% endif %}
-
-          {% if section.settings.subheading != blank %}
-            <p>{{ section.settings.subheading }}</p>
-          {% endif %}
-
-          <div class="note-line">
-            <i class="fa fa-star"></i>
-            <p>{{ section.settings.note_text }}</p>
+  <section class="get-report-section section-{{ section.id }}">
+    <div class="report-container">
+      <div class="bg-gradient-to-br">
+        <div class="flex-wrap">
+          <!-- 左侧内容 -->
+          <div class="left-content">
+            {% if section.settings.heading != blank %}
+              <h2 class="heading">{{ section.settings.heading }}</h2>
+            {% endif %}
+  
+            {% if section.settings.subheading != blank %}
+              <p class="subheading">{{ section.settings.subheading }}</p>
+            {% endif %}
+  
+            <div class="note-line">
+              <i class="fa fa-star"></i>
+              <p>{{ section.settings.note_text }}</p>
+            </div>
+  
+            {% if section.settings.top_image != blank %}
+              <div class="top-img-container">
+                {{ section.settings.top_image | image_url: width: 800 | image_tag: class: 'top-img', loading: 'lazy', widths: '400, 600, 800', sizes: '(max-width: 768px) 100vw, 50vw' }}
+              </div>
+            {% endif %}
           </div>
-
-          {% if section.settings.top_image != blank %}
-            <div class="top-img-container">
-              <img
-                src="{{ section.settings.top_image | image_url: width: 800 }}"
-                alt="{{ section.settings.heading }}"
-                class="top-img"
-                width="800"
-                height="{{ section.settings.top_image.height | times: 300 | divided_by: section.settings.top_image.width }}"
-              >
-            </div>
-          {% endif %}
-        </div>
-
-        <!-- 右侧表单 -->
-        <div class="form-container">
-          <form id="report-form">
-            <div class="form-group">
-              <label for="name">Full Name <span class="required">*</span></label>
-              <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required value="">
-            </div>
-
-            <div class="form-group">
-              <label>Birth Date & Time <span class="required">*</span></label>
-              <div class="grid-cols-3">
-                <div>
-                  <label for="birth-year">Year</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-year"
-                    name="birth_year"
-                    min="1900"
-                    max="2023"
-                    placeholder="YYYY"
-                    required
-                    value=""
-                  >
+  
+          <!-- 右侧表单 -->
+          <div class="form-container">
+            <form id="report-form">
+              <div class="form-group">
+                <label for="name">Full Name <span class="required">*</span></label>
+                <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required value="">
+              </div>
+  
+              <div class="form-group">
+                <label>Birth Date & Time <span class="required">*</span></label>
+                <div class="grid-cols-responsive">
+                  <div>
+                    <label for="birth-year">Year</label>
+                    <input class="ipt" type="number" id="birth-year" name="birth_year" min="1900" max="2024" placeholder="YYYY" required value="">
+                  </div>
+                  <div>
+                    <label for="birth-month">Month</label>
+                    <select id="birth-month" name="birth_month" required value="">
+                      <option value="">Select</option>
+                      {% for m in (1..12) %}<option value="{{ m }}">{{ m }}</option>{% endfor %}
+                    </select>
+                  </div>
+                  <div>
+                    <label for="birth-day">Day</label>
+                    <input class="ipt" type="number" id="birth-day" name="birth_day" min="1" max="31" placeholder="DD" required value="">
+                  </div>
                 </div>
-                <div>
-                  <label for="birth-month">Month</label>
-                  <select id="birth-month" name="birth_month" required value="">
-                    <option value="">Select</option>
-                    {% for m in (1..12) %}
-                      <option value="{{ m }}">{{ m }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <div>
-                  <label for="birth-day">Day</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-day"
-                    name="birth_day"
-                    min="1"
-                    max="31"
-                    placeholder="DD"
-                    required
-                    value=""
-                  >
+  
+                <div class="grid-cols-2">
+                  <div>
+                    <label for="birth-hour">Hour (24h)</label>
+                    <input class="ipt" type="number" id="birth-hour" name="birth_hour" min="0" max="23" placeholder="HH" required value="">
+                  </div>
+                  <div>
+                    <label for="birth-minute">Minute</label>
+                    <input class="ipt" type="number" id="birth-minute" name="birth_minute" min="0" max="59" placeholder="MM" required value="">
+                  </div>
                 </div>
               </div>
-
-              <div class="grid-cols-2">
-                <div>
-                  <label for="birth-hour">Hour (24h)</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-hour"
-                    name="birth_hour"
-                    min="0"
-                    max="23"
-                    placeholder="HH"
-                    required
-                    value=""
-                  >
-                </div>
-                <div>
-                  <label for="birth-minute">Minute</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-minute"
-                    name="birth_minute"
-                    min="0"
-                    max="59"
-                    placeholder="MM"
-                    required
-                    value=""
-                  >
+  
+              <div class="form-group">
+                <label>Birth Location <span class="required">*</span></label>
+                <div class="grid-cols-responsive">
+                  <div>
+                    <label for="country">Country</label>
+                    <select id="country" name="country" required><option value="">Select Country</option></select>
+                  </div>
+                  <div>
+                    <label for="state">State/Province</label>
+                    <select id="state" name="state" disabled required><option value="">Select State</option></select>
+                  </div>
+                  <div>
+                    <label for="city">City</label>
+                    <select id="city" name="city" disabled required><option value="">Select City</option></select>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <!-- 出生地选择器 -->
-            <div class="form-group">
-              <label>Birth Location <span class="required">*</span></label>
-              <div class="grid-cols-3">
-                <div>
-                  <label for="country">Country</label>
-                  <select id="country" name="country" required>
-                    <option value="name">Select Country</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="state">State/Province</label>
-                  <select id="state" name="state" disabled required>
-                    <option value="name">Select State/Province</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="city">City</label>
-                  <select id="city" name="city" disabled required>
-                    <option value="name">Select City</option>
-                  </select>
-                </div>
+  
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input class="ipt" type="checkbox" id="daylight-saving" name="daylight_saving">
+                  <span class="checkbox-check-text">Daylight Saving Time was in effect at birth</span>
+                </label>
               </div>
-            </div>
-
-            <div class="form-group">
-              <label class="checkbox-label">
-                <input class="ipt" type="checkbox" id="daylight-saving" name="daylight_saving">
-                <span class="checkbox-check-text">Daylight Saving Time was in effect at birth</span>
-              </label>
-            </div>
-
-            <button id="submit" type="submit" class="gradient-btn">
-              <span>{{ section.settings.button_text }}</span>
-              <i class="fa fa-arrow-right"></i>
-            </button>
-          </form>
+  
+              <button id="submit-btn" type="submit" class="gradient-btn">
+                <span>{{ section.settings.button_text }}</span>
+                <i class="fa fa-arrow-right"></i>
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-
-      <!-- 🔹 弹窗结构 -->
-      <div id="report-modal" class="report-modal">
-        <div class="report-modal-content" id="modelContent">
-          <span class="report-close">&times;</span>
-          <h2>✨ 报告结果</h2>
-
-          <!-- 表格 -->
-          <table class="table table-hover" id="report-table">
+    </div>
+  
+    <!-- 🔹 弹窗结构 -->
+    <div id="report-modal" class="report-modal">
+      <div class="report-modal-content" id="modelContent">
+        <span class="report-close">&times;</span>
+        <h2 class="modal-heading">✨ Your Elemental Report</h2>
+  
+        <div class="table-responsive-wrapper">
+          <table class="report-table" id="report-table">
             <thead>
               <tr>
-                <th>星座</th>
-                <th>行星</th>
-                <th>庙旺</th>
-                <th>星座元素</th>
-                <th>行星-元素分</th>
-                <th>庙旺元素分</th>
-                <th>行星所落宫位</th>
-                <th>宫位元素</th>
-                <th>宫位元素分</th>
+                <th>Constellation</th>
+                <th>Planet</th>
+                <th>Dignity</th>
+                <th>Element</th>
+                <th>Planet Score</th>
+                <th>Dignity Score</th>
+                <th>House</th>
+                <th>House Element</th>
+                <th>House Score</th>
               </tr>
             </thead>
             <tbody></tbody>
           </table>
-
-          <!-- 百分比圆形图 -->
-          <div class="canvas-box">
-            <div id="tooltip"></div>
-            <canvas id="chartCanvas" width="400" height="400" style="width:400px;height:400px;"></canvas>
-          </div>
-          <!-- 流数据渲染 -->
-          <div style="font-size: 16px;color: #BBB;" id="markdownRea"></div>
-          <div id="streamData"></div>
-          <!-- 推荐一个商品 -->
-          <div id="recommended-products"></div>
         </div>
+  
+        <div class="canvas-box">
+          <div id="tooltip"></div>
+          <canvas id="chartCanvas"></canvas>
+        </div>
+        
+        <div id="stream-container">
+            <div class="stream-content" id="markdownRea"></div>
+            <div class="stream-content" id="streamData"></div>
+        </div>
+        
+        <div id="recommended-products"></div>
       </div>
     </div>
-  </div>
+  </section>
+  
+  {% stylesheet %}
+    /* --- Base Styles (Mobile <= 768px) --- */
+    .get-report-section {
+      padding: 3rem 1rem;
+    }
+    .report-container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .bg-gradient-to-br {
+      background: linear-gradient(to bottom right, #f9fafb, #f3f4f6);
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+    .flex-wrap {
+      display: flex;
+      flex-direction: column; /* Mobile first: stack columns */
+    }
+    .left-content, .form-container {
+      padding: 1.5rem;
+    }
+    .left-content {
+      text-align: center;
+    }
+    .form-container {
+      background-color: #fff;
+    }
+    .heading {
+      font-weight: 700;
+      color: #1c1c1c;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+      font-size: 1.875rem; /* 30px */
+    }
+    .subheading {
+      color: #4b5563;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .note-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+    .note-line i {
+      color: #f97316;
+    }
+    .top-img-container {
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    .top-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    /* Form Styles */
+    #report-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .grid-cols-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .grid-cols-responsive { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; }
+    .checkbox-label { display: flex; align-items: center; gap: 8px; }
+    .ipt, select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+      font-size: 1rem;
+    }
+    .ipt:focus, select:focus {
+      outline: none;
+      border-color: #f97316;
+      box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+    }
+    .ipt[type='checkbox'] { width: 1.25rem; height: 1.25rem; }
+    .gradient-btn {
+      background: linear-gradient(90deg, #ffd100, #4a90e2, #8b5a2b, #4caf50);
+      background-size: 300% 100%;
+      color: #fff;
+      font-weight: 600;
+      padding: 0.875rem 1.5rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.125rem;
+      transition: background-position 0.5s ease;
+      cursor: pointer;
+      border: none;
+      gap: 8px;
+    }
+    .gradient-btn:hover { background-position: 100% 0; }
+  
+    /* Modal Styles */
+    .report-modal {
+      display: none; position: fixed; z-index: 9999; left: 0; top: 0;
+      width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6);
+      justify-content: center; align-items: center; padding: 1rem;
+    }
+    .report-modal-content {
+      background: #fff; padding: 1.5rem; border-radius: 12px;
+      width: 100%; height: 90%; overflow-y: auto; position: relative;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    }
+    .report-close {
+      position: absolute; right: 15px; top: 10px;
+      font-size: 28px; cursor: pointer; color: #888;
+    }
+    .modal-heading { font-size: 1.5rem; text-align: center; margin-bottom: 1.5rem; }
+    
+    .table-responsive-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      margin-bottom: 2rem;
+    }
+    .report-table {
+      width: 100%; min-width: 800px; /* Force scroll on small screens */
+      border-collapse: collapse;
+    }
+    .report-table th, .report-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    .report-table th { background: #f8f8f8; font-weight: 600; }
+    
+    .canvas-box { position: relative; width: 100%; max-width: 400px; margin: 0 auto 2rem auto; }
+    #chartCanvas { width: 100%; height: auto; }
+    #tooltip {
+      position: absolute; padding: 6px 10px; background: rgba(0, 0, 0, 0.8);
+      color: #fff; border-radius: 4px; font-size: 13px;
+      pointer-events: none; display: none; z-index: 10;
+    }
+    #stream-container { font-size: 1rem; color: #444; line-height: 1.6; }
+  
+    /* Recommended Product Styles */
+    #recommended-products { margin-top: 2rem; }
+    .recommended-card {
+      display: flex;
+      flex-direction: column; /* Mobile: stack image and content */
+      gap: 1.5rem;
+      padding: 1rem;
+      border: 1px solid #eee;
+      border-radius: 8px;
+    }
+    .card-left img { width: 100%; height: auto; border-radius: 8px; }
+    .card-right h3 { font-size: 1.5rem; margin: 0 0 0.5rem 0; }
+    .product-price { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; }
+    .card-right .button { width: 100%; }
+  
+    /* --- Tablet Styles (768px - 1024px) --- */
+    @media (min-width: 768px) {
+      .get-report-section { padding: 5rem 1.5rem; }
+      .flex-wrap {
+        flex-direction: row; /* Tablet: two columns */
+        align-items: stretch;
+      }
+      .left-content, .form-container {
+        flex: 1;
+        padding: 2.5rem;
+        min-width: 0; /* Fix flexbox overflow */
+      }
+      .left-content { text-align: left; }
+      .heading { font-size: 2.25rem; }
+      .subheading { font-size: 1.125rem; }
+      .grid-cols-responsive { grid-template-columns: repeat(3, 1fr); }
+      
+      .report-modal-content {
+        width: 85%;
+        height: 85%;
+        padding: 2rem;
+      }
+      .modal-heading { font-size: 1.8rem; }
+      
+      .recommended-card {
+        flex-direction: row; /* Tablet: horizontal layout */
+        align-items: center;
+      }
+      .card-left { flex: 0 0 200px; }
+      .card-right { flex: 1; }
+      .card-right .button { width: auto; }
+    }
+  
+    /* --- Desktop Styles (> 1024px) --- */
+    @media (min-width: 1024px) {
+      .get-report-section { padding: 6rem 2rem; }
+      .flex-wrap { gap: 0; }
+      .left-content { flex-basis: 45%; }
+      .form-container { flex-basis: 55%; }
+      .left-content, .form-container { padding: 3rem; }
+      .heading { font-size: 2.5rem; }
+  
+      .report-modal-content {
+        width: 80%;
+        max-width: 1100px;
+      }
+    }
+  {% endstylesheet %}
 
   <script>
     window.customer = {% if customer %}
