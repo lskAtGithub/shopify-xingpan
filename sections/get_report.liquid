@@ -119,19 +119,19 @@
                 <div>
                   <label for="country">Country</label>
                   <select id="country" name="country" required>
-                    <option value="">Select Country</option>
+                    <option value="name">Select Country</option>
                   </select>
                 </div>
                 <div>
                   <label for="state">State/Province</label>
                   <select id="state" name="state" disabled required>
-                    <option value="">Select State/Province</option>
+                    <option value="name">Select State/Province</option>
                   </select>
                 </div>
                 <div>
                   <label for="city">City</label>
                   <select id="city" name="city" disabled required>
-                    <option value="">Select City</option>
+                    <option value="name">Select City</option>
                   </select>
                 </div>
               </div>
@@ -321,6 +321,9 @@
 
         setLoading(stateSelect);
         const states = await fetchFromApi({ countryId: countryId });
+        const opt = this.options[this.selectedIndex];
+        lat = opt.dataset.latitude;
+        lon = opt.dataset.longitude;
         populateSelectWithObjects(stateSelect, states, 'name', 'id');
       });
 
@@ -330,7 +333,9 @@
         const countryId = countrySelect.value;
         resetSelect(citySelect, PLACEHOLDERS.city);
         if (!countryId || !stateId) return;
-
+        const opt = this.options[this.selectedIndex];
+        lat = opt.dataset.latitude;
+        lon = opt.dataset.longitude;
         setLoading(citySelect);
         const cities = await fetchFromApi({ countryId: '', stateId: stateId });
         populateSelectWithObjects(citySelect, cities, 'name', 'id');
@@ -363,30 +368,29 @@
 
         const address = `${country} ${state} ${city}`;
         const payload = {
-          key: '123456789' ||window.customer.id,
+          key: window.customer.id,
           tid: 4,
           us: 'zh-CN',
           userBirthday: time,
-          userCity: '', //JSON.stringify(window.customer.addresses),
+          userCity: address,
           userEmail: window.customer.email,
-          userName: window.customer.first_name + window.customer.last_name,
           ztime: 8,
           lat: lat,
           lon: lon,
-          name: name,
-          address: address,
+          userName: name,
         };
-
-        const query = new URLSearchParams(payload).toString();
-        {% comment %} const url = BASE_URL + '/sysUser/creatReport?' + query; {% endcomment %}
-
+        const paramsForm = new URLSearchParams();
+        Object.keys(payload).forEach((k) => {
+          paramsForm.append(k, payload[k]);
+        });
+        console.log(paramsForm);
         try {
-          const res = await fetch('/sysUser/creatReport', {
+          const res = await fetch(`${BASE_URL}/sysUser/creatReport`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: new URLSearchParams(payload),
+            body: paramsForm,
           });
           const data = await res.json();
           reportId = data.data.reportId;
@@ -419,11 +423,6 @@
             var choices = json.choices;
             for (var i = 0; i < choices.length; i++) {
               var item = choices[i].delta;
-              if(item.finish_reason == 'stop'){
-                alert(11)
-                renderRecommendedProducts(data)
-                break;
-              }
               if (item.content != undefined && item.content != '') {
                 content += item.content;
                 streamData.innerHTML = marked.parse(content);
@@ -439,7 +438,7 @@
         };
 
         eventSource.onerror = function (error) {
-          alert(11111)
+          renderRecommendedProducts(data);
           eventSource.close();
         };
       }
@@ -558,7 +557,7 @@
           draw();
           tooltip.style.display = 'none';
         });
-        loadStream(data);
+        loadStream(res);
       }
 
       async function renderModal(data) {
@@ -602,14 +601,11 @@
       * 推荐商品渲染，这里沟通确定只要渲染一条商品数据， key不定，通过下标获取
       * @param {Object} productsMap
       */
-      async function renderRecommendedProducts(productsMap) {
+      async function renderRecommendedProducts(res) {
         const container = document.getElementById('recommended-products');
-
+        const productsMap = res.scoreProduct
         for (const key in productsMap) {
-          if (!productsMap.hasOwnProperty(key)) continue;
-
           const productTitle = productsMap[key].title;
-
           try {
             // Shopify 前端通过 title 获取 handle，再请求 JSON
             const handle = productTitle
@@ -623,17 +619,21 @@
 
             // 构建HTML
             const card = document.createElement('div');
+            console.log(product);
             card.className = 'recommended-card';
             card.innerHTML = `
               <div class="card-left">
                 <img src="${product.images[0] || ''}" alt="${product.title}" />
               </div>
               <div class="card-right">
+                <h3 style="font-size: 2.2rem;margin-bottom: 15px;">${product.title}</h3>
                 <span class="product-tag">${product.tags}</span>
-                <h3>${product.title}</h3>
-                <p class="product-price">$${product.variants[0].price}</p>
+                <p class="product-price" style="font-size: 2rem;font-weight: 700; color: #333333;">$${product.variants[0].price}</p>
                 <p class="product-desc">${product.body_html || ''}</p>
-                <button class="add-to-cart" onclick="addToCart(${product.variants[0].id})">Add to Cart</button>
+                <form method="post" action="/cart/add" accept-charset="UTF-8" enctype="multipart/form-data" novalidate="novalidate">
+                   <input type="hidden" name="id" value="${product.id}">
+                   <button type="submit" class="button button--primary">Add to Cart</button>
+                </form>
               </div>
             `;
             container.appendChild(card);
@@ -641,15 +641,6 @@
             console.error('Failed to load product', productTitle, e);
           }
         }
-      }
-
-      // 模拟购物车函数
-      function addToCart(variantId) {
-        fetch('/cart/add.js', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({id: variantId, quantity: 1})
-        }).then(res => res.json()).then(data => alert('Added to cart!'));
       }
 
       // 关闭弹窗

@@ -66,11 +66,25 @@
         <div class="cw-grid">
           {% for product in products %}
             <div class="cw-product-card" data-tags="{{ product.tags | join: ',' }}">
-              <a href="{{ product.url }}">
-                {{ product.featured_image | image_url: width: 400 | image_tag: class: 'cw-img' }}
-                <h3 class="cw-title">{{ product.title }}</h3>
-                <p class="cw-price">{{ product.price | money }}</p>
-              </a>
+              <div class="inner">
+                <a href="{{ product.url }}">
+                  {{ product.featured_image | image_url: width: 400 | image_tag: class: 'cw-img' }}
+                  <h3 class="cw-title">{{ product.title }}</h3>
+                  <p class="cw-price">{{ product.price | money }}</p>
+                </a>
+                <div class="cw-cart-btn">
+                  <form
+                    method="post"
+                    action="/cart"
+                    accept-charset="UTF-8"
+                    enctype="multipart/form-data"
+                    novalidate="novalidate"
+                  >
+                    <input type="hidden" name="id" value="{{product.id}}">
+                    <button type="submit" class="button button--primary" style="margin: 0 auto;">Add to Cart</button>
+                  </form>
+                </div>
+              </div>
             </div>
           {% endfor %}
         </div>
@@ -132,19 +146,46 @@
   .cw-products {
     flex: 1;
   }
+
   .cw-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
   }
   .cw-product-card {
     border: 1px solid #eee;
+    transition: all 0.3s ease;
+    z-index: 1;
+    position: relative;
+  }
+  .cw-product-card .inner {
+    transition: none;
     padding: 12px;
-    text-align: center;
-    transition: box-shadow 0.2s ease;
+    position: relative;
+  }
+  .cw-product-card:hover .inner {
+    transform: scaleY(calc(1 / 1.16));
+    transform-origin: top;
   }
   .cw-product-card:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transform: scaleY(1.16);
+    transform-origin: top;
+    z-index: 3;
+  }
+  .cw-product-card:hover .cw-cart-btn {
+    opacity: 1;
+    height: 46px;
+    background: #fff;
+  }
+  .cw-products .cw-cart-btn {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    height: 0;
+    text-align: center;
+    overflow: hidden;
+    bottom: -48px;
   }
   .cw-img {
     max-width: 100%;
