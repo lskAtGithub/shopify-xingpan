@@ -144,6 +144,7 @@
   padding: 14px 20px;
   font-size: 1rem;
   border-radius: 8px;
+  min-height: 50px;
 }
 
 .newsletter-form__input {
@@ -160,6 +161,14 @@
 
 .newsletter-form__button:hover {
   opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+  .bottom-section .newsletter-form {
+    max-width: 480px;
+    margin: 0 20px;
+    display: block;
+  }
 }
 
 /* --- Tablet Styles (768px - 1024px) --- */
