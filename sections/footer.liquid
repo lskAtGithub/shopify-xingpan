@@ -1,14 +1,16 @@
-<!-- footer.liquid -->
-<footer class="section-{{ section.id }} footer bg-gray-900 text-gray-300 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="container mx-auto max-w-7xl">
+{% comment %}
+  Optimized Footer Section
+  - Implements a responsive layout for Desktop, Tablet, and Mobile.
+  - Adds an accordion effect for menu columns on mobile devices (< 768px).
+{% endcomment %}
+
+<footer class="section-{{ section.id }} footer bg-gray-900 text-gray-300">
+  <div class="footer-container">
     <div class="footer-content-box">
-      
-      <!-- Logo & Description -->
-      <div>
+
+      <!-- Column 1: Brand Info (Always visible) -->
+      <div class="footer-column footer-column--brand">
         <h3 class="text-white font-bold text-lg mb-6">11STARS</h3>
-        <div class="footer-logo flex items-center space-x-2 mb-6">
-          <i class="fa fa-star text-fire"></i>
-        </div>
         <p class="footer-description mb-6">
           Blending ancient astrological wisdom with the healing power of natural crystals to create unique art pieces that resonate with your elemental energy.
         </p>
@@ -19,87 +21,232 @@
           <a href="#" class="text-gray-400 hover:text-fire transition-colors"><i class="fa fa-twitter"></i></a>
         </div>
       </div>
-      
-      <!-- Shop Links -->
-      <div>
-        <h3 class="text-white font-bold text-lg mb-6">Shop</h3>
-        <ul class="space-y-3 footer-links">
-          <li><a href="#" class="hover:text-fire transition-colors">Fire Element Collection</a></li>
-          <li><a href="#" class="hover:text-fire transition-colors">Water Element Collection</a></li>
-          <li><a href="#" class="hover:text-fire transition-colors">Earth Element Collection</a></li>
-          <li><a href="#" class="hover:text-fire transition-colors">Air Element Collection</a></li>
-          <li><a href="#" class="hover:text-fire transition-colors">Zodiac Collections</a></li>
-          <li><a href="#" class="hover:text-fire transition-colors">Gift Cards</a></li>
-        </ul>
+
+      <!-- Column 2: Shop (Accordion on mobile) -->
+      <div class="footer-column footer-accordion-item">
+        <button type="button" class="footer-accordion-trigger">
+          <h3 class="text-white font-bold text-lg">Shop</h3>
+          <span class="icon-wrapper">
+            <svg class="icon-plus" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            <svg class="icon-minus" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" /></svg>
+          </span>
+        </button>
+        <div class="footer-accordion-content">
+          <ul class="space-y-3 footer-links">
+            <li><a href="#" class="hover:text-fire transition-colors">Fire Element Collection</a></li>
+            <li><a href="#" class="hover:text-fire transition-colors">Water Element Collection</a></li>
+            <li><a href="#" class="hover:text-fire transition-colors">Earth Element Collection</a></li>
+            <li><a href="#" class="hover:text-fire transition-colors">Air Element Collection</a></li>
+            <li><a href="#" class="hover:text-fire transition-colors">Zodiac Collections</a></li>
+            <li><a href="#" class="hover:text-fire transition-colors">Gift Cards</a></li>
+          </ul>
+        </div>
       </div>
-      
-      <!-- About Links -->
-      <div>
-        <h3 class="text-white font-bold text-lg mb-6">About</h3>
-        <ul class="space-y-3 footer-links">
-          <li><a href="pages/our-story" class="hover:text-fire transition-colors">Our Story</a></li>
-          <li><a href="#" class="hover:text-fire transition-colors">Astrology & Crystals</a></li>
-          <li><a href="#" class="hover:text-fire transition-colors">Sustainability</a></li>
-          <li><a href="#" class="hover:text-fire transition-colors">Artist Spotlight</a></li>
-          <li><a href="blogs/blog-center" class="hover:text-fire transition-colors">Blog</a></li>
-          <li><a href="#" class="hover:text-fire transition-colors">Contact Us</a></li>
-        </ul>
+
+      <!-- Column 3: About (Accordion on mobile) -->
+      <div class="footer-column footer-accordion-item">
+        <button type="button" class="footer-accordion-trigger">
+          <h3 class="text-white font-bold text-lg">About</h3>
+          <span class="icon-wrapper">
+            <svg class="icon-plus" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            <svg class="icon-minus" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" /></svg>
+          </span>
+        </button>
+        <div class="footer-accordion-content">
+          <ul class="space-y-3 footer-links">
+            <li><a href="/pages/our-story" class="hover:text-fire transition-colors">Our Story</a></li>
+            <li><a href="#" class="hover:text-fire transition-colors">Astrology & Crystals</a></li>
+            <li><a href="#" class="hover:text-fire transition-colors">Sustainability</a></li>
+            <li><a href="#" class="hover:text-fire transition-colors">Artist Spotlight</a></li>
+            <li><a href="/blogs/news" class="hover:text-fire transition-colors">Blog</a></li>
+            <li><a href="#" class="hover:text-fire transition-colors">Contact Us</a></li>
+          </ul>
+        </div>
       </div>
-      
-      <!-- Customer Service Links -->
-      <div>
-        <h3 class="text-white font-bold text-lg mb-6">Customer Service</h3>
-        <ul class="space-y-3 footer-links">
-          <li><a href="#" class="hover:text-fire transition-colors">Shipping & Returns</a></li>
-          <li><a href="#" class="hover:text-fire transition-colors">FAQ</a></li>
-          <li><a href="#" class="hover:text-fire transition-colors">Size Guide</a></li>
-          <li><a href="#" class="hover:text-fire transition-colors">Care Instructions</a></li>
-          <li><a href="#" class="hover:text-fire transition-colors">Privacy Policy</a></li>
-          <li><a href="#" class="hover:text-fire transition-colors">Terms of Service</a></li>
-        </ul>
+
+      <!-- Column 4: Customer Service (Accordion on mobile) -->
+      <div class="footer-column footer-accordion-item">
+        <button type="button" class="footer-accordion-trigger">
+          <h3 class="text-white font-bold text-lg">Customer Service</h3>
+          <span class="icon-wrapper">
+            <svg class="icon-plus" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            <svg class="icon-minus" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" /></svg>
+          </span>
+        </button>
+        <div class="footer-accordion-content">
+          <ul class="space-y-3 footer-links">
+            <li><a href="#" class="hover:text-fire transition-colors">Shipping & Returns</a></li>
+            <li><a href="#" class="hover:text-fire transition-colors">FAQ</a></li>
+            <li><a href="#" class="hover:text-fire transition-colors">Size Guide</a></li>
+            <li><a href="#" class="hover:text-fire transition-colors">Care Instructions</a></li>
+            <li><a href="#" class="hover:text-fire transition-colors">Privacy Policy</a></li>
+            <li><a href="#" class="hover:text-fire transition-colors">Terms of Service</a></li>
+          </ul>
+        </div>
       </div>
     </div>
-    
-    <!-- Footer Bottom -->
-    <div class="footer-bottom pt-8 border-t border-gray-800 text-center text-sm">
-      <p>&copy; 2023 11STARS Crystal Art. All rights reserved.</p>
+
+    <div class="footer-bottom">
+      <p>&copy; {%- assign year = 'now' | date: '%Y' -%}{{ year }} 11STARS Crystal Art. All rights reserved.</p>
       <p class="mt-2">Handcrafted with love and cosmic energy.</p>
     </div>
   </div>
 
-  <!-- CSS -->
   <style>
-    .footer a { text-decoration: none; color: #fff; }
-    .footer a:hover { color: #ffd110; } /* fire color */
-    .footer .text-fire { color: #ffd110; }
-    .footer .transition-colors { transition: color 0.3s ease; }
-    .footer .footer-logo i { font-size: 1.25rem; }
-    .footer .footer-links li a { display: block; }
-    .footer .footer-bottom p { margin: 0.25rem 0; }
-    /* Responsive tweaks if needed */
-    .container {
-      background-color: #111827;
-      color: #fff;
-      padding: 48px 0;
+    .footer {
+      padding: 48px 16px;
     }
-    .footer-content-box > div {
-      flex: 1;
-    }
-    .footer-content-box {
-      display: flex;
-      justify-content: space-between;
-      gap: 24px;
-      flex-wrap: wrap;
-      width: max(100vw, 1200px);
-      margin: 0 auto;
-      color: #fff;
-      gap: 24px;
+    .footer-container {
       max-width: 1280px;
       margin: 0 auto;
     }
-    ul { padding-left: 0; }
-    li {
+    .footer-content-box {
+      display: flex;
+      flex-direction: column; /* Mobile first: stack columns */
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .footer-links {
+      padding: 0;
+      margin: 0;
       list-style: none;
+    }
+    .footer-links a {
+      transition: color 0.3s ease;
+    }
+    .footer-links a:hover {
+      color: #ffd110; /* fire color */
+    }
+    .footer-bottom {
+      padding-top: 32px;
+      border-top: 1px solid #374151; /* gray-800 */
+      text-align: center;
+      font-size: 0.875rem;
+    }
+    .footer-column--brand h3, .footer-column--brand p {
+      text-align: center;
+    }
+     .footer-social {
+      justify-content: center;
+    }
+    
+    /* --- Accordion Styles (Mobile < 768px) --- */
+    .footer-accordion-trigger {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: none;
+      border: none;
+      padding: 16px 0;
+      border-bottom: 1px solid #374151;
+      cursor: pointer;
+      color: inherit;
+    }
+    .footer-accordion-trigger h3 {
+      margin: 0;
+      padding: 0;
+    }
+    .footer-accordion-trigger .icon-wrapper {
+      width: 20px;
+      height: 20px;
+    }
+    .footer-accordion-item .icon-minus {
+      display: none;
+    }
+    .footer-accordion-item.active .icon-plus {
+      display: none;
+    }
+    .footer-accordion-item.active .icon-minus {
+      display: block;
+    }
+
+    .footer-accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out;
+    }
+    .footer-accordion-content .footer-links {
+      padding: 16px 0;
+    }
+    .footer-accordion-item.active .footer-accordion-content {
+      max-height: 300px; /* Adjust if you have more links */
+    }
+
+    /* --- Tablet Styles (768px - 1024px) --- */
+    @media (min-width: 768px) {
+      .footer {
+        padding: 48px 24px;
+      }
+      .footer-content-box {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+      }
+      .footer-column--brand h3, .footer-column--brand p {
+        text-align: left;
+      }
+      .footer-social {
+        justify-content: flex-start;
+      }
+
+      /* Disable Accordion on Tablet & Desktop */
+      .footer-accordion-trigger {
+        display: block;
+        text-align: left;
+        padding: 0;
+        border: none;
+        cursor: default;
+        margin-bottom: 24px;
+      }
+      .footer-accordion-trigger .icon-wrapper {
+        display: none;
+      }
+      .footer-accordion-content {
+        max-height: none;
+        overflow: visible;
+      }
+      .footer-accordion-content .footer-links {
+        padding: 0;
+      }
+    }
+
+    /* --- Desktop Styles (> 1024px) --- */
+    @media (min-width: 1024px) {
+       .footer {
+        padding: 48px 32px;
+      }
+      .footer-content-box {
+        display: flex;
+        flex-direction: row;
+        grid-template-columns: none;
+      }
+      .footer-column {
+        flex: 1;
+      }
+       .footer-column--brand {
+        flex: 1.5; /* Give brand column more space */
+      }
     }
   </style>
 </footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const accordionItems = document.querySelectorAll('.footer-accordion-item');
+
+    accordionItems.forEach(item => {
+      const trigger = item.querySelector('.footer-accordion-trigger');
+      trigger.addEventListener('click', () => {
+        // Close other open items
+        accordionItems.forEach(otherItem => {
+          if (otherItem !== item) {
+            otherItem.classList.remove('active');
+          }
+        });
+        // Toggle the clicked item
+        item.classList.toggle('active');
+      });
+    });
+  });
+</script>
