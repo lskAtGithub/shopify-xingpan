@@ -19,7 +19,7 @@
       <button type="submit">Join Our Newsletter</button>
     </form>
 
-    <div class="features">
+    {% comment %} <div class="features">
       <div class="p-5 bg-white/5 rounded-lg feature">
         {% if section.settings.feature1_icon != blank %}
           <img src="{{ section.settings.feature1_icon | image_url: width: 64 }}" alt="{{ section.settings.feature1_title }}" class="feature-icon" />
@@ -67,7 +67,7 @@
         <a href="#"><i class="fa fa-twitter"></i></a>
         <a href="#"><i class="fa fa-youtube"></i></a>
       </div>
-    </div>
+    </div> {% endcomment %}
   </div>
 </section>
 
