@@ -163,47 +163,6 @@
   opacity: 0.85;
 }
 
-@media (max-width: 768px) {
-  .bottom-section .newsletter-form {
-    max-width: 480px;
-    margin: 0 20px;
-    display: block;
-  }
-}
-
-/* --- Tablet Styles (768px - 1024px) --- */
-@media (min-width: 768px) {
-  .bottom-section {
-    padding: 64px 24px;
-  }
-  .heading {
-    font-size: 2.25rem; /* 36px */
-  }
-  .bottom-section__feature-grid {
-    gap: 40px;
-  }
-  .newsletter-form__fields {
-    /* Tablet: horizontal layout */
-    flex-direction: row;
-  }
-  .newsletter-form__input {
-    flex-grow: 1; /* Input takes available space */
-  }
-  .newsletter-form__button {
-    flex-shrink: 0; /* Button keeps its size */
-  }
-}
-
-/* --- Desktop Styles (> 1024px) --- */
-@media (min-width: 1024px) {
-  .bottom-section {
-    padding: 80px 32px;
-  }
-  .bottom-section__feature-grid {
-    /* Desktop: 4 columns */
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
 {% endstylesheet %}
 
 {% comment %} {% schema %}
