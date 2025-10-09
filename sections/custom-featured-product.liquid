@@ -67,7 +67,7 @@
               <span class="price">{{ product.price | money }}</span>
               <div class="buttons-wrapper">
                 {%- assign current_variant = product.selected_or_first_available_variant -%}
-                <form method="post" action="/cart" accept-charset="UTF-8" enctype="multipart/form-data" novalidate="novalidate">
+                <form method="post" action="/cart/add" accept-charset="UTF-8" enctype="multipart/form-data" novalidate="novalidate">
                    <input type="hidden" name="id" value="{{ current_variant.id }}">
                    <button type="submit" class="button button--primary">Add to Cart</button>
                 </form>
