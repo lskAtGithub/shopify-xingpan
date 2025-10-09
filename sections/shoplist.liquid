@@ -12,7 +12,7 @@
         <div class="bg-white rounded-xl overflow-hidden shadow-md card-hover">
           <div class="zodiac-img-container relative">
             {% if product.featured_media %}
-              <img src="{{ product.featured_media | image_url: '400x400' }}" width="204" height="204" alt="{{ product.title }}" class="zodiac-img">
+              <img src="{{ product.featured_media | image_url: '400x400' }}" alt="{{ product.title }}" class="zodiac-img">
             {% endif %}
             {% assign tag = product.tags[0] %}
             {% if tag %}
