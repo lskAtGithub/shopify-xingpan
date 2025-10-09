@@ -217,10 +217,23 @@
 
         e.preventDefault();
         const parent = btn.parentElement;
+        
+        // 先关闭所有已打开的面板
+        const allAccordions = container.querySelectorAll('.cw-accordion');
+        allAccordions.forEach(acc => {
+          if (acc !== parent) {
+            acc.classList.remove('open');
+            // 更新其他面板的图标
+            const otherBtn = acc.querySelector('.cw-accordion-toggle');
+            const otherIcon = otherBtn.querySelector('.icon');
+            if (otherIcon) otherIcon.textContent = '+';
+          }
+        });
+        
+        // 切换当前面板
         parent.classList.toggle('open');
-        console.log(parent.classList.contains('open'));
-
-        // 如果要切换 + / - 图标
+        
+        // 切换当前面板的图标
         const icon = btn.querySelector('.icon');
         if (icon) icon.textContent = parent.classList.contains('open') ? '−' : '+';
       });
