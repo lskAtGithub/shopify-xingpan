@@ -86,7 +86,8 @@
    *  We assume the parent container has a class like `.header__inner`.
    *  If not, you may need to inspect your site and adjust this selector.
    */
-  @media screen and (min-width: 990px) { /* Apply this layout only on larger screens */
+  @media screen and (min-width: 990px) {
+    /* Apply this layout only on larger screens */
     .header__inner {
       display: grid;
       grid-template-columns: 1fr auto 1fr; /* The magic for perfect centering */
@@ -158,11 +159,11 @@
     object-fit: contain;
     height: var(--header-logo-image-height-mobile);
     width: var(--header-logo-image-width-mobile);
+    margin: 0 2.8rem;
 
     @media screen and (min-width: 750px) {
       height: var(--header-logo-image-height);
       width: var(--header-logo-image-width);
-      margin-right: 1.25rem;
     }
   }
 {% endstylesheet %}
