@@ -1,6 +1,6 @@
 /* 整体 Section 间距 */
 .get-report-section {
-  padding-top: 8rem; /* pt-32 */
+  padding-top: .5rem; /* pt-32 */
   padding-bottom: 5rem; /* pb-20 */
   padding-left: 1rem; /* px-4 */
   padding-right: 1rem;
@@ -10,7 +10,7 @@
   .get-report-section {
     padding-left: 1.5rem; /* sm:px-6 */
     padding-right: 1.5rem;
-    padding-top: .5rem;
+    padding-top: 3.5rem;
   }
 }
 
@@ -18,7 +18,7 @@
   .get-report-section {
     padding-left: 2rem; /* lg:px-8 */
     padding-right: 2rem;
-    padding-top: .5rem;
+    padding-top: 8rem;
   }
 }
 
