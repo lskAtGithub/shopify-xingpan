@@ -96,7 +96,9 @@
       '.account-button__avatar, .account-button__icon, .account-button img, .account-button [data-avatar]'
     );
     const accountButton = avatarOrIcon?.closest('.account-button');
-    console.log(111);
+    console.log(avatarOrIcon);
+    console.log(accountButton);
+    console.log(event.target !== accountButton);
     // If the click was on the avatar/icon but not on the button itself,
     // trigger the button click manually
     if (avatarOrIcon && accountButton && event.target !== accountButton) {
