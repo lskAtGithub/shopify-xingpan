@@ -88,36 +88,3 @@
   /* The shop avatar doesn't bubble the click event up to our button, so we need to prevent that or the button doesn't work */
   /* Alternative approach using JavaScript for better compatibility */
 {% endstylesheet %}
-
-{% javascript %}
-  document.addEventListener('click', function (event) {
-    // Find if the click was on an account button or its avatar/icon
-    const avatarOrIcon = event.target.closest(
-      '.account-button__avatar, .account-button__icon, .account-button img, .account-button [data-avatar]'
-    );
-    const accountButton = avatarOrIcon?.closest('.account-button');
-    
-    // If the click was on the avatar/icon but not on the button itself
-    if (avatarOrIcon && accountButton && event.target !== accountButton) {
-      event.preventDefault();
-      
-      // Get the popover ID from the button's popovertarget attribute
-      const popoverId = accountButton.getAttribute('popovertarget');
-      
-      if (popoverId) {
-        // Find the popover element
-        const popover = document.getElementById(popoverId);
-        
-        if (popover) {
-          // Directly toggle the popover using showPopover/hidePopover methods
-          // or toggle the open state manually for better compatibility
-          if (popover.matches(':popover-open')) {
-            popover.hidePopover && popover.hidePopover();
-          } else {
-            popover.showPopover && popover.showPopover();
-          }
-        }
-      }
-    }
-  });
-{% endjavascript %}
