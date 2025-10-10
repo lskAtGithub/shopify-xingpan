@@ -1,4 +1,4 @@
-  <section class="get-report-section section-{{ section.id }}">
+<section class="get-report-section section-{{ section.id }}">
     <div class="report-container">
       <div class="bg-gradient-to-br">
         <div class="flex-wrap">
@@ -137,8 +137,7 @@
         <div id="recommended-products"></div>
       </div>
     </div>
-  </section>
-  
+    
   {% stylesheet %}
     /* --- Base Styles (Mobile <= 768px) --- */
     .get-report-section {
@@ -506,7 +505,7 @@
       const form = document.querySelector('#report-form');
       form.addEventListener('submit', async function (e) {
         e.preventDefault();
-        if (!window.customer.id) {
+        if (!window.customer) {
           return alert('请先登录');
         }
         const name = document.getElementById('name').value.trim();
