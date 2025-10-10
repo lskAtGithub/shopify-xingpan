@@ -86,9 +86,7 @@
   }
 
   /* The shop avatar doesn't bubble the click event up to our button, so we need to prevent that or the button doesn't work */
-  .account-button img,
-  .account-button shop-user-avatar,
-  .account-button [data-avatar] {
+  .account-button shop-user-avatar {
     pointer-events: none;
   }
 {% endstylesheet %}
