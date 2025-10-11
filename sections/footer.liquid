@@ -99,7 +99,7 @@
     .footer {
       padding: 48px 16px;
     }
-    .footer a { text-decoration: none; color: #fff; }
+    .footer a { text-decoration: none; color: #fff; opacity: 0.8; }
     .footer-container {
       max-width: 1280px;
       margin: 0 auto;
@@ -175,11 +175,17 @@
     }
     .footer-accordion-content .footer-links {
       padding: 16px 0;
+      display: grid;
+      gap: 24px;
     }
     .footer-accordion-item.active .footer-accordion-content {
       max-height: 300px; /* Adjust if you have more links */
     }
-
+    @media (max-width: 767px) { 
+      .footer-accordion-item.active .footer-accordion-content{
+        border-bottom: 1px solid #374151;
+      }
+    }
     /* --- Tablet Styles (768px - 1024px) --- */
     @media (min-width: 768px) {
       .footer {
@@ -215,6 +221,7 @@
       }
       .footer-accordion-content .footer-links {
         padding: 0;
+        gap: 16px;
       }
     }
 
