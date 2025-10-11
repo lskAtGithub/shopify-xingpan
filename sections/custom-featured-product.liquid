@@ -31,7 +31,7 @@
           class="custom-featured-product__item {% cycle 'layout--normal', 'layout--reversed' %}"
           {{ block.shopify_attributes }}
         >
-          <div class="custom-featured-product__image-wrapper">
+          <a class="custom-featured-product__image-wrapper" href="/products/{{ product.handle }}">
             {% if block.settings.badge_text != blank %}
               <div class="custom-featured-product__badge">{{ block.settings.badge_text }}</div>
             {% endif %}
@@ -48,7 +48,7 @@
             {% else %}
               {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
             {% endif %}
-          </div>
+          </a>
 
           <div class="custom-featured-product__info">
             {%- assign title = block.settings.product_title_override | default: product.title -%}
@@ -57,7 +57,7 @@
             {%- assign description = block.settings.product_description_override | default: product.description -%}
             <div class="rte">{{ description }}</div>
 
-            {%- assign features = block.settings.features_list | split: newline -%}
+            {%- assign features = block.settings.features_list | split: ' ' -%}
             {% if features.size > 0 %}
               <ul class="custom-featured-product__features-list">
                 {% for feature in features %}
@@ -203,6 +203,10 @@
   .custom-featured-product__features-list {
     list-style: none;
     padding: 0;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
     margin: 0 0 30px 0;
   }
   .custom-featured-product__features-list li {
