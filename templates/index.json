@@ -26,6 +26,7 @@
         "featured_product_6ERABi": {
           "type": "featured_product",
           "settings": {
+            "featured_image": "shopify://shop_images/437195e1b89fc6108fb226593b4e2fe6.png",
             "featured_product": "ignite-passion",
             "badge_text": "New Element",
             "product_title_override": "",
@@ -36,6 +37,7 @@
         "featured_product_Vxc96U": {
           "type": "featured_product",
           "settings": {
+            "featured_image": "shopify://shop_images/683d2bae6dfb116cfe913d8b5f97aea8.png",
             "featured_product": "flow-harmony",
             "badge_text": "New Element",
             "product_title_override": "",
@@ -46,6 +48,7 @@
         "featured_product_KzKFgm": {
           "type": "featured_product",
           "settings": {
+            "featured_image": "shopify://shop_images/8b537e1d5cbc7fa417a78bf8cf0e5e9d.png",
             "featured_product": "grounded-stability",
             "badge_text": "New Element",
             "product_title_override": "",
@@ -56,6 +59,7 @@
         "featured_product_C77FRX": {
           "type": "featured_product",
           "settings": {
+            "featured_image": "shopify://shop_images/456c15d583e08485c8ed98668647a386.png",
             "featured_product": "clarity-insight",
             "badge_text": "New Element",
             "product_title_override": "",
