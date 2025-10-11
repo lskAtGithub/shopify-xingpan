@@ -79,11 +79,6 @@
     "variant_button_width": "equal-width-buttons",
     "content_for_index": [],
     "blocks": {
-      "6052823664294247695": {
-        "type": "shopify://apps/qikify-form-builder/blocks/app-embed/753fa0d7-50d4-480a-b094-cff26e632c36",
-        "disabled": false,
-        "settings": {}
-      },
       "15683396631634586217": {
         "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
         "disabled": false,
@@ -97,6 +92,11 @@
           "button_vertical_position": "lowest",
           "greeting_message": ""
         }
+      },
+      "6052823664294247695": {
+        "type": "shopify://apps/qikify-form-builder/blocks/app-embed/753fa0d7-50d4-480a-b094-cff26e632c36",
+        "disabled": true,
+        "settings": {}
       }
     },
     "color_schemes": {
