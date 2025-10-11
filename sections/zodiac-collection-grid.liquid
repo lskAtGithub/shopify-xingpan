@@ -28,7 +28,7 @@
   <div class="zodiac-collection__grid">
     {% for product in collection.products limit: section.settings.products_to_show %}
       <div class="zodiac-card">
-        <a href="{{ product.url }}" class="zodiac-card__image-wrapper">
+        <a href="/products/{{ product.title | handleize }}" class="zodiac-card__image-wrapper">
           <div class="zodiac-card__badge-container">
             {% if product.metafields.custom.zodiac_sign.value != blank %}
               {%- assign zodiac_class = product.metafields.custom.zodiac_sign.value | downcase -%}
