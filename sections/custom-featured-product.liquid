@@ -63,7 +63,7 @@
                 {% for feature in features %}
                   {% if feature != blank %}
                     <li>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                      <svg class="icon-checkmark" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
                         <g clip-path="url(#clip0_1572_18)">
                         <circle cx="7.5" cy="7.92969" r="7" fill="black"/>
                         <path d="M4 7.34644L5.51906 9.24526C5.95344 9.78823 6.76335 9.83309 7.25503 9.34141L11 5.59644" stroke="white" stroke-width="1.16667" stroke-linecap="round"/>
@@ -74,7 +74,7 @@
                         </clipPath>
                         </defs>
                       </svg>
-                      <span>{{ feature }}</span>
+                      <span style="line-height: 1.2;">{{ feature }}</span>
                     </li>
                   {% endif %}
                 {% endfor %}
@@ -216,11 +216,7 @@
     margin-bottom: 10px;
   }
   .custom-featured-product__features-list .icon-checkmark {
-    width: 20px;
-    height: 20px;
-    color: #fbbf24;
     margin-right: 10px;
-    flex-shrink: 0;
   }
   .custom-featured-product__price-and-cta {
     display: flex;
