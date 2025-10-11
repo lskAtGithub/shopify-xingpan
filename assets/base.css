@@ -3645,7 +3645,7 @@ slideshow-component[autoplay] slideshow-controls {
     aspect-ratio: var(--aspect-ratio);
 
     img {
-      height: 100%;
+      /* height: 100%; */
       object-fit: cover;
       border-radius: var(--media-radius);
     }
