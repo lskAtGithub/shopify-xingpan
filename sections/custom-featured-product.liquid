@@ -36,7 +36,7 @@
               <div class="custom-featured-product__badge">{{ block.settings.badge_text }}</div>
             {% endif %}
 
-            {% if product.featured_media %}
+            {% if block.settings.featured_image %}
               {{
                 block.settings.featured_image
                 | image_url: width: 1000
