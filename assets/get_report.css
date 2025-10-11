@@ -18,7 +18,7 @@
   .get-report-section {
     padding-left: 2rem; /* lg:px-8 */
     padding-right: 2rem;
-    padding-top: 8rem;
+    padding-top: 4rem;
   }
 }
 
@@ -167,7 +167,8 @@ label.checkbox-label {
 
 /* 按钮 */
 .get-report-section .gradient-btn {
-  background: linear-gradient(90deg, #ffd100, #4a90e2, #8b5a2b, #4caf50); /* 可自定义渐变 */
+  /* background: linear-gradient(90deg, #ffd100, #4a90e2, #8b5a2b, #4caf50); 可自定义渐变 */
+  background-color: #111;
   background-size: 300% 100%;
   color: #fff;
   font-weight: 500;
