@@ -58,7 +58,6 @@
             <div class="rte">{{ description }}</div>
 
             {%- assign features = block.settings.features_list | split: ' ' -%}
-            <p>features_list content: {{ block.settings.features_list }}</p>
             {% if features.size > 0 %}
               <ul class="custom-featured-product__features-list">
                 {% for feature in features %}
@@ -204,6 +203,10 @@
   .custom-featured-product__features-list {
     list-style: none;
     padding: 0;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
     margin: 0 0 30px 0;
   }
   .custom-featured-product__features-list li {
