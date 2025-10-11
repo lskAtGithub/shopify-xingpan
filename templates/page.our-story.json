@@ -1,8 +1,56 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "template-page-our-story",
-      "settings": {}
+      "blocks": {
+        "philosophy_item_G8AdyP": {
+          "type": "philosophy_item",
+          "settings": {
+            "quote": "It's important that the artwork feels curated and elevated, and the quality from 11stars met those expectations."
+          }
+        },
+        "philosophy_item_HFez4A": {
+          "type": "philosophy_item",
+          "settings": {
+            "quote": "It's important that the artwork feels curated and elevated, and the quality from 11stars met those expectations."
+          }
+        },
+        "philosophy_item_UTaHng": {
+          "type": "philosophy_item",
+          "settings": {
+            "quote": "It's important that the artwork feels curated and elevated, and the quality from 11stars met those expectations."
+          }
+        },
+        "philosophy_item_tDEPFk": {
+          "type": "philosophy_item",
+          "settings": {
+            "quote": "It's important that the artwork feels curated and elevated, and the quality from 11stars met those expectations."
+          }
+        }
+      },
+      "block_order": [
+        "philosophy_item_G8AdyP",
+        "philosophy_item_HFez4A",
+        "philosophy_item_UTaHng",
+        "philosophy_item_tDEPFk"
+      ],
+      "settings": {
+        "philosophy_image": "shopify://shop_images/02-min.png",
+        "philosophy_title": "Business Philosophy",
+        "expert_image": "shopify://shop_images/01-min.png",
+        "expert_title": "Meet Our Trade Expert",
+        "expert_quote": "I have a passion for art and am honored to be able to connect astrological signs with beautiful works of art. As a Trade Account Manager at 11starts, my goal is to create a memorable product experience for you and help you achieve a better mood and life.",
+        "expert_name": "Megan Dagen"
+      }
     }
   },
   "order": [
