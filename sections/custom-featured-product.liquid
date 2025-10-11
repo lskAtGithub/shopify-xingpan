@@ -158,8 +158,12 @@
 
   /* Desktop layout */
   @media (min-width: 769px) {
-    .custom-featured-product__item {
-      grid-template-columns: 1fr 1fr; /* Two columns on desktop */
+    .custom-featured-product__item:nth-child(odd) {
+      grid-template-columns: 1.4fr 1fr; /* Two columns on desktop */
+      gap: 60px;
+    }
+    .custom-featured-product__item:nth-child(even) {
+      grid-template-columns: 1fr 1.4fr; /* Two columns on desktop */
       gap: 60px;
     }
     .custom-featured-product__item.layout--reversed .custom-featured-product__image-wrapper {
