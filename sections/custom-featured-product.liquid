@@ -38,7 +38,7 @@
 
             {% if product.featured_media %}
               {{
-                product.featured_media
+                block.settings.featured_media
                 | image_url: width: 1000
                 | image_tag:
                   loading: 'lazy',
@@ -340,6 +340,11 @@
       "name": "特色产品",
       "limit": 6,
       "settings": [
+        {
+          "type": "image_picker",
+          "id": "featured_image",
+          "label": "选择图片"
+        },
         {
           "type": "product",
           "id": "featured_product",
