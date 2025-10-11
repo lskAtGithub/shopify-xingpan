@@ -58,6 +58,7 @@
             <div class="rte">{{ description }}</div>
 
             {%- assign features = block.settings.features_list | split: '\n' -%}
+            <p>features content: {{ features }}</p>
             {% if features.size > 0 %}
               <ul class="custom-featured-product__features-list">
                 {% for feature in features %}
