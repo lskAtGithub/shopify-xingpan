@@ -533,7 +533,7 @@ select:hover {
     font-size: 13px;
   }
 
-  a {
+  .report-container a {
     padding: 3px 6px;
     font-size: 13px;
   }
