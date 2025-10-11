@@ -28,7 +28,7 @@
   <div class="zodiac-collection__grid">
     {% for product in collection.products limit: section.settings.products_to_show %}
       <div class="zodiac-card">
-        <a href="/products/{{ product.handle }}" class="zodiac-card__image-wrapper">
+        <a href="{{ product.handle }}" class="zodiac-card__image-wrapper">
           <div class="zodiac-card__badge-container">
             {% if product.metafields.custom.zodiac_sign.value != blank %}
               {%- assign zodiac_class = product.metafields.custom.zodiac_sign.value | downcase -%}
@@ -58,7 +58,7 @@
         <div class="zodiac-card__info">
           {% comment %} "标题" 对应产品默认标题 {% endcomment %}
           <h3 class="zodiac-card__title">
-            <a href="{{ product.url }}">{{ product.handle }}</a>
+            <a href="{{ product.url }}">{{ product.title }} 111</a>
           </h3>
           
           {% comment %} "描述" 对应 subtitle 元字段 {% endcomment %}
