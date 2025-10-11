@@ -26,7 +26,8 @@
                 <div class="quote-container">
                   <div class="quote-decorator">
                     <span class="line"></span>
-                    <svg class="quote-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M9.983 3v7.391c0 2.908-2.355 5.264-5.263 5.264s-5.264-2.356-5.264-5.264V3h10.527zm14.017 0v7.391c0 2.908-2.355 5.264-5.263 5.264s-5.264-2.356-5.264-5.264V3h10.527z"/></svg>
+                    {% comment %} <svg class="quote-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M9.983 3v7.391c0 2.908-2.355 5.264-5.263 5.264s-5.264-2.356-5.264-5.264V3h10.527zm14.017 0v7.391c0 2.908-2.355 5.264-5.263 5.264s-5.264-2.356-5.264-5.264V3h10.527z"/></svg> {% endcomment %}
+                    <svg class="quote-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48" fill="currentColor"><path xmlns="http://www.w3.org/2000/svg" d="M20.3125 14.1875C17.4375 14.7292 15.4167 16.8125 14.25 20.4375C13.6667 22.2292 13.375 24 13.375 25.75C13.375 25.9583 13.375 26.1458 13.375 26.3125C13.4167 26.4375 13.4583 26.75 13.5 27.25H20.3125V40.875H7V28.3125C7 22.1458 8.22917 17.3958 10.6875 14.0625C13.1458 10.7292 16.3542 8.8125 20.3125 8.3125V14.1875ZM41.375 14.1875C39.0833 14.5625 37.3333 15.8542 36.125 18.0625C34.9583 20.2708 34.375 22.8125 34.375 25.6875C34.375 25.9375 34.375 26.1875 34.375 26.4375C34.4167 26.6875 34.4792 26.9583 34.5625 27.25H41.375V40.875H28V28.3125C28 23.3542 29.0417 18.9375 31.125 15.0625C33.2083 11.1458 36.625 8.89583 41.375 8.3125V14.1875Z" fill="black"></path></svg>
                     <span class="line"></span>
                   </div>
                   <p class="quote-text">{{ block.settings.quote | escape }}</p>
@@ -96,7 +97,6 @@
     color: var(--heading-color);
     margin-bottom: 3rem;
     line-height: 1.2;
-    font-family: serif; /* More elegant font */
   }
 
   .story-grid {
