@@ -1,7 +1,7 @@
 /* 整体 Section 间距 */
 .get-report-section {
   padding-top: .5rem; /* pt-32 */
-  padding-bottom: 5rem; /* pb-20 */
+  padding-bottom: 4rem; /* pb-20 */
   padding-left: 1rem; /* px-4 */
   padding-right: 1rem;
 }
@@ -67,6 +67,7 @@
 }
 
 .flex-wrap > .form-container {
+  padding: 2rem 3rem;
   background-color: #fff;
 }
 
