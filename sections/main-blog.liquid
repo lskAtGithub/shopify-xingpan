@@ -54,6 +54,9 @@
           <div class="article-card__excerpt">
             {{ article.excerpt_or_content | strip_html | truncate: 150 }}
           </div>
+          <div class="article-card__meta">
+            <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%B %d, %Y' }}</time>
+          </div>
         </div>
       </div>
     {% endfor %}
@@ -156,6 +159,11 @@
     font-size: 0.95rem;
     color: #555;
     line-height: 1.6;
+  }
+  .article-card__meta { 
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #999;
   }
   @media (min-width: 768px) {
     .article-grid {
