@@ -7,35 +7,6 @@
 <section class="bottom-section section-{{ section.id }}">
   <div class="bottom-section__container">
     
-    <!-- Feature Grid -->
-    <div class="bottom-section__feature-grid">
-      {%- for i in (1..4) -%}
-        {%- liquid
-          assign icon_setting = 'feature' | append: i | append: '_icon'
-          assign title_setting = 'feature' | append: i | append: '_title'
-          assign text_setting = 'feature' | append: i | append: '_text'
-
-          assign icon = section.settings[icon_setting]
-          assign title = section.settings[title_setting]
-          assign text = section.settings[text_setting]
-        -%}
-        
-        <div class="feature-item">
-          {% if icon != blank %}
-            <div class="feature-item__icon">
-              {{ icon | image_url: width: 120 | image_tag: loading: 'lazy', widths: '60, 120' }}
-            </div>
-          {% endif %}
-          {% if title != blank %}
-            <h3 class="feature-item__title">{{ title }}</h3>
-          {% endif %}
-          {% if text != blank %}
-            <p class="feature-item__text">{{ text }}</p>
-          {% endif %}
-        </div>
-      {%- endfor -%}
-    </div>
-
     <!-- Newsletter Section -->
     <div class="bottom-section__newsletter">
       <h2 class="heading">Join the 11STARS Cosmic Community</h2>
