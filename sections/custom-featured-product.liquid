@@ -57,7 +57,7 @@
             {%- assign description = block.settings.product_description_override | default: product.description -%}
             <div class="rte">{{ description }}</div>
 
-            {%- assign features = block.settings.features_list | split: ' ' -%}
+            {%- assign features = block.settings.features_list | split: '$$' -%}
             {% if features.size > 0 %}
               <ul class="custom-featured-product__features-list">
                 {% for feature in features %}
@@ -361,7 +361,7 @@
           "type": "textarea",
           "id": "features_list",
           "label": "特性列表",
-          "info": "每行一个特性"
+          "info": "每行一个特性，用$$分隔"
         }
       ]
     }
