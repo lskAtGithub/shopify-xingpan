@@ -63,15 +63,16 @@
                 {% for feature in features %}
                   {% if feature != blank %}
                     <li>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="icon-checkmark"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <g clip-path="url(#clip0_1572_2)">
+                        <circle cx="6" cy="6" r="5.5" stroke="black"/>
+                        <path d="M3 5.5L4.30205 7.12756C4.67438 7.59297 5.36858 7.63142 5.79003 7.20997L9 4" stroke="black" stroke-linecap="round"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_1572_2">
+                        <rect width="12" height="12" fill="white"/>
+                        </clipPath>
+                        </defs>
                       </svg>
                       <span>{{ feature }}</span>
                     </li>
