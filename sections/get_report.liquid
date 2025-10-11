@@ -1,143 +1,209 @@
 <section class="get-report-section section-{{ section.id }}">
-    <div class="report-container">
-      <div class="bg-gradient-to-br">
-        <div class="flex-wrap">
-          <!-- 左侧内容 -->
-          <div class="left-content">
-            {% if section.settings.heading != blank %}
-              <h2 class="heading">{{ section.settings.heading }}</h2>
-            {% endif %}
-  
-            {% if section.settings.subheading != blank %}
-              <p class="subheading">{{ section.settings.subheading }}</p>
-            {% endif %}
-  
-            <div class="note-line">
-              <i class="fa fa-star"></i>
-              <p>{{ section.settings.note_text }}</p>
+  <div class="report-container">
+    <div class="bg-gradient-to-br">
+      <div class="flex-wrap">
+        <!-- 左侧内容 -->
+        <div class="left-content">
+          {% if section.settings.heading != blank %}
+            <h2 class="heading">{{ section.settings.heading }}</h2>
+          {% endif %}
+
+          {% if section.settings.subheading != blank %}
+            <p class="subheading">{{ section.settings.subheading }}</p>
+          {% endif %}
+
+          <div class="note-line">
+            {% comment %} <i class="fa fa-star"></i> {% endcomment %}
+            <svg class="icon-star" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <g clip-path="url(#clip0_619_771)">
+              <path d="M12.1519 15.6565C11.9601 15.6565 11.7682 15.6086 11.5604 15.4967L8.33158 13.8024C8.25166 13.7544 8.13977 13.7224 8.01191 13.7224C7.90002 13.7224 7.77214 13.7544 7.69222 13.7864L4.47936 15.4967C4.28755 15.6086 4.09573 15.6565 3.87195 15.6565C3.48833 15.6565 3.12069 15.4807 2.86492 15.193C2.60917 14.9053 2.51328 14.5217 2.5772 14.138L3.20061 10.5575C3.23258 10.3337 3.15265 10.11 2.99279 9.95012L0.403339 7.44055C0.0356981 7.08891 -0.092177 6.5774 0.0676669 6.09786C0.227495 5.61832 0.62712 5.28265 1.12264 5.20272L4.70314 4.67524C4.92692 4.64327 5.1347 4.49941 5.23061 4.3076L6.82905 1.04678C7.05283 0.599219 7.50039 0.327484 7.99591 0.327484C8.49142 0.327484 8.93899 0.599219 9.16277 1.04678L10.7612 4.3076C10.8731 4.51541 11.0649 4.64327 11.2887 4.67524L14.8692 5.20274C15.3647 5.28266 15.7643 5.61833 15.9242 6.08188C16.084 6.56141 15.9562 7.07291 15.6045 7.42458L13.031 9.9501C12.8552 10.1099 12.7912 10.3337 12.8232 10.5575L13.4306 14.122C13.4945 14.5057 13.3986 14.8893 13.1429 15.177C12.9031 15.4807 12.5355 15.6565 12.1519 15.6565Z" fill="#FFD324"/>
+              </g>
+              <defs>
+              <clipPath id="clip0_619_771">
+              <rect width="16" height="16" fill="white"/>
+              </clipPath>
+              </defs>
+            </svg>
+            <p>{{ section.settings.note_text }}</p>
+          </div>
+
+          {% if section.settings.top_image != blank %}
+            <div class="top-img-container">
+              {{
+                section.settings.top_image
+                | image_url: width: 800
+                | image_tag:
+                  class: 'top-img',
+                  loading: 'lazy',
+                  widths: '400, 600, 800',
+                  sizes: '(max-width: 768px) 100vw, 50vw'
+              }}
             </div>
-  
-            {% if section.settings.top_image != blank %}
-              <div class="top-img-container">
-                {{ section.settings.top_image | image_url: width: 800 | image_tag: class: 'top-img', loading: 'lazy', widths: '400, 600, 800', sizes: '(max-width: 768px) 100vw, 50vw' }}
-              </div>
-            {% endif %}
-          </div>
-  
-          <!-- 右侧表单 -->
-          <div class="form-container">
-            <form id="report-form">
-              <div class="form-group">
-                <label for="name">Full Name <span class="required">*</span></label>
-                <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required value="">
-              </div>
-  
-              <div class="form-group">
-                <label>Birth Date & Time <span class="required">*</span></label>
-                <div class="grid-cols-responsive">
-                  <div>
-                    <label for="birth-year">Year</label>
-                    <input class="ipt" type="number" id="birth-year" name="birth_year" min="1900" max="2024" placeholder="YYYY" required value="">
-                  </div>
-                  <div>
-                    <label for="birth-month">Month</label>
-                    <select id="birth-month" name="birth_month" required value="">
-                      <option value="">Select</option>
-                      {% for m in (1..12) %}<option value="{{ m }}">{{ m }}</option>{% endfor %}
-                    </select>
-                  </div>
-                  <div>
-                    <label for="birth-day">Day</label>
-                    <input class="ipt" type="number" id="birth-day" name="birth_day" min="1" max="31" placeholder="DD" required value="">
-                  </div>
+          {% endif %}
+        </div>
+
+        <!-- 右侧表单 -->
+        <div class="form-container">
+          <form id="report-form">
+            <div class="form-group">
+              <label for="name">Full Name <span class="required">*</span></label>
+              <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required value="">
+            </div>
+
+            <div class="form-group">
+              <label>Birth Date & Time <span class="required">*</span></label>
+              <div class="grid-cols-responsive">
+                <div>
+                  <label for="birth-year">Year</label>
+                  <input
+                    class="ipt"
+                    type="number"
+                    id="birth-year"
+                    name="birth_year"
+                    min="1900"
+                    max="2024"
+                    placeholder="YYYY"
+                    required
+                    value=""
+                  >
                 </div>
-  
-                <div class="grid-cols-2">
-                  <div>
-                    <label for="birth-hour">Hour (24h)</label>
-                    <input class="ipt" type="number" id="birth-hour" name="birth_hour" min="0" max="23" placeholder="HH" required value="">
-                  </div>
-                  <div>
-                    <label for="birth-minute">Minute</label>
-                    <input class="ipt" type="number" id="birth-minute" name="birth_minute" min="0" max="59" placeholder="MM" required value="">
-                  </div>
+                <div>
+                  <label for="birth-month">Month</label>
+                  <select id="birth-month" name="birth_month" required value="">
+                    <option value="">Select</option>
+                    {% for m in (1..12) %}
+                      <option value="{{ m }}">{{ m }}</option>
+                    {% endfor %}
+                  </select>
                 </div>
-              </div>
-  
-              <div class="form-group">
-                <label>Birth Location <span class="required">*</span></label>
-                <div class="grid-cols-responsive">
-                  <div>
-                    <label for="country">Country</label>
-                    <select id="country" name="country" required><option value="">Select Country</option></select>
-                  </div>
-                  <div>
-                    <label for="state">State/Province</label>
-                    <select id="state" name="state" disabled required><option value="">Select State</option></select>
-                  </div>
-                  <div>
-                    <label for="city">City</label>
-                    <select id="city" name="city" disabled required><option value="">Select City</option></select>
-                  </div>
+                <div>
+                  <label for="birth-day">Day</label>
+                  <input
+                    class="ipt"
+                    type="number"
+                    id="birth-day"
+                    name="birth_day"
+                    min="1"
+                    max="31"
+                    placeholder="DD"
+                    required
+                    value=""
+                  >
                 </div>
               </div>
-  
-              <div class="form-group">
-                <label class="checkbox-label">
-                  <input class="ipt" type="checkbox" id="daylight-saving" name="daylight_saving">
-                  <span class="checkbox-check-text">Daylight Saving Time was in effect at birth</span>
-                </label>
+
+              <div class="grid-cols-2">
+                <div>
+                  <label for="birth-hour">Hour (24h)</label>
+                  <input
+                    class="ipt"
+                    type="number"
+                    id="birth-hour"
+                    name="birth_hour"
+                    min="0"
+                    max="23"
+                    placeholder="HH"
+                    required
+                    value=""
+                  >
+                </div>
+                <div>
+                  <label for="birth-minute">Minute</label>
+                  <input
+                    class="ipt"
+                    type="number"
+                    id="birth-minute"
+                    name="birth_minute"
+                    min="0"
+                    max="59"
+                    placeholder="MM"
+                    required
+                    value=""
+                  >
+                </div>
               </div>
-  
-              <button id="submit-btn" type="submit" class="gradient-btn">
-                <span>{{ section.settings.button_text }}</span>
-                <i class="fa fa-arrow-right"></i>
-              </button>
-            </form>
-          </div>
+            </div>
+
+            <div class="form-group">
+              <label>Birth Location <span class="required">*</span></label>
+              <div class="grid-cols-responsive">
+                <div>
+                  <label for="country">Country</label>
+                  <select id="country" name="country" required>
+                    <option value="">Select Country</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="state">State/Province</label>
+                  <select id="state" name="state" disabled required>
+                    <option value="">Select State</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="city">City</label>
+                  <select id="city" name="city" disabled required>
+                    <option value="">Select City</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input class="ipt" type="checkbox" id="daylight-saving" name="daylight_saving">
+                <span class="checkbox-check-text">Daylight Saving Time was in effect at birth</span>
+              </label>
+            </div>
+
+            <button id="submit-btn" type="submit" class="gradient-btn">
+              <span>{{ section.settings.button_text }}</span>
+              <i class="fa fa-arrow-right"></i>
+            </button>
+          </form>
         </div>
       </div>
     </div>
-  
-    <!-- 🔹 弹窗结构 -->
-    <div id="report-modal" class="report-modal">
-      <div class="report-modal-content" id="modelContent">
-        <span class="report-close">&times;</span>
-        <h2 class="modal-heading">✨ Your Elemental Report</h2>
-  
-        <div class="table-responsive-wrapper">
-          <table class="report-table" id="report-table">
-            <thead>
-              <tr>
-                <th>Constellation</th>
-                <th>Planet</th>
-                <th>Dignity</th>
-                <th>Element</th>
-                <th>Planet Score</th>
-                <th>Dignity Score</th>
-                <th>House</th>
-                <th>House Element</th>
-                <th>House Score</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-  
-        <div class="canvas-box">
-          <div id="tooltip"></div>
-          <canvas id="chartCanvas"></canvas>
-        </div>
-        
-        <div id="stream-container">
-            <div class="stream-content" id="markdownRea"></div>
-            <div class="stream-content" id="streamData"></div>
-        </div>
-        
-        <div id="recommended-products"></div>
+  </div>
+
+  <!-- 🔹 弹窗结构 -->
+  <div id="report-modal" class="report-modal">
+    <div class="report-modal-content" id="modelContent">
+      <span class="report-close">&times;</span>
+      <h2 class="modal-heading">✨ Your Elemental Report</h2>
+
+      <div class="table-responsive-wrapper">
+        <table class="report-table" id="report-table">
+          <thead>
+            <tr>
+              <th>Constellation</th>
+              <th>Planet</th>
+              <th>Dignity</th>
+              <th>Element</th>
+              <th>Planet Score</th>
+              <th>Dignity Score</th>
+              <th>House</th>
+              <th>House Element</th>
+              <th>House Score</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
+
+      <div class="canvas-box">
+        <div id="tooltip"></div>
+        <canvas id="chartCanvas"></canvas>
+      </div>
+
+      <div id="stream-container">
+        <div class="stream-content" id="markdownRea"></div>
+        <div class="stream-content" id="streamData"></div>
+      </div>
+
+      <div id="recommended-products"></div>
     </div>
-    
+  </div>
+
   {% stylesheet %}
     /* --- Base Styles (Mobile <= 768px) --- */
     .get-report-section {
@@ -157,7 +223,8 @@
       display: flex;
       flex-direction: column; /* Mobile first: stack columns */
     }
-    .left-content, .form-container {
+    .left-content,
+    .form-container {
       padding: 1.5rem;
     }
     .left-content {
@@ -172,7 +239,6 @@
       margin-bottom: 1rem;
       line-height: 1.2;
       font-size: 2.75rem; /* 30px */
-
     }
     .get-report-section p.subheading {
       color: #333;
@@ -181,13 +247,17 @@
     }
     .note-line {
       display: inline-flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 8px;
       color: #6b7280;
       margin-bottom: 1.5rem;
     }
-    .get-report-section .note-line p { 
+    .get-report-section .note-line p {
       color: #666;
+      margin: 0;
+    }
+    .note-line .icon-star{
+
     }
     .note-line i {
       color: #f97316;
@@ -202,7 +272,7 @@
       height: auto;
       display: block;
     }
-    
+
     /* Form Styles */
     #report-form {
       display: flex;
@@ -214,10 +284,23 @@
       margin-bottom: 0.5rem;
       font-weight: 500;
     }
-    .grid-cols-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-    .grid-cols-responsive { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; }
-    .checkbox-label { display: flex; align-items: center; gap: 8px; }
-    .ipt, select {
+    .grid-cols-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .grid-cols-responsive {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 1rem;
+    }
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ipt,
+    select {
       width: 100%;
       padding: 0.75rem;
       border: 1px solid #d1d5db;
@@ -225,12 +308,16 @@
       transition: all 0.2s;
       font-size: 1rem;
     }
-    .ipt:focus, select:focus {
+    .ipt:focus,
+    select:focus {
       outline: none;
       border-color: #f97316;
       box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
     }
-    .ipt[type='checkbox'] { width: 1.25rem; height: 1.25rem; }
+    .ipt[type='checkbox'] {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
     .gradient-btn {
       /* background: linear-gradient(90deg, #ffd100, #4a90e2, #8b5a2b, #4caf50); */
       background-color: #333;
@@ -248,48 +335,100 @@
       border: none;
       gap: 8px;
     }
-    .gradient-btn:hover { background-color: #000; }
-  
+    .gradient-btn:hover {
+      background-color: #000;
+    }
+
     /* Modal Styles */
     .report-modal {
-      display: none; position: fixed; z-index: 9999; left: 0; top: 0;
-      width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6);
-      justify-content: center; align-items: center; padding: 1rem;
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
     }
     .report-modal-content {
-      background: #fff; padding: 1.5rem; border-radius: 12px;
-      width: 100%; height: 90%; overflow-y: auto; position: relative;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      width: 100%;
+      height: 90%;
+      overflow-y: auto;
+      position: relative;
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
     }
     .report-close {
-      position: absolute; right: 15px; top: 10px;
-      font-size: 28px; cursor: pointer; color: #888;
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      font-size: 28px;
+      cursor: pointer;
+      color: #888;
     }
-    .modal-heading { font-size: 1.5rem; text-align: center; margin-bottom: 1.5rem; }
-    
+    .modal-heading {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
     .table-responsive-wrapper {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
       margin-bottom: 2rem;
     }
     .report-table {
-      width: 100%; min-width: 800px; /* Force scroll on small screens */
+      width: 100%;
+      min-width: 800px; /* Force scroll on small screens */
       border-collapse: collapse;
     }
-    .report-table th, .report-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-    .report-table th { background: #f8f8f8; font-weight: 600; }
-    
-    .canvas-box { position: relative; width: 100%; max-width: 400px; margin: 0 auto 2rem auto; }
-    #chartCanvas { width: 100%; height: auto; }
-    #tooltip {
-      position: absolute; padding: 6px 10px; background: rgba(0, 0, 0, 0.8);
-      color: #fff; border-radius: 4px; font-size: 13px;
-      pointer-events: none; display: none; z-index: 10;
+    .report-table th,
+    .report-table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
     }
-    #stream-container { font-size: 1rem; color: #444; line-height: 1.6; }
-  
+    .report-table th {
+      background: #f8f8f8;
+      font-weight: 600;
+    }
+
+    .canvas-box {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto 2rem auto;
+    }
+    #chartCanvas {
+      width: 100%;
+      height: auto;
+    }
+    #tooltip {
+      position: absolute;
+      padding: 6px 10px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      border-radius: 4px;
+      font-size: 13px;
+      pointer-events: none;
+      display: none;
+      z-index: 10;
+    }
+    #stream-container {
+      font-size: 1rem;
+      color: #444;
+      line-height: 1.6;
+    }
+
     /* Recommended Product Styles */
-    #recommended-products { margin-top: 2rem; }
+    #recommended-products {
+      margin-top: 2rem;
+    }
     .recommended-card {
       display: flex;
       flex-direction: column; /* Mobile: stack image and content */
@@ -298,57 +437,104 @@
       border: 1px solid #eee;
       border-radius: 8px;
     }
-    .card-left img { width: 100%; height: auto; border-radius: 8px; }
-    .card-right h3 { font-size: 1.5rem; margin: 0 0 0.5rem 0; }
-    .product-price { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; }
-    .card-right .button { width: 100%; }
-    @media (max-width: 768px) { 
-      .flex-wrap>.left-content, .flex-wrap>.form-container, .form-container {
+    .card-left img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .card-right h3 {
+      font-size: 1.5rem;
+      margin: 0 0 0.5rem 0;
+    }
+    .product-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .card-right .button {
+      width: 100%;
+    }
+    @media (max-width: 768px) {
+      .flex-wrap > .left-content,
+      .flex-wrap > .form-container,
+      .form-container {
         padding: 1rem;
       }
-     }
+    }
     /* --- Tablet Styles (768px - 1024px) --- */
     @media (min-width: 768px) {
-      .get-report-section { padding: 5rem 1.5rem; }
+      .get-report-section {
+        padding: 5rem 1.5rem;
+      }
       .flex-wrap {
         flex-direction: row; /* Tablet: two columns */
         align-items: stretch;
       }
-      .left-content, .form-container {
+      .left-content,
+      .form-container {
         flex: 1;
         padding: 2.5rem;
         min-width: 0; /* Fix flexbox overflow */
       }
-      .left-content { text-align: left; }
-      .heading { font-size: 2.25rem; }
-      .subheading { font-size: 1.125rem; }
-      .grid-cols-responsive { grid-template-columns: repeat(3, 1fr); }
-      
+      .left-content {
+        text-align: left;
+      }
+      .heading {
+        font-size: 2.25rem;
+      }
+      .subheading {
+        font-size: 1.125rem;
+      }
+      .grid-cols-responsive {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
       .report-modal-content {
         width: 85%;
         height: 85%;
         padding: 2rem;
       }
-      .modal-heading { font-size: 1.8rem; }
-      
+      .modal-heading {
+        font-size: 1.8rem;
+      }
+
       .recommended-card {
         flex-direction: row; /* Tablet: horizontal layout */
         align-items: center;
       }
-      .card-left { flex: 0 0 200px; }
-      .card-right { flex: 1; }
-      .card-right .button { width: auto; }
+      .card-left {
+        flex: 0 0 200px;
+      }
+      .card-right {
+        flex: 1;
+      }
+      .card-right .button {
+        width: auto;
+      }
     }
-  
+
     /* --- Desktop Styles (> 1024px) --- */
     @media (min-width: 1024px) {
-      .get-report-section { padding: 6rem 2rem; }
-      .flex-wrap { gap: 0; }
-      .left-content { flex-basis: 45%; }
-      .form-container { flex-basis: 55%; }
-      .left-content, .form-container { padding: 3rem; }
-      .heading { font-size: 2.5rem; }
-  
+      .get-report-section {
+        padding: 6rem 2rem;
+      }
+      .flex-wrap {
+        gap: 0;
+      }
+      .left-content {
+        flex-basis: 45%;
+      }
+      .form-container {
+        flex-basis: 55%;
+      }
+      .left-content,
+      .form-container {
+        padding: 3rem;
+      }
+      .heading {
+        font-size: 2.5rem;
+      }
+
       .report-modal-content {
         width: 80%;
         max-width: 1100px;
