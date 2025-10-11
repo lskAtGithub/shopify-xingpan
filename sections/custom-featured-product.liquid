@@ -57,7 +57,7 @@
             {%- assign description = block.settings.product_description_override | default: product.description -%}
             <div class="rte">{{ description }}</div>
 
-            {%- assign features = block.settings.features_list | split: newline -%}
+            {%- assign features = block.settings.features_list | split: '\n' -%}
             {% if features.size > 0 %}
               <ul class="custom-featured-product__features-list">
                 {% for feature in features %}
