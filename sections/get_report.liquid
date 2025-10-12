@@ -50,175 +50,110 @@
         </div>
 
         <!-- 右侧表单 -->
-        {% comment %}
-          <div class="form-container">
-            <form id="report-form">
-              <div class="form-group">
-                <label for="name">Full Name <span class="required">*</span></label>
-                <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required value="">
-              </div>
-
-              <div class="form-group">
-                <label>Birth Date & Time <span class="required">*</span></label>
-                <div class="grid-cols-responsive">
-                  <div>
-                    <label for="birth-year">Year</label>
-                    <input
-                      class="ipt"
-                      type="number"
-                      id="birth-year"
-                      name="birth_year"
-                      min="1900"
-                      max="2024"
-                      placeholder="YYYY"
-                      required
-                      value=""
-                    >
-                  </div>
-                  <div>
-                    <label for="birth-month">Month</label>
-                    <select id="birth-month" name="birth_month" required value="">
-                      <option value="">Select</option>
-                      {% for m in (1..12) %}
-                        <option value="{{ m }}">{{ m }}</option>
-                      {% endfor %}
-                    </select>
-                  </div>
-                  <div>
-                    <label for="birth-day">Day</label>
-                    <input
-                      class="ipt"
-                      type="number"
-                      id="birth-day"
-                      name="birth_day"
-                      min="1"
-                      max="31"
-                      placeholder="DD"
-                      required
-                      value=""
-                    >
-                  </div>
-                </div>
-
-                <div class="grid-cols-2">
-                  <div>
-                    <label for="birth-hour">Hour (24h)</label>
-                    <input
-                      class="ipt"
-                      type="number"
-                      id="birth-hour"
-                      name="birth_hour"
-                      min="0"
-                      max="23"
-                      placeholder="HH"
-                      required
-                      value=""
-                    >
-                  </div>
-                  <div>
-                    <label for="birth-minute">Minute</label>
-                    <input
-                      class="ipt"
-                      type="number"
-                      id="birth-minute"
-                      name="birth_minute"
-                      min="0"
-                      max="59"
-                      placeholder="MM"
-                      required
-                      value=""
-                    >
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label>Birth Location <span class="required">*</span></label>
-                <div class="grid-cols-responsive">
-                  <div>
-                    <label for="country">Country</label>
-                    <select id="country" name="country" required>
-                      <option value="">Select Country</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label for="state">State/Province</label>
-                    <select id="state" name="state" disabled required>
-                      <option value="">Select State</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label for="city">City</label>
-                    <select id="city" name="city" disabled required>
-                      <option value="">Select City</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="checkbox-label">
-                  <input class="ipt" type="checkbox" id="daylight-saving" name="daylight_saving">
-                  <span class="checkbox-check-text">Daylight Saving Time was in effect at birth</span>
-                </label>
-              </div>
-
-              <button id="submit-btn" type="submit" class="gradient-btn">
-                <span>{{ section.settings.button_text }}</span>
-                <i class="fa fa-arrow-right"></i>
-              </button>
-            </form>
-          </div>
-        {% endcomment %}
         <div class="form-container">
           <form id="report-form">
-            <fieldset class="form-fieldset">
-              <div class="form-group">
-                <label for="name">Full Name <span class="required">*</span></label>
-                <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required>
-              </div>
-            </fieldset>
+            <div class="form-group">
+              <label for="name">Full Name <span class="required">*</span></label>
+              <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required value="">
+            </div>
 
-            <fieldset class="form-fieldset">
-              <legend class="form-legend">Step 2: Birth Details</legend>
-              
-              <!-- This is the single, unified input for both PC and Mobile -->
-              <div class="form-group">
-                <label for="zui-datetime-picker">Birth Date & Time <span class="required">*</span></label>
-                <input class="ipt form-datetime" type="text" id="zui-datetime-picker" placeholder="Select Date and Time" readonly>
+            <div class="form-group">
+              <label>Birth Date & Time <span class="required">*</span></label>
+              <div class="grid-cols-responsive">
+                <div>
+                  <label for="birth-year">Year</label>
+                  <input
+                    class="ipt"
+                    type="number"
+                    id="birth-year"
+                    name="birth_year"
+                    min="1900"
+                    max="2024"
+                    placeholder="YYYY"
+                    required
+                    value=""
+                  >
+                </div>
+                <div>
+                  <label for="birth-month">Month</label>
+                  <select id="birth-month" name="birth_month" required value="">
+                    <option value="">Select</option>
+                    {% for m in (1..12) %}
+                      <option value="{{ m }}">{{ m }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div>
+                  <label for="birth-day">Day</label>
+                  <input
+                    class="ipt"
+                    type="number"
+                    id="birth-day"
+                    name="birth_day"
+                    min="1"
+                    max="31"
+                    placeholder="DD"
+                    required
+                    value=""
+                  >
+                </div>
               </div>
-              
-              <!-- These hidden inputs will store the final values for form submission -->
-              <div style="display: none;">
-                  <select id="birth-month" name="birth_month" required></select>
-                  <input type="number" id="birth-day" name="birth_day" required>
-                  <input type="number" id="birth-year" name="birth_year" required>
-                  <input type="number" id="birth-hour" name="birth_hour_12" required>
-                  <input type="number" id="birth-minute" name="birth_minute" required>
-                  <select id="birth-ampm" name="birth_ampm" required></select>
-              </div>
-            </fieldset>
 
-            <fieldset class="form-fieldset">
-              <div class="form-group">
-                <label for="country">Country <span class="required">*</span></label>
-                <select id="country" name="country" required>
-                  <option value="">Select Country</option>
-                </select>
+              <div class="grid-cols-2">
+                <div>
+                  <label for="birth-hour">Hour (24h)</label>
+                  <input
+                    class="ipt"
+                    type="number"
+                    id="birth-hour"
+                    name="birth_hour"
+                    min="0"
+                    max="23"
+                    placeholder="HH"
+                    required
+                    value=""
+                  >
+                </div>
+                <div>
+                  <label for="birth-minute">Minute</label>
+                  <input
+                    class="ipt"
+                    type="number"
+                    id="birth-minute"
+                    name="birth_minute"
+                    min="0"
+                    max="59"
+                    placeholder="MM"
+                    required
+                    value=""
+                  >
+                </div>
               </div>
-              <div class="form-group">
-                <label for="state">State/Province <span class="required">*</span></label>
-                <select id="state" name="state" disabled required>
-                  <option value="">Select State</option>
-                </select>
+            </div>
+
+            <div class="form-group">
+              <label>Birth Location <span class="required">*</span></label>
+              <div class="grid-cols-responsive">
+                <div>
+                  <label for="country">Country</label>
+                  <select id="country" name="country" required>
+                    <option value="">Select Country</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="state">State/Province</label>
+                  <select id="state" name="state" disabled required>
+                    <option value="">Select State</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="city">City</label>
+                  <select id="city" name="city" disabled required>
+                    <option value="">Select City</option>
+                  </select>
+                </div>
               </div>
-              <div class="form-group">
-                <label for="city">City <span class="required">*</span></label>
-                <select id="city" name="city" disabled required>
-                  <option value="">Select City</option>
-                </select>
-              </div>
-            </fieldset>
+            </div>
 
             <div class="form-group">
               <label class="checkbox-label">
@@ -229,19 +164,7 @@
 
             <button id="submit-btn" type="submit" class="gradient-btn">
               <span>{{ section.settings.button_text }}</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
+              <i class="fa fa-arrow-right"></i>
             </button>
           </form>
         </div>
@@ -401,7 +324,7 @@
     .form-group label {
       display: block;
       margin-bottom: 0.5rem;
-      font-weight: bold;
+      font-weight: 500;
     }
     .grid-cols-2 {
       display: grid;
@@ -763,79 +686,6 @@
     .modal-actions .btn--primary:hover {
       background-color: #374151;
     }
-
-    #report-form fieldset {
-      border: none;
-      padding: 0;
-      margin: 0;
-    }
-    #report-form fieldset + fieldset {
-      /* margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #f0f0f0; */
-    }
-    #report-form .form-legend {
-      font-size: 1.125rem;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 1.5rem;
-    }
-    #report-form .form-group {
-      margin-bottom: 1.25rem;
-    }
-    #report-form .form-group:last-child {
-      margin-bottom: 0;
-    }
-    #report-form label {
-      font-size: 0.95rem;
-      color: #444;
-    }
-    #report-form .required {
-      color: #e53e3e; /* Red */
-      margin-left: 2px;
-    }
-    #report-form .sr-label {
-      /* For accessibility, but visually hidden */
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border-width: 0;
-    }
-    #report-form .form-grid {
-      display: grid;
-      gap: 1rem;
-      margin-top: 0.5rem;
-    }
-    #report-form .form-grid--2-col {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    #report-form .form-grid--3-col {
-      grid-template-columns: repeat(3, 1fr);
-    }
-    #report-form .ipt,
-    #report-form select {
-      background-color: #f9fafb;
-    }
-    #report-form select:disabled {
-      background-color: #e5e7eb;
-      cursor: not-allowed;
-    }
-
-    /* Responsive adjustments for the new form layout */
-    @media (max-width: 480px) {
-      #report-form .form-grid--3-col {
-        grid-template-columns: repeat(2, 1fr); /* On very small screens, date becomes 2 columns */
-      }
-    }
-    /* By default, hide the mobile picker trigger */
-    .mobile-only-picker-trigger {
-      display: none;
-    }
   {% endstylesheet %}
 
   <script>
@@ -865,51 +715,6 @@
       const stateSelect = document.getElementById('state');
       const citySelect = document.getElementById('city');
       const API_URL = BASE_URL + '/city/getInfo';
-
-      // --- Initialize ZUI Datetime Picker ---
-if (typeof $ !== 'undefined' && $.fn.datetimepicker) {
-  const zuiPickerInput = $('#zui-datetime-picker');
-  
-  // Find the hidden input fields
-  const monthInput = $('#birth-month');
-  const dayInput = $('#birth-day');
-  const yearInput = $('#birth-year');
-  const hourInput = $('#birth-hour');
-  const minuteInput = $('#birth-minute');
-  const ampmInput = $('#birth-ampm');
-  
-  zuiPickerInput.datetimepicker({
-    format: 'MM dd, yyyy HH:ii P', // Display format e.g., "August 15, 2024 02:30 PM"
-    autoclose: true,
-    todayBtn: true,
-    pickerPosition: 'bottom-left'
-  }).on('onChangeDate', function(e) {
-    const selectedDate = e.date; // ZUI provides the date object directly
-
-    if (selectedDate) {
-      // --- IMPORTANT: Sync values back to the hidden inputs ---
-      monthInput.val(selectedDate.getMonth() + 1); // getMonth() is 0-indexed
-      dayInput.val(selectedDate.getDate());
-      yearInput.val(selectedDate.getFullYear());
-      
-      let hour12 = selectedDate.getHours();
-      let ampm = 'AM';
-      if (hour12 >= 12) {
-        ampm = 'PM';
-        if (hour12 > 12) {
-          hour12 -= 12;
-        }
-      }
-      if (hour12 === 0) { // Midnight case
-        hour12 = 12;
-      }
-      
-      hourInput.val(hour12);
-      minuteInput.val(String(selectedDate.getMinutes()).padStart(2, '0'));
-      ampmInput.val(ampm);
-    }
-  });
-}
 
       const loginPromptModal = document.getElementById('login-prompt-modal');
       if (!loginPromptModal) return;
@@ -1086,27 +891,16 @@ if (typeof $ !== 'undefined' && $.fn.datetimepicker) {
         const year = document.getElementById('birth-year').value;
         const month = document.getElementById('birth-month').value;
         const day = document.getElementById('birth-day').value;
-        
-        let hour12 = parseInt(document.getElementById('birth-hour').value, 10);
+        const hour = document.getElementById('birth-hour').value;
         const minute = document.getElementById('birth-minute').value;
-        const ampm = document.getElementById('birth-ampm').value;
-  
-        // Convert 12-hour format to 24-hour format
-        let hour24 = hour12;
-        if (ampm === 'PM' && hour12 < 12) {
-          hour24 += 12;
-        } else if (ampm === 'AM' && hour12 === 12) { // Midnight case (12:00 AM is 00:00)
-          hour24 = 0;
-        }
-        // --- END: VALUE RETRIEVAL AND TIME CONVERSION ---
-  
         const country = document.getElementById('country').value;
         const state = document.getElementById('state').value;
         const city = document.getElementById('city').value;
-        
-        // Construct the timestamp string using the calculated 24-hour value
-        const time = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} ${String(hour24).padStart(2, '0')}:${String(minute).padStart(2, '0')}:00`;
-  
+        const time = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} ${String(hour).padStart(
+          2,
+          '0'
+        )}:${String(minute).padStart(2, '0')}:00`;
+
         const address = `${country} ${state} ${city}`;
         const payload = {
           key: window.customer.id,
@@ -1120,23 +914,24 @@ if (typeof $ !== 'undefined' && $.fn.datetimepicker) {
           lon: lon,
           userName: name,
         };
-  
         const paramsForm = new URLSearchParams();
         Object.keys(payload).forEach((k) => {
           paramsForm.append(k, payload[k]);
         });
-        
+        console.log(paramsForm);
         try {
           const res = await fetch(`${BASE_URL}/sysUser/creatReport`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
             body: paramsForm,
           });
           const data = await res.json();
           reportId = data.data.reportId;
           renderModal(data.data);
         } catch (err) {
-          alert('Request failed. Please try again later.');
+          alert('请求失败，请稍后再试');
         }
         return false;
       });
