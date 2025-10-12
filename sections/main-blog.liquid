@@ -49,9 +49,13 @@
           <div class="article-card__tags">
             {% for tag in article.tags %}
               {%- assign handleized_tag = tag | handle -%}
-          
+
               {% comment %} Only render tags that are one of the four elements {% endcomment %}
-              {%- if handleized_tag == 'fire' or handleized_tag == 'water' or handleized_tag == 'earth' or handleized_tag == 'air' -%}
+              {%- if handleized_tag == 'fire'
+                or handleized_tag == 'water'
+                or handleized_tag == 'earth'
+                or handleized_tag == 'air'
+              -%}
                 <span class="tag tag--{{ handleized_tag }}">
                   {{- tag -}}
                 </span>
@@ -164,6 +168,18 @@
     color: #fff;
     padding: 5px 10px;
     border-radius: 9999px;
+  }
+  .article-card .article-card__tags .tag.tag--fire {
+    background-color: #ffd100;
+  }
+  .article-card .article-card__tags .tag.tag--water {
+    background-color: #4a90e2;
+  }
+  .article-card .article-card__tags .tag.tag--earth {
+    background-color: #8b5a2b;
+  }
+  .article-card .article-card__tags .tag.tag--air {
+    background-color: #4caf50;
   }
   .article-card__image-wrapper {
     display: block;
