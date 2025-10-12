@@ -50,6 +50,7 @@
             {%- assign downcased_tag = article.tags | join: ' ' -%}
             <span
               class="tag"
+              data-tag="{{ downcased_tag }}"
               {% if downcased_tag == 'fire' %}
                 style="background-color: #FFD100; color: #111;"
               {% elsif downcased_tag == 'water' %}
