@@ -180,95 +180,22 @@
             </fieldset>
 
             <fieldset class="form-fieldset">
-              <!-- This input is ONLY for triggering the mobile picker -->
-              <div class="form-group mobile-only-picker-trigger">
-                <label for="mobile-datetime-picker">Birth Date & Time <span class="required">*</span></label>
-                <input class="ipt" type="datetime" id="mobile-datetime-picker" placeholder="Select Date and Time" readonly>
+              <legend class="form-legend">Step 2: Birth Details</legend>
+              
+              <!-- This is the single, unified input for both PC and Mobile -->
+              <div class="form-group">
+                <label for="zui-datetime-picker">Birth Date & Time <span class="required">*</span></label>
+                <input class="ipt form-datetime" type="text" id="zui-datetime-picker" placeholder="Select Date and Time" readonly>
               </div>
-
-              <!-- These inputs are for PC and for storing the values from the mobile picker -->
-              <div class="desktop-only-inputs">
-                <div class="form-group">
-                  <label>Birth Date <span class="required">*</span></label>
-                  <div class="form-grid form-grid--3-col-us">
-                    <div>
-                      <label for="birth-month" class="sr-label">Month</label>
-                      <select id="birth-month" name="birth_month" required>
-                        <option value="">Month</option>
-                        {% assign months = 'January,February,March,April,May,June,July,August,September,October,November,December'
-                          | split: ','
-                        %}
-                        {% for month in months %}
-                          <option value="{{ forloop.index }}">{{ month }}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                    <div>
-                      <label for="birth-day" class="sr-label">Day</label>
-                      <input
-                        class="ipt"
-                        type="number"
-                        id="birth-day"
-                        name="birth_day"
-                        min="1"
-                        max="31"
-                        placeholder="Day"
-                        required
-                      >
-                    </div>
-                    <div>
-                      <label for="birth-year" class="sr-label">Year</label>
-                      <input
-                        class="ipt"
-                        type="number"
-                        id="birth-year"
-                        name="birth_year"
-                        min="1900"
-                        max="2024"
-                        placeholder="Year"
-                        required
-                      >
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>Birth Time <span class="required">*</span></label>
-                  <div class="form-grid form-grid--3-col-us">
-                    <div>
-                      <label for="birth-hour" class="sr-label">Hour</label>
-                      <input
-                        class="ipt"
-                        type="number"
-                        id="birth-hour"
-                        name="birth_hour_12"
-                        min="1"
-                        max="12"
-                        placeholder="Hour"
-                        required
-                      >
-                    </div>
-                    <div>
-                      <label for="birth-minute" class="sr-label">Minute</label>
-                      <input
-                        class="ipt"
-                        type="number"
-                        id="birth-minute"
-                        name="birth_minute"
-                        min="0"
-                        max="59"
-                        placeholder="Min"
-                        required
-                      >
-                    </div>
-                    <div>
-                      <label for="birth-ampm" class="sr-label">AM/PM</label>
-                      <select id="birth-ampm" name="birth_ampm" required>
-                        <option value="AM">AM</option>
-                        <option value="PM">PM</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
+              
+              <!-- These hidden inputs will store the final values for form submission -->
+              <div style="display: none;">
+                  <select id="birth-month" name="birth_month" required></select>
+                  <input type="number" id="birth-day" name="birth_day" required>
+                  <input type="number" id="birth-year" name="birth_year" required>
+                  <input type="number" id="birth-hour" name="birth_hour_12" required>
+                  <input type="number" id="birth-minute" name="birth_minute" required>
+                  <select id="birth-ampm" name="birth_ampm" required></select>
               </div>
             </fieldset>
 
@@ -909,43 +836,6 @@
     .mobile-only-picker-trigger {
       display: none;
     }
-    /* Style the mobile picker input to look like a button */
-    #mobile-datetime-picker {
-      cursor: pointer;
-      background-color: #f9fafb;
-      text-align: left;
-    }
-
-    /* On mobile screens (<= 768px) */
-    @media (max-width: 768px) {
-      /* Hide the desktop inputs */
-      .desktop-only-inputs {
-        display: none;
-      }
-      /* Show the mobile picker trigger */
-      .mobile-only-picker-trigger {
-        display: block;
-      }
-    }
-
-    /* Custom styles for Flatpickr to match the theme */
-    .flatpickr-calendar {
-      border-radius: 8px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      font-family: inherit;
-    }
-    .flatpickr-day.selected,
-    .flatpickr-day.today {
-      background-color: #111827;
-      border-color: #111827;
-    }
-    .flatpickr-time .numInputWrapper:hover,
-    .flatpickr-time .numInput:focus {
-      background: #f0f0f0;
-    }
-    .flatpickr-am-pm:hover {
-      background: #f0f0f0;
-    }
   {% endstylesheet %}
 
   <script>
@@ -976,65 +866,50 @@
       const citySelect = document.getElementById('city');
       const API_URL = BASE_URL + '/city/getInfo';
 
-      // --- Detect if it's a mobile device ---
-const isMobile = window.innerWidth <= 768;
+      // --- Initialize ZUI Datetime Picker ---
+if (typeof $ !== 'undefined' && $.fn.datetimepicker) {
+  const zuiPickerInput = $('#zui-datetime-picker');
+  
+  // Find the hidden input fields
+  const monthInput = $('#birth-month');
+  const dayInput = $('#birth-day');
+  const yearInput = $('#birth-year');
+  const hourInput = $('#birth-hour');
+  const minuteInput = $('#birth-minute');
+  const ampmInput = $('#birth-ampm');
+  
+  zuiPickerInput.datetimepicker({
+    format: 'MM dd, yyyy HH:ii P', // Display format e.g., "August 15, 2024 02:30 PM"
+    autoclose: true,
+    todayBtn: true,
+    pickerPosition: 'bottom-left'
+  }).on('onChangeDate', function(e) {
+    const selectedDate = e.date; // ZUI provides the date object directly
 
-  if (isMobile && typeof flatpickr !== 'undefined') {
-    const mobilePickerInput = document.getElementById('mobile-datetime-picker');
-  
-    // Find the original input fields
-    const monthInput = document.getElementById('birth-month');
-    const dayInput = document.getElementById('birth-day');
-    const yearInput = document.getElementById('birth-year');
-    const hourInput = document.getElementById('birth-hour');
-    const minuteInput = document.getElementById('birth-minute');
-    const ampmInput = document.getElementById('birth-ampm');
-    
-    flatpickr(mobilePickerInput, {
-      enableTime: true,
-      dateFormat: "F j, Y h:i K", // e.g., "August 15, 2024 02:30 PM"
-      time_24hr: false,
+    if (selectedDate) {
+      // --- IMPORTANT: Sync values back to the hidden inputs ---
+      monthInput.val(selectedDate.getMonth() + 1); // getMonth() is 0-indexed
+      dayInput.val(selectedDate.getDate());
+      yearInput.val(selectedDate.getFullYear());
       
-      // When the user closes the picker (confirms a date/time)
-      onClose: function(selectedDates, dateStr, instance) {
-        if (selectedDates.length > 0) {
-          const selectedDate = selectedDates[0];
-          
-          // Update the mobile picker's display text
-          mobilePickerInput.value = dateStr;
-          
-          // --- IMPORTANT: Sync values back to the hidden desktop inputs ---
-          monthInput.value = selectedDate.getMonth() + 1; // getMonth() is 0-indexed
-          dayInput.value = selectedDate.getDate();
-          yearInput.value = selectedDate.getFullYear();
-          
-          let hour12 = selectedDate.getHours();
-          let ampm = 'AM';
-          if (hour12 >= 12) {
-            ampm = 'PM';
-            if (hour12 > 12) {
-              hour12 -= 12;
-            }
-          }
-          if (hour12 === 0) { // Midnight case
-            hour12 = 12;
-          }
-          
-          hourInput.value = hour12;
-          minuteInput.value = String(selectedDate.getMinutes()).padStart(2, '0');
-          ampmInput.value = ampm;
-  
-          // Manually trigger change events so any other scripts listening will know
-          monthInput.dispatchEvent(new Event('change'));
-          dayInput.dispatchEvent(new Event('change'));
-          yearInput.dispatchEvent(new Event('change'));
-          hourInput.dispatchEvent(new Event('change'));
-          minuteInput.dispatchEvent(new Event('change'));
-          ampmInput.dispatchEvent(new Event('change'));
+      let hour12 = selectedDate.getHours();
+      let ampm = 'AM';
+      if (hour12 >= 12) {
+        ampm = 'PM';
+        if (hour12 > 12) {
+          hour12 -= 12;
         }
       }
-    });
-  }
+      if (hour12 === 0) { // Midnight case
+        hour12 = 12;
+      }
+      
+      hourInput.val(hour12);
+      minuteInput.val(String(selectedDate.getMinutes()).padStart(2, '0'));
+      ampmInput.val(ampm);
+    }
+  });
+}
 
       const loginPromptModal = document.getElementById('login-prompt-modal');
       if (!loginPromptModal) return;
