@@ -30,6 +30,23 @@
           {% else %}
             {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
           {% endif %}
+          <div class="article-card__tags">
+            {% for tag in article.tags %}
+              <span class="tag" 
+                {% if tag == "Fire" %}
+                  style="background-color: #FFD100;"
+                {% else if tag == "Water" %}
+                  style="background-color: #4A90E2;"
+                {% else if tag == "Earth" %}
+                  style="background-color: #8B5A2B;"
+                {% else if tag == "Air" %}
+                  style="background-color: #4CAF50;"
+                {% else %}
+                  style="background-color: #333;"
+                {% endif %}
+              >{{ tag }}</span>
+            {% endfor %}
+          </div>
         </a>
         <div class="article-card__info">
           <h2 class="article-card__title">
@@ -116,7 +133,20 @@
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
-
+.article-card .article-card__tags {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+.article-card .article-card__tags .tag { 
+  background-color: #2D3748;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 9999px;
+}
 .article-card__image-wrapper {
   display: block;
   aspect-ratio: 16 / 10;
