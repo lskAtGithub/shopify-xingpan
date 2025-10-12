@@ -672,7 +672,10 @@ p:empty {
   width: var(--icon-size-sm);
   height: var(--icon-size-sm);
 }
-
+.svg-wrapper.new-icon-menu-svg > svg {
+  width: auto;
+  height: auto;
+}
 .relative {
   position: relative;
 }

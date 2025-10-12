@@ -50,7 +50,7 @@
         </div>
 
         <!-- 右侧表单 -->
-        <div class="form-container">
+        {% comment %} <div class="form-container">
           <form id="report-form">
             <div class="form-group">
               <label for="name">Full Name <span class="required">*</span></label>
@@ -167,7 +167,84 @@
               <i class="fa fa-arrow-right"></i>
             </button>
           </form>
+        </div> {% endcomment %}
+        <div class="form-container">
+          <form id="report-form">
+            <fieldset class="form-fieldset">
+              <legend class="form-legend">Step 1: Personal Info</legend>
+              <div class="form-group">
+                <label for="name">Full Name <span class="required">*</span></label>
+                <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-fieldset">
+              <legend class="form-legend">Step 2: Birth Details</legend>
+              <div class="form-group">
+                <label>Birth Date <span class="required">*</span></label>
+                <div class="form-grid form-grid--3-col">
+                  <div>
+                    <label for="birth-year" class="sr-label">Year</label>
+                    <input class="ipt" type="number" id="birth-year" name="birth_year" min="1900" max="2024" placeholder="YYYY" required>
+                  </div>
+                  <div>
+                    <label for="birth-month" class="sr-label">Month</label>
+                    <select id="birth-month" name="birth_month" required>
+                      <option value="">Month</option>
+                      {% for m in (1..12) %}<option value="{{ m }}">{{ m }}</option>{% endfor %}
+                    </select>
+                  </div>
+                  <div>
+                    <label for="birth-day" class="sr-label">Day</label>
+                    <input class="ipt" type="number" id="birth-day" name="birth_day" min="1" max="31" placeholder="DD" required>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Birth Time (24h format) <span class="required">*</span></label>
+                <div class="form-grid form-grid--2-col">
+                  <div>
+                    <label for="birth-hour" class="sr-label">Hour</label>
+                    <input class="ipt" type="number" id="birth-hour" name="birth_hour" min="0" max="23" placeholder="HH" required>
+                  </div>
+                  <div>
+                    <label for="birth-minute" class="sr-label">Minute</label>
+                    <input class="ipt" type="number" id="birth-minute" name="birth_minute" min="0" max="59" placeholder="MM" required>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-fieldset">
+              <legend class="form-legend">Step 3: Birth Location</legend>
+              <div class="form-group">
+                <label for="country">Country <span class="required">*</span></label>
+                <select id="country" name="country" required><option value="">Select Country</option></select>
+              </div>
+              <div class="form-group">
+                <label for="state">State/Province <span class="required">*</span></label>
+                <select id="state" name="state" disabled required><option value="">Select State</option></select>
+              </div>
+              <div class="form-group">
+                <label for="city">City <span class="required">*</span></label>
+                <select id="city" name="city" disabled required><option value="">Select City</option></select>
+              </div>
+            </fieldset>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input class="ipt" type="checkbox" id="daylight-saving" name="daylight_saving">
+                <span class="checkbox-check-text">Daylight Saving Time was in effect at birth</span>
+              </label>
+            </div>
+
+            <button id="submit-btn" type="submit" class="gradient-btn">
+              <span>{{ section.settings.button_text }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+          </form>
         </div>
+
       </div>
     </div>
   </div>
@@ -686,6 +763,74 @@
     .modal-actions .btn--primary:hover {
       background-color: #374151;
     }
+
+    #report-form fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+  #report-form fieldset + fieldset {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f0f0f0;
+  }
+  #report-form .form-legend {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.5rem;
+  }
+  #report-form .form-group {
+    margin-bottom: 1.25rem;
+  }
+  #report-form .form-group:last-child {
+    margin-bottom: 0;
+  }
+  #report-form label {
+    font-size: 0.95rem;
+    color: #444;
+  }
+  #report-form .required {
+    color: #e53e3e; /* Red */
+    margin-left: 2px;
+  }
+  #report-form .sr-label {
+    /* For accessibility, but visually hidden */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+  #report-form .form-grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  #report-form .form-grid--2-col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  #report-form .form-grid--3-col {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  #report-form .ipt, #report-form select {
+    background-color: #f9fafb;
+  }
+  #report-form select:disabled {
+    background-color: #e5e7eb;
+    cursor: not-allowed;
+  }
+  
+  /* Responsive adjustments for the new form layout */
+  @media (max-width: 480px) {
+    #report-form .form-grid--3-col {
+      grid-template-columns: repeat(2, 1fr); /* On very small screens, date becomes 2 columns */
+    }
+  }
   {% endstylesheet %}
 
   <script>
