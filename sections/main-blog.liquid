@@ -52,12 +52,12 @@
               class="tag"
               data-tag="{{ downcased_tag }}"
               {% if downcased_tag == 'Fire' %}
-                style="background-color: #FFD100; color: #111;"
-              {% elsif downcased_tag == 'Water' %}
+                style="background-color: #FFD100;"
+              {% elseif downcased_tag == 'Water' %}
                 style="background-color: #4A90E2;"
-              {% elsif downcased_tag == 'earth' %}
+              {% elseif downcased_tag == 'earth' %}
                 style="background-color: #8B5A2B;"
-              {% elsif downcased_tag == 'air' %}
+              {% elseif downcased_tag == 'air' %}
                 style="background-color: #4CAF50;"
               {% endif %}
             >
