@@ -46,29 +46,22 @@
           {% else %}
             {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
           {% endif %}
-          {%- assign all_tags = blog.all_tags -%}
-          {% if all_tags.size > 0 %}
-            <div class="article-card__tags">
-              {% for tag in all_tags %}
-                {% if tag != 'All' %}
-                  <span
-                    class="tag"
-                    {% if tag == 'Fire' %}
-                      style="background-color: #FFD100;"
-                    {% elsif tag == 'Water' %}
-                      style="background-color: #4A90E2;"
-                    {% elsif tag == 'Earth' %}
-                      style="background-color: #8B5A2B;"
-                    {% elsif tag == 'Air' %}
-                      style="background-color: #4CAF50;"
-                    {% endif %}
-                  >
-                    {{- article.tags -}}
-                  </span>
-                {% endif %}
-              {% endfor %}
-            </div>
-          {% endif %}
+          <div class="article-card__tags">
+            <span
+              class="tag"
+              {% if article.tags | join: ' ' == 'fire' %}
+                style="background-color: #FFD100;"
+              {% elseif article.tags | join: ' ' == 'Water' %}
+                style="background-color: #4A90E2;"
+              {% elseif article.tags | join: ' '== 'Earth' %}
+                style="background-color: #8B5A2B;"
+              {% elseif article.tags | join: ' ' == 'Air' %}
+                style="background-color: #4CAF50;"
+              {% endif %}
+            >
+              {{- article.tags -}}
+            </span>
+          </div>
         </a>
         <div class="article-card__info">
           <h2 class="article-card__title">
