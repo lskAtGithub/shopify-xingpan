@@ -14,7 +14,14 @@
 
           <div class="note-line">
             {% comment %} <i class="fa fa-star"></i> {% endcomment %}
-            <svg class="icon-star" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <svg
+              class="icon-star"
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
               <g clip-path="url(#clip0_619_771)">
               <path d="M12.1519 15.6565C11.9601 15.6565 11.7682 15.6086 11.5604 15.4967L8.33158 13.8024C8.25166 13.7544 8.13977 13.7224 8.01191 13.7224C7.90002 13.7224 7.77214 13.7544 7.69222 13.7864L4.47936 15.4967C4.28755 15.6086 4.09573 15.6565 3.87195 15.6565C3.48833 15.6565 3.12069 15.4807 2.86492 15.193C2.60917 14.9053 2.51328 14.5217 2.5772 14.138L3.20061 10.5575C3.23258 10.3337 3.15265 10.11 2.99279 9.95012L0.403339 7.44055C0.0356981 7.08891 -0.092177 6.5774 0.0676669 6.09786C0.227495 5.61832 0.62712 5.28265 1.12264 5.20272L4.70314 4.67524C4.92692 4.64327 5.1347 4.49941 5.23061 4.3076L6.82905 1.04678C7.05283 0.599219 7.50039 0.327484 7.99591 0.327484C8.49142 0.327484 8.93899 0.599219 9.16277 1.04678L10.7612 4.3076C10.8731 4.51541 11.0649 4.64327 11.2887 4.67524L14.8692 5.20274C15.3647 5.28266 15.7643 5.61833 15.9242 6.08188C16.084 6.56141 15.9562 7.07291 15.6045 7.42458L13.031 9.9501C12.8552 10.1099 12.7912 10.3337 12.8232 10.5575L13.4306 14.122C13.4945 14.5057 13.3986 14.8893 13.1429 15.177C12.9031 15.4807 12.5355 15.6565 12.1519 15.6565Z" fill="#FFD324"/>
               </g>
@@ -204,6 +211,30 @@
     </div>
   </div>
 
+  <div id="login-prompt-modal" class="login-prompt-modal" style="display: none;" aria-hidden="true">
+    <div class="modal-overlay" tabindex="-1"></div>
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close-btn" aria-label="Close modal">&times;</button>
+      
+      <div class="modal-icon">
+        <!-- Icon: Lock -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+      
+      <h2 id="modal-title" class="modal-title">Please Login to Continue</h2>
+      <p class="modal-description">
+        This feature is available for members only. Please log in to your account or create a new one to proceed.
+      </p>
+      
+      <div class="modal-actions">
+        <a href="/account/login" class="btn btn--primary">Go to Login</a>
+      </div>
+    </div>
+  </div>
+
   {% stylesheet %}
     /* --- Base Styles (Mobile <= 768px) --- */
     .get-report-section {
@@ -256,7 +287,7 @@
       color: #666;
       margin: 0;
     }
-    .note-line .icon-star{
+    .note-line .icon-star {
       position: relative;
       top: 4px;
     }
@@ -459,7 +490,7 @@
       .flex-wrap > .left-content,
       .flex-wrap > .form-container,
       .form-container {
-        padding: 1rem!important;
+        padding: 1rem !important;
       }
     }
     /* --- Tablet Styles (768px - 1024px) --- */
@@ -541,6 +572,107 @@
         max-width: 1100px;
       }
     }
+    .login-prompt-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-content {
+      position: relative;
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 450px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transform: scale(0.95);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* Show animation */
+    .login-prompt-modal.is-open .modal-overlay,
+    .login-prompt-modal.is-open .modal-content {
+      opacity: 1;
+    }
+    .login-prompt-modal.is-open .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      color: #aaa;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+    }
+    .modal-close-btn:hover {
+      color: #333;
+    }
+
+    .modal-icon {
+      margin: 0 auto 1.5rem auto;
+      color: #111827; /* Dark Gray */
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #111;
+      margin: 0 0 0.75rem 0;
+    }
+
+    .modal-description {
+      font-size: 1rem;
+      color: #555;
+      line-height: 1.6;
+      margin: 0 0 2rem 0;
+    }
+
+    .modal-actions .btn {
+      display: inline-block;
+      padding: 0.875rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .modal-actions .btn--primary {
+      background-color: #111827; /* Dark background */
+      color: #fff;
+    }
+    .modal-actions .btn--primary:hover {
+      background-color: #374151;
+    }
   {% endstylesheet %}
 
   <script>
@@ -570,6 +702,43 @@
       const stateSelect = document.getElementById('state');
       const citySelect = document.getElementById('city');
       const API_URL = BASE_URL + '/city/getInfo';
+
+      const loginPromptModal = document.getElementById('login-prompt-modal');
+      if (!loginPromptModal) return;
+
+      const overlay = loginPromptModal.querySelector('.modal-overlay');
+      const closeBtn = loginPromptModal.querySelector('.modal-close-btn');
+
+      // --- Function to open the modal ---
+      window.openLoginPromptModal = function() {
+        loginPromptModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+          loginPromptModal.classList.add('is-open');
+          loginPromptModal.setAttribute('aria-hidden', 'false');
+        }, 10); // Small delay to allow CSS transition
+      };
+
+      // --- Function to close the modal ---
+      window.closeLoginPromptModal = function() {
+        loginPromptModal.classList.remove('is-open');
+        loginPromptModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+          loginPromptModal.style.display = 'none';
+        }, 300); // Wait for transition to finish
+      };
+
+      // Event listeners for closing
+      closeBtn.addEventListener('click', window.closeLoginPromptModal);
+      overlay.addEventListener('click', window.closeLoginPromptModal);
+      
+      // Close on 'Escape' key press
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && loginPromptModal.classList.contains('is-open')) {
+          window.closeLoginPromptModal();
+        }
+      });
 
       const PLACEHOLDERS = {
         country: 'Select Country',
@@ -702,7 +871,8 @@
       form.addEventListener('submit', async function (e) {
         e.preventDefault();
         if (!window.customer) {
-          return alert('请先登录');
+          openLoginPromptModal();
+          return false;
         }
         const name = document.getElementById('name').value.trim();
         const year = document.getElementById('birth-year').value;
