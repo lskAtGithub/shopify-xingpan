@@ -47,15 +47,16 @@
             {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
           {% endif %}
           <div class="article-card__tags">
+            {%- assign downcased_tag = article.tags | downcase -%}
             <span
               class="tag"
-              {% if article.tags | join: ' ' == 'fire' %}
-                style="background-color: #FFD100;"
-              {% elseif article.tags | join: ' ' == 'Water' %}
+              {% if downcased_tag == 'fire' %}
+                style="background-color: #FFD100; color: #111;"
+              {% elsif downcased_tag == 'water' %}
                 style="background-color: #4A90E2;"
-              {% elseif article.tags | join: ' '== 'Earth' %}
+              {% elsif downcased_tag == 'earth' %}
                 style="background-color: #8B5A2B;"
-              {% elseif article.tags | join: ' ' == 'Air' %}
+              {% elsif downcased_tag == 'air' %}
                 style="background-color: #4CAF50;"
               {% endif %}
             >
