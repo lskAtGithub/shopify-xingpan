@@ -87,17 +87,9 @@
         "enable_transparent_header_collection": false,
         "collection_color_scheme": "default"
       }
-    },
-    "shop_flex_section_hU4ffC": {
-      "type": "shop-flex-section",
-      "name": "Collection with Filters",
-      "settings": {
-        "collection": ""
-      }
     }
   },
   "order": [
-    "header_section",
-    "shop_flex_section_hU4ffC"
+    "header_section"
   ]
 }
