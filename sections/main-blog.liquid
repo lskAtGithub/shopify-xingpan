@@ -51,11 +51,11 @@
               class="tag"
               {% if article.tags == 'Fire' %}
                 style="background-color: #FFD100;"
-              {% else %}
+              {% else if article.tags == 'Water' %}
                 style="background-color: #4A90E2;"
-              {% else %}
+              {% else if article.tags == 'Earth' %}
                 style="background-color: #8B5A2B;"
-              {% else %}
+              {% else if article.tags == 'Air' %}
                 style="background-color: #4CAF50;"
               {% else %}
                 style="background-color: #333;"
