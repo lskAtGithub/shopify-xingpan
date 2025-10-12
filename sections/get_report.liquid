@@ -707,7 +707,7 @@
       if (!loginPromptModal) return;
 
       const overlay = loginPromptModal.querySelector('.modal-overlay');
-      const closeBtn = loginPromptModal.querySelector('.modal-close-btn');
+      const loginPromptModalCloseBtn = loginPromptModal.querySelector('.modal-close-btn');
 
       // --- Function to open the modal ---
       window.openLoginPromptModal = function() {
@@ -730,7 +730,7 @@
       };
 
       // Event listeners for closing
-      closeBtn.addEventListener('click', window.closeLoginPromptModal);
+      loginPromptModalCloseBtn.addEventListener('click', window.closeLoginPromptModal);
       overlay.addEventListener('click', window.closeLoginPromptModal);
       
       // Close on 'Escape' key press
