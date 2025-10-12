@@ -47,7 +47,7 @@
             {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
           {% endif %}
           <div class="article-card__tags">
-            {%- assign downcased_tag = article.tags | downcase -%}
+            {%- assign downcased_tag = article.tags | join: ' ' -%}
             <span
               class="tag"
               {% if downcased_tag == 'fire' %}
