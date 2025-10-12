@@ -50,124 +50,126 @@
         </div>
 
         <!-- 右侧表单 -->
-        {% comment %} <div class="form-container">
-          <form id="report-form">
-            <div class="form-group">
-              <label for="name">Full Name <span class="required">*</span></label>
-              <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required value="">
-            </div>
+        {% comment %}
+          <div class="form-container">
+            <form id="report-form">
+              <div class="form-group">
+                <label for="name">Full Name <span class="required">*</span></label>
+                <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required value="">
+              </div>
 
-            <div class="form-group">
-              <label>Birth Date & Time <span class="required">*</span></label>
-              <div class="grid-cols-responsive">
-                <div>
-                  <label for="birth-year">Year</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-year"
-                    name="birth_year"
-                    min="1900"
-                    max="2024"
-                    placeholder="YYYY"
-                    required
-                    value=""
-                  >
+              <div class="form-group">
+                <label>Birth Date & Time <span class="required">*</span></label>
+                <div class="grid-cols-responsive">
+                  <div>
+                    <label for="birth-year">Year</label>
+                    <input
+                      class="ipt"
+                      type="number"
+                      id="birth-year"
+                      name="birth_year"
+                      min="1900"
+                      max="2024"
+                      placeholder="YYYY"
+                      required
+                      value=""
+                    >
+                  </div>
+                  <div>
+                    <label for="birth-month">Month</label>
+                    <select id="birth-month" name="birth_month" required value="">
+                      <option value="">Select</option>
+                      {% for m in (1..12) %}
+                        <option value="{{ m }}">{{ m }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div>
+                    <label for="birth-day">Day</label>
+                    <input
+                      class="ipt"
+                      type="number"
+                      id="birth-day"
+                      name="birth_day"
+                      min="1"
+                      max="31"
+                      placeholder="DD"
+                      required
+                      value=""
+                    >
+                  </div>
                 </div>
-                <div>
-                  <label for="birth-month">Month</label>
-                  <select id="birth-month" name="birth_month" required value="">
-                    <option value="">Select</option>
-                    {% for m in (1..12) %}
-                      <option value="{{ m }}">{{ m }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <div>
-                  <label for="birth-day">Day</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-day"
-                    name="birth_day"
-                    min="1"
-                    max="31"
-                    placeholder="DD"
-                    required
-                    value=""
-                  >
+
+                <div class="grid-cols-2">
+                  <div>
+                    <label for="birth-hour">Hour (24h)</label>
+                    <input
+                      class="ipt"
+                      type="number"
+                      id="birth-hour"
+                      name="birth_hour"
+                      min="0"
+                      max="23"
+                      placeholder="HH"
+                      required
+                      value=""
+                    >
+                  </div>
+                  <div>
+                    <label for="birth-minute">Minute</label>
+                    <input
+                      class="ipt"
+                      type="number"
+                      id="birth-minute"
+                      name="birth_minute"
+                      min="0"
+                      max="59"
+                      placeholder="MM"
+                      required
+                      value=""
+                    >
+                  </div>
                 </div>
               </div>
 
-              <div class="grid-cols-2">
-                <div>
-                  <label for="birth-hour">Hour (24h)</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-hour"
-                    name="birth_hour"
-                    min="0"
-                    max="23"
-                    placeholder="HH"
-                    required
-                    value=""
-                  >
-                </div>
-                <div>
-                  <label for="birth-minute">Minute</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-minute"
-                    name="birth_minute"
-                    min="0"
-                    max="59"
-                    placeholder="MM"
-                    required
-                    value=""
-                  >
+              <div class="form-group">
+                <label>Birth Location <span class="required">*</span></label>
+                <div class="grid-cols-responsive">
+                  <div>
+                    <label for="country">Country</label>
+                    <select id="country" name="country" required>
+                      <option value="">Select Country</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="state">State/Province</label>
+                    <select id="state" name="state" disabled required>
+                      <option value="">Select State</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="city">City</label>
+                    <select id="city" name="city" disabled required>
+                      <option value="">Select City</option>
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label>Birth Location <span class="required">*</span></label>
-              <div class="grid-cols-responsive">
-                <div>
-                  <label for="country">Country</label>
-                  <select id="country" name="country" required>
-                    <option value="">Select Country</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="state">State/Province</label>
-                  <select id="state" name="state" disabled required>
-                    <option value="">Select State</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="city">City</label>
-                  <select id="city" name="city" disabled required>
-                    <option value="">Select City</option>
-                  </select>
-                </div>
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input class="ipt" type="checkbox" id="daylight-saving" name="daylight_saving">
+                  <span class="checkbox-check-text">Daylight Saving Time was in effect at birth</span>
+                </label>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label class="checkbox-label">
-                <input class="ipt" type="checkbox" id="daylight-saving" name="daylight_saving">
-                <span class="checkbox-check-text">Daylight Saving Time was in effect at birth</span>
-              </label>
-            </div>
-
-            <button id="submit-btn" type="submit" class="gradient-btn">
-              <span>{{ section.settings.button_text }}</span>
-              <i class="fa fa-arrow-right"></i>
-            </button>
-          </form>
-        </div> {% endcomment %}
+              <button id="submit-btn" type="submit" class="gradient-btn">
+                <span>{{ section.settings.button_text }}</span>
+                <i class="fa fa-arrow-right"></i>
+              </button>
+            </form>
+          </div>
+        {% endcomment %}
         <div class="form-container">
           <form id="report-form">
             <fieldset class="form-fieldset">
@@ -176,82 +178,148 @@
                 <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required>
               </div>
             </fieldset>
-        
+
             <fieldset class="form-fieldset">
-              <div class="form-group">
-                <label>Birth Date <span class="required">*</span></label>
-                <div class="form-grid form-grid--3-col-us">
-                  <div>
-                    <label for="birth-month" class="sr-label">Month</label>
-                    <select id="birth-month" name="birth_month" required>
-                      <option value="">Month</option>
-                      {% assign months = "January,February,March,April,May,June,July,August,September,October,November,December" | split: ',' %}
-                      {% for month in months %}
-                        <option value="{{ forloop.index }}">{{ month }}</option>
-                      {% endfor %}
-                    </select>
-                  </div>
-                  <div>
-                    <label for="birth-day" class="sr-label">Day</label>
-                    <input class="ipt" type="number" id="birth-day" name="birth_day" min="1" max="31" placeholder="Day" required>
-                  </div>
-                  <div>
-                    <label for="birth-year" class="sr-label">Year</label>
-                    <input class="ipt" type="number" id="birth-year" name="birth_year" min="1900" max="2024" placeholder="Year" required>
+              <legend class="form-legend">Step 2: Birth Details</legend>
+
+              <!-- This input is ONLY for triggering the mobile picker -->
+              <div class="form-group mobile-only-picker-trigger">
+                <label for="mobile-datetime-picker">Birth Date & Time <span class="required">*</span></label>
+                <input class="ipt" type="text" id="mobile-datetime-picker" placeholder="Select Date and Time" readonly>
+              </div>
+
+              <!-- These inputs are for PC and for storing the values from the mobile picker -->
+              <div class="desktop-only-inputs">
+                <div class="form-group">
+                  <label>Birth Date <span class="required">*</span></label>
+                  <div class="form-grid form-grid--3-col-us">
+                    <div>
+                      <label for="birth-month" class="sr-label">Month</label>
+                      <select id="birth-month" name="birth_month" required>
+                        <option value="">Month</option>
+                        {% assign months = 'January,February,March,April,May,June,July,August,September,October,November,December'
+                          | split: ','
+                        %}
+                        {% for month in months %}
+                          <option value="{{ forloop.index }}">{{ month }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div>
+                      <label for="birth-day" class="sr-label">Day</label>
+                      <input
+                        class="ipt"
+                        type="number"
+                        id="birth-day"
+                        name="birth_day"
+                        min="1"
+                        max="31"
+                        placeholder="Day"
+                        required
+                      >
+                    </div>
+                    <div>
+                      <label for="birth-year" class="sr-label">Year</label>
+                      <input
+                        class="ipt"
+                        type="number"
+                        id="birth-year"
+                        name="birth_year"
+                        min="1900"
+                        max="2024"
+                        placeholder="Year"
+                        required
+                      >
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="form-group">
-                <label>Birth Time <span class="required">*</span></label>
-                <div class="form-grid form-grid--3-col-us">
-                  <div>
-                    <label for="birth-hour" class="sr-label">Hour</label>
-                    <input class="ipt" type="number" id="birth-hour" name="birth_hour_12" min="1" max="12" placeholder="Hour" required>
-                  </div>
-                  <div>
-                    <label for="birth-minute" class="sr-label">Minute</label>
-                    <input class="ipt" type="number" id="birth-minute" name="birth_minute" min="0" max="59" placeholder="Min" required>
-                  </div>
-                  <div>
-                    <label for="birth-ampm" class="sr-label">AM/PM</label>
-                    <select id="birth-ampm" name="birth_ampm" required>
-                      <option value="AM">AM</option>
-                      <option value="PM">PM</option>
-                    </select>
+                <div class="form-group">
+                  <label>Birth Time <span class="required">*</span></label>
+                  <div class="form-grid form-grid--3-col-us">
+                    <div>
+                      <label for="birth-hour" class="sr-label">Hour</label>
+                      <input
+                        class="ipt"
+                        type="number"
+                        id="birth-hour"
+                        name="birth_hour_12"
+                        min="1"
+                        max="12"
+                        placeholder="Hour"
+                        required
+                      >
+                    </div>
+                    <div>
+                      <label for="birth-minute" class="sr-label">Minute</label>
+                      <input
+                        class="ipt"
+                        type="number"
+                        id="birth-minute"
+                        name="birth_minute"
+                        min="0"
+                        max="59"
+                        placeholder="Min"
+                        required
+                      >
+                    </div>
+                    <div>
+                      <label for="birth-ampm" class="sr-label">AM/PM</label>
+                      <select id="birth-ampm" name="birth_ampm" required>
+                        <option value="AM">AM</option>
+                        <option value="PM">PM</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
             </fieldset>
-        
+
             <fieldset class="form-fieldset">
               <div class="form-group">
                 <label for="country">Country <span class="required">*</span></label>
-                <select id="country" name="country" required><option value="">Select Country</option></select>
+                <select id="country" name="country" required>
+                  <option value="">Select Country</option>
+                </select>
               </div>
               <div class="form-group">
                 <label for="state">State/Province <span class="required">*</span></label>
-                <select id="state" name="state" disabled required><option value="">Select State</option></select>
+                <select id="state" name="state" disabled required>
+                  <option value="">Select State</option>
+                </select>
               </div>
               <div class="form-group">
                 <label for="city">City <span class="required">*</span></label>
-                <select id="city" name="city" disabled required><option value="">Select City</option></select>
+                <select id="city" name="city" disabled required>
+                  <option value="">Select City</option>
+                </select>
               </div>
             </fieldset>
-        
+
             <div class="form-group">
               <label class="checkbox-label">
                 <input class="ipt" type="checkbox" id="daylight-saving" name="daylight_saving">
                 <span class="checkbox-check-text">Daylight Saving Time was in effect at birth</span>
               </label>
             </div>
-        
+
             <button id="submit-btn" type="submit" class="gradient-btn">
               <span>{{ section.settings.button_text }}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
             </button>
           </form>
         </div>
-
       </div>
     </div>
   </div>
@@ -772,72 +840,114 @@
     }
 
     #report-form fieldset {
-    border: none;
-    padding: 0;
-    margin: 0;
-  }
-  #report-form fieldset + fieldset {
-    /* margin-top: 1.5rem;
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+    #report-form fieldset + fieldset {
+      /* margin-top: 1.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid #f0f0f0; */
-  }
-  #report-form .form-legend {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 1.5rem;
-  }
-  #report-form .form-group {
-    margin-bottom: 1.25rem;
-  }
-  #report-form .form-group:last-child {
-    margin-bottom: 0;
-  }
-  #report-form label {
-    font-size: 0.95rem;
-    color: #444;
-  }
-  #report-form .required {
-    color: #e53e3e; /* Red */
-    margin-left: 2px;
-  }
-  #report-form .sr-label {
-    /* For accessibility, but visually hidden */
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-  }
-  #report-form .form-grid {
-    display: grid;
-    gap: 1rem;
-    margin-top: 0.5rem;
-  }
-  #report-form .form-grid--2-col {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  #report-form .form-grid--3-col {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  #report-form .ipt, #report-form select {
-    background-color: #f9fafb;
-  }
-  #report-form select:disabled {
-    background-color: #e5e7eb;
-    cursor: not-allowed;
-  }
-  
-  /* Responsive adjustments for the new form layout */
-  @media (max-width: 480px) {
-    #report-form .form-grid--3-col {
-      grid-template-columns: repeat(2, 1fr); /* On very small screens, date becomes 2 columns */
     }
-  }
+    #report-form .form-legend {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+    #report-form .form-group {
+      margin-bottom: 1.25rem;
+    }
+    #report-form .form-group:last-child {
+      margin-bottom: 0;
+    }
+    #report-form label {
+      font-size: 0.95rem;
+      color: #444;
+    }
+    #report-form .required {
+      color: #e53e3e; /* Red */
+      margin-left: 2px;
+    }
+    #report-form .sr-label {
+      /* For accessibility, but visually hidden */
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+    #report-form .form-grid {
+      display: grid;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    #report-form .form-grid--2-col {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    #report-form .form-grid--3-col {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    #report-form .ipt,
+    #report-form select {
+      background-color: #f9fafb;
+    }
+    #report-form select:disabled {
+      background-color: #e5e7eb;
+      cursor: not-allowed;
+    }
+
+    /* Responsive adjustments for the new form layout */
+    @media (max-width: 480px) {
+      #report-form .form-grid--3-col {
+        grid-template-columns: repeat(2, 1fr); /* On very small screens, date becomes 2 columns */
+      }
+    }
+    /* By default, hide the mobile picker trigger */
+    .mobile-only-picker-trigger {
+      display: none;
+    }
+    /* Style the mobile picker input to look like a button */
+    #mobile-datetime-picker {
+      cursor: pointer;
+      background-color: #f9fafb;
+      text-align: left;
+    }
+
+    /* On mobile screens (<= 768px) */
+    @media (max-width: 768px) {
+      /* Hide the desktop inputs */
+      .desktop-only-inputs {
+        display: none;
+      }
+      /* Show the mobile picker trigger */
+      .mobile-only-picker-trigger {
+        display: block;
+      }
+    }
+
+    /* Custom styles for Flatpickr to match the theme */
+    .flatpickr-calendar {
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      font-family: inherit;
+    }
+    .flatpickr-day.selected,
+    .flatpickr-day.today {
+      background-color: #111827;
+      border-color: #111827;
+    }
+    .flatpickr-time .numInputWrapper:hover,
+    .flatpickr-time .numInput:focus {
+      background: #f0f0f0;
+    }
+    .flatpickr-am-pm:hover {
+      background: #f0f0f0;
+    }
   {% endstylesheet %}
 
   <script>
@@ -867,6 +977,66 @@
       const stateSelect = document.getElementById('state');
       const citySelect = document.getElementById('city');
       const API_URL = BASE_URL + '/city/getInfo';
+
+      // --- Detect if it's a mobile device ---
+const isMobile = window.innerWidth <= 768;
+
+  if (isMobile && typeof flatpickr !== 'undefined') {
+    const mobilePickerInput = document.getElementById('mobile-datetime-picker');
+  
+    // Find the original input fields
+    const monthInput = document.getElementById('birth-month');
+    const dayInput = document.getElementById('birth-day');
+    const yearInput = document.getElementById('birth-year');
+    const hourInput = document.getElementById('birth-hour');
+    const minuteInput = document.getElementById('birth-minute');
+    const ampmInput = document.getElementById('birth-ampm');
+    
+    flatpickr(mobilePickerInput, {
+      enableTime: true,
+      dateFormat: "F j, Y h:i K", // e.g., "August 15, 2024 02:30 PM"
+      time_24hr: false,
+      
+      // When the user closes the picker (confirms a date/time)
+      onClose: function(selectedDates, dateStr, instance) {
+        if (selectedDates.length > 0) {
+          const selectedDate = selectedDates[0];
+          
+          // Update the mobile picker's display text
+          mobilePickerInput.value = dateStr;
+          
+          // --- IMPORTANT: Sync values back to the hidden desktop inputs ---
+          monthInput.value = selectedDate.getMonth() + 1; // getMonth() is 0-indexed
+          dayInput.value = selectedDate.getDate();
+          yearInput.value = selectedDate.getFullYear();
+          
+          let hour12 = selectedDate.getHours();
+          let ampm = 'AM';
+          if (hour12 >= 12) {
+            ampm = 'PM';
+            if (hour12 > 12) {
+              hour12 -= 12;
+            }
+          }
+          if (hour12 === 0) { // Midnight case
+            hour12 = 12;
+          }
+          
+          hourInput.value = hour12;
+          minuteInput.value = String(selectedDate.getMinutes()).padStart(2, '0');
+          ampmInput.value = ampm;
+  
+          // Manually trigger change events so any other scripts listening will know
+          monthInput.dispatchEvent(new Event('change'));
+          dayInput.dispatchEvent(new Event('change'));
+          yearInput.dispatchEvent(new Event('change'));
+          hourInput.dispatchEvent(new Event('change'));
+          minuteInput.dispatchEvent(new Event('change'));
+          ampmInput.dispatchEvent(new Event('change'));
+        }
+      }
+    });
+  }
 
       const loginPromptModal = document.getElementById('login-prompt-modal');
       if (!loginPromptModal) return;
