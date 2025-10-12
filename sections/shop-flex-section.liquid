@@ -1,8 +1,7 @@
 {% comment %}
   Optimized Collection with Filters Section
-  - Implements a fully responsive layout with an off-canvas filter on mobile.
-  - Enhances accordion with smooth transitions and animated SVG icons.
-  - Fixes the "Add to Cart" functionality.
+  - Implements AJAX "Add to Cart" functionality to prevent page redirection.
+  - Updates cart icon count dynamically.
 {% endcomment %}
 
 <section class="collection-with-filters section-{{ section.id }}">
@@ -63,11 +62,19 @@
                   <p class="cw-price">{{ product.price | money }}</p>
                 </a>
                 <div class="cw-cart-btn">
-                  <form method="post" action="/cart/add" accept-charset="UTF-8" enctype="multipart/form-data" novalidate="novalidate">
-                    <!-- CRITICAL FIX: Use variant ID, not product ID -->
+                  <!-- START: HTML Changes for AJAX Cart -->
+                  <form method="post" action="/cart/add" class="ajax-cart-form">
                     <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-                    <button type="submit" class="button button--primary">Add to Cart</button>
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="button button--primary add-to-cart-button">
+                      <span class="button-text">Add to Cart</span>
+                      <span class="button-loading" style="display: none;">
+                        <!-- Simple spinner -->
+                        <svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>
+                      </span>
+                    </button>
                   </form>
+                  <!-- END: HTML Changes for AJAX Cart -->
                 </div>
               </div>
             </div>
@@ -81,6 +88,7 @@
 </section>
 
 <style>
+  /* --- (Paste all your existing styles here) --- */
   :root {
     --cw-sidebar-width: 260px;
     --cw-border-color: #e5e7eb;
@@ -93,8 +101,6 @@
     grid-template-columns: 1fr; /* Mobile: single column */
     gap: 1.5rem;
   }
-  
-  /* Mobile Header */
   .cw-mobile-header { margin-bottom: 1rem; }
   .cw-mobile-filter-toggle {
     display: inline-flex; align-items: center; gap: 8px;
@@ -102,8 +108,6 @@
     padding: 8px 16px; border-radius: 8px; cursor: pointer;
     font-size: 1rem; font-weight: 500;
   }
-  
-  /* Filters Sidebar */
   .cw-filters {
     position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
@@ -128,8 +132,6 @@
   }
   .cw-filters-header span { font-size: 1.1rem; font-weight: 600; }
   .cw-filters-close { background: none; border: none; cursor: pointer; }
-  
-  /* Accordion Styles */
   .cw-accordion { border-bottom: 1px solid var(--cw-border-color); }
   .cw-accordion-toggle {
     width: 100%; padding: 1rem; background: #fff; border: none;
@@ -138,76 +140,66 @@
   }
   .cw-accordion-toggle .icon-chevron { transition: transform 0.3s ease; }
   .cw-accordion.is-open .cw-accordion-toggle .icon-chevron { transform: rotate(180deg); }
-  .cw-accordion-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
-  }
+  .cw-accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
   .cw-accordion-content-inner { padding: 0.5rem 1rem 1rem 1rem; }
-  .cw-accordion.is-open .cw-accordion-content { max-height: 300px; /* Adjust if needed */ }
-  
+  .cw-accordion.is-open .cw-accordion-content { max-height: 300px; }
   .cw-filter-option { display: flex; align-items: center; margin-bottom: 0.5rem; }
   .cw-filter-option input { margin-right: 8px; }
-
-  /* Products Grid */
   .cw-products { width: 100%; }
-  .cw-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Mobile: 2 columns */
-    gap: 1rem;
-  }
-  .cw-product-card {
-    border: 1px solid #eee; transition: all 0.3s ease;
-    z-index: 1; position: relative;
-  }
+  .cw-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .cw-product-card { border: 1px solid #eee; transition: all 0.3s ease; z-index: 1; position: relative; }
   .cw-product-card .inner { padding: 12px; position: relative; }
   .cw-img { max-width: 100%; height: auto; margin-bottom: 8px; }
   .cw-title { font-size: 14px; margin: 6px 0; }
   .cw-price { font-size: 14px; color: #d33; font-weight: bold; }
-  
-  /* Product Card Hover Effect */
-  .cw-product-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(-5px);
-    z-index: 3;
-  }
+  .cw-product-card:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); transform: translateY(-5px); z-index: 3; }
   .cw-product-card:hover .cw-cart-btn { opacity: 1; transform: translateY(0); }
   .cw-cart-btn {
     position: absolute; left: 0; bottom: 0;
-    width: 100%; padding: 1rem;
-    background: #fff;
-    opacity: 0;
-    transform: translateY(10px);
+    width: 100%; padding: 1rem; background: #fff;
+    opacity: 0; transform: translateY(10px);
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
   .cw-cart-btn .button { margin: 0 auto; width: 100%; }
-
-  /* --- Tablet Styles (768px - 1024px) --- */
   @media (min-width: 768px) {
     .collection-with-filters { padding: 3rem 1.5rem; }
     .cw-container { grid-template-columns: var(--cw-sidebar-width) 1fr; }
     .cw-mobile-header { display: none; }
-    .cw-filters {
-      position: static; opacity: 1; visibility: visible;
-      background: none; width: auto; height: auto;
-    }
-    .cw-filters-inner {
-      transform: none; width: 100%; height: auto;
-      max-width: none;
-    }
+    .cw-filters { position: static; opacity: 1; visibility: visible; background: none; width: auto; height: auto; }
+    .cw-filters-inner { transform: none; width: 100%; height: auto; max-width: none; }
     .cw-filters-header { display: none; }
     .cw-grid { grid-template-columns: repeat(3, 1fr); }
   }
-
-  /* --- Desktop Styles (> 1024px) --- */
   @media (min-width: 1024px) {
     .cw-container { gap: 2rem; }
     .cw-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  /* --- Styles for AJAX Cart Button --- */
+  .add-to-cart-button { position: relative; }
+  .button-loading {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .spinner {
+    animation: rotate 2s linear infinite;
+    width: 20px; height: 20px;
+  }
+  .path {
+    stroke: #fff; stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+  @keyframes rotate { 100% { transform: rotate(360deg); } }
+  @keyframes dash {
+    0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
+    50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
+    100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
   }
 </style>
 
 <script>
   (function () {
+    // --- (Paste your existing filter/accordion script here) ---
     function initFilterSection(container) {
       if (!container || container.dataset.filterInit === 'true') return;
       container.dataset.filterInit = 'true';
@@ -215,96 +207,108 @@
       const filterSidebar = container.querySelector('.cw-filters');
       const openBtn = container.querySelector('.cw-mobile-filter-toggle');
       const closeBtn = container.querySelector('.cw-filters-close');
-
-      // Mobile sidebar toggle
-      openBtn?.addEventListener('click', () => {
-        filterSidebar.classList.add('is-open');
-        document.body.style.overflow = 'hidden';
-      });
-      const closeSidebar = () => {
-        filterSidebar.classList.remove('is-open');
-        document.body.style.overflow = '';
-      };
+      openBtn?.addEventListener('click', () => { filterSidebar.classList.add('is-open'); document.body.style.overflow = 'hidden'; });
+      const closeSidebar = () => { filterSidebar.classList.remove('is-open'); document.body.style.overflow = ''; };
       closeBtn?.addEventListener('click', closeSidebar);
-      filterSidebar?.addEventListener('click', (e) => {
-        if (e.target === filterSidebar) closeSidebar();
-      });
-
-      // Accordion logic
+      filterSidebar?.addEventListener('click', (e) => { if (e.target === filterSidebar) closeSidebar(); });
       const accordions = container.querySelectorAll('.cw-accordion');
       accordions.forEach(accordion => {
         const btn = accordion.querySelector('.cw-accordion-toggle');
-        btn.addEventListener('click', () => {
-          accordion.classList.toggle('is-open');
-        });
+        btn.addEventListener('click', () => { accordion.classList.toggle('is-open'); });
       });
-
-      // Filtering logic
       const checkboxes = container.querySelectorAll('.filter-checkbox');
       const products = container.querySelectorAll('.cw-product-card');
-
       const applyFilters = () => {
-        const activeFilters = Array.from(checkboxes)
-          .filter(c => c.checked)
-          .map(c => c.value.trim().toLowerCase());
-
+        const activeFilters = Array.from(checkboxes).filter(c => c.checked).map(c => c.value.trim().toLowerCase());
         products.forEach(p => {
           const tags = (p.dataset.tags || '').toLowerCase().split(',');
           const isVisible = activeFilters.length === 0 || activeFilters.every(filter => tags.includes(filter));
           p.style.display = isVisible ? '' : 'none';
         });
       };
-
       checkboxes.forEach(cb => cb.addEventListener('change', applyFilters));
     }
+    document.addEventListener('DOMContentLoaded', () => { document.querySelectorAll('.collection-with-filters').forEach(initFilterSection); });
+    document.addEventListener('shopify:section:load', (e) => { const container = e.target.querySelector('.collection-with-filters'); if (container) initFilterSection(container); });
+    
+    // --- START: NEW AJAX Cart Logic ---
+    function initAjaxCartForms() {
+      const forms = document.querySelectorAll('form.ajax-cart-form');
+      forms.forEach(form => {
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
 
-    // Shopify Theme Editor integration
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.collection-with-filters').forEach(initFilterSection);
-    });
+          const submitButton = form.querySelector('button[type="submit"]');
+          const buttonText = submitButton.querySelector('.button-text');
+          const buttonLoading = submitButton.querySelector('.button-loading');
 
-    document.addEventListener('shopify:section:load', (e) => {
-      const container = e.target.querySelector('.collection-with-filters');
-      if (container) initFilterSection(container);
-    });
+          // Show loading state
+          submitButton.disabled = true;
+          buttonText.style.visibility = 'hidden';
+          buttonLoading.style.display = 'flex';
+
+          try {
+            const formData = new FormData(form);
+            const response = await fetch('/cart/add.js', {
+              method: 'POST',
+              body: formData
+            });
+
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.description || 'Something went wrong.');
+            }
+
+            const cartData = await fetch('/cart.js').then(res => res.json());
+
+            // Update cart count in the header
+            // This assumes your theme has a cart count element with a specific selector.
+            // Adjust '.cart-count-bubble' to match your theme's actual selector.
+            const cartCountBubbles = document.querySelectorAll('.cart-count-bubble, [data-cart-count]');
+            if (cartCountBubbles.length > 0) {
+              cartCountBubbles.forEach(bubble => {
+                bubble.textContent = cartData.item_count;
+                bubble.style.display = cartData.item_count > 0 ? 'flex' : 'none';
+              });
+            }
+            
+            // Optional: Show a success message or open a cart drawer/popup
+            alert('Item added to cart!');
+
+          } catch (error) {
+            console.error('Error adding to cart:', error);
+            alert(`Error: ${error.message}`);
+          } finally {
+            // Revert button to normal state
+            submitButton.disabled = false;
+            buttonText.style.visibility = 'visible';
+            buttonLoading.style.display = 'none';
+          }
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initAjaxCartForms);
+    // Re-initialize for theme editor reloads
+    document.addEventListener('shopify:section:load', initAjaxCartForms);
+    
+    // --- END: NEW AJAX Cart Logic ---
 
   })();
 </script>
 
 {% schema %}
-{
-  "name": "Collection with Filters",
-  "settings": [
-    {
-      "type": "collection",
-      "id": "collection",
-      "label": "选择商品集合"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "filter_group",
-      "name": "筛选分组",
+  <!-- Your schema remains unchanged -->
+  {
+    "name": "Collection with Filters",
+    "settings": [{ "type": "collection", "id": "collection", "label": "选择商品集合" }],
+    "blocks": [{
+      "type": "filter_group", "name": "筛选分组",
       "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "分组标题"
-        },
-        {
-          "type": "textarea",
-          "id": "options",
-          "label": "选项（每行一个）",
-          "default": "选项1\n选项2\n选项3"
-        }
+        { "type": "text", "id": "title", "label": "分组标题" },
+        { "type": "textarea", "id": "options", "label": "选项（每行一个）", "default": "选项1\n选项2\n选项3" }
       ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "Collection with Filters",
-      "category": "Collection"
-    }
-  ]
-}
+    }],
+    "presets": [{ "name": "Collection with Filters", "category": "Collection" }]
+  }
 {% endschema %}
