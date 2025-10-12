@@ -49,16 +49,17 @@
           <div class="article-card__tags">
             <span
               class="tag"
-              {% if article.tags == 'Fire' %}
+              {% if article.tags | join: ' ' == 'Fire' %}
                 style="background-color: #FFD100;"
-              {% else if article.tags == 'Water' %}
+              {% endif %}
+              {% if article.tags | join: ' ' == 'Water' %}
                 style="background-color: #4A90E2;"
-              {% else if article.tags == 'Earth' %}
+              {% endif %}
+              {% if article.tags | join: ' '== 'Earth' %}
                 style="background-color: #8B5A2B;"
-              {% else if article.tags == 'Air' %}
+              {% endif %}
+              {% if article.tags | join: ' ' == 'Air' %}
                 style="background-color: #4CAF50;"
-              {% else %}
-                style="background-color: #333;"
               {% endif %}
             >
               {{- article.tags -}}
