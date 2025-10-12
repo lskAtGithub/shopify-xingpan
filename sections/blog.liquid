@@ -31,21 +31,19 @@
             {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
           {% endif %}
           <div class="article-card__tags">
-            {% for tag in article.tags %}
-              <span class="tag" 
-                {% if tag == "Fire" %}
-                  style="background-color: #FFD100;"
-                {% else if tag == "Water" %}
-                  style="background-color: #4A90E2;"
-                {% else if tag == "Earth" %}
-                  style="background-color: #8B5A2B;"
-                {% else if tag == "Air" %}
-                  style="background-color: #4CAF50;"
-                {% else %}
-                  style="background-color: #333;"
-                {% endif %}
-              >{{ tag }}</span>
-            {% endfor %}
+            <span class="tag" 
+              {% if article.tags == "Fire" %}
+                style="background-color: #FFD100;"
+              {% else if article.tags == "Water" %}
+                style="background-color: #4A90E2;"
+              {% else if article.tags == "Earth" %}
+                style="background-color: #8B5A2B;"
+              {% else if article.tags == "Air" %}
+                style="background-color: #4CAF50;"
+              {% else %}
+                style="background-color: #333;"
+              {% endif %}
+            >{{ article.tags }}</span>
           </div>
         </a>
         <div class="article-card__info">
