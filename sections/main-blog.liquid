@@ -47,22 +47,16 @@
             {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
           {% endif %}
           <div class="article-card__tags">
-            {%- assign downcased_tag = article.tags | join: ' ' -%}
-            <span
-              class="tag"
-              data-tag="{{ downcased_tag }}"
-              {% if downcased_tag == 'Fire' %}
-                style="background-color: #FFD100;"
-              {% elseif downcased_tag == 'Water' %}
-                style="background-color: #4A90E2;"
-              {% elseif downcased_tag == 'earth' %}
-                style="background-color: #8B5A2B;"
-              {% elseif downcased_tag == 'air' %}
-                style="background-color: #4CAF50;"
-              {% endif %}
-            >
-              {{- article.tags -}}
-            </span>
+            {% for tag in article.tags %}
+              {%- assign handleized_tag = tag | handle -%}
+          
+              {% comment %} Only render tags that are one of the four elements {% endcomment %}
+              {%- if handleized_tag == 'fire' or handleized_tag == 'water' or handleized_tag == 'earth' or handleized_tag == 'air' -%}
+                <span class="tag tag--{{ handleized_tag }}">
+                  {{- tag -}}
+                </span>
+              {%- endif -%}
+            {% endfor %}
           </div>
         </a>
         <div class="article-card__info">
