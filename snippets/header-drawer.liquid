@@ -54,7 +54,7 @@
         {{- 'icon-menu.svg' | inline_asset_content -}}
       </span>
       <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
-        {{- 'icon-close.svg' | inline_asset_content -}}
+        {{- 'new-icon-close.svg' | inline_asset_content -}}
       </span>
     </summary>
     <div
@@ -289,7 +289,7 @@
                             on:click="header-drawer/close"
                           >
                             <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
-                              {{- 'icon-close.svg' | inline_asset_content -}}
+                              {{- 'new-icon-close.svg' | inline_asset_content -}}
                             </span>
                           </button>
                         </div>
@@ -1012,10 +1012,10 @@
     padding: var(--padding-lg);
     will-change: transform;
   }
-  /* .menu-drawer__close-button .svg-wrapper{
-    width: 3rem;
-    height: 3rem;
-  } */
+  .menu-drawer__close-button .header-drawer-icon--close{
+    width: 2.75rem;
+    height: 2.75rem;
+  }
   .menu-drawer__back-button {
     display: flex;
     width: 100%;
