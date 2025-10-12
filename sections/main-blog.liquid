@@ -46,6 +46,24 @@
           {% else %}
             {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
           {% endif %}
+          <div class="article-card__tags">
+            <span
+              class="tag"
+              {% if article.tags == 'Fire' %}
+                style="background-color: #FFD100;"
+              {% else %}
+                style="background-color: #4A90E2;"
+              {% else %}
+                style="background-color: #8B5A2B;"
+              {% else %}
+                style="background-color: #4CAF50;"
+              {% else %}
+                style="background-color: #333;"
+              {% endif %}
+            >
+              {{- article.tags -}}
+            </span>
+          </div>
         </a>
         <div class="article-card__info">
           <h2 class="article-card__title">
@@ -55,7 +73,9 @@
             {{ article.excerpt_or_content | strip_html | truncate: 150 }}
           </div>
           <div class="article-card__meta">
-            <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%B %d, %Y' }}</time>
+            <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+              {{- article.published_at | date: '%B %d, %Y' -}}
+            </time>
           </div>
         </div>
       </div>
@@ -133,6 +153,20 @@
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   }
+  .article-card .article-card__tags {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .article-card .article-card__tags .tag {
+    background-color: #2d3748;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 9999px;
+  }
   .article-card__image-wrapper {
     display: block;
     aspect-ratio: 16 / 10;
@@ -160,7 +194,7 @@
     color: #555;
     line-height: 1.6;
   }
-  .article-card__meta { 
+  .article-card__meta {
     margin-top: 10px;
     font-size: 0.8rem;
     color: #999;
