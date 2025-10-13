@@ -57,84 +57,9 @@
               <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required value="">
             </div>
             <!-- 日期时间选择器 -->
-            <!--
-            <div class="form-group">
-              <label>Birth Date & Time <span class="required">*</span></label>
-              <div class="grid-cols-responsive">
-                <div>
-                  <label for="birth-year">Year</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-year"
-                    name="birth_year"
-                    min="1900"
-                    max="2025"
-                    placeholder="YYYY"
-                    required
-                    value=""
-                  >
-                </div>
-                <div>
-                  <label for="birth-month">Month</label>
-                  <select id="birth-month" name="birth_month" required value="">
-                    <option value="">Select</option>
-                    {% for m in (1..12) %}
-                      <option value="{{ m }}">{{ m }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <div>
-                  <label for="birth-day">Day</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-day"
-                    name="birth_day"
-                    min="1"
-                    max="31"
-                    placeholder="DD"
-                    required
-                    value=""
-                  >
-                </div>
-              </div>
-
-              <div class="grid-cols-2">
-                <div>
-                  <label for="birth-hour">Hour (24h)</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-hour"
-                    name="birth_hour"
-                    min="0"
-                    max="23"
-                    placeholder="HH"
-                    required
-                    value=""
-                  >
-                </div>
-                <div>
-                  <label for="birth-minute">Minute</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-minute"
-                    name="birth_minute"
-                    min="0"
-                    max="59"
-                    placeholder="MM"
-                    required
-                    value=""
-                  >
-                </div>
-              </div>
-            </div>
-            -->
             <div class="form-group">
               <label for="birth-datetime">Birth Date & Time <span class="required">*</span></label>
-              <input class="ipt" type="datetime-local" lang="en" id="birth-datetime" name="birth_datetime" required value="" placeholder="please select">
+              <input class="ipt datetime-local-en" type="datetime-local" lang="en" id="birth-datetime" name="birth_datetime" required value="" placeholder="Select date and time">
             </div>
 
             <!--国家选择器-->
@@ -311,6 +236,36 @@
       .get-report-section input[type="datetime-local"] {
         font-size: 16px; /* 防止iOS缩放 */
       }
+    }
+    
+    /* 确保日期时间选择器使用英文显示 */
+    .datetime-local-en {
+      /* 强制使用英文语言环境 */
+      --webkit-calendar-picker-color: #333;
+    }
+    
+    /* 针对Webkit浏览器的日期时间选择器样式 */
+    .datetime-local-en::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      filter: invert(0.5);
+    }
+    
+    /* 设置日期时间选择器的语言环境 */
+    .datetime-local-en::-webkit-datetime-edit-text {
+      color: #333;
+      padding: 0 0.3em;
+    }
+    
+    .datetime-local-en::-webkit-datetime-edit-month-field {
+      color: #333;
+    }
+    
+    .datetime-local-en::-webkit-datetime-edit-day-field {
+      color: #333;
+    }
+    
+    .datetime-local-en::-webkit-datetime-edit-year-field {
+      color: #333;
     }
     .get-report-section p.subheading {
       color: #333;
@@ -865,21 +820,51 @@
         }
       }
 
-      // 初始化日期时间选择器
+      // 初始化日期时间选择器的范围和语言
       const birthDateTimeInput = document.getElementById('birth-datetime');
-      
-      // 设置最大值为当前时间
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      const maxDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
-      birthDateTimeInput.max = maxDateTime;
-      
-      // 设置最小值为1900年1月1日
-      birthDateTimeInput.min = '1900-01-01T00:00';
+      if (birthDateTimeInput) {
+        // 设置最大值为当前时间
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const maxDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+        birthDateTimeInput.max = maxDateTime;
+        
+        // 设置最小值为1900年1月1日
+        birthDateTimeInput.min = '1900-01-01T00:00';
+        
+        // 尝试设置语言环境为英文
+        try {
+          // 对于支持该属性的浏览器
+          birthDateTimeInput.setAttribute('lang', 'en');
+          birthDateTimeInput.setAttribute('data-locale', 'en-US');
+          
+          // 尝试通过Intl API设置日期格式
+          const options = { 
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          };
+          const formatter = new Intl.DateTimeFormat('en-US', options);
+          
+          // 添加事件监听器，确保选择器使用英文
+          birthDateTimeInput.addEventListener('focus', function() {
+            this.setAttribute('lang', 'en');
+          });
+          
+          birthDateTimeInput.addEventListener('click', function() {
+            this.setAttribute('lang', 'en');
+          });
+        } catch (e) {
+          console.log('Could not set locale for datetime input:', e);
+        }
+      }
       
       // 初始化：清空下级
       resetSelect(stateSelect, PLACEHOLDERS.state);
