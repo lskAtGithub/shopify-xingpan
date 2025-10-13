@@ -133,76 +133,16 @@
 
             <div class="form-group">
               <label>Birth Date & Time <span class="required">*</span></label>
-              <div class="grid-cols-responsive">
-                <div>
-                  <label for="birth-year">Year</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-year"
-                    name="birth_year"
-                    min="1900"
-                    max="2024"
-                    placeholder="YYYY"
-                    required
-                    value=""
-                  >
-                </div>
-                <div>
-                  <label for="birth-month">Month</label>
-                  <select id="birth-month" name="birth_month" required value="">
-                    <option value="">Select</option>
-                    {% for m in (1..12) %}
-                      <option value="{{ m }}">{{ m }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <div>
-                  <label for="birth-day">Day</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-day"
-                    name="birth_day"
-                    min="1"
-                    max="31"
-                    placeholder="DD"
-                    required
-                    value=""
-                  >
-                </div>
-              </div>
-
-              <div class="grid-cols-2">
-                <div>
-                  <label for="birth-hour">Hour (24h)</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-hour"
-                    name="birth_hour"
-                    min="0"
-                    max="23"
-                    placeholder="HH"
-                    required
-                    value=""
-                  >
-                </div>
-                <div>
-                  <label for="birth-minute">Minute</label>
-                  <input
-                    class="ipt"
-                    type="number"
-                    id="birth-minute"
-                    name="birth_minute"
-                    min="0"
-                    max="59"
-                    placeholder="MM"
-                    required
-                    value=""
-                  >
-                </div>
-              </div>
+              <input 
+                type="text"
+                class="ipt"
+                id="birth-datetime"
+                name="birth_datetime"
+                required
+                data-input
+                placeholder="Select Birth Date & Time"
+                pattern="\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}"
+              >
             </div>
 
             <div class="form-group">
@@ -1286,3 +1226,15 @@
 }
   {% endschema %}
 </section>
+
+{% comment %} 添加Flatpickr初始化脚本 {% endcomment %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    flatpickr('#birth-datetime', {
+      enableTime: true,
+      dateFormat: 'Y-m-d H:i:S',
+      time_24hr: true,
+      minuteIncrement: 1
+    });
+  });
+</script>
