@@ -58,20 +58,16 @@
             </div>
 
             <div class="form-group">
-              <label>出生日期时间 <span class="required">*</span></label>
+              <label>Birth Date & Time <span class="required">*</span></label>
               <input 
-                type="datetime-local"
+                type="text"
                 class="ipt"
                 id="birth-datetime"
                 name="birth_datetime"
                 required
-                value=""
-                min="1900-01-01T00:00"
-                max="2024-12-31T23:59"
-                {% comment %} 移动端优化 {% endcomment %}
-                onfocus="(this.type='datetime-local')"
-                onblur="(this.type='text')"
-                placeholder="选择日期时间"
+                data-input
+                placeholder="Select Birth Date & Time"
+                pattern="\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}"
               >
             </div>
 
@@ -1160,3 +1156,15 @@
 }
   {% endschema %}
 </section>
+
+{% comment %} 添加Flatpickr初始化脚本 {% endcomment %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    flatpickr('#birth-datetime', {
+      enableTime: true,
+      dateFormat: 'Y-m-d H:i:S',
+      time_24hr: true,
+      minuteIncrement: 1
+    });
+  });
+</script>
