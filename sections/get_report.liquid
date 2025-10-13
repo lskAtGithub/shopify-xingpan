@@ -60,6 +60,9 @@
             <div class="form-group">
               <label for="birth-datetime">Birth Date & Time <span class="required">*</span></label>
               <input class="ipt datetime-local-en" type="datetime-local" lang="en" id="birth-datetime" name="birth_datetime" required value="" placeholder="Select date and time">
+              <p style="font-size: 12px; color: #666;">
+                tips：If you don't know the exact time, choose the one you think is possible.
+              </p>
             </div>
 
             <!--国家选择器-->
@@ -1141,7 +1144,8 @@
           draw();
           tooltip.style.display = 'none';
         });
-        loadStream(res);
+        // loadStream(res);
+        renderRecommendedProducts(res);
       }
 
       async function renderModal(data) {
