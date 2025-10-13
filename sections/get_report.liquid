@@ -716,8 +716,7 @@
     let lon = '';
     let reportId = '';
     const BASE_URL = 'https://api.11starsastro.com';
-    const today = new Date();
-    const datetimePicker = new zui.datetimePicker('#datetimePicker', { menu: [] });
+    const datetimePicker = new zui.datetimePicker('#datetimePicker', { todayText: 'toDay', clearText: 'Clear', required: true, yearText: 'Year',  });
 
     document.addEventListener('DOMContentLoaded', function () {
       const countrySelect = document.getElementById('country');
