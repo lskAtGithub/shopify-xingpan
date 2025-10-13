@@ -288,6 +288,30 @@
       line-height: 1.2;
       font-size: 2.75rem; /* 30px */
     }
+    
+    /* 日期时间选择器样式 */
+    .get-report-section input[type="datetime-local"] {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: all 0.2s;
+      background-color: #fff;
+    }
+    
+    .get-report-section input[type="datetime-local"]:focus {
+      outline: none;
+      border-color: #f97316;
+      box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+    }
+    
+    /* 移动端优化 */
+    @media (max-width: 768px) {
+      .get-report-section input[type="datetime-local"] {
+        font-size: 16px; /* 防止iOS缩放 */
+      }
+    }
     .get-report-section p.subheading {
       color: #333;
       font-size: 1rem;
@@ -841,6 +865,22 @@
         }
       }
 
+      // 初始化日期时间选择器
+      const birthDateTimeInput = document.getElementById('birth-datetime');
+      
+      // 设置最大值为当前时间
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const maxDateTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+      birthDateTimeInput.max = maxDateTime;
+      
+      // 设置最小值为1900年1月1日
+      birthDateTimeInput.min = '1900-01-01T00:00';
+      
       // 初始化：清空下级
       resetSelect(stateSelect, PLACEHOLDERS.state);
       resetSelect(citySelect, PLACEHOLDERS.city);
@@ -899,6 +939,22 @@
         const country = document.getElementById('country').value;
         const state = document.getElementById('state').value;
         const city = document.getElementById('city').value;
+        
+        // 验证必填字段
+        if (!name) {
+          alert('Please enter your full name');
+          return false;
+        }
+        
+        if (!birthDateTime) {
+          alert('Please select your birth date and time');
+          return false;
+        }
+        
+        if (!country || !state || !city) {
+          alert('Please select your birth location');
+          return false;
+        }
         
         // 将datetime-local格式转换为所需的格式
         const date = new Date(birthDateTime);
