@@ -57,84 +57,82 @@
               <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required value="">
             </div>
 
-            {% comment %}
-              <div class="form-group">
-                <label>Birth Date & Time <span class="required">*</span></label>
-                <div class="grid-cols-responsive">
-                  <div>
-                    <label for="birth-year">Year</label>
-                    <input
-                      class="ipt"
-                      type="number"
-                      id="birth-year"
-                      name="birth_year"
-                      min="1900"
-                      max="2024"
-                      placeholder="YYYY"
-                      required
-                      value=""
-                    >
-                  </div>
-                  <div>
-                    <label for="birth-month">Month</label>
-                    <select id="birth-month" name="birth_month" required value="">
-                      <option value="">Select</option>
-                      {% for m in (1..12) %}
-                        <option value="{{ m }}">{{ m }}</option>
-                      {% endfor %}
-                    </select>
-                  </div>
-                  <div>
-                    <label for="birth-day">Day</label>
-                    <input
-                      class="ipt"
-                      type="number"
-                      id="birth-day"
-                      name="birth_day"
-                      min="1"
-                      max="31"
-                      placeholder="DD"
-                      required
-                      value=""
-                    >
-                  </div>
+            {% comment %} <div class="form-group">
+              <label>Birth Date & Time <span class="required">*</span></label>
+              <div class="grid-cols-responsive">
+                <div>
+                  <label for="birth-year">Year</label>
+                  <input
+                    class="ipt"
+                    type="number"
+                    id="birth-year"
+                    name="birth_year"
+                    min="1900"
+                    max="2024"
+                    placeholder="YYYY"
+                    required
+                    value=""
+                  >
                 </div>
-
-                <div class="grid-cols-2">
-                  <div>
-                    <label for="birth-hour">Hour (24h)</label>
-                    <input
-                      class="ipt"
-                      type="number"
-                      id="birth-hour"
-                      name="birth_hour"
-                      min="0"
-                      max="23"
-                      placeholder="HH"
-                      required
-                      value=""
-                    >
-                  </div>
-                  <div>
-                    <label for="birth-minute">Minute</label>
-                    <input
-                      class="ipt"
-                      type="number"
-                      id="birth-minute"
-                      name="birth_minute"
-                      min="0"
-                      max="59"
-                      placeholder="MM"
-                      required
-                      value=""
-                    >
-                  </div>
+                <div>
+                  <label for="birth-month">Month</label>
+                  <select id="birth-month" name="birth_month" required value="">
+                    <option value="">Select</option>
+                    {% for m in (1..12) %}
+                      <option value="{{ m }}">{{ m }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div>
+                  <label for="birth-day">Day</label>
+                  <input
+                    class="ipt"
+                    type="number"
+                    id="birth-day"
+                    name="birth_day"
+                    min="1"
+                    max="31"
+                    placeholder="DD"
+                    required
+                    value=""
+                  >
                 </div>
               </div>
-            {% endcomment %}
+
+              <div class="grid-cols-2">
+                <div>
+                  <label for="birth-hour">Hour (24h)</label>
+                  <input
+                    class="ipt"
+                    type="number"
+                    id="birth-hour"
+                    name="birth_hour"
+                    min="0"
+                    max="23"
+                    placeholder="HH"
+                    required
+                    value=""
+                  >
+                </div>
+                <div>
+                  <label for="birth-minute">Minute</label>
+                  <input
+                    class="ipt"
+                    type="number"
+                    id="birth-minute"
+                    name="birth_minute"
+                    min="0"
+                    max="59"
+                    placeholder="MM"
+                    required
+                    value=""
+                  >
+                </div>
+              </div>
+            </div> {% endcomment %}
 
             <div class="form-group">
-              <div id="datetimePicker"></div>
+              <input type="datetime-local" class="form-control" placeholder="Select Birth Date & Time" clearText="Clear" todayText="Today" />
             </div>
 
             <div class="form-group">
@@ -716,8 +714,6 @@
     let lon = '';
     let reportId = '';
     const BASE_URL = 'https://api.11starsastro.com';
-    const datetimePicker = new zui.datetimePicker('#datetimePicker', { todayText: 'toDay', clearText: 'Clear', required: true, yearText: 'Year',  });
-
     document.addEventListener('DOMContentLoaded', function () {
       const countrySelect = document.getElementById('country');
       const stateSelect = document.getElementById('state');
