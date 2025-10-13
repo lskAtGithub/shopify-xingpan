@@ -57,6 +57,7 @@
               <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required value="">
             </div>
             <!-- 日期时间选择器 -->
+            <!--
             <div class="form-group">
               <label>Birth Date & Time <span class="required">*</span></label>
               <div class="grid-cols-responsive">
@@ -129,6 +130,11 @@
                   >
                 </div>
               </div>
+            </div>
+            -->
+            <div class="form-group">
+              <label for="birth-datetime">Birth Date & Time <span class="required">*</span></label>
+              <input class="ipt" type="datetime-local" id="birth-datetime" name="birth_datetime" required value="">
             </div>
 
             <!--国家选择器-->
@@ -889,18 +895,19 @@
           return false;
         }
         const name = document.getElementById('name').value.trim();
-        const year = document.getElementById('birth-year').value;
-        const month = document.getElementById('birth-month').value;
-        const day = document.getElementById('birth-day').value;
-        const hour = document.getElementById('birth-hour').value;
-        const minute = document.getElementById('birth-minute').value;
+        const birthDateTime = document.getElementById('birth-datetime').value;
         const country = document.getElementById('country').value;
         const state = document.getElementById('state').value;
         const city = document.getElementById('city').value;
-        const time = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} ${String(hour).padStart(
-          2,
-          '0'
-        )}:${String(minute).padStart(2, '0')}:00`;
+        
+        // 将datetime-local格式转换为所需的格式
+        const date = new Date(birthDateTime);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hour = String(date.getHours()).padStart(2, '0');
+        const minute = String(date.getMinutes()).padStart(2, '0');
+        const time = `${year}-${month}-${day} ${hour}:${minute}:00`;
 
         const address = `${country} ${state} ${city}`;
         const payload = {
