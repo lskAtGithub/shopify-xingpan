@@ -57,7 +57,7 @@
               <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required value="">
             </div>
 
-            <div class="form-group">
+            {% comment %} <div class="form-group">
               <label>Birth Date & Time <span class="required">*</span></label>
               <div class="grid-cols-responsive">
                 <div>
@@ -129,6 +129,10 @@
                   >
                 </div>
               </div>
+            </div> {% endcomment %}
+
+            <div class="form-group">
+              <input type="datetime-local" class="form-control" placeholder="选择日期时间" />
             </div>
 
             <div class="form-group">
