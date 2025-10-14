@@ -178,6 +178,10 @@
 .product-image { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
 .product-info h4 { font-size: 1rem; margin: 0 0 4px 0; }
 .product-info p { font-size: 0.9rem; margin: 0; }
+.product-info p.product-price {  }
+.product-info p.product-decoration { 
+  color: #999;
+ }
 
 .card-footer {
   margin-top: 1.5rem;
@@ -273,9 +277,10 @@ document.addEventListener('DOMContentLoaded', () => {
           
           ${productData ? `
             <div class="recommended-product">
-              <img src="/assets/placeholder-image.png" class="product-image" data-product-title="${productData.title}" alt="Recommended product">
+              <img src="${productData.image}" class="product-image" data-product-title="${productData.title}" alt="Recommended product">
               <div class="product-info">
                 <h4>${productData.title}</h4>
+                <p class="product-decoration">${productData.bodyHtml}</p>
                 <p class="product-price">$129</p>
               </div>
             </div>
@@ -292,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Post-render step: Fetch and populate product images
-    document.querySelectorAll('.product-image[data-product-title]').forEach(async (img) => {
+    {% comment %} document.querySelectorAll('.product-image[data-product-title]').forEach(async (img) => {
       const title = img.dataset.productTitle;
       const handle = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
       try {
@@ -302,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
           img.src = product.featured_image || '/assets/placeholder-image.png';
         }
       } catch (e) { console.error('Could not fetch product image for', title); }
-    });
+    }); {% endcomment %}
   }
 
   fetchReports();
