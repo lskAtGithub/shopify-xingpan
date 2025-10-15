@@ -953,7 +953,7 @@
         const minute = String(date.getMinutes()).padStart(2, '0');
         const time = `${year}-${month}-${day} ${hour}:${minute}:00`;
 
-        const address = `${country} ${state} ${city}`;
+        const address = city ? `${city},${state},${country}` : `${state},${country}`;
         const payload = {
           key: window.customer.id,
           tid: 4,
