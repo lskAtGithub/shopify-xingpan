@@ -918,10 +918,6 @@
       const form = document.querySelector('#report-form');
       form.addEventListener('submit', async function (e) {
         e.preventDefault();
-        if (!window.customer) {
-          openLoginPromptModal();
-          return false;
-        }
         const name = document.getElementById('name').value.trim();
         const birthDateTime = document.getElementById('birth-datetime').value;
         const country = document.getElementById('country').value;
@@ -955,7 +951,6 @@
 
         const address = city ? `${city},${state},${country}` : `${state},${country}`;
         const payload = {
-          key: window.customer.id,
           tid: 4,
           us: 'zh-CN',
           userBirthday: time,
@@ -966,6 +961,9 @@
           lon: lon,
           userName: name,
         };
+        if(window.customer.id) {
+          payload.key = window.customer.id;
+        }
         const paramsForm = new URLSearchParams();
         Object.keys(payload).forEach((k) => {
           paramsForm.append(k, payload[k]);
