@@ -1,530 +1,669 @@
 {% comment %}
-  Report Detail Page Section
-  - Displays detailed report information based on report ID in URL
-  - Includes customer authentication check
-  - Shows loading, error, and not found states
+  Astrological Report Detail Page
+  - Uses Shopify customer data for user information
+  - Displays astrological elements analysis with visualization
+  - Shows recommended products based on element balance
+  - Includes PDF download functionality
 {% endcomment %}
 
-<div class="report-detail-page section-{{ section.id }}">
-  <div class="page-width">
-
-    {% if customer %}
-      <!-- ============================================= -->
-      <!-- ========= START: LOGGED IN VIEW ========= -->
-      <!-- ============================================= -->
-      <div id="report-detail-container" data-customer-id="{{ customer.id }}">
-        <div class="report-detail-header">
-          <div class="header-actions">
-            <a href="/pages/report-list" class="button button--secondary back-button">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
-              Back to Reports
-            </a>
+<div class="astrological-report section-{{ section.id }}">
+  {% if customer %}
+    <!-- Logged in view with customer information -->
+    <div class="page-width">
+      <!-- Report Header -->
+      <div class="report-header">
+        <div class="report-title-area">
+          <div class="customer-info">
+            {% if customer.last_name and customer.first_name %}
+              <h1>Report for {{ customer.first_name }} {{ customer.last_name }}</h1>
+            {% else %}
+              <h1>Report for {{ customer.email | split: '@' | first | capitalize }}</h1>
+            {% endif %}
+            <p class="report-date">{{ 'now' | date: '%Y-%m-%d %H:%M:%S' }}</p>
           </div>
-          <h1 id="report-title">Report Details</h1>
+          <a href="/pages/report-list" class="back-to-reports">Back to Reports</a>
         </div>
-
-        <!-- Loading Spinner -->
-        <div id="loading-spinner" class="spinner-container">
-          <div class="spinner"></div>
-          <p>Loading your report...</p>
-        </div>
-        
-        <!-- Report Not Found -->
-        <div id="report-not-found" class="message-container" style="display: none;">
-          <p>Report not found or you don't have permission to view it.</p>
-          <a href="/pages/report-list" class="button">View All Reports</a>
-        </div>
-        
-        <!-- Report Content -->
-        <div id="report-content" class="report-content" style="display: none;">
-          <!-- Report Header Info -->
-          <div class="report-header-info">
-            <div class="report-meta">
-              <div class="meta-item">
-                <span class="meta-label">Report ID:</span>
-                <span id="report-id" class="meta-value"></span>
-              </div>
-              <div class="meta-item">
-                <span class="meta-label">Generated:</span>
-                <span id="report-date" class="meta-value"></span>
-              </div>
-            </div>
-            <div class="report-actions">
-              <a id="download-pdf" href="#" class="button button--secondary" download>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                Download PDF
-              </a>
-            </div>
-          </div>
-
-          <!-- Report Data Sections -->
-          <div class="report-sections">
-            <!-- Personal Information -->
-            <div class="report-section">
-              <h2 class="section-title">Personal Information</h2>
-              <div class="personal-info">
-                <div class="info-grid">
-                  <div class="info-item">
-                    <span class="info-label">Name:</span>
-                    <span id="user-name" class="info-value"></span>
-                  </div>
-                  <div class="info-item">
-                    <span class="info-label">Birth Date:</span>
-                    <span id="birth-date" class="info-value"></span>
-                  </div>
-                  <div class="info-item">
-                    <span class="info-label">Birth Time:</span>
-                    <span id="birth-time" class="info-value"></span>
-                  </div>
-                  <div class="info-item">
-                    <span class="info-label">Birth Place:</span>
-                    <span id="birth-place" class="info-value"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Core Analysis -->
-            <div class="report-section">
-              <h2 class="section-title">Core Analysis</h2>
-              <div id="core-analysis" class="analysis-content">
-                <!-- Will be populated by JavaScript -->
-              </div>
-            </div>
-
-            <!-- Recommended Products -->
-            <div class="report-section">
-              <h2 class="section-title">Recommended Products</h2>
-              <div id="recommended-products" class="products-grid">
-                <!-- Will be populated by JavaScript -->
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Error Message -->
-        <div id="error-message" class="message-container" style="display: none;"></div>
+        <button class="download-pdf-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download PDF
+        </button>
       </div>
-      <!-- ============================================= -->
-      <!-- ========= END: LOGGED IN VIEW ========= -->
-      <!-- ============================================= -->
 
-    {% else %}
-      <!-- ============================================= -->
-      <!-- ======= START: LOGGED OUT VIEW ======= -->
-      <!-- ============================================= -->
-      <div class="logged-out-container message-container">
-        <p>You can view your report only after logging in to your account</p>
-        <a href="/account/login" class="button">Log in now</a>
+      <!-- Main Report Content -->
+      <div class="report-content-wrapper">
+        <!-- Left Column - Report Details -->
+        <div class="report-main">
+          <!-- Element Distribution Chart -->
+          <div class="element-chart-section">
+            <div class="element-chart">
+              <canvas id="elementChart"></canvas>
+            </div>
+            <div class="element-legend">
+              <div class="element-item">
+                <span class="element-color earth"></span>
+                <span class="element-name">Earth</span>
+                <span class="element-value">20%</span>
+              </div>
+              <div class="element-item">
+                <span class="element-color water"></span>
+                <span class="element-name">Water</span>
+                <span class="element-value">20%</span>
+              </div>
+              <div class="element-item">
+                <span class="element-color air"></span>
+                <span class="element-name">Air</span>
+                <span class="element-value">20%</span>
+              </div>
+              <div class="element-item">
+                <span class="element-color fire"></span>
+                <span class="element-name">Fire</span>
+                <span class="element-value">40%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Analysis Text -->
+          <div class="analysis-section">
+            <h2>You're a fire-element person and need water to balance your life.</h2>
+            <p>Your dominant fire element means you're passionate, energetic, and charismatic. You have a natural ability to inspire others and take initiative. However, sometimes you may burn too brightly, becoming impatient or impulsive. Consider incorporating more water-element activities into your life, such as spending time near bodies of water, practicing mindfulness, or engaging in creative pursuits that require patience and flow.</p>
+          </div>
+
+          <!-- Element Table -->
+          <div class="element-table-section">
+            <table class="element-table">
+              <thead>
+                <tr>
+                  <th>Planet</th>
+                  <th>Sign</th>
+                  <th>Degree</th>
+                  <th>Element</th>
+                  <th>Quality</th>
+                  <th>Cardinality</th>
+                  <th>House</th>
+                  <th>Position</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Sample table data -->
+                <tr>
+                  <td>Sun</td>
+                  <td>Aries</td>
+                  <td>5°</td>
+                  <td>Fire</td>
+                  <td>Cardinal</td>
+                  <td>Self</td>
+                  <td>1st</td>
+                  <td>Conjunct</td>
+                </tr>
+                <tr>
+                  <td>Moon</td>
+                  <td>Sagittarius</td>
+                  <td>12°</td>
+                  <td>Fire</td>
+                  <td>Mutable</td>
+                  <td>Emotion</td>
+                  <td>9th</td>
+                  <td>Trine</td>
+                </tr>
+                <tr>
+                  <td>Mercury</td>
+                  <td>Pisces</td>
+                  <td>23°</td>
+                  <td>Water</td>
+                  <td>Mutable</td>
+                  <td>Communication</td>
+                  <td>12th</td>
+                  <td>Sextile</td>
+                </tr>
+                <tr>
+                  <td>Venus</td>
+                  <td>Scorpio</td>
+                  <td>15°</td>
+                  <td>Water</td>
+                  <td>Fixed</td>
+                  <td>Love</td>
+                  <td>8th</td>
+                  <td>Square</td>
+                </tr>
+                <tr>
+                  <td>Mars</td>
+                  <td>Leo</td>
+                  <td>8°</td>
+                  <td>Fire</td>
+                  <td>Fixed</td>
+                  <td>Action</td>
+                  <td>5th</td>
+                  <td>Opposition</td>
+                </tr>
+                <tr>
+                  <td>Jupiter</td>
+                  <td>Capricorn</td>
+                  <td>11°</td>
+                  <td>Earth</td>
+                  <td>Cardinal</td>
+                  <td>Expansion</td>
+                  <td>10th</td>
+                  <td>Conjunct</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right Column - Personal Info & Recommended Products -->
+        <div class="report-sidebar">
+          <!-- Personal Information Card -->
+          <div class="personal-info-card">
+            {% if customer.last_name and customer.first_name %}
+              <div class="customer-name">{{ customer.first_name }} {{ customer.last_name }}</div>
+            {% else %}
+              <div class="customer-name">{{ customer.email | split: '@' | first | capitalize }}</div>
+            {% endif %}
+            <div class="birth-info">
+              <div class="birth-item">
+                <span class="birth-label">Birth Time:</span>
+                <span class="birth-value">February 5, 1994 05:15</span>
+              </div>
+              <div class="birth-item">
+                <span class="birth-label">Birth Place:</span>
+                <span class="birth-value">Shenzhen, Guangdong, China</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Element Description Card -->
+          <div class="element-description-card">
+            <h3>Water Element</h3>
+            <p>Our Transformation crystal art captures the essence of water element vitality and harmony. Handcrafted with genuine lapis lazuli and carnelian crystals, this piece amplifies your intuition, passion, and creative energy.</p>
+            <div class="element-image">
+              <img src="https://cdn.shopify.com/s/files/1/0585/3828/1384/files/water-crystal-art.jpg" alt="Water Element Crystal Art">
+            </div>
+            <div class="element-details">
+              <div class="element-meta">
+                <span class="meta-label">Natural stones</span>
+                <span class="meta-label">20"×20" framed</span>
+                <span class="meta-label">Handcrafted</span>
+              </div>
+              <div class="element-price">$89</div>
+              <button class="add-to-cart-btn">Add to Cart</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <!-- ============================================= -->
-      <!-- ========= END: LOGGED OUT VIEW ======== -->
-      <!-- ============================================= -->
-    {% endif %}
-
-  </div>
+    </div>
+  {% else %}
+    <!-- Logged out view -->
+    <div class="page-width">
+      <div class="not-logged-in">
+        <h2>Please Log In</h2>
+        <p>You need to be logged in to view your astrological report.</p>
+        <a href="/account/login" class="login-link">Log in now</a>
+      </div>
+    </div>
+  {% endif %}
 </div>
 
 {% stylesheet %}
-.report-detail-page {
-  padding: 3rem 1rem;
+/* Main Report Styles */
+.astrological-report {
+  padding: 2rem 0;
 }
+
 .page-width {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
-/* --- Header Styles --- */
-.report-detail-header {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-.header-actions {
-  margin-bottom: 1.5rem;
-  text-align: left;
-}
-.back-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.9rem;
-}
-.report-detail-header h1 {
-  font-size: 2.5rem;
-  margin: 0;
-}
-
-/* --- Message & Loading Styles --- */
-.message-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 4rem 1rem;
-  background-color: #f9fafb;
-  border-radius: 12px;
-  min-height: 40vh;
-}
-.message-container p {
-  font-size: 1.125rem;
-  color: #555;
-  margin: 0 0 1.5rem 0;
-}
-
-.spinner-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 40vh;
-  gap: 1.5rem;
-}
-.spinner {
-  width: 48px; height: 48px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #3498db;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-/* --- Button Styles --- */
-.button {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-}
-.button--primary {
-  background: #2D3748;
-  color: #fff;
-}
-.button--primary:hover {
-  background-color: #1a202c;
-}
-.button--secondary {
-  background: #fff;
-  border: 1px solid #d1d5db;
-  color: #333;
-}
-.button--secondary:hover {
-  background-color: #f9fafb;
-}
-
-/* --- Report Content Styles --- */
-.report-content {
-  background-color: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.report-header-info {
+/* Report Header */
+.report-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #f9fafb;
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid #e5e7eb;
-  flex-wrap: wrap;
-  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
 }
 
-.report-meta {
+.report-title-area {
   display: flex;
+  align-items: center;
   gap: 2rem;
-  flex-wrap: wrap;
-}
-.meta-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-.meta-label {
-  font-size: 0.875rem;
-  color: #777;
-}
-.meta-value {
-  font-weight: 500;
-  color: #333;
 }
 
-/* --- Report Sections --- */
-.report-sections {
-  padding: 2rem;
-}
-.report-section {
-  margin-bottom: 3rem;
-}
-.section-title {
+.customer-info h1 {
   font-size: 1.5rem;
-  margin: 0 0 1.5rem 0;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e5e7eb;
-  color: #2D3748;
-}
-
-/* --- Personal Info Grid --- */
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-}
-.info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.info-label {
-  font-size: 0.875rem;
-  color: #777;
-  font-weight: 500;
-}
-.info-value {
-  font-size: 1.125rem;
+  margin: 0;
   color: #333;
 }
 
-/* --- Analysis Content --- */
-.analysis-content {
-  line-height: 1.6;
-  color: #555;
-}
-.analysis-content p {
-  margin-bottom: 1rem;
-}
-.analysis-content h3 {
-  font-size: 1.25rem;
-  margin: 1.5rem 0 1rem 0;
-  color: #2D3748;
+.report-date {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0 0;
 }
 
-/* --- Products Grid --- */
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-}
-.product-card {
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-}
-.product-image-container {
-  height: 200px;
-  overflow: hidden;
-}
-.product-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-.product-card:hover .product-image {
-  transform: scale(1.05);
-}
-.product-details {
-  padding: 1.5rem;
-}
-.product-title {
-  font-size: 1.125rem;
-  margin: 0 0 0.5rem 0;
-  font-weight: 600;
-}
-.product-description {
-  color: #777;
-  font-size: 0.9rem;
-  margin: 0 0 1rem 0;
-  line-height: 1.5;
-}
-.product-price {
-  font-weight: 600;
-  color: #2D3748;
-  margin: 0 0 1rem 0;
-}
-.product-link {
-  display: inline-block;
+.back-to-reports {
+  color: #666;
   text-decoration: none;
-  color: #2D3748;
-  font-weight: 500;
-  transition: color 0.2s ease;
+  font-size: 0.9rem;
+  transition: color 0.2s;
 }
-.product-link:hover {
-  color: #1a202c;
+
+.back-to-reports:hover {
+  color: #333;
   text-decoration: underline;
 }
 
-/* --- Responsive Adjustments --- */
+.download-pdf-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.download-pdf-btn:hover {
+  background-color: #1a1a1a;
+}
+
+/* Main Content Layout */
+.report-content-wrapper {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+/* Left Column - Report Main */
+.report-main {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Element Chart Section */
+.element-chart-section {
+  margin-bottom: 2rem;
+}
+
+.element-chart {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+#elementChart {
+  max-width: 400px;
+  max-height: 300px;
+}
+
+.element-legend {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.element-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.element-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.element-color.earth {
+  background-color: #8B4513;
+}
+
+.element-color.water {
+  background-color: #1E90FF;
+}
+
+.element-color.air {
+  background-color: #F5DEB3;
+}
+
+.element-color.fire {
+  background-color: #FF4500;
+}
+
+.element-name {
+  color: #333;
+}
+
+.element-value {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Analysis Section */
+.analysis-section {
+  margin-bottom: 2rem;
+}
+
+.analysis-section h2 {
+  font-size: 1.25rem;
+  margin: 0 0 1rem 0;
+  color: #333;
+}
+
+.analysis-section p {
+  line-height: 1.6;
+  color: #555;
+  margin: 0;
+}
+
+/* Element Table */
+.element-table-section {
+  overflow-x: auto;
+}
+
+.element-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.element-table th {
+  background-color: #f5f5f5;
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.element-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e0e0e0;
+  color: #555;
+}
+
+.element-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Right Column - Sidebar */
+.report-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Personal Info Card */
+.personal-info-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.customer-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.birth-info {
+  text-align: left;
+}
+
+.birth-item {
+  margin-bottom: 0.75rem;
+}
+
+.birth-item:last-child {
+  margin-bottom: 0;
+}
+
+.birth-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.birth-value {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Element Description Card */
+.element-description-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.element-description-card h3 {
+  font-size: 1.1rem;
+  margin: 0 0 1rem 0;
+  color: #333;
+}
+
+.element-description-card p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555;
+  margin: 0 0 1rem 0;
+}
+
+.element-image {
+  margin-bottom: 1rem;
+}
+
+.element-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.element-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.meta-label {
+  font-size: 0.8rem;
+  color: #666;
+  background-color: #f5f5f5;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.element-price {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.add-to-cart-btn {
+  width: 100%;
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #1a1a1a;
+}
+
+/* Logged Out View */
+.not-logged-in {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.not-logged-in h2 {
+  margin: 0 0 1rem 0;
+  color: #333;
+}
+
+.not-logged-in p {
+  margin: 0 0 1.5rem 0;
+  color: #555;
+}
+
+.login-link {
+  display: inline-block;
+  background-color: #333;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.login-link:hover {
+  background-color: #1a1a1a;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .report-content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  
+  .element-legend {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 0;
+  }
+}
+
 @media (max-width: 768px) {
-  .report-header-info {
+  .report-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
   
-  .report-meta {
+  .report-title-area {
     flex-direction: column;
-    gap: 1rem;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
   
-  .report-sections {
-    padding: 1.5rem;
+  .download-pdf-btn {
+    align-self: stretch;
+    justify-content: center;
   }
   
-  .info-grid {
-    grid-template-columns: 1fr;
+  .customer-info h1 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .element-chart {
+    height: 250px;
+  }
+  
+  #elementChart {
+    max-width: 300px;
+    max-height: 250px;
+  }
+  
+  .element-table {
+    font-size: 0.8rem;
+  }
+  
+  .element-table th,
+  .element-table td {
+    padding: 0.5rem;
   }
 }
 {% endstylesheet %}
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('report-detail-container');
-    if (!container) return; // Exit if not logged in
-
-    // Get report ID from URL parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const reportId = urlParams.get('id');
-    
-    if (!reportId) {
-      showNotFound();
-      return;
-    }
-
-    const customerId = container.dataset.customerId;
-    const reportTitle = document.getElementById('report-title');
-    const reportContent = document.getElementById('report-content');
-    const loadingSpinner = document.getElementById('loading-spinner');
-    const reportNotFound = document.getElementById('report-not-found');
-    const errorMessage = document.getElementById('error-message');
-    const downloadPdf = document.getElementById('download-pdf');
-    
-    // Element references for report data
-    const reportIdEl = document.getElementById('report-id');
-    const reportDateEl = document.getElementById('report-date');
-    const userNameEl = document.getElementById('user-name');
-    const birthDateEl = document.getElementById('birth-date');
-    const birthTimeEl = document.getElementById('birth-time');
-    const birthPlaceEl = document.getElementById('birth-place');
-    const coreAnalysisEl = document.getElementById('core-analysis');
-    const recommendedProductsEl = document.getElementById('recommended-products');
-
-    const BASE_URL = 'https://api.11starsastro.com';
-
-    async function fetchReportDetails() {
-      try {
-        // Fetch report details by ID
-        const response = await fetch(`${BASE_URL}/report/getById?id=${reportId}&key=${customerId}`);
-        
-        if (!response.ok) {
-          throw new Error(`API Error: ${response.status} ${response.statusText}`);
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Chart.js for element distribution
+    const ctx = document.getElementById('elementChart');
+    if (ctx) {
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Earth', 'Water', 'Air', 'Fire'],
+          datasets: [{
+            data: [20, 20, 20, 40],
+            backgroundColor: ['#8B4513', '#1E90FF', '#F5DEB3', '#FF4500'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '60%',
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
         }
-
-        const result = await response.json();
-        
-        loadingSpinner.style.display = 'none';
-
-        if (result.code === 0 && result.data) {
-          // Display report content
-          reportContent.style.display = 'block';
-          populateReportData(result.data);
-        } else {
-          showNotFound();
-        }
-
-      } catch (error) {
-        console.error('Failed to fetch report details:', error);
-        loadingSpinner.style.display = 'none';
-        errorMessage.textContent = 'Sorry, we couldn\'t load your report at this time. Please try again later.';
-        errorMessage.style.display = 'block';
-      }
+      });
     }
 
-    function showNotFound() {
-      loadingSpinner.style.display = 'none';
-      reportNotFound.style.display = 'flex';
+    // Download PDF button functionality
+    const downloadPdfBtn = document.querySelector('.download-pdf-btn');
+    if (downloadPdfBtn) {
+      downloadPdfBtn.addEventListener('click', function() {
+        // In a real implementation, this would link to an actual PDF file
+        alert('PDF download functionality would be implemented here.');
+      });
     }
 
-    function populateReportData(report) {
-      // Set basic report information
-      reportTitle.textContent = `${report.userName || 'Report'} - Details`;
-      reportIdEl.textContent = report.id;
-      reportDateEl.textContent = new Date(report.cTime).toLocaleString();
-      
-      // Set personal information
-      userNameEl.textContent = report.userName || 'N/A';
-      
-      // Parse birth date/time
-      if (report.birthday) {
-        const dateParts = report.birthday.split(' ');
-        birthDateEl.textContent = dateParts[0] || 'N/A';
-        birthTimeEl.textContent = dateParts.length > 1 ? dateParts[1] : 'N/A';
-      } else {
-        birthDateEl.textContent = 'N/A';
-        birthTimeEl.textContent = 'N/A';
-      }
-      
-      birthPlaceEl.textContent = report.address || 'N/A';
-      
-      // Set PDF download link
-      if (report.pdfPath) {
-        downloadPdf.href = report.pdfPath;
-      }
-      
-      // Populate core analysis (customize based on your report data structure)
-      coreAnalysisEl.innerHTML = `
-        <p>This is a detailed analysis based on the astrological data provided. The report includes insights about personality traits, strengths, challenges, and life path guidance.</p>
-        
-        <h3>Key Insights</h3>
-        <p>The analysis reveals important patterns in your astrological chart that influence various aspects of your life. These insights can help you understand your natural tendencies and make more informed decisions.</p>
-        
-        <h3>Recommendations</h3>
-        <p>Based on your astrological profile, we've provided personalized recommendations to help you navigate life's challenges and opportunities.</p>
-      `;
-      
-      // Populate recommended products
-      if (report.scoreProductMap && Object.keys(report.scoreProductMap).length > 0) {
-        recommendedProductsEl.innerHTML = '';
-        
-        Object.values(report.scoreProductMap).forEach(product => {
-          const productCard = document.createElement('div');
-          productCard.className = 'product-card';
-          productCard.innerHTML = `
-            <div class="product-image-container">
-              <img src="${product.image || '/assets/placeholder-image.png'}" alt="${product.title}" class="product-image">
-            </div>
-            <div class="product-details">
-              <h3 class="product-title">${product.title}</h3>
-              <p class="product-description">${product.bodyHtml || 'No description available'}</p>
-              <p class="product-price">$${product.price || 129}</p>
-              <a href="/products/${product.handle || '#'}" class="product-link" target="_blank">View Product</a>
-            </div>
-          `;
-          recommendedProductsEl.appendChild(productCard);
-        });
-      } else {
-        recommendedProductsEl.innerHTML = '<p class="message-container">No recommended products available for this report.</p>';
-      }
+    // Add to Cart button functionality
+    const addToCartBtn = document.querySelector('.add-to-cart-btn');
+    if (addToCartBtn) {
+      addToCartBtn.addEventListener('click', function() {
+        // In a real implementation, this would add the product to cart
+        alert('Product would be added to cart.');
+      });
     }
-
-    // Start fetching report details
-    fetchReportDetails();
   });
 </script>
 
 {% schema %}
   {
-    "name": "Report Detail Page",
-    "settings": []
+    "name": "Astrological Report",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Astrological Report Settings"
+      },
+      {
+        "type": "paragraph",
+        "content": "This section displays detailed astrological report for logged-in customers."
+      }
+    ]
   }
 {% endschema %}
