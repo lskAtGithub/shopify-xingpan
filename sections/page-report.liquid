@@ -632,6 +632,8 @@
               document.getElementById('birth-time').textContent = param.birth_time;
               document.getElementById('address').textContent = param.address;
               const canvas = document.getElementById('elementChart');
+              console.log(param);
+              console.log(param.data);
               // 创建图表
               const myChart = new window.Chart(canvas, {
                 type: 'doughnut',
