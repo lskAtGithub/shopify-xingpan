@@ -92,15 +92,15 @@
             <table class="element-table">
               <thead>
                 <tr>
-                  <th>Zodiac Sign</th>
+                  <th>Constellation</th>
                   <th>Planet</th>
-                  <th>Domicile</th>
+                  <th>Dignity</th>
                   <th>Element</th>
-                  <th>Element</th>
-                  <th>Element</th>
-                  <th>Element</th>
-                  <th>Element</th>
-                  <th>Element</th>
+                  <th>Planet Score</th>
+                  <th>Dignity Score</th>
+                  <th>House</th>
+                  <th>House Element</th>
+                  <th>House Score</th>
                 </tr>
               </thead>
               <tbody id="tableBody">
@@ -632,8 +632,6 @@
               document.getElementById('birth-time').textContent = param.birth_time;
               document.getElementById('address').textContent = param.address;
               const canvas = document.getElementById('elementChart');
-              console.log(param);
-              console.log(param.data);
               // 创建图表
               const myChart = new window.Chart(canvas, {
                 type: 'doughnut',
@@ -655,6 +653,31 @@
                     legend: { display: false },
                   },
                 },
+              });
+              const tableBody = document.getElementById('tableBody');
+              tableBody.innerHTML = '';
+              param.data.list.map((item) => {
+                const miaoWang =
+                  item.miao === 0 && item.wang === 0
+                    ? '无'
+                    : (item.miao > 0 ? '庙' : '') +
+                      (item.miao > 0 && item.wang > 0 ? '/' : '') +
+                      (item.wang > 0 ? '旺' : '');
+
+                const row = `
+                    <tr class="${index % 2 === 1 ? 'even-row' : ''}">
+                      <td>${item.constellationCN}</td>
+                      <td>${item.starNameCN}</td>
+                      <td>${miaoWang}</td>
+                      <td>${item.zodiacSigns}</td>
+                      <td>${item.starScore}</td>
+                      <td>${item.miao + item.wang}</td>
+                      <td>${item.houses ? item.houses : '/'}</td>
+                      <td>${item.houses ? item.housesName : '/'}</td>
+                      <td>${item.houses ? item.housesScore : '/'}</td>
+                    </tr>
+                  `;
+                tableBody.insertAdjacentHTML('beforeend', row);
               });
             }
           })
