@@ -791,7 +791,6 @@
           select.appendChild(opt);
           opt.dataset.latitude = item.latitude;
           opt.dataset.longitude = item.longitude;
-          opt.dataset.label = item.name;
         });
         select.disabled = false;
       }
@@ -921,21 +920,9 @@
         e.preventDefault();
         const name = document.getElementById('name').value.trim();
         const birthDateTime = document.getElementById('birth-datetime').value;
-        
-        // 获取下拉选择框元素
-        const countrySelect = document.getElementById('country');
-        const stateSelect = document.getElementById('state');
-        const citySelect = document.getElementById('city');
-        
-        // 获取value值（用于后续API调用）
-        const countryValue =  countrySelect.value;
-        const stateValue = stateSelect.value;
-        const cityValue = citySelect.value;
-        
-        // 获取label文本内容
-        const countryLabel = countrySelect.options[countrySelect.selectedIndex]?.text || '';
-        const stateLabel = stateSelect.options[stateSelect.selectedIndex]?.text || '';
-        const cityLabel = citySelect.options[citySelect.selectedIndex]?.text || '';
+        const country = document.getElementById('country').value;
+        const state = document.getElementById('state').value;
+        const city = document.getElementById('city').value;
         
         // 验证必填字段
         if (!name) {
@@ -948,7 +935,7 @@
           return false;
         }
         
-        if (!countryValue || !stateValue || !cityValue) {
+        if (!country || !state || !city) {
           alert('Please select your birth location');
           return false;
         }
@@ -962,7 +949,7 @@
         const minute = String(date.getMinutes()).padStart(2, '0');
         const time = `${year}-${month}-${day} ${hour}:${minute}:00`;
 
-        const address = cityLabel ? `${cityLabel},${stateLabel},${countryLabel}` : `${stateLabel},${countryLabel}`;
+        const address = city ? `${city},${state},${country}` : `${state},${country}`;
         const payload = {
           tid: 4,
           us: 'zh-CN',
