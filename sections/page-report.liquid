@@ -649,142 +649,83 @@
   }
 {% endstylesheet %}
 
-<!-- 使用本地加载的Chart.js库 -->
+<!-- 引入Chart.js和自定义脚本 -->
 {{ 'chart.min.js' | asset_url | script_tag }}
 
 <script>
-  // 首先检查Chart.js是否已加载
-  console.log('页面加载中 - 检查Chart.js是否存在:', typeof window.Chart);
+// 等待所有资源加载完成
+window.addEventListener('load', function() {
+  console.log('页面加载完成，开始初始化图表');
   
-  // 直接在DOMContentLoaded事件中初始化图表，确保在Chart.js加载后执行
-  document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOMContentLoaded事件触发，准备初始化图表');
-    
-    // 再次检查Chart.js是否已加载
-    console.log('DOMContentLoaded时Chart.js状态:', typeof window.Chart);
-    
-    const ctx = document.getElementById('elementChart');
-    console.log('Canvas元素获取结果:', ctx);
-    
-    if (!ctx) {
-      console.error('未找到canvas元素');
-      return;
-    }
-    
-    try {
-      if (typeof window.Chart !== 'undefined') {
-        console.log('Chart.js已加载，开始创建图表');
-        
-        // 尝试获取2D上下文
-        const context = ctx.getContext('2d');
-        console.log('Canvas上下文获取结果:', context);
-        
-        if (context) {
-          // 简化图表配置，使用更基础的设置
-          const chartConfig = {
-            type: 'doughnut',
-            data: {
-              labels: ['Earth', 'Water', 'Air', 'Fire'],
-              datasets: [
-                {
-                  label: 'Element Distribution',
-                  data: [20, 20, 20, 40],
-                  backgroundColor: [
-                    '#8B4513',  // Earth - brown
-                    '#1E90FF',  // Water - blue
-                    '#F5DEB3',  // Air - beige
-                    '#FF4500'   // Fire - orange
-                  ],
-                  borderColor: [
-                    '#8B4513',
-                    '#1E90FF',
-                    '#F5DEB3',
-                    '#FF4500'
-                  ],
-                  borderWidth: 1
-                }
-              ]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              cutout: '60%',
-              plugins: {
-                legend: {
-                  display: true,  // 显示图例以便调试
-                  position: 'bottom'
-                },
-                tooltip: {
-                  enabled: true
-                }
-              }
-            }
-          };
-          
-          console.log('图表配置:', chartConfig);
-          
-          // 创建图表
-          const myChart = new window.Chart(ctx, chartConfig);
-          console.log('图表创建成功:', myChart);
-          
-          // 验证图表是否正确渲染
-          setTimeout(() => {
-            console.log('图表渲染后检查:', myChart);
-          }, 500);
-          
-        } else {
-          console.error('无法获取canvas 2D上下文');
-          alert('不存在');
+  // 获取canvas元素
+  const canvas = document.getElementById('elementChart');
+  if (!canvas) {
+    console.error('未找到canvas元素');
+    alert('不存在');
+    return;
+  }
+  
+  // 检查Chart对象是否存在
+  if (typeof window.Chart === 'undefined') {
+    console.error('Chart.js未加载或未正确绑定到window对象');
+    alert('不存在');
+    return;
+  }
+  
+  try {
+    // 创建图表
+    const myChart = new window.Chart(canvas, {
+      type: 'doughnut',
+      data: {
+        labels: ['Earth', 'Water', 'Air', 'Fire'],
+        datasets: [{
+          data: [20, 20, 20, 40],
+          backgroundColor: ['#8B4513', '#1E90FF', '#F5DEB3', '#FF4500'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '60%',
+        plugins: {
+          legend: { display: false }
         }
-      } else {
-        console.error('Chart.js未加载');
-        alert('不存在');
       }
-    } catch (error) {
-      console.error('图表初始化错误:', error);
-      alert('不存在');
-    }
+    });
+    console.log('图表创建成功');
+  } catch (error) {
+    console.error('图表初始化错误:', error);
+    alert('不存在');
+  }
+  
+  // 其他功能
+  function initButtons() {
+    const pdfBtn = document.querySelector('.download-pdf-btn');
+    if (pdfBtn) pdfBtn.onclick = () => alert('PDF下载功能');
     
-    // Download PDF button functionality
-    const downloadPdfBtn = document.querySelector('.download-pdf-btn');
-    if (downloadPdfBtn) {
-      downloadPdfBtn.addEventListener('click', function () {
-        alert('PDF download functionality would be implemented here.');
-      });
-    }
-    
-    // Add to Cart button functionality
-    const addToCartBtn = document.querySelector('.add-to-cart-btn');
-    if (addToCartBtn) {
-      addToCartBtn.addEventListener('click', function () {
-        alert('Product would be added to cart.');
-      });
-    }
-    
-    // 获取URL中的报表ID
-    const urlParams = new URLSearchParams(window.location.search);
-    const reportId = urlParams.get('id');
+    const cartBtn = document.querySelector('.add-to-cart-btn');
+    if (cartBtn) cartBtn.onclick = () => alert('添加到购物车');
+  }
+  
+  function handleReportId() {
+    const reportId = new URLSearchParams(window.location.search).get('id');
     if (reportId) {
-      console.log('查看reportId:', reportId);
-      // 可以在页面标题中显示报表ID
-      const titleElement = document.querySelector('.report-id');
-      if (titleElement) {
-        titleElement.textContent = `报表ID: ${reportId}`;
-      }
+      console.log('报表ID:', reportId);
+      const titleEl = document.querySelector('.report-id');
+      if (titleEl) titleEl.textContent = `报表ID: ${reportId}`;
       
-      // 添加异步API调用
-      (async function () {
-        try {
-          const BASE_URL = 'https://api.11starsastro.com';
-          const response = await fetch(`${BASE_URL}/report/getById?id=${reportId}`);
-          console.log(response);
-        } catch (error) {
-          console.error('获取报表数据失败:', error);
-        }
-      })();
+      // API调用
+      fetch(`https://api.11starsastro.com/report/getById?id=${reportId}`)
+        .then(res => console.log('API响应:', res))
+        .catch(err => console.error('API错误:', err));
     }
-  });
-  </script>
+  }
+  
+  initButtons();
+  handleReportId();
+});
+</script>
 
 {% schema %}
 {
