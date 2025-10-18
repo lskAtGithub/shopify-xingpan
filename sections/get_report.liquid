@@ -709,7 +709,7 @@
     let lon = '';
     let reportId = '';
     const BASE_URL = 'https://api.11starsastro.com';
-    alert(111)
+    alert(222)
     document.addEventListener('DOMContentLoaded', function () {
       const countrySelect = document.getElementById('country');
       const stateSelect = document.getElementById('state');
@@ -961,8 +961,8 @@
         const hour = String(date.getHours()).padStart(2, '0');
         const minute = String(date.getMinutes()).padStart(2, '0');
         const time = `${year}-${month}-${day} ${hour}:${minute}:00`;
-
         const address = city ? `${city},${state},${country}` : `${state},${country}`;
+        alert('get all params');
         const payload = {
           tid: 4,
           us: 'zh-CN',
@@ -974,10 +974,13 @@
           lon: lon,
           userName: name,
         };
+        alert('get payload');
         if(window.customer.id) {
           payload.key = window.customer.id;
         }
+        alert('get window.customer.id');
         const paramsForm = new URLSearchParams();
+        alert('get paramsForm');
         Object.keys(payload).forEach((k) => {
           paramsForm.append(k, payload[k]);
         });
