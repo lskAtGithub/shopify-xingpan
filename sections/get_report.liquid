@@ -1018,6 +1018,12 @@
           });
           const data = await res.json();
           reportId = data.data.reportId;
+          const formData = {
+            name: name,
+            formattedDate: time,
+            userCity: address
+
+          }
           renderReportModal(data.data);
         } catch (err) {
           alert('请求失败，请稍后再试');
@@ -1236,9 +1242,7 @@ async function renderReportModal(data, formData) {
 
   // --- 1. Populate Header ---
   document.getElementById('report-title').textContent = `${formData.name || 'Your'}'s Report`;
-  const birthDate = new Date(`${formData.birth_year}-${formData.birth_month}-${formData.birth_day}T${String(formData.birth_hour).padStart(2, '0')}:${String(formData.birth_minute).padStart(2, '0')}`);
-  const formattedDate = birthDate.toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
-  document.getElementById('report-subtitle').innerHTML = `${formattedDate}<br>${formData.city}, ${formData.state}, ${formData.country}`;
+  document.getElementById('report-subtitle').innerHTML = `${formData.formattedDate}<br>${formData.address}`;
 
   // --- 2. Render Elemental Balance Chart ---
   const { itemScore } = data;
