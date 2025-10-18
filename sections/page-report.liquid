@@ -656,7 +656,7 @@
               });
               const tableBody = document.getElementById('tableBody');
               tableBody.innerHTML = '';
-              param.data.list.map((item) => {
+              param.data.list.map((item, index) => {
                 const miaoWang =
                   item.miao === 0 && item.wang === 0
                     ? '无'
