@@ -699,16 +699,15 @@
         alert('不存在');
       }
     }
-  });
-
-  // Download PDF button functionality
+    
+    // Download PDF button functionality
     const downloadPdfBtn = document.querySelector('.download-pdf-btn');
     if (downloadPdfBtn) {
       downloadPdfBtn.addEventListener('click', function () {
         alert('PDF download functionality would be implemented here.');
       });
     }
-
+    
     // Add to Cart button functionality
     const addToCartBtn = document.querySelector('.add-to-cart-btn');
     if (addToCartBtn) {
@@ -716,7 +715,7 @@
         alert('Product would be added to cart.');
       });
     }
-
+    
     // 获取URL中的报表ID
     const urlParams = new URLSearchParams(window.location.search);
     const reportId = urlParams.get('id');
@@ -727,7 +726,7 @@
       if (titleElement) {
         titleElement.textContent = `报表ID: ${reportId}`;
       }
-
+      
       // 添加异步API调用
       (async function () {
         try {
@@ -740,7 +739,7 @@
       })();
     }
   });
-</script>
+  </script>
 
 {% schema %}
 {
