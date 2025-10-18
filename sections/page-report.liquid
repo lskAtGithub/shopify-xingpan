@@ -628,11 +628,9 @@
           })
           .then((res) => {
             if (res && res.data) {
-              console.log('API返回数据:', res.data);
+              const param = JSON.parse(res.data.param);
               document.getElementById('birth-time').textContent = param.birth_time;
               document.getElementById('address').textContent = param.address;
-              const param = JSON.parse(res.data.param);
-              console.log(param)
               const canvas = document.getElementById('elementChart');
               // 创建图表
               const myChart = new window.Chart(canvas, {
