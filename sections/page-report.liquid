@@ -653,41 +653,31 @@
 {{ 'chart.min.js' | asset_url | script_tag }}
 
 <script>
-  alert(12);
-  // 等待所有资源加载完成
   window.addEventListener('load', function () {
-    console.log('页面加载完成，开始初始化图表');
-
     // 获取canvas元素
     const canvas = document.getElementById('elementChart');
-    try {
-      // 创建图表
-      const myChart = new window.Chart(canvas, {
-        type: 'doughnut',
-        data: {
-          labels: ['Earth', 'Water', 'Air', 'Fire'],
-          datasets: [
-            {
-              data: [20, 20, 20, 40],
-              backgroundColor: ['#8B4513', '#1E90FF', '#F5DEB3', '#FF4500'],
-              borderWidth: 0,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          cutout: '60%',
-          plugins: {
-            legend: { display: false },
+    // 创建图表
+    const myChart = new window.Chart(canvas, {
+      type: 'doughnut',
+      data: {
+        labels: ['Earth', 'Water', 'Air', 'Fire'],
+        datasets: [
+          {
+            data: [20, 20, 20, 40],
+            backgroundColor: ['#8B5A2B', '#4A90E2', '#FFD100', '#4CAF50'],
+            borderWidth: 0,
           },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '60%',
+        plugins: {
+          legend: { display: false },
         },
-      });
-      console.log('图表创建成功');
-    } catch (error) {
-      console.error('图表初始化错误:', error);
-      alert('不存在');
-    }
+      },
+    });
 
     // 其他功能
     function initButtons() {
@@ -707,7 +697,7 @@
 
         // API调用
         fetch(`https://api.11starsastro.com/report/getById?id=${reportId}`)
-          .then((res) => console.log('API响应:', res))
+          .then((res) => console.log('API响应:', res.body.data))
           .catch((err) => console.error('API错误:', err));
       }
     }
