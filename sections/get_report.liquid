@@ -59,13 +59,22 @@
             <!-- 日期时间选择器 -->
             <div class="form-group">
               <label for="birth-datetime">Birth Date & Time <span class="required">*</span></label>
-              <input class="ipt datetime-local-en" type="datetime-local" lang="en" id="birth-datetime" name="birth_datetime" required value="" placeholder="Select date and time">
+              <input
+                class="ipt datetime-local-en"
+                type="datetime-local"
+                lang="en"
+                id="birth-datetime"
+                name="birth_datetime"
+                required
+                value=""
+                placeholder="Select date and time"
+              >
               <p style="font-size: 12px; color: #666;">
                 tips：If you don't know the exact time, choose the one you think is possible.
               </p>
             </div>
 
-            <!--国家选择器-->
+            <!-- 国家选择器 -->
             <div class="form-group">
               <label>Birth Location <span class="required">*</span></label>
               <div class="grid-cols-responsive">
@@ -108,43 +117,111 @@
   </div>
 
   <!-- 🔹 弹窗结构 -->
+  {% comment %}
+    <div id="report-modal" class="report-modal">
+      <div class="report-modal-content" id="modelContent">
+        <span class="report-close">&times;</span>
+        <h2 class="modal-heading">✨ Your Elemental Report</h2>
+
+        <div class="table-responsive-wrapper">
+          <table class="report-table" id="report-table">
+            <thead>
+              <tr>
+                <th>Constellation</th>
+                <th>Planet</th>
+                <th>Dignity</th>
+                <th>Element</th>
+                <th>Planet Score</th>
+                <th>Dignity Score</th>
+                <th>House</th>
+                <th>House Element</th>
+                <th>House Score</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div class="canvas-box">
+          <div id="tooltip"></div>
+          <canvas id="chartCanvas"></canvas>
+        </div>
+
+        <div id="stream-container">
+          <div class="stream-content" id="markdownRea"></div>
+          <div class="stream-content" id="streamData"></div>
+        </div>
+
+        <div id="recommended-products"></div>
+      </div>
+    </div>
+  {% endcomment %}
+
+  <!-- ================================================================ -->
+  <!-- =================== OPTIMIZED MODAL HTML START ================= -->
+  <!-- ================================================================ -->
   <div id="report-modal" class="report-modal">
     <div class="report-modal-content" id="modelContent">
-      <span class="report-close">&times;</span>
-      <h2 class="modal-heading">✨ Your Elemental Report</h2>
-
-      <div class="table-responsive-wrapper">
-        <table class="report-table" id="report-table">
-          <thead>
-            <tr>
-              <th>Constellation</th>
-              <th>Planet</th>
-              <th>Dignity</th>
-              <th>Element</th>
-              <th>Planet Score</th>
-              <th>Dignity Score</th>
-              <th>House</th>
-              <th>House Element</th>
-              <th>House Score</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div class="report-header">
+        <button class="report-back-btn" aria-label="Go back">&larr;</button>
+        <div class="report-header-info">
+          <h2 id="report-title">Jason's Report</h2>
+          <p id="report-subtitle">
+            February 5, 1994 05:15<br>
+            Shantou, Guangdong, China
+          </p>
+        </div>
+        <!-- Placeholder for alignment -->
+        <div style="width: 40px;"></div>
       </div>
 
-      <div class="canvas-box">
-        <div id="tooltip"></div>
-        <canvas id="chartCanvas"></canvas>
-      </div>
+      <div class="report-body">
+        <!-- Elemental Balance Section -->
+        <section class="report-section">
+          <h3 class="report-section-title">Elemental Balance</h3>
+          <div class="balance-card">
+            <div class="chart-wrapper">
+              <canvas id="elementChart"></canvas>
+            </div>
+            <div id="chart-legend" class="chart-legend">
+              <!-- Legend items will be injected here -->
+            </div>
+          </div>
+          <div id="balance-summary" class="balance-summary">
+            <!-- Summary text will be injected here -->
+          </div>
+        </section>
 
-      <div id="stream-container">
-        <div class="stream-content" id="markdownRea"></div>
-        <div class="stream-content" id="streamData"></div>
-      </div>
+        <!-- Chart Details Section -->
+        <section class="report-section">
+          <h3 class="report-section-title">Chart Details</h3>
+          <div class="table-card">
+            <div class="table-responsive-wrapper">
+              <table class="details-table" id="report-table">
+                <thead>
+                  <!-- Table header will be injected here -->
+                </thead>
+                <tbody>
+                  <!-- Table rows will be injected here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
 
-      <div id="recommended-products"></div>
+        <!-- Recommended For You Section -->
+        <section class="report-section">
+          <h3 class="report-section-title">Recommended For You</h3>
+          <div id="recommended-products">
+            <!-- Recommended product will be injected here -->
+          </div>
+        </section>
+      </div>
     </div>
   </div>
+  <!-- ================================================================ -->
+  <!-- ==================== OPTIMIZED MODAL HTML END ================== -->
+  <!-- ================================================================ -->
 
   <div id="login-prompt-modal" class="login-prompt-modal" style="display: none;" aria-hidden="true">
     <div class="modal-overlay" tabindex="-1"></div>
@@ -216,9 +293,9 @@
       line-height: 1.2;
       font-size: 2.75rem; /* 30px */
     }
-    
+
     /* 日期时间选择器样式 */
-    .get-report-section input[type="datetime-local"] {
+    .get-report-section input[type='datetime-local'] {
       width: 100%;
       padding: 0.75rem;
       border: 1px solid #d1d5db;
@@ -227,46 +304,46 @@
       transition: all 0.2s;
       background-color: #fff;
     }
-    
-    .get-report-section input[type="datetime-local"]:focus {
+
+    .get-report-section input[type='datetime-local']:focus {
       outline: none;
       border-color: #f97316;
       box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
     }
-    
+
     /* 移动端优化 */
     @media (max-width: 768px) {
-      .get-report-section input[type="datetime-local"] {
+      .get-report-section input[type='datetime-local'] {
         font-size: 16px; /* 防止iOS缩放 */
       }
     }
-    
+
     /* 确保日期时间选择器使用英文显示 */
     .datetime-local-en {
       /* 强制使用英文语言环境 */
       --webkit-calendar-picker-color: #333;
     }
-    
+
     /* 针对Webkit浏览器的日期时间选择器样式 */
     .datetime-local-en::-webkit-calendar-picker-indicator {
       cursor: pointer;
       filter: invert(0.5);
     }
-    
+
     /* 设置日期时间选择器的语言环境 */
     .datetime-local-en::-webkit-datetime-edit-text {
       color: #333;
       padding: 0 0.3em;
     }
-    
+
     .datetime-local-en::-webkit-datetime-edit-month-field {
       color: #333;
     }
-    
+
     .datetime-local-en::-webkit-datetime-edit-day-field {
       color: #333;
     }
-    
+
     .datetime-local-en::-webkit-datetime-edit-year-field {
       color: #333;
     }
@@ -370,311 +447,260 @@
       background-color: #000;
     }
 
-    /* Modal Styles */
+    /* ================================================================= */
+    /* =================== OPTIMIZED MODAL CSS START =================== */
+    /* ================================================================= */
     .report-modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      justify-content: center;
-      align-items: center;
-      padding: 1rem;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
     }
     .report-modal-content {
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 12px;
-      width: 100%;
-      height: 90%;
-      overflow-y: auto;
-      position: relative;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-    }
-    .report-close {
-      position: absolute;
-      right: 15px;
-      top: 10px;
-      font-size: 28px;
-      cursor: pointer;
-      color: #888;
-    }
-    .modal-heading {
-      font-size: 1.5rem;
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .table-responsive-wrapper {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-      margin-bottom: 2rem;
-    }
-    .report-table {
-      width: 100%;
-      min-width: 800px; /* Force scroll on small screens */
-      border-collapse: collapse;
-    }
-    .report-table th,
-    .report-table td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-    }
-    .report-table th {
-      background: #f8f8f8;
-      font-weight: 600;
-    }
-
-    .canvas-box {
-      position: relative;
-      width: 100%;
-      max-width: 400px;
-      margin: 0 auto 2rem auto;
-    }
-    #chartCanvas {
-      width: 100%;
-      height: auto;
-    }
-    #tooltip {
-      position: absolute;
-      padding: 6px 10px;
-      background: rgba(0, 0, 0, 0.8);
-      color: #fff;
-      border-radius: 4px;
-      font-size: 13px;
-      pointer-events: none;
-      display: none;
-      z-index: 10;
-    }
-    #stream-container {
-      font-size: 1rem;
-      color: #444;
-      line-height: 1.6;
-    }
-
-    /* Recommended Product Styles */
-    #recommended-products {
-      margin-top: 2rem;
-    }
-    .recommended-card {
-      display: flex;
-      flex-direction: column; /* Mobile: stack image and content */
-      gap: 1.5rem;
-      padding: 1rem;
-      border: 1px solid #eee;
-      border-radius: 8px;
-    }
-    .card-left img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-    .card-right h3 {
-      font-size: 1.5rem;
-      margin: 0 0 0.5rem 0;
-    }
-    .product-price {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-    }
-    .card-right .button {
-      width: 100%;
-    }
-    @media (max-width: 768px) {
-      .flex-wrap > .left-content,
-      .flex-wrap > .form-container,
-      .form-container {
-        padding: 1rem !important;
-      }
-    }
-    /* --- Tablet Styles (768px - 1024px) --- */
-    @media (min-width: 768px) {
-      .get-report-section {
-        padding: 5rem 1.5rem;
-      }
-      .flex-wrap {
-        flex-direction: row; /* Tablet: two columns */
-        align-items: stretch;
-      }
-      .left-content,
-      .form-container {
-        flex: 1;
-        padding: 2.5rem;
-        min-width: 0; /* Fix flexbox overflow */
-      }
-      .left-content {
-        text-align: left;
-      }
-      .heading {
-        font-size: 2.25rem;
-      }
-      .subheading {
-        font-size: 1.125rem;
-      }
-      .grid-cols-responsive {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .report-modal-content {
-        width: 85%;
-        height: 85%;
-        padding: 2rem;
-      }
-      .modal-heading {
-        font-size: 1.8rem;
-      }
-
-      .recommended-card {
-        flex-direction: row; /* Tablet: horizontal layout */
-        align-items: center;
-      }
-      .card-left {
-        flex: 0 0 200px;
-      }
-      .card-right {
-        flex: 1;
-      }
-      .card-right .button {
-        width: auto;
-      }
-    }
-
-    /* --- Desktop Styles (> 1024px) --- */
-    @media (min-width: 1024px) {
-      .get-report-section {
-        padding: 6rem 2rem;
-      }
-      .flex-wrap {
-        gap: 0;
-      }
-      .left-content {
-        flex-basis: 45%;
-      }
-      .form-container {
-        flex-basis: 55%;
-      }
-      .left-content,
-      .form-container {
-        padding: 3rem;
-      }
-      .heading {
-        font-size: 2.5rem;
-      }
-
-      .report-modal-content {
-        width: 80%;
-        max-width: 1100px;
-      }
-    }
-    .login-prompt-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
+      background: transparent;
       width: 100%;
       height: 100%;
-      z-index: 1000;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .report-header {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
+      background-color: #111827;
+      color: #fff;
+      padding: 1rem;
+      flex-shrink: 0;
     }
-
-    .modal-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.6);
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .modal-content {
-      position: relative;
-      background-color: #fff;
-      padding: 2rem;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 450px;
+    .report-header-info {
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      transform: scale(0.95);
-      opacity: 0;
-      transition: transform 0.3s ease, opacity 0.3s ease;
     }
-
-    /* Show animation */
-    .login-prompt-modal.is-open .modal-overlay,
-    .login-prompt-modal.is-open .modal-content {
-      opacity: 1;
+    .report-header h2 {
+      font-size: 1.25rem;
+      margin: 0;
     }
-    .login-prompt-modal.is-open .modal-content {
-      transform: scale(1);
+    .report-header p {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin: 4px 0 0 0;
+      line-height: 1.4;
     }
-
-    .modal-close-btn {
-      position: absolute;
-      top: 10px;
-      right: 15px;
+    .report-back-btn {
       background: none;
       border: none;
-      font-size: 2rem;
-      color: #aaa;
-      cursor: pointer;
-      line-height: 1;
-      padding: 0;
-    }
-    .modal-close-btn:hover {
-      color: #333;
-    }
-
-    .modal-icon {
-      margin: 0 auto 1.5rem auto;
-      color: #111827; /* Dark Gray */
-      display: flex;
-      justify-content: center;
-    }
-
-    .modal-title {
+      color: #fff;
       font-size: 1.5rem;
-      font-weight: 600;
-      color: #111;
-      margin: 0 0 0.75rem 0;
+      cursor: pointer;
+      width: 40px;
+      text-align: center;
     }
 
-    .modal-description {
-      font-size: 1rem;
+    .report-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex-grow: 1;
+      background-color: #f3f4f6; /* Light gray background for the body */
+    }
+    .report-section {
+      margin-bottom: 2rem;
+    }
+    .report-section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0 0 1rem 0;
+      text-align: left;
+    }
+
+    /* Card Styles */
+    .balance-card,
+    .table-card {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Elemental Balance Section */
+    .balance-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .chart-wrapper {
+      max-width: 180px;
+      width: 100%;
+    }
+    .chart-legend {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem 1.5rem;
+      width: 100%;
+      max-width: 320px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-color-box {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .legend-label {
+      color: #555;
+    }
+    .legend-value {
+      font-weight: 500;
+      margin-left: auto;
+    }
+
+    .balance-summary {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background-color: #fff;
+      border-radius: 12px;
+    }
+    .balance-summary .summary-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .balance-summary .summary-text {
+      font-size: 0.95rem;
       color: #555;
       line-height: 1.6;
-      margin: 0 0 2rem 0;
+      margin: 0;
     }
 
-    .modal-actions .btn {
-      display: inline-block;
-      padding: 0.875rem 1.5rem;
+    /* Chart Details Table */
+    .table-responsive-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .details-table {
+      width: 100%;
+      min-width: 600px;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .details-table th,
+    .details-table td {
+      padding: 12px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .details-table thead {
+      background-color: #fafafa;
+    }
+    .details-table th {
+      font-weight: 600;
+      color: #333;
+      font-size: 0.875rem;
+    }
+    .details-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Recommended Product */
+    #recommended-products .recommended-product-card {
+      display: flex;
+      flex-direction: column;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    .recommended-product-card img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+    .product-details {
+      padding: 1.5rem;
+    }
+    .product-details h4 {
+      font-size: 1.25rem;
+      margin: 0 0 0.5rem 0;
+    }
+    .product-details .price {
+      font-size: 1.125rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    .product-details .description {
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .product-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      color: #555;
+    }
+    .product-features span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .product-features .icon-dot {
+      font-size: 6px;
+    }
+    .add-to-cart-wrapper .note {
+      font-size: 0.8rem;
+      color: #e53e3e;
+      margin-bottom: 0.75rem;
+    }
+    .add-to-cart-wrapper .button {
+      width: 100%;
+      background-color: #111827;
+      color: #fff;
+      border: none;
+      padding: 0.875rem;
       font-size: 1rem;
       font-weight: 500;
-      text-decoration: none;
       border-radius: 8px;
-      border: none;
       cursor: pointer;
-      transition: background-color 0.2s ease;
     }
 
-    .modal-actions .btn--primary {
-      background-color: #111827; /* Dark background */
-      color: #fff;
-      display: block;
+    /* --- Responsive Styles --- */
+    @media (min-width: 768px) {
+      .report-modal-content {
+        width: 90%;
+        height: 90%;
+        max-width: 500px;
+        border-radius: 16px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
+      .report-body {
+        padding: 2rem;
+      }
+      .balance-card {
+        flex-direction: row;
+      }
+      .chart-legend {
+        grid-template-columns: 1fr;
+      }
+      .recommended-product-card {
+        flex-direction: row;
+      }
+      .recommended-product-card img {
+        width: 40%;
+        aspect-ratio: 1 / 1;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 12px;
+      }
     }
-    .modal-actions .btn--primary:hover {
-      background-color: #374151;
-    }
+    /* ================================================================= */
+    /* ==================== OPTIMIZED MODAL CSS END ==================== */
+    /* ================================================================= */
   {% endstylesheet %}
 
   <script>
@@ -1159,7 +1185,7 @@
         renderRecommendedProducts(res);
       }
 
-      async function renderModal(data) {
+      {% comment %} async function renderModal(data) {
         modal.style.display = 'flex';
         tableBody.innerHTML = '';
         if (data.list.length > 0) {
@@ -1194,7 +1220,121 @@
         </tr>`;
         }
         renderCanvas(data);
-      }
+      } {% endcomment %}
+
+      // ====================================================================
+// =================== OPTIMIZED RENDERMODAL JS START =================
+// ====================================================================
+
+// Keep a reference to the chart instance to destroy it later
+let elementChartInstance = null;
+
+async function renderReportModal(data, formData) {
+  const modal = document.getElementById('report-modal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  // --- 1. Populate Header ---
+  document.getElementById('report-title').textContent = `${formData.name || 'Your'}'s Report`;
+  const birthDate = new Date(`${formData.birth_year}-${formData.birth_month}-${formData.birth_day}T${String(formData.birth_hour).padStart(2, '0')}:${String(formData.birth_minute).padStart(2, '0')}`);
+  const formattedDate = birthDate.toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+  document.getElementById('report-subtitle').innerHTML = `${formattedDate}<br>${formData.city}, ${formData.state}, ${formData.country}`;
+
+  // --- 2. Render Elemental Balance Chart ---
+  const { itemScore } = data;
+  const elementData = {
+    'Air': { value: itemScore['风'] || 0, color: '#facc15' },   // yellow
+    'Fire': { value: itemScore['火'] || 0, color: '#fb923c' },  // orange
+    'Earth': { value: itemScore['土'] || 0, color: '#4ade80' }, // green
+    'Water': { value: itemScore['水'] || 0, color: '#60a5fa' } // blue
+  };
+  const totalScore = Object.values(elementData).reduce((sum, el) => sum + el.value, 0);
+
+  // Render Legend
+  document.getElementById('chart-legend').innerHTML = Object.entries(elementData).map(([name, { value, color }]) => {
+    const percentage = totalScore > 0 ? ((value / totalScore) * 100).toFixed(2) : 0;
+    return `<div class="legend-item"><span class="legend-color-box" style="background-color: ${color};"></span><span class="legend-label">${name}:</span><span class="legend-value">${percentage}%</span></div>`;
+  }).join('');
+  
+  // Render Chart using Chart.js
+  const chartCanvas = document.getElementById('elementChart');
+  if (elementChartInstance) elementChartInstance.destroy();
+  elementChartInstance = new Chart(chartCanvas, {
+    type: 'pie',
+    data: {
+      labels: Object.keys(elementData),
+      datasets: [{
+        data: Object.values(elementData).map(el => el.value),
+        backgroundColor: Object.values(elementData).map(el => el.color),
+        borderWidth: 2,
+        borderColor: '#fff'
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false }, tooltip: { enabled: true } } }
+  });
+
+  // --- 3. Render Balance Summary ---
+  let [dominantElement, weakestElement] = ['', ''];
+  let maxScore = -1, minScore = Infinity;
+  for (const [name, { value }] of Object.entries(elementData)) {
+    if (value > maxScore) { maxScore = value; dominantElement = name; }
+    if (value < minScore) { minScore = value; weakestElement = name; }
+  }
+  document.getElementById('balance-summary').innerHTML = `<h4 class="summary-title">You're an ${dominantElement}-element person and need ${weakestElement} to balance your life.</h4><p class="summary-text">Your dominant air element means you lack tenacity... (summary text here)</p>`;
+
+  // --- 4. Render Chart Details Table ---
+  const tableHeader = document.querySelector('#report-table thead');
+  const tableBody = document.querySelector('#report-table tbody');
+  const headers = ["Zodiac Sign", "Planet", "Domicile/Exaltation", "Zodiac Element", "Planet-Element Score", "Domicile/Exaltation Bonus", "House the Planet is in", "House Element", "House Element Score"];
+  tableHeader.innerHTML = `<tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>`;
+
+  tableBody.innerHTML = data.list.map(item => {
+      const domicile = item.miao > 0 ? 'Miao' : (item.wang > 0 ? 'Wang' : 'None');
+      return `
+        <tr>
+          <td>${item.constellationCN}</td><td>${item.starNameCN}</td><td>${domicile}</td><td>${item.zodiacSigns}</td><td>${item.starScore}</td><td>${item.miao + item.wang}</td><td>${item.houses || 'N/A'}</td><td>${item.housesName || 'N/A'}</td><td>${item.housesScore || 'N/A'}</td>
+        </tr>
+      `;
+  }).join('');
+
+  // --- 5. Render Recommended Product ---
+  const { scoreProduct } = data;
+  const productContainer = document.getElementById('recommended-products');
+  const productKey = Object.keys(scoreProduct || {})[0];
+  const productData = productKey ? scoreProduct[productKey] : null;
+
+  if (productData) {
+    const handle = productData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    const shopifyProduct = await fetch(`/products/${handle}.js`).then(res => res.ok ? res.json() : null);
+
+    productContainer.innerHTML = `
+      <div class="recommended-product-card">
+        <img src="${productData.image || (shopifyProduct ? shopifyProduct.featured_image : '')}" alt="${productData.title}">
+        <div class="product-details">
+          <h4>${productData.title}</h4>
+          <p class="price">${shopifyProduct ? '$' + (shopifyProduct.price / 100).toFixed(2) : '$135.00'}</p>
+          <div class="description">${productData.bodyHtml}</div>
+          <div class="product-features">
+            <span>✔ Tiger's eye crystals</span><span><i class="icon-dot">●</i> 16" × 20" framed</span><span><i class="icon-dot">●</i> Handcrafted</span>
+          </div>
+          <div class="add-to-cart-wrapper">
+            <p class="note">✦ After purchase you will get a professional report</p>
+            <form method="post" action="/cart/add">
+              <input type="hidden" name="id" value="${shopifyProduct ? shopifyProduct.variants[0].id : ''}">
+              <button type="submit" class="button">Add to Cart</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    productContainer.innerHTML = '';
+  }
+}
+
+// ====================================================================
+// ==================== OPTIMIZED RENDERMODAL JS END ==================
+// ====================================================================
 
       /**
       * 推荐商品渲染，这里沟通确定只要渲染一条商品数据， key不定，通过下标获取
