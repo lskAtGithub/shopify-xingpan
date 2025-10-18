@@ -8,6 +8,11 @@
 
 <div class="astrological-report section-{{ section.id }}">
   {% if customer %}
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="spinner-container">
+      <div class="spinner"></div>
+      <p>Loading your reports...</p>
+    </div>
     <!-- Logged in view with customer information -->
     <div class="page-width">
       <!-- Report Header -->
@@ -144,29 +149,7 @@
           </div>
 
           <!-- Element Description Card -->
-          <div class="element-description-card">
-            <h3>Water Element</h3>
-            <p>
-              Our Transformation crystal art captures the essence of water element vitality and harmony. Handcrafted
-              with genuine lapis lazuli and carnelian crystals, this piece amplifies your intuition, passion, and
-              creative energy.
-            </p>
-            <div class="element-image">
-              <img
-                src=""
-                alt=""
-              >
-            </div>
-            <div class="element-details">
-              <div class="element-meta">
-                <span class="meta-label">Natural stones</span>
-                <span class="meta-label">20"×20" framed</span>
-                <span class="meta-label">Handcrafted</span>
-              </div>
-              <div class="element-price">$89</div>
-              <button class="add-to-cart-btn">Add to Cart</button>
-            </div>
-          </div>
+          <div class="element-description-card" id="shopBox"></div>
         </div>
       </div>
     </div>
@@ -321,19 +304,19 @@
   }
 
   .element-color.earth {
-    background-color: #8B5A2B;
+    background-color: #8b5a2b;
   }
 
   .element-color.water {
-    background-color: #4A90E2;
+    background-color: #4a90e2;
   }
 
   .element-color.air {
-    background-color: #FFD100;
+    background-color: #ffd100;
   }
 
   .element-color.fire {
-    background-color: #4CAF50;
+    background-color: #4caf50;
   }
 
   .element-name {
@@ -603,13 +586,11 @@
 
 <script>
   window.addEventListener('load', function () {
+    const spinner = document.getElementById('loading-spinner');
     // 其他功能
     function initButtons() {
       const pdfBtn = document.querySelector('.download-pdf-btn');
       if (pdfBtn) pdfBtn.onclick = () => alert('PDF下载功能');
-
-      const cartBtn = document.querySelector('.add-to-cart-btn');
-      if (cartBtn) cartBtn.onclick = () => alert('添加到购物车');
     }
 
     function handleReportId() {
@@ -679,6 +660,42 @@
                   `;
                 tableBody.insertAdjacentHTML('beforeend', row);
               });
+
+              const shopBox = document.getElementById('shopBox');
+              shopBox.innerHTML = `
+                <h3>Water Element</h3>
+                <p>
+                  Our Transformation crystal art captures the essence of water element vitality and harmony. Handcrafted
+                  with genuine lapis lazuli and carnelian crystals, this piece amplifies your intuition, passion, and
+                  creative energy.
+                </p>
+                <div class="element-image">
+                  <img
+                    src=""
+                    alt=""
+                  >
+                </div>
+                <div class="element-details">
+                  <div class="element-meta">
+                    <span class="meta-label">Natural stones</span>
+                    <span class="meta-label">20"×20" framed</span>
+                    <span class="meta-label">Handcrafted</span>
+                  </div>
+                  <div class="element-price">$89</div>
+                  <form
+                    method="post"
+                    action="/cart/add"
+                    accept-charset="UTF-8"
+                    enctype="multipart/form-data"
+                    novalidate="novalidate"
+                  >
+                    <input type="hidden" name="id" value="{{ current_variant.id }}">
+                    <button class="add-to-cart-btn" type="submit" class="button button--primary">Add to Cart</button>
+                  </form>
+                </div>
+              `;
+              // 隐藏加载Spinner
+              spinner.style.display = 'none';
             }
           })
           .catch((err) => {
