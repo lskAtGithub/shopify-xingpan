@@ -92,18 +92,18 @@
             <table class="element-table">
               <thead>
                 <tr>
+                  <th>Zodiac Sign</th>
                   <th>Planet</th>
-                  <th>Sign</th>
-                  <th>Degree</th>
+                  <th>Domicile</th>
                   <th>Element</th>
-                  <th>Quality</th>
-                  <th>Cardinality</th>
-                  <th>House</th>
-                  <th>Position</th>
+                  <th>Element</th>
+                  <th>Element</th>
+                  <th>Element</th>
+                  <th>Element</th>
+                  <th>Element</th>
                 </tr>
               </thead>
-              <tbody>
-                <!-- Sample table data -->
+              <tbody id="tableBody">
                 <tr>
                   <td>Sun</td>
                   <td>Aries</td>
@@ -112,56 +112,6 @@
                   <td>Cardinal</td>
                   <td>Self</td>
                   <td>1st</td>
-                  <td>Conjunct</td>
-                </tr>
-                <tr>
-                  <td>Moon</td>
-                  <td>Sagittarius</td>
-                  <td>12°</td>
-                  <td>Fire</td>
-                  <td>Mutable</td>
-                  <td>Emotion</td>
-                  <td>9th</td>
-                  <td>Trine</td>
-                </tr>
-                <tr>
-                  <td>Mercury</td>
-                  <td>Pisces</td>
-                  <td>23°</td>
-                  <td>Water</td>
-                  <td>Mutable</td>
-                  <td>Communication</td>
-                  <td>12th</td>
-                  <td>Sextile</td>
-                </tr>
-                <tr>
-                  <td>Venus</td>
-                  <td>Scorpio</td>
-                  <td>15°</td>
-                  <td>Water</td>
-                  <td>Fixed</td>
-                  <td>Love</td>
-                  <td>8th</td>
-                  <td>Square</td>
-                </tr>
-                <tr>
-                  <td>Mars</td>
-                  <td>Leo</td>
-                  <td>8°</td>
-                  <td>Fire</td>
-                  <td>Fixed</td>
-                  <td>Action</td>
-                  <td>5th</td>
-                  <td>Opposition</td>
-                </tr>
-                <tr>
-                  <td>Jupiter</td>
-                  <td>Capricorn</td>
-                  <td>11°</td>
-                  <td>Earth</td>
-                  <td>Cardinal</td>
-                  <td>Expansion</td>
-                  <td>10th</td>
                   <td>Conjunct</td>
                 </tr>
               </tbody>
@@ -682,6 +632,7 @@
               document.getElementById('birth-time').textContent = param.birth_time;
               document.getElementById('address').textContent = param.address;
               const param = JSON.parse(res.data.param);
+              console.log(param)
               const canvas = document.getElementById('elementChart');
               // 创建图表
               const myChart = new window.Chart(canvas, {
