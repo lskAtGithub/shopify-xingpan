@@ -617,91 +617,120 @@
 {% endstylesheet %}
 
 <!-- 首先加载Chart.js库 -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js" integrity="sha256-+8RZJua0aEWg+QVVKg4LEzEEm/8RFez5Tb4JBNiV5xA=" crossorigin="anonymous"></script>
-
-<script>
-  // 确保Chart.js正确加载的辅助函数
-  function ensureChartLoaded(callback) {
-    if (typeof Chart !== 'undefined') {
-      callback();
-    } else {
-      console.warn('Chart.js未加载，尝试使用备用方法');
-      // 提供降级显示
-      const ctx = document.getElementById('elementChart');
-      if (ctx) {
-        ctx.parentElement.innerHTML = '<div class="chart-fallback">元素分布: Earth 20%, Water 20%, Air 20%, Fire 40%</div>';
-      }
-    }
-  }
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
   
-  document.addEventListener('DOMContentLoaded', function() {
-    // 等待Chart.js加载完成后再初始化图表
-    setTimeout(function() {
-      const ctx = document.getElementById('elementChart');
-      if (ctx) {
-        ensureChartLoaded(function() {
-          try {
-            new Chart(ctx, {
-              type: 'doughnut',
-              data: {
-                labels: ['Earth', 'Water', 'Air', 'Fire'],
-                datasets: [{
-                  data: [20, 20, 20, 40],
-                  backgroundColor: ['#8B4513', '#1E90FF', '#F5DEB3', '#FF4500'],
-                  borderWidth: 0
-                }]
-              },
-              options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '60%',
-                plugins: {
-                  legend: {
-                    display: false
-                  }
-                }
-              }
-            });
-            console.log('图表初始化成功');
-          } catch (error) {
-            console.error('图表初始化失败:', error);
-            ctx.parentElement.innerHTML = '<div class="chart-fallback">无法加载图表，数据: Earth 20%, Water 20%, Air 20%, Fire 40%</div>';
-          }
-        });
+  <script>
+    
+    // 确保Chart.js正确加载的辅助函数
+    function ensureChartLoaded(callback) {
+      if (typeof Chart !== 'undefined') {
+        callback();
+      } else {
+        // 提供降级显示
+        const ctx = document.getElementById('elementChart');
+        if (ctx) {
+          ctx.parentElement.innerHTML = '<div class="chart-fallback">元素分布: Earth 20%, Water 20%, Air 20%, Fire 40%</div>';
+        }
       }
-    }, 100); // 短暂延迟确保Chart.js有足够时间加载
-
-    // Download PDF button functionality
-    const downloadPdfBtn = document.querySelector('.download-pdf-btn');
-    if (downloadPdfBtn) {
-      downloadPdfBtn.addEventListener('click', function() {
-        // In a real implementation, this would link to an actual PDF file
-        alert('PDF download functionality would be implemented here.');
-      });
-    }
-
-    // Add to Cart button functionality
-    const addToCartBtn = document.querySelector('.add-to-cart-btn');
-    if (addToCartBtn) {
-      addToCartBtn.addEventListener('click', function() {
-        // In a real implementation, this would add the product to cart
-        alert('Product would be added to cart.');
-      });
     }
     
-    // 获取URL中的报表ID
-    const urlParams = new URLSearchParams(window.location.search);
-    const reportId = urlParams.get('id');
-    if (reportId) {
-      console.log('查看报表ID:', reportId);
-      // 可以在页面标题中显示报表ID
-      const titleElement = document.querySelector('.report-id');
-      if (titleElement) {
-        titleElement.textContent = `报表ID: ${reportId}`;
+    document.addEventListener('DOMContentLoaded', function() {
+      
+      // 创建一个简单的降级方案，无论Chart.js是否加载都显示数据
+      const createFallbackChart = () => {
+        const ctx = document.getElementById('elementChart');
+        if (ctx) {
+          const elementData = [
+            { name: 'Earth', value: 20, color: '#8B4513' },
+            { name: 'Water', value: 20, color: '#1E90FF' },
+            { name: 'Air', value: 20, color: '#F5DEB3' },
+            { name: 'Fire', value: 40, color: '#FF4500' }
+          ];
+          
+          let fallbackHTML = '<div class="chart-fallback">';
+          fallbackHTML += '<h4>元素分布</h4>';
+          elementData.forEach(item => {
+            fallbackHTML += `<div style="display:flex;align-items:center;margin:8px 0;">`;
+            fallbackHTML += `<div style="width:16px;height:16px;border-radius:50%;background:${item.color};margin-right:10px;"></div>`;
+            fallbackHTML += `<span>${item.name}: ${item.value}%</span>`;
+            fallbackHTML += `</div>`;
+          });
+          fallbackHTML += '</div>';
+          
+          ctx.parentElement.innerHTML = fallbackHTML;
+        }
+      };
+      
+      // 尝试初始化图表，但也准备降级方案
+      const initChart = () => {
+        const ctx = document.getElementById('elementChart');
+        if (ctx) {
+          try {
+            if (typeof Chart !== 'undefined') {
+              new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                  labels: ['Earth', 'Water', 'Air', 'Fire'],
+                  datasets: [{
+                    data: [20, 20, 20, 40],
+                    backgroundColor: ['#8B4513', '#1E90FF', '#F5DEB3', '#FF4500'],
+                    borderWidth: 0
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  cutout: '60%',
+                  plugins: {
+                    legend: {
+                      display: false
+                    }
+                  }
+                }
+              });
+            } else {
+              createFallbackChart();
+            }
+          } catch (error) {
+            createFallbackChart();
+          }
+        }
+      };
+      
+      // 立即尝试初始化，如果失败则使用降级方案
+      initChart();
+
+      // Download PDF button functionality
+      const downloadPdfBtn = document.querySelector('.download-pdf-btn');
+      if (downloadPdfBtn) {
+        downloadPdfBtn.addEventListener('click', function() {
+          // In a real implementation, this would link to an actual PDF file
+          alert('PDF download functionality would be implemented here.');
+        });
       }
-    }
-  });
-</script>
+
+      // Add to Cart button functionality
+      const addToCartBtn = document.querySelector('.add-to-cart-btn');
+      if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', function() {
+          // In a real implementation, this would add the product to cart
+          alert('Product would be added to cart.');
+        });
+      }
+      
+      // 获取URL中的报表ID
+      const urlParams = new URLSearchParams(window.location.search);
+      const reportId = urlParams.get('id');
+      if (reportId) {
+        console.log('查看报表ID:', reportId);
+        // 可以在页面标题中显示报表ID
+        const titleElement = document.querySelector('.report-id');
+        if (titleElement) {
+          titleElement.textContent = `报表ID: ${reportId}`;
+        }
+      }
+    });
+  </script>
 
 {% schema %}
   {
