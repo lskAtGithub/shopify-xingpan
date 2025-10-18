@@ -638,10 +638,10 @@
               const myChart = new window.Chart(canvas, {
                 type: 'doughnut',
                 data: {
-                  labels: param.data.itemScore.keys(),
+                  labels: object.keys(param.data.itemScore),
                   datasets: [
                     {
-                      data: param.data.itemScore.values(),
+                      data: Object.values(param.data.itemScore),
                       backgroundColor: ['#8B5A2B', '#4A90E2', '#FFD100', '#4CAF50'],
                       borderWidth: 0,
                     },
