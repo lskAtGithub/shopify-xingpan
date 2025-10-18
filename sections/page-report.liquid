@@ -650,39 +650,58 @@
 {{ 'chart.min.js' | asset_url | script_tag }}
 
 <script>
+  // 直接在DOMContentLoaded事件中初始化图表，确保在Chart.js加载后执行
   document.addEventListener('DOMContentLoaded', function () {
-    // 初始化图表
-    const initChart = () => {
-      const ctx = document.getElementById('elementChart');
-      // 检查Chart是否已加载
-      if (typeof window.Chart !== 'undefined') {
-        // 使用window.Chart确保使用全局Chart对象
-        new window.Chart(ctx, {
-          type: 'doughnut',
-          data: {
-            labels: ['Earth', 'Water', 'Air', 'Fire'],
-            datasets: [
-              {
-                data: [20, 20, 20, 40],
-                backgroundColor: ['#8B4513', '#1E90FF', '#F5DEB3', '#FF4500'],
-                borderWidth: 0,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '60%',
-            plugins: {
-              legend: {
-                display: false,
+    console.log('DOMContentLoaded事件触发，准备初始化图表');
+    
+    const ctx = document.getElementById('elementChart');
+    console.log('Canvas元素获取结果:', ctx);
+    
+    if (ctx) {
+      try {
+        // 检查Chart是否已加载
+        console.log('检查window.Chart是否存在:', typeof window.Chart);
+        if (typeof window.Chart !== 'undefined') {
+          // 使用window.Chart确保使用全局Chart对象
+          console.log('Chart.js已加载，开始创建图表');
+          new window.Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: ['Earth', 'Water', 'Air', 'Fire'],
+              datasets: [
+                {
+                  data: [20, 20, 20, 40],
+                  backgroundColor: ['#8B4513', '#1E90FF', '#F5DEB3', '#FF4500'],
+                  borderWidth: 0,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: '60%',
+              plugins: {
+                legend: {
+                  display: false,
+                },
               },
             },
-          },
-        });
+          });
+          console.log('图表创建成功');
+        } else {
+          console.log('Chart.js未加载，尝试提示用户');
+          // Chart未加载，直接alert提示
+          alert('不存在');
+        }
+      } catch (error) {
+        console.error('图表初始化错误:', error);
+        // 发生错误时alert提示
+        alert('不存在');
       }
-    };
+    }
+  });
 
+  <script>
     // Download PDF button functionality
     const downloadPdfBtn = document.querySelector('.download-pdf-btn');
     if (downloadPdfBtn) {
