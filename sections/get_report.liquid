@@ -59,13 +59,22 @@
             <!-- 日期时间选择器 -->
             <div class="form-group">
               <label for="birth-datetime">Birth Date & Time <span class="required">*</span></label>
-              <input class="ipt datetime-local-en" type="datetime-local" lang="en" id="birth-datetime" name="birth_datetime" required value="" placeholder="Select date and time">
+              <input
+                class="ipt datetime-local-en"
+                type="datetime-local"
+                lang="en"
+                id="birth-datetime"
+                name="birth_datetime"
+                required
+                value=""
+                placeholder="Select date and time"
+              >
               <p style="font-size: 12px; color: #666;">
                 tips：If you don't know the exact time, choose the one you think is possible.
               </p>
             </div>
 
-            <!--国家选择器-->
+            <!-- 国家选择器 -->
             <div class="form-group">
               <label>Birth Location <span class="required">*</span></label>
               <div class="grid-cols-responsive">
@@ -216,9 +225,9 @@
       line-height: 1.2;
       font-size: 2.75rem; /* 30px */
     }
-    
+
     /* 日期时间选择器样式 */
-    .get-report-section input[type="datetime-local"] {
+    .get-report-section input[type='datetime-local'] {
       width: 100%;
       padding: 0.75rem;
       border: 1px solid #d1d5db;
@@ -227,46 +236,46 @@
       transition: all 0.2s;
       background-color: #fff;
     }
-    
-    .get-report-section input[type="datetime-local"]:focus {
+
+    .get-report-section input[type='datetime-local']:focus {
       outline: none;
       border-color: #f97316;
       box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
     }
-    
+
     /* 移动端优化 */
     @media (max-width: 768px) {
-      .get-report-section input[type="datetime-local"] {
+      .get-report-section input[type='datetime-local'] {
         font-size: 16px; /* 防止iOS缩放 */
       }
     }
-    
+
     /* 确保日期时间选择器使用英文显示 */
     .datetime-local-en {
       /* 强制使用英文语言环境 */
       --webkit-calendar-picker-color: #333;
     }
-    
+
     /* 针对Webkit浏览器的日期时间选择器样式 */
     .datetime-local-en::-webkit-calendar-picker-indicator {
       cursor: pointer;
       filter: invert(0.5);
     }
-    
+
     /* 设置日期时间选择器的语言环境 */
     .datetime-local-en::-webkit-datetime-edit-text {
       color: #333;
       padding: 0 0.3em;
     }
-    
+
     .datetime-local-en::-webkit-datetime-edit-month-field {
       color: #333;
     }
-    
+
     .datetime-local-en::-webkit-datetime-edit-day-field {
       color: #333;
     }
-    
+
     .datetime-local-en::-webkit-datetime-edit-year-field {
       color: #333;
     }
@@ -917,6 +926,7 @@
       //  提交表单
       const form = document.querySelector('#report-form');
       form.addEventListener('submit', async function (e) {
+        alert('touch submit');
         e.preventDefault();
         const name = document.getElementById('name').value.trim();
         const birthDateTime = document.getElementById('birth-datetime').value;
@@ -939,6 +949,7 @@
           alert('Please select your birth location');
           return false;
         }
+        alert('pass field');
         
         // 将datetime-local格式转换为所需的格式
         const date = new Date(birthDateTime);
@@ -968,8 +979,9 @@
         Object.keys(payload).forEach((k) => {
           paramsForm.append(k, payload[k]);
         });
-        console.log(paramsForm);
+        
         try {
+          alert('start request');
           const res = await fetch(`${BASE_URL}/sysUser/creatReport`, {
             method: 'POST',
             headers: {
@@ -979,6 +991,7 @@
           });
           const data = await res.json();
           reportId = data.data.reportId;
+          alert('get data');
           renderModal(data.data);
         } catch (err) {
           alert('请求失败，请稍后再试');
