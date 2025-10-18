@@ -653,78 +653,68 @@
 {{ 'chart.min.js' | asset_url | script_tag }}
 
 <script>
-// 等待所有资源加载完成
-window.addEventListener('load', function() {
-  console.log('页面加载完成，开始初始化图表');
-  
-  // 获取canvas元素
-  const canvas = document.getElementById('elementChart');
-  if (!canvas) {
-    console.error('未找到canvas元素');
-    alert('不存在');
-    return;
-  }
-  
-  // 检查Chart对象是否存在
-  if (typeof window.Chart === 'undefined') {
-    console.error('Chart.js未加载或未正确绑定到window对象');
-    alert('不存在');
-    return;
-  }
-  
-  try {
-    // 创建图表
-    const myChart = new window.Chart(canvas, {
-      type: 'doughnut',
-      data: {
-        labels: ['Earth', 'Water', 'Air', 'Fire'],
-        datasets: [{
-          data: [20, 20, 20, 40],
-          backgroundColor: ['#8B4513', '#1E90FF', '#F5DEB3', '#FF4500'],
-          borderWidth: 0
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '60%',
-        plugins: {
-          legend: { display: false }
-        }
-      }
-    });
-    console.log('图表创建成功');
-  } catch (error) {
-    console.error('图表初始化错误:', error);
-    alert('不存在');
-  }
-  
-  // 其他功能
-  function initButtons() {
-    const pdfBtn = document.querySelector('.download-pdf-btn');
-    if (pdfBtn) pdfBtn.onclick = () => alert('PDF下载功能');
-    
-    const cartBtn = document.querySelector('.add-to-cart-btn');
-    if (cartBtn) cartBtn.onclick = () => alert('添加到购物车');
-  }
-  
-  function handleReportId() {
-    const reportId = new URLSearchParams(window.location.search).get('id');
-    if (reportId) {
-      console.log('报表ID:', reportId);
-      const titleEl = document.querySelector('.report-id');
-      if (titleEl) titleEl.textContent = `报表ID: ${reportId}`;
-      
-      // API调用
-      fetch(`https://api.11starsastro.com/report/getById?id=${reportId}`)
-        .then(res => console.log('API响应:', res))
-        .catch(err => console.error('API错误:', err));
+  alert(12);
+  // 等待所有资源加载完成
+  window.addEventListener('load', function () {
+    console.log('页面加载完成，开始初始化图表');
+
+    // 获取canvas元素
+    const canvas = document.getElementById('elementChart');
+    try {
+      // 创建图表
+      const myChart = new window.Chart(canvas, {
+        type: 'doughnut',
+        data: {
+          labels: ['Earth', 'Water', 'Air', 'Fire'],
+          datasets: [
+            {
+              data: [20, 20, 20, 40],
+              backgroundColor: ['#8B4513', '#1E90FF', '#F5DEB3', '#FF4500'],
+              borderWidth: 0,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '60%',
+          plugins: {
+            legend: { display: false },
+          },
+        },
+      });
+      console.log('图表创建成功');
+    } catch (error) {
+      console.error('图表初始化错误:', error);
+      alert('不存在');
     }
-  }
-  
-  initButtons();
-  handleReportId();
-});
+
+    // 其他功能
+    function initButtons() {
+      const pdfBtn = document.querySelector('.download-pdf-btn');
+      if (pdfBtn) pdfBtn.onclick = () => alert('PDF下载功能');
+
+      const cartBtn = document.querySelector('.add-to-cart-btn');
+      if (cartBtn) cartBtn.onclick = () => alert('添加到购物车');
+    }
+
+    function handleReportId() {
+      const reportId = new URLSearchParams(window.location.search).get('id');
+      if (reportId) {
+        console.log('报表ID:', reportId);
+        const titleEl = document.querySelector('.report-id');
+        if (titleEl) titleEl.textContent = `报表ID: ${reportId}`;
+
+        // API调用
+        fetch(`https://api.11starsastro.com/report/getById?id=${reportId}`)
+          .then((res) => console.log('API响应:', res))
+          .catch((err) => console.error('API错误:', err));
+      }
+    }
+
+    initButtons();
+    handleReportId();
+  });
 </script>
 
 {% schema %}
