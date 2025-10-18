@@ -691,14 +691,29 @@
     function handleReportId() {
       const reportId = new URLSearchParams(window.location.search).get('id');
       if (reportId) {
-        console.log('报表ID:', reportId);
-        const titleEl = document.querySelector('.report-id');
-        if (titleEl) titleEl.textContent = `报表ID: ${reportId}`;
-
         // API调用
         fetch(`https://api.11starsastro.com/report/getById?id=${reportId}`)
-          .then((res) => console.log('API响应:', res.body.data))
-          .catch((err) => console.error('API错误:', err));
+          .then((response) => {
+            console.log('HTTP响应状态:', response.status);
+            // 首先检查响应是否成功
+            if (!response.ok) {
+              throw new Error(`HTTP错误: ${response.status}`);
+            }
+            // 然后将响应转换为JSON格式
+            return response.json();
+          })
+          .then((data) => {
+            console.log('API返回数据:', data);
+            // 假设API返回的数据结构是 { body: { data: ... } }
+            if (data && data.body && data.body.data) {
+              console.log('数据内容:', data.body.data);
+              // 这里可以使用数据进行后续操作
+            }
+          })
+          .catch((err) => {
+            console.error('API请求错误:', err);
+            alert('不存在');
+          });
       }
     }
 
