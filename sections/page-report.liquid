@@ -330,11 +330,14 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 1.5rem;
+    position: relative;
   }
 
   #elementChart {
-    max-width: 400px;
-    max-height: 300px;
+    height: 100% !important;
+    width: 100% !important;
+    max-width: 100%;
+    max-height: 100%;
   }
 
   .chart-fallback {
@@ -650,31 +653,57 @@
 {{ 'chart.min.js' | asset_url | script_tag }}
 
 <script>
+  // 首先检查Chart.js是否已加载
+  console.log('页面加载中 - 检查Chart.js是否存在:', typeof window.Chart);
+  
   // 直接在DOMContentLoaded事件中初始化图表，确保在Chart.js加载后执行
   document.addEventListener('DOMContentLoaded', function () {
     console.log('DOMContentLoaded事件触发，准备初始化图表');
     
+    // 再次检查Chart.js是否已加载
+    console.log('DOMContentLoaded时Chart.js状态:', typeof window.Chart);
+    
     const ctx = document.getElementById('elementChart');
     console.log('Canvas元素获取结果:', ctx);
     
-    if (ctx) {
-      try {
-        // 检查Chart是否已加载
-        console.log('检查window.Chart是否存在:', typeof window.Chart);
-        if (typeof window.Chart !== 'undefined') {
-          // 使用window.Chart确保使用全局Chart对象
-          console.log('Chart.js已加载，开始创建图表');
-          new window.Chart(ctx, {
+    if (!ctx) {
+      console.error('未找到canvas元素');
+      return;
+    }
+    
+    try {
+      if (typeof window.Chart !== 'undefined') {
+        console.log('Chart.js已加载，开始创建图表');
+        
+        // 尝试获取2D上下文
+        const context = ctx.getContext('2d');
+        console.log('Canvas上下文获取结果:', context);
+        
+        if (context) {
+          // 简化图表配置，使用更基础的设置
+          const chartConfig = {
             type: 'doughnut',
             data: {
               labels: ['Earth', 'Water', 'Air', 'Fire'],
               datasets: [
                 {
+                  label: 'Element Distribution',
                   data: [20, 20, 20, 40],
-                  backgroundColor: ['#8B4513', '#1E90FF', '#F5DEB3', '#FF4500'],
-                  borderWidth: 0,
-                },
-              ],
+                  backgroundColor: [
+                    '#8B4513',  // Earth - brown
+                    '#1E90FF',  // Water - blue
+                    '#F5DEB3',  // Air - beige
+                    '#FF4500'   // Fire - orange
+                  ],
+                  borderColor: [
+                    '#8B4513',
+                    '#1E90FF',
+                    '#F5DEB3',
+                    '#FF4500'
+                  ],
+                  borderWidth: 1
+                }
+              ]
             },
             options: {
               responsive: true,
@@ -682,22 +711,38 @@
               cutout: '60%',
               plugins: {
                 legend: {
-                  display: false,
+                  display: true,  // 显示图例以便调试
+                  position: 'bottom'
                 },
-              },
-            },
-          });
-          console.log('图表创建成功');
+                tooltip: {
+                  enabled: true
+                }
+              }
+            }
+          };
+          
+          console.log('图表配置:', chartConfig);
+          
+          // 创建图表
+          const myChart = new window.Chart(ctx, chartConfig);
+          console.log('图表创建成功:', myChart);
+          
+          // 验证图表是否正确渲染
+          setTimeout(() => {
+            console.log('图表渲染后检查:', myChart);
+          }, 500);
+          
         } else {
-          console.log('Chart.js未加载，尝试提示用户');
-          // Chart未加载，直接alert提示
+          console.error('无法获取canvas 2D上下文');
           alert('不存在');
         }
-      } catch (error) {
-        console.error('图表初始化错误:', error);
-        // 发生错误时alert提示
+      } else {
+        console.error('Chart.js未加载');
         alert('不存在');
       }
+    } catch (error) {
+      console.error('图表初始化错误:', error);
+      alert('不存在');
     }
     
     // Download PDF button functionality
