@@ -638,7 +638,7 @@
               const myChart = new window.Chart(canvas, {
                 type: 'doughnut',
                 data: {
-                  labels: object.keys(param.data.itemScore),
+                  labels: Object.keys(param.data.itemScore),
                   datasets: [
                     {
                       data: Object.values(param.data.itemScore),
