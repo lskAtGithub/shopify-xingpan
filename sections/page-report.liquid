@@ -15,7 +15,10 @@
         <div class="report-title-area">
           <div class="customer-info">
             {% if customer.last_name and customer.first_name %}
-              <h1>Report for {{ customer.first_name }} {{ customer.last_name }}</h1>
+              <h1>
+                Report for {{ customer.first_name }}
+                {{ customer.last_name }}
+              </h1>
             {% else %}
               <h1>Report for {{ customer.email | split: '@' | first | capitalize }}</h1>
             {% endif %}
@@ -24,7 +27,19 @@
           <a href="/pages/report-list" class="back-to-reports">Back to Reports</a>
         </div>
         <button class="download-pdf-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
           Download PDF
         </button>
       </div>
@@ -65,7 +80,12 @@
           <!-- Analysis Text -->
           <div class="analysis-section">
             <h2>You're a fire-element person and need water to balance your life.</h2>
-            <p>Your dominant fire element means you're passionate, energetic, and charismatic. You have a natural ability to inspire others and take initiative. However, sometimes you may burn too brightly, becoming impatient or impulsive. Consider incorporating more water-element activities into your life, such as spending time near bodies of water, practicing mindfulness, or engaging in creative pursuits that require patience and flow.</p>
+            <p>
+              Your dominant fire element means you're passionate, energetic, and charismatic. You have a natural ability
+              to inspire others and take initiative. However, sometimes you may burn too brightly, becoming impatient or
+              impulsive. Consider incorporating more water-element activities into your life, such as spending time near
+              bodies of water, practicing mindfulness, or engaging in creative pursuits that require patience and flow.
+            </p>
           </div>
 
           <!-- Element Table -->
@@ -155,7 +175,10 @@
           <!-- Personal Information Card -->
           <div class="personal-info-card">
             {% if customer.last_name and customer.first_name %}
-              <div class="customer-name">{{ customer.first_name }} {{ customer.last_name }}</div>
+              <div class="customer-name">
+                {{ customer.first_name }}
+                {{ customer.last_name }}
+              </div>
             {% else %}
               <div class="customer-name">{{ customer.email | split: '@' | first | capitalize }}</div>
             {% endif %}
@@ -174,9 +197,16 @@
           <!-- Element Description Card -->
           <div class="element-description-card">
             <h3>Water Element</h3>
-            <p>Our Transformation crystal art captures the essence of water element vitality and harmony. Handcrafted with genuine lapis lazuli and carnelian crystals, this piece amplifies your intuition, passion, and creative energy.</p>
+            <p>
+              Our Transformation crystal art captures the essence of water element vitality and harmony. Handcrafted
+              with genuine lapis lazuli and carnelian crystals, this piece amplifies your intuition, passion, and
+              creative energy.
+            </p>
             <div class="element-image">
-              <img src="https://cdn.shopify.com/s/files/1/0585/3828/1384/files/water-crystal-art.jpg" alt="Water Element Crystal Art">
+              <img
+                src="https://cdn.shopify.com/s/files/1/0585/3828/1384/files/water-crystal-art.jpg"
+                alt="Water Element Crystal Art"
+              >
             </div>
             <div class="element-details">
               <div class="element-meta">
@@ -204,91 +234,91 @@
 </div>
 
 {% stylesheet %}
-/* Main Report Styles */
-.astrological-report {
-  padding: 2rem 0;
-}
+  /* Main Report Styles */
+  .astrological-report {
+    padding: 2rem 0;
+  }
 
-.page-width {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
+  .page-width {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
 
-/* Report Header */
-.report-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid #e0e0e0;
-}
+  /* Report Header */
+  .report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
 
-.report-title-area {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
+  .report-title-area {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
 
-.customer-info h1 {
-  font-size: 1.5rem;
-  margin: 0;
-  color: #333;
-}
+  .customer-info h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: #333;
+  }
 
-.report-date {
-  color: #666;
-  font-size: 0.9rem;
-  margin: 0.5rem 0 0 0;
-}
+  .report-date {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0.5rem 0 0 0;
+  }
 
-.back-to-reports {
-  color: #666;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: color 0.2s;
-}
+  .back-to-reports {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
 
-.back-to-reports:hover {
-  color: #333;
-  text-decoration: underline;
-}
+  .back-to-reports:hover {
+    color: #333;
+    text-decoration: underline;
+  }
 
-.download-pdf-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: #333;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.25rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
+  .download-pdf-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
 
-.download-pdf-btn:hover {
-  background-color: #1a1a1a;
-}
+  .download-pdf-btn:hover {
+    background-color: #1a1a1a;
+  }
 
-/* Main Content Layout */
-.report-content-wrapper {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 2rem;
-}
+  /* Main Content Layout */
+  .report-content-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+  }
 
-/* Left Column - Report Main */
-.report-main {
-  background-color: white;
-  border-radius: 8px;
-  padding: 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
+  /* Left Column - Report Main */
+  .report-main {
+    background-color: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
 
-/* Element Chart Section */
+  /* Element Chart Section */
   .element-chart-section {
     margin-bottom: 2rem;
   }
@@ -319,407 +349,393 @@
     max-width: 400px;
   }
 
-.element-legend {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-}
-
-.element-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-}
-
-.element-color {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-}
-
-.element-color.earth {
-  background-color: #8B4513;
-}
-
-.element-color.water {
-  background-color: #1E90FF;
-}
-
-.element-color.air {
-  background-color: #F5DEB3;
-}
-
-.element-color.fire {
-  background-color: #FF4500;
-}
-
-.element-name {
-  color: #333;
-}
-
-.element-value {
-  font-weight: bold;
-  color: #333;
-}
-
-/* Analysis Section */
-.analysis-section {
-  margin-bottom: 2rem;
-}
-
-.analysis-section h2 {
-  font-size: 1.25rem;
-  margin: 0 0 1rem 0;
-  color: #333;
-}
-
-.analysis-section p {
-  line-height: 1.6;
-  color: #555;
-  margin: 0;
-}
-
-/* Element Table */
-.element-table-section {
-  overflow-x: auto;
-}
-
-.element-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.element-table th {
-  background-color: #f5f5f5;
-  padding: 0.75rem;
-  text-align: left;
-  font-weight: 600;
-  color: #333;
-  border-bottom: 2px solid #e0e0e0;
-}
-
-.element-table td {
-  padding: 0.75rem;
-  border-bottom: 1px solid #e0e0e0;
-  color: #555;
-}
-
-.element-table tr:last-child td {
-  border-bottom: none;
-}
-
-/* Right Column - Sidebar */
-.report-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-/* Personal Info Card */
-.personal-info-card {
-  background-color: white;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  text-align: center;
-}
-
-.customer-name {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 1rem;
-}
-
-.birth-info {
-  text-align: left;
-}
-
-.birth-item {
-  margin-bottom: 0.75rem;
-}
-
-.birth-item:last-child {
-  margin-bottom: 0;
-}
-
-.birth-label {
-  display: block;
-  font-size: 0.85rem;
-  color: #666;
-  margin-bottom: 0.25rem;
-}
-
-.birth-value {
-  font-size: 0.95rem;
-  color: #333;
-}
-
-/* Element Description Card */
-.element-description-card {
-  background-color: white;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.element-description-card h3 {
-  font-size: 1.1rem;
-  margin: 0 0 1rem 0;
-  color: #333;
-}
-
-.element-description-card p {
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: #555;
-  margin: 0 0 1rem 0;
-}
-
-.element-image {
-  margin-bottom: 1rem;
-}
-
-.element-image img {
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
-  object-fit: cover;
-}
-
-.element-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-.meta-label {
-  font-size: 0.8rem;
-  color: #666;
-  background-color: #f5f5f5;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-}
-
-.element-price {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 1rem;
-}
-
-.add-to-cart-btn {
-  width: 100%;
-  background-color: #333;
-  color: white;
-  border: none;
-  padding: 0.75rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.add-to-cart-btn:hover {
-  background-color: #1a1a1a;
-}
-
-/* Logged Out View */
-.not-logged-in {
-  text-align: center;
-  padding: 4rem 2rem;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.not-logged-in h2 {
-  margin: 0 0 1rem 0;
-  color: #333;
-}
-
-.not-logged-in p {
-  margin: 0 0 1.5rem 0;
-  color: #555;
-}
-
-.login-link {
-  display: inline-block;
-  background-color: #333;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  text-decoration: none;
-  transition: background-color 0.2s;
-}
-
-.login-link:hover {
-  background-color: #1a1a1a;
-}
-
-/* Responsive Design */
-@media (max-width: 992px) {
-  .report-content-wrapper {
-    grid-template-columns: 1fr;
-  }
-  
   .element-legend {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem 0;
-  }
-}
-
-@media (max-width: 768px) {
-  .report-header {
-    flex-direction: column;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
   }
-  
-  .report-title-area {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-  
-  .download-pdf-btn {
-    align-self: stretch;
-    justify-content: center;
-  }
-  
-  .customer-info h1 {
-    font-size: 1.25rem;
-  }
-}
 
-@media (max-width: 480px) {
-  .element-chart {
-    height: 250px;
+  .element-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
   }
-  
-  #elementChart {
-    max-width: 300px;
-    max-height: 250px;
+
+  .element-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
   }
-  
+
+  .element-color.earth {
+    background-color: #8b4513;
+  }
+
+  .element-color.water {
+    background-color: #1e90ff;
+  }
+
+  .element-color.air {
+    background-color: #f5deb3;
+  }
+
+  .element-color.fire {
+    background-color: #ff4500;
+  }
+
+  .element-name {
+    color: #333;
+  }
+
+  .element-value {
+    font-weight: bold;
+    color: #333;
+  }
+
+  /* Analysis Section */
+  .analysis-section {
+    margin-bottom: 2rem;
+  }
+
+  .analysis-section h2 {
+    font-size: 1.25rem;
+    margin: 0 0 1rem 0;
+    color: #333;
+  }
+
+  .analysis-section p {
+    line-height: 1.6;
+    color: #555;
+    margin: 0;
+  }
+
+  /* Element Table */
+  .element-table-section {
+    overflow-x: auto;
+  }
+
   .element-table {
-    font-size: 0.8rem;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
   }
-  
-  .element-table th,
+
+  .element-table th {
+    background-color: #f5f5f5;
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
   .element-table td {
-    padding: 0.5rem;
+    padding: 0.75rem;
+    border-bottom: 1px solid #e0e0e0;
+    color: #555;
   }
-}
+
+  .element-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Right Column - Sidebar */
+  .report-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* Personal Info Card */
+  .personal-info-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    text-align: center;
+  }
+
+  .customer-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+
+  .birth-info {
+    text-align: left;
+  }
+
+  .birth-item {
+    margin-bottom: 0.75rem;
+  }
+
+  .birth-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .birth-label {
+    display: block;
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+  }
+
+  .birth-value {
+    font-size: 0.95rem;
+    color: #333;
+  }
+
+  /* Element Description Card */
+  .element-description-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .element-description-card h3 {
+    font-size: 1.1rem;
+    margin: 0 0 1rem 0;
+    color: #333;
+  }
+
+  .element-description-card p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #555;
+    margin: 0 0 1rem 0;
+  }
+
+  .element-image {
+    margin-bottom: 1rem;
+  }
+
+  .element-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+
+  .element-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .meta-label {
+    font-size: 0.8rem;
+    color: #666;
+    background-color: #f5f5f5;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .element-price {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+
+  .add-to-cart-btn {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .add-to-cart-btn:hover {
+    background-color: #1a1a1a;
+  }
+
+  /* Logged Out View */
+  .not-logged-in {
+    text-align: center;
+    padding: 4rem 2rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .not-logged-in h2 {
+    margin: 0 0 1rem 0;
+    color: #333;
+  }
+
+  .not-logged-in p {
+    margin: 0 0 1.5rem 0;
+    color: #555;
+  }
+
+  .login-link {
+    display: inline-block;
+    background-color: #333;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+
+  .login-link:hover {
+    background-color: #1a1a1a;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .report-content-wrapper {
+      grid-template-columns: 1fr;
+    }
+
+    .element-legend {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .report-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .report-title-area {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .download-pdf-btn {
+      align-self: stretch;
+      justify-content: center;
+    }
+
+    .customer-info h1 {
+      font-size: 1.25rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .element-chart {
+      height: 250px;
+    }
+
+    #elementChart {
+      max-width: 300px;
+      max-height: 250px;
+    }
+
+    .element-table {
+      font-size: 0.8rem;
+    }
+
+    .element-table th,
+    .element-table td {
+      padding: 0.5rem;
+    }
+  }
 {% endstylesheet %}
 
 <!-- 使用本地加载的Chart.js库 -->
-  {{ 'chart.min.js' | asset_url | script_tag }}
-  
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // 初始化图表
-      const initChart = () => {
-        const ctx = document.getElementById('elementChart');
-        if (ctx) {
-          try {
-            // 检查Chart是否已加载
-            if (typeof window.Chart !== 'undefined') {
-              // 使用window.Chart确保使用全局Chart对象
-              new window.Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                  labels: ['Earth', 'Water', 'Air', 'Fire'],
-                  datasets: [{
-                    data: [20, 20, 20, 40],
-                    backgroundColor: ['#8B4513', '#1E90FF', '#F5DEB3', '#FF4500'],
-                    borderWidth: 0
-                  }]
-                },
-                options: {
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  cutout: '60%',
-                  plugins: {
-                    legend: {
-                      display: false
-                    }
-                  }
-                }
-              });
-            } else {
-              // Chart未加载，直接alert提示
-              alert('不存在');
-            }
-          } catch (error) {
-            // 发生错误时alert提示
-            alert('不存在');
-          }
-        }
-      };
-      
-      // 尝试立即初始化
-      initChart();
-      
-      // 再设置一个定时器重试，确保Chart.js有足够时间加载
-      setTimeout(initChart, 1000);
-      
-      // Download PDF button functionality
-      const downloadPdfBtn = document.querySelector('.download-pdf-btn');
-      if (downloadPdfBtn) {
-        downloadPdfBtn.addEventListener('click', function() {
-          alert('PDF download functionality would be implemented here.');
+{{ 'chart.min.js' | asset_url | script_tag }}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // 初始化图表
+    const initChart = () => {
+      const ctx = document.getElementById('elementChart');
+      // 检查Chart是否已加载
+      if (typeof window.Chart !== 'undefined') {
+        // 使用window.Chart确保使用全局Chart对象
+        new window.Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Earth', 'Water', 'Air', 'Fire'],
+            datasets: [
+              {
+                data: [20, 20, 20, 40],
+                backgroundColor: ['#8B4513', '#1E90FF', '#F5DEB3', '#FF4500'],
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '60%',
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+          },
         });
       }
-      
-      // Add to Cart button functionality
-      const addToCartBtn = document.querySelector('.add-to-cart-btn');
-      if (addToCartBtn) {
-        addToCartBtn.addEventListener('click', function() {
-          alert('Product would be added to cart.');
-        });
+    };
+
+    // Download PDF button functionality
+    const downloadPdfBtn = document.querySelector('.download-pdf-btn');
+    if (downloadPdfBtn) {
+      downloadPdfBtn.addEventListener('click', function () {
+        alert('PDF download functionality would be implemented here.');
+      });
+    }
+
+    // Add to Cart button functionality
+    const addToCartBtn = document.querySelector('.add-to-cart-btn');
+    if (addToCartBtn) {
+      addToCartBtn.addEventListener('click', function () {
+        alert('Product would be added to cart.');
+      });
+    }
+
+    // 获取URL中的报表ID
+    const urlParams = new URLSearchParams(window.location.search);
+    const reportId = urlParams.get('id');
+    if (reportId) {
+      console.log('查看reportId:', reportId);
+      // 可以在页面标题中显示报表ID
+      const titleElement = document.querySelector('.report-id');
+      if (titleElement) {
+        titleElement.textContent = `报表ID: ${reportId}`;
       }
-      
-      // 获取URL中的报表ID
-      const urlParams = new URLSearchParams(window.location.search);
-      const reportId = urlParams.get('id');
-      if (reportId) {
-        console.log('查看reportId:', reportId);
-        // 可以在页面标题中显示报表ID
-        const titleElement = document.querySelector('.report-id');
-        if (titleElement) {
-          titleElement.textContent = `报表ID: ${reportId}`;
+
+      // 添加异步API调用
+      (async function () {
+        try {
+          const BASE_URL = 'https://api.11starsastro.com';
+          const response = await fetch(`${BASE_URL}/report/getById?id=${reportId}`);
+          console.log(response);
+        } catch (error) {
+          console.error('获取报表数据失败:', error);
         }
-        
-        // 添加异步API调用
-        (async function() {
-          try {
-            const BASE_URL = 'https://api.11starsastro.com';
-            const response = await fetch(`${BASE_URL}/report/getById?id=${reportId}`);
-            console.log(response);
-          } catch (error) {
-            console.error('获取报表数据失败:', error);
-          }
-        })();
-      }
-    });
-  </script>
+      })();
+    }
+  });
+</script>
 
 {% schema %}
-  {
-    "name": "Report Detail",
-    "settings": [
-      {
-        "type": "header",
-        "content": "Report Detail Settings"
-      },
-      {
-        "type": "paragraph",
-        "content": "This section displays detailed report for logged-in customers."
-      }
-    ]
-  }
+{
+  "name": "Report Detail",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Report Detail Settings"
+    },
+    {
+      "type": "paragraph",
+      "content": "This section displays detailed report for logged-in customers."
+    }
+  ]
+}
 {% endschema %}
