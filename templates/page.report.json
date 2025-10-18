@@ -1,0 +1,12 @@
+{
+  "name": "Report Detail",
+  "sections": {
+    "main": {
+      "type": "page-report",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

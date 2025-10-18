@@ -291,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="card-footer">
           <a href="${report.pdfPath || '#'}" class="button button--secondary" download>Download PDF</a>
-          <a href="#" class="button button--primary">View Report</a>
+          <a href="/pages/report?id=${report.id}" class="button button--primary">View Report</a>
         </div>
       `;
       grid.appendChild(card);
