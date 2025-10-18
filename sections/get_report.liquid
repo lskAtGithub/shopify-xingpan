@@ -709,7 +709,7 @@
     let lon = '';
     let reportId = '';
     const BASE_URL = 'https://api.11starsastro.com';
-    alert(222)
+    alert(333)
     document.addEventListener('DOMContentLoaded', function () {
       const countrySelect = document.getElementById('country');
       const stateSelect = document.getElementById('state');
@@ -928,7 +928,6 @@
       //  提交表单
       const form = document.querySelector('#report-form');
       form.addEventListener('submit', async function (e) {
-        alert('touch submit');
         e.preventDefault();
         const name = document.getElementById('name').value.trim();
         const birthDateTime = document.getElementById('birth-datetime').value;
@@ -951,7 +950,6 @@
           alert('Please select your birth location');
           return false;
         }
-        alert('pass field');
         
         // 将datetime-local格式转换为所需的格式
         const date = new Date(birthDateTime);
@@ -962,13 +960,12 @@
         const minute = String(date.getMinutes()).padStart(2, '0');
         const time = `${year}-${month}-${day} ${hour}:${minute}:00`;
         const address = city ? `${city},${state},${country}` : `${state},${country}`;
-        alert('get all params');
         const payload = {
           tid: 4,
           us: 'zh-CN',
           userBirthday: time,
           userCity: address,
-          userEmail: window.customer.email,
+          userEmail: window.customer ? window.customer.email : '',
           ztime: 8,
           lat: lat,
           lon: lon,
