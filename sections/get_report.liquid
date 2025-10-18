@@ -734,7 +734,7 @@ async function renderReportModal(data, formData) {
 
   // --- 1. Populate Header ---
   document.getElementById('report-title').textContent = `${formData.name || 'Your'}'s Report`;
-  document.getElementById('report-subtitle').innerHTML = `${formData.formattedDate}<br>${formData.address}`;
+  document.getElementById('report-subtitle').innerHTML = `${formData.formattedDate}<br>${formData.userCity}`;
 
   // --- 2. Render Elemental Balance Chart ---
   const { itemScore } = data;
@@ -1126,7 +1126,7 @@ async function renderReportModal(data, formData) {
             userCity: address
 
           }
-          renderReportModal(data.data);
+          renderReportModal(data.data, formData);
         } catch (err) {
           alert('请求失败，请稍后再试');
         }
