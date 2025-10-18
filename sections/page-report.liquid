@@ -582,7 +582,7 @@
 {% endstylesheet %}
 
 <!-- 引入Chart.js和自定义脚本 -->
-{{ 'chart.min.js' | asset_url | script_tag }}
+{{ 'chart.min.js' | asset_url | script_tag: text/javascript }}
 
 <script>
   window.addEventListener('load', function () {
