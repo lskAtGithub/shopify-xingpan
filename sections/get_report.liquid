@@ -725,6 +725,108 @@
     let lon = '';
     let reportId = '';
     const BASE_URL = 'https://api.11starsastro.com';
+    let elementChartInstance = null;
+
+async function renderReportModal(data, formData) {
+  const modal = document.getElementById('report-modal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  // --- 1. Populate Header ---
+  document.getElementById('report-title').textContent = `${formData.name || 'Your'}'s Report`;
+  document.getElementById('report-subtitle').innerHTML = `${formData.formattedDate}<br>${formData.address}`;
+
+  // --- 2. Render Elemental Balance Chart ---
+  const { itemScore } = data;
+  const elementData = {
+    'Air': { value: itemScore['风'] || 0, color: '#facc15' },   // yellow
+    'Fire': { value: itemScore['火'] || 0, color: '#fb923c' },  // orange
+    'Earth': { value: itemScore['土'] || 0, color: '#4ade80' }, // green
+    'Water': { value: itemScore['水'] || 0, color: '#60a5fa' } // blue
+  };
+  const totalScore = Object.values(elementData).reduce((sum, el) => sum + el.value, 0);
+
+  // Render Legend
+  document.getElementById('chart-legend').innerHTML = Object.entries(elementData).map(([name, { value, color }]) => {
+    const percentage = totalScore > 0 ? ((value / totalScore) * 100).toFixed(2) : 0;
+    return `<div class="legend-item"><span class="legend-color-box" style="background-color: ${color};"></span><span class="legend-label">${name}:</span><span class="legend-value">${percentage}%</span></div>`;
+  }).join('');
+  
+  // Render Chart using Chart.js
+  const chartCanvas = document.getElementById('elementChart');
+  if (elementChartInstance) elementChartInstance.destroy();
+  elementChartInstance = new Chart(chartCanvas, {
+    type: 'pie',
+    data: {
+      labels: Object.keys(elementData),
+      datasets: [{
+        data: Object.values(elementData).map(el => el.value),
+        backgroundColor: Object.values(elementData).map(el => el.color),
+        borderWidth: 2,
+        borderColor: '#fff'
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false }, tooltip: { enabled: true } } }
+  });
+
+  // --- 3. Render Balance Summary ---
+  let [dominantElement, weakestElement] = ['', ''];
+  let maxScore = -1, minScore = Infinity;
+  for (const [name, { value }] of Object.entries(elementData)) {
+    if (value > maxScore) { maxScore = value; dominantElement = name; }
+    if (value < minScore) { minScore = value; weakestElement = name; }
+  }
+  document.getElementById('balance-summary').innerHTML = `<h4 class="summary-title">You're an ${dominantElement}-element person and need ${weakestElement} to balance your life.</h4><p class="summary-text">Your dominant air element means you lack tenacity... (summary text here)</p>`;
+
+  // --- 4. Render Chart Details Table ---
+  const tableHeader = document.querySelector('#report-table thead');
+  const tableBody = document.querySelector('#report-table tbody');
+  const headers = ["Zodiac Sign", "Planet", "Domicile/Exaltation", "Zodiac Element", "Planet-Element Score", "Domicile/Exaltation Bonus", "House the Planet is in", "House Element", "House Element Score"];
+  tableHeader.innerHTML = `<tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>`;
+
+  tableBody.innerHTML = data.list.map(item => {
+      const domicile = item.miao > 0 ? 'Miao' : (item.wang > 0 ? 'Wang' : 'None');
+      return `
+        <tr>
+          <td>${item.constellationCN}</td><td>${item.starNameCN}</td><td>${domicile}</td><td>${item.zodiacSigns}</td><td>${item.starScore}</td><td>${item.miao + item.wang}</td><td>${item.houses || 'N/A'}</td><td>${item.housesName || 'N/A'}</td><td>${item.housesScore || 'N/A'}</td>
+        </tr>
+      `;
+  }).join('');
+
+  // --- 5. Render Recommended Product ---
+  const { scoreProduct } = data;
+  const productContainer = document.getElementById('recommended-products');
+  const productKey = Object.keys(scoreProduct || {})[0];
+  const productData = productKey ? scoreProduct[productKey] : null;
+
+  if (productData) {
+    const handle = productData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    const shopifyProduct = await fetch(`/products/${handle}.js`).then(res => res.ok ? res.json() : null);
+
+    productContainer.innerHTML = `
+      <div class="recommended-product-card">
+        <img src="${productData.image || (shopifyProduct ? shopifyProduct.featured_image : '')}" alt="${productData.title}">
+        <div class="product-details">
+          <h4>${productData.title}</h4>
+          <p class="price">${shopifyProduct ? '$' + (shopifyProduct.price / 100).toFixed(2) : '$135.00'}</p>
+          <div class="description">${productData.bodyHtml}</div>
+          <div class="product-features">
+            <span>✔ Tiger's eye crystals</span><span><i class="icon-dot">●</i> 16" × 20" framed</span><span><i class="icon-dot">●</i> Handcrafted</span>
+          </div>
+          <div class="add-to-cart-wrapper">
+            <p class="note">✦ After purchase you will get a professional report</p>
+            <form method="post" action="/cart/add">
+              <input type="hidden" name="id" value="${shopifyProduct ? shopifyProduct.variants[0].id : ''}">
+              <button type="submit" class="button">Add to Cart</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    productContainer.innerHTML = '';
+  }
+}
     document.addEventListener('DOMContentLoaded', function () {
       const countrySelect = document.getElementById('country');
       const stateSelect = document.getElementById('state');
@@ -1233,108 +1335,7 @@
 // ====================================================================
 
 // Keep a reference to the chart instance to destroy it later
-let elementChartInstance = null;
 
-async function renderReportModal(data, formData) {
-  const modal = document.getElementById('report-modal');
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-
-  // --- 1. Populate Header ---
-  document.getElementById('report-title').textContent = `${formData.name || 'Your'}'s Report`;
-  document.getElementById('report-subtitle').innerHTML = `${formData.formattedDate}<br>${formData.address}`;
-
-  // --- 2. Render Elemental Balance Chart ---
-  const { itemScore } = data;
-  const elementData = {
-    'Air': { value: itemScore['风'] || 0, color: '#facc15' },   // yellow
-    'Fire': { value: itemScore['火'] || 0, color: '#fb923c' },  // orange
-    'Earth': { value: itemScore['土'] || 0, color: '#4ade80' }, // green
-    'Water': { value: itemScore['水'] || 0, color: '#60a5fa' } // blue
-  };
-  const totalScore = Object.values(elementData).reduce((sum, el) => sum + el.value, 0);
-
-  // Render Legend
-  document.getElementById('chart-legend').innerHTML = Object.entries(elementData).map(([name, { value, color }]) => {
-    const percentage = totalScore > 0 ? ((value / totalScore) * 100).toFixed(2) : 0;
-    return `<div class="legend-item"><span class="legend-color-box" style="background-color: ${color};"></span><span class="legend-label">${name}:</span><span class="legend-value">${percentage}%</span></div>`;
-  }).join('');
-  
-  // Render Chart using Chart.js
-  const chartCanvas = document.getElementById('elementChart');
-  if (elementChartInstance) elementChartInstance.destroy();
-  elementChartInstance = new Chart(chartCanvas, {
-    type: 'pie',
-    data: {
-      labels: Object.keys(elementData),
-      datasets: [{
-        data: Object.values(elementData).map(el => el.value),
-        backgroundColor: Object.values(elementData).map(el => el.color),
-        borderWidth: 2,
-        borderColor: '#fff'
-      }]
-    },
-    options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false }, tooltip: { enabled: true } } }
-  });
-
-  // --- 3. Render Balance Summary ---
-  let [dominantElement, weakestElement] = ['', ''];
-  let maxScore = -1, minScore = Infinity;
-  for (const [name, { value }] of Object.entries(elementData)) {
-    if (value > maxScore) { maxScore = value; dominantElement = name; }
-    if (value < minScore) { minScore = value; weakestElement = name; }
-  }
-  document.getElementById('balance-summary').innerHTML = `<h4 class="summary-title">You're an ${dominantElement}-element person and need ${weakestElement} to balance your life.</h4><p class="summary-text">Your dominant air element means you lack tenacity... (summary text here)</p>`;
-
-  // --- 4. Render Chart Details Table ---
-  const tableHeader = document.querySelector('#report-table thead');
-  const tableBody = document.querySelector('#report-table tbody');
-  const headers = ["Zodiac Sign", "Planet", "Domicile/Exaltation", "Zodiac Element", "Planet-Element Score", "Domicile/Exaltation Bonus", "House the Planet is in", "House Element", "House Element Score"];
-  tableHeader.innerHTML = `<tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>`;
-
-  tableBody.innerHTML = data.list.map(item => {
-      const domicile = item.miao > 0 ? 'Miao' : (item.wang > 0 ? 'Wang' : 'None');
-      return `
-        <tr>
-          <td>${item.constellationCN}</td><td>${item.starNameCN}</td><td>${domicile}</td><td>${item.zodiacSigns}</td><td>${item.starScore}</td><td>${item.miao + item.wang}</td><td>${item.houses || 'N/A'}</td><td>${item.housesName || 'N/A'}</td><td>${item.housesScore || 'N/A'}</td>
-        </tr>
-      `;
-  }).join('');
-
-  // --- 5. Render Recommended Product ---
-  const { scoreProduct } = data;
-  const productContainer = document.getElementById('recommended-products');
-  const productKey = Object.keys(scoreProduct || {})[0];
-  const productData = productKey ? scoreProduct[productKey] : null;
-
-  if (productData) {
-    const handle = productData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-    const shopifyProduct = await fetch(`/products/${handle}.js`).then(res => res.ok ? res.json() : null);
-
-    productContainer.innerHTML = `
-      <div class="recommended-product-card">
-        <img src="${productData.image || (shopifyProduct ? shopifyProduct.featured_image : '')}" alt="${productData.title}">
-        <div class="product-details">
-          <h4>${productData.title}</h4>
-          <p class="price">${shopifyProduct ? '$' + (shopifyProduct.price / 100).toFixed(2) : '$135.00'}</p>
-          <div class="description">${productData.bodyHtml}</div>
-          <div class="product-features">
-            <span>✔ Tiger's eye crystals</span><span><i class="icon-dot">●</i> 16" × 20" framed</span><span><i class="icon-dot">●</i> Handcrafted</span>
-          </div>
-          <div class="add-to-cart-wrapper">
-            <p class="note">✦ After purchase you will get a professional report</p>
-            <form method="post" action="/cart/add">
-              <input type="hidden" name="id" value="${shopifyProduct ? shopifyProduct.variants[0].id : ''}">
-              <button type="submit" class="button">Add to Cart</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    `;
-  } else {
-    productContainer.innerHTML = '';
-  }
-}
 
 // ====================================================================
 // ==================== OPTIMIZED RENDERMODAL JS END ==================
