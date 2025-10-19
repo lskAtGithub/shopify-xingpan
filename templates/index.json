@@ -42,7 +42,10 @@
             "badge_text": "New Element",
             "product_title_override": "",
             "product_description_override": "",
-            "features_list": ""
+            "features_list": "",
+            "image_1": "shopify://shop_images/1.jpg",
+            "image_2": "shopify://shop_images/2.jpg",
+            "image_3": "shopify://shop_images/3.jpg"
           }
         },
         "featured_product_KzKFgm": {
