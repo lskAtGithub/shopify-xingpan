@@ -1,3 +1,7 @@
+<!-- Splide.js CDN - Loaded only for this section -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+
 <style>
   .section-{{ section.id }} {
     --background-color: {{ section.settings.background_color }};
@@ -10,6 +14,22 @@
   .section-{{ section.id }}.page-width {
     max-width: 1280px;
     margin: 0 auto;
+  }
+  
+  /* --- Splide.js Custom Styles --- */
+  .splide__arrow {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+  }
+  .splide__arrow svg {
+    fill: #111;
+  }
+  .splide__pagination__page {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  .splide__pagination__page.is-active {
+    background: #111;
+    transform: scale(1.2);
   }
 </style>
 
@@ -25,107 +45,119 @@
 
   <div class="custom-featured-product__list">
     {% for block in section.blocks %}
-      {%- assign product = block.settings.featured_product -%}
-      {% if product != blank %}
-        <div
-          class="custom-featured-product__item {% cycle 'layout--normal', 'layout--reversed' %}"
-          {{ block.shopify_attributes }}
-        >
-          <a class="custom-featured-product__image-wrapper" href="/products/{{ product.handle }}">
-            {% if block.settings.badge_text != blank %}
-              <div class="custom-featured-product__badge">{{ block.settings.badge_text }}</div>
-            {% endif %}
+      {% if block.type == 'featured_product' %}
+        {%- assign product = block.settings.featured_product -%}
+        {% if product != blank %}
+          <div
+            class="custom-featured-product__item {% cycle 'layout--normal', 'layout--reversed' %}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="custom-featured-product__image-wrapper">
+              {% if block.settings.badge_text != blank %}
+                <div class="custom-featured-product__badge">{{ block.settings.badge_text }}</div>
+              {% endif %}
 
-            {% if block.settings.featured_image %}
-              {{
-                block.settings.featured_image
-                | image_url: width: 1000
-                | image_tag:
-                  loading: 'lazy',
-                  widths: '300, 400, 600, 800, 1000',
-                  sizes: '(max-width: 768px) 100vw, 50vw'
-              }}
-            {% else %}
-              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-            {% endif %}
-          </a>
+              <!-- Splide Slider Structure -->
+              <div class="splide splide-{{ block.id }}" role="group" aria-label="Product Images">
+                <div class="splide__track">
+                  <ul class="splide__list">
+                    {%- assign has_images = false -%}
+                    {% for i in (1..5) %}
+                      {%- assign image_setting_id = 'image_' | append: i -%}
+                      {%- assign image = block.settings[image_setting_id] -%}
+                      {% if image != blank %}
+                        {%- assign has_images = true -%}
+                        <li class="splide__slide">
+                          <a href="/products/{{ product.handle }}">
+                            {{
+                              image
+                              | image_url: width: 1000
+                              | image_tag:
+                                loading: 'lazy',
+                                widths: '300, 400, 600, 800, 1000',
+                                sizes: '(max-width: 768px) 100vw, 50vw'
+                            }}
+                          </a>
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                    
+                    {% comment %} Fallback if no images are selected {% endcomment %}
+                    {% if has_images == false %}
+                      <li class="splide__slide">
+                        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                      </li>
+                    {% endif %}
+                  </ul>
+                </div>
+              </div>
+            </div>
 
-          <div class="custom-featured-product__info">
-            {%- assign title = block.settings.product_title_override | default: product.title -%}
-            <h3>{{ title }}</h3>
-
-            {%- assign description = block.settings.product_description_override | default: product.description -%}
-            <div class="rte">{{ description }}</div>
-
-            {%- assign features = block.settings.features_list | split: '$$' -%}
-            {% if features.size > 0 %}
-              <ul class="custom-featured-product__features-list">
-                {% for feature in features %}
-                  {% if feature != blank %}
-                    <li>
-                      <svg
-                        class="icon-checkmark"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="15"
-                        height="15"
-                        viewBox="0 0 15 15"
-                        fill="none"
-                      >
-                        <g clip-path="url(#clip0_1572_18)">
-                        <circle cx="7.5" cy="7.92969" r="7" fill="black"/>
-                        <path d="M4 7.34644L5.51906 9.24526C5.95344 9.78823 6.76335 9.83309 7.25503 9.34141L11 5.59644" stroke="white" stroke-width="1.16667" stroke-linecap="round"/>
-                        </g>
-                        <defs>
-                        <clipPath id="clip0_1572_18">
-                        <rect width="14" height="14" fill="white" transform="translate(0.5 0.929688)"/>
-                        </clipPath>
-                        </defs>
-                      </svg>
-                      <span style="line-height: 1.2;">{{ feature }}</span>
-                    </li>
-                  {% endif %}
-                {% endfor %}
-              </ul>
-            {% endif %}
-
-            <div class="custom-featured-product__price-and-cta">
-              <span class="price">{{ product.price | money }}</span>
-              <div class="buttons-wrapper">
-                {%- assign current_variant = product.selected_or_first_available_variant -%}
-                <form
-                  method="post"
-                  action="/cart/add"
-                  accept-charset="UTF-8"
-                  enctype="multipart/form-data"
-                  novalidate="novalidate"
-                >
-                  <input type="hidden" name="id" value="{{ current_variant.id }}">
-                  <button type="submit" class="button button--primary">Add to Cart</button>
-                </form>
-                <a href="{{ product.url }}" class="button button--secondary">
-                  <svg class="icon-eye" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
-                    <g clip-path="url(#clip0_756_422)">
-                    <path d="M15.5162 8.1356C14.6096 6.72893 13.4762 5.67893 12.1163 4.9856C12.4762 5.59893 12.6562 6.2656 12.6562 6.9856C12.6562 8.09226 12.2662 9.0356 11.4862 9.8156C10.6996 10.5956 9.75625 10.9856 8.65625 10.9856C7.55625 10.9856 6.61292 10.5956 5.82625 9.8156C5.04625 9.0356 4.65625 8.09226 4.65625 6.9856C4.65625 6.2656 4.83625 5.59893 5.19625 4.9856C3.83625 5.67893 2.70292 6.72893 1.79625 8.1356C2.58958 9.3556 3.58292 10.3256 4.77625 11.0456C5.96958 11.7723 7.26292 12.1356 8.65625 12.1356C10.0496 12.1356 11.3429 11.7723 12.5363 11.0456C13.7296 10.3256 14.7229 9.3556 15.5162 8.1356ZM8.95625 5.0056C9.04292 4.9256 9.08625 4.8256 9.08625 4.7056C9.08625 4.5856 9.04292 4.48226 8.95625 4.3956C8.87625 4.3156 8.77625 4.2756 8.65625 4.2756C7.90958 4.2756 7.26958 4.54226 6.73625 5.0756C6.20958 5.60893 5.94625 6.2456 5.94625 6.9856C5.94625 7.1056 5.98625 7.20893 6.06625 7.2956C6.15292 7.3756 6.25292 7.4156 6.36625 7.4156C6.48625 7.4156 6.58958 7.3756 6.67625 7.2956C6.75625 7.20893 6.79625 7.1056 6.79625 6.9856C6.79625 6.47893 6.97958 6.04226 7.34625 5.6756C7.70625 5.3156 8.14292 5.1356 8.65625 5.1356C8.77625 5.1356 8.87625 5.09226 8.95625 5.0056ZM16.4762 7.5156C16.5962 7.72226 16.6562 7.92893 16.6562 8.1356C16.6562 8.3356 16.5962 8.53893 16.4762 8.7456C15.6429 10.1189 14.5229 11.2156 13.1163 12.0356C11.7096 12.8623 10.2229 13.2756 8.65625 13.2756C7.08958 13.2756 5.60292 12.8623 4.19625 12.0356C2.78958 11.2089 1.66958 10.1123 0.83625 8.7456C0.71625 8.53893 0.65625 8.3356 0.65625 8.1356C0.65625 7.92893 0.71625 7.72226 0.83625 7.5156C1.66958 6.1556 2.78958 5.06226 4.19625 4.2356C5.60292 3.40226 7.08958 2.9856 8.65625 2.9856C10.2229 2.9856 11.7096 3.40226 13.1163 4.2356C14.5229 5.06226 15.6429 6.1556 16.4762 7.5156Z" fill="black"></path>
-                    </g>
-                    <defs>
-                    <clipPath id="clip0_756_422">
-                    <rect width="16" height="10.2857" fill="white" transform="translate(0.65625 2.98999)"></rect>
-                    </clipPath>
-                    </defs>
-                  </svg>
-                </a>
+            <div class="custom-featured-product__info">
+              {%- assign title = block.settings.product_title_override | default: product.title -%}
+              <h3>{{ title }}</h3>
+              {%- assign description = block.settings.product_description_override | default: product.description -%}
+              <div class="rte">{{ description }}</div>
+              {%- assign features = block.settings.features_list | split: '$$' -%}
+              {% if features.size > 0 %}
+                <ul class="custom-featured-product__features-list">
+                  {% for feature in features %}
+                    {% if feature != blank %}
+                      <li>
+                        <svg class="icon-checkmark" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                          <g clip-path="url(#clip0_1572_18)"><circle cx="7.5" cy="7.92969" r="7" fill="black"/><path d="M4 7.34644L5.51906 9.24526C5.95344 9.78823 6.76335 9.83309 7.25503 9.34141L11 5.59644" stroke="white" stroke-width="1.16667" stroke-linecap="round"/></g>
+                          <defs><clipPath id="clip0_1572_18"><rect width="14" height="14" fill="white" transform="translate(0.5 0.929688)"/></clipPath></defs>
+                        </svg>
+                        <span style="line-height: 1.2;">{{ feature | strip }}</span>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              {% endif %}
+              <div class="custom-featured-product__price-and-cta">
+                <span class="price">{{ product.price | money }}</span>
+                <div class="buttons-wrapper">
+                  {%- assign current_variant = product.selected_or_first_available_variant -%}
+                  <form method="post" action="/cart/add" accept-charset="UTF-8" enctype="multipart/form-data" novalidate="novalidate">
+                    <input type="hidden" name="id" value="{{ current_variant.id }}">
+                    <button type="submit" class="button button--primary">Add to Cart</button>
+                  </form>
+                  <a href="{{ product.url }}" class="button button--secondary">
+                    <svg class="icon-eye" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
+                      <g clip-path="url(#clip0_756_422)"><path d="M15.5162 8.1356C14.6096 6.72893 13.4762 5.67893 12.1163 4.9856C12.4762 5.59893 12.6562 6.2656 12.6562 6.9856C12.6562 8.09226 12.2662 9.0356 11.4862 9.8156C10.6996 10.5956 9.75625 10.9856 8.65625 10.9856C7.55625 10.9856 6.61292 10.5956 5.82625 9.8156C5.04625 9.0356 4.65625 8.09226 4.65625 6.9856C4.65625 6.2656 4.83625 5.59893 5.19625 4.9856C3.83625 5.67893 2.70292 6.72893 1.79625 8.1356C2.58958 9.3556 3.58292 10.3256 4.77625 11.0456C5.96958 11.7723 7.26292 12.1356 8.65625 12.1356C10.0496 12.1356 11.3429 11.7723 12.5363 11.0456C13.7296 10.3256 14.7229 9.3556 15.5162 8.1356ZM8.95625 5.0056C9.04292 4.9256 9.08625 4.8256 9.08625 4.7056C9.08625 4.5856 9.04292 4.48226 8.95625 4.3956C8.87625 4.3156 8.77625 4.2756 8.65625 4.2756C7.90958 4.2756 7.26958 4.54226 6.73625 5.0756C6.20958 5.60893 5.94625 6.2456 5.94625 6.9856C5.94625 7.1056 5.98625 7.20893 6.06625 7.2956C6.15292 7.3756 6.25292 7.4156 6.36625 7.4156C6.48625 7.4156 6.58958 7.3756 6.67625 7.2956C6.75625 7.20893 6.79625 7.1056 6.79625 6.9856C6.79625 6.47893 6.97958 6.04226 7.34625 5.6756C7.70625 5.3156 8.14292 5.1356 8.65625 5.1356C8.77625 5.1356 8.87625 5.09226 8.95625 5.0056ZM16.4762 7.5156C16.5962 7.72226 16.6562 7.92893 16.6562 8.1356C16.6562 8.3356 16.5962 8.53893 16.4762 8.7456C15.6429 10.1189 14.5229 11.2156 13.1163 12.0356C11.7096 12.8623 10.2229 13.2756 8.65625 13.2756C7.08958 13.2756 5.60292 12.8623 4.19625 12.0356C2.78958 11.2089 1.66958 10.1123 0.83625 8.7456C0.71625 8.53893 0.65625 8.3356 0.65625 8.1356C0.65625 7.92893 0.71625 7.72226 0.83625 7.5156C1.66958 6.1556 2.78958 5.06226 4.19625 4.2356C5.60292 3.40226 7.08958 2.9856 8.65625 2.9856C10.2229 2.9856 11.7096 3.40226 13.1163 4.2356C14.5229 5.06226 15.6429 6.1556 16.4762 7.5156Z" fill="black"></path></g>
+                      <defs><clipPath id="clip0_756_422"><rect width="16" height="10.2857" fill="white" transform="translate(0.65625 2.98999)"/></clipPath></defs>
+                    </svg>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        {% endif %}
       {% endif %}
     {% endfor %}
-
-    {% if section.blocks.size == 0 %}
-      <p>请在后台添加产品特色块。</p>
-    {% endif %}
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const splideElements = document.querySelectorAll('.splide');
+    splideElements.forEach(element => {
+      // Check if the slider has more than one slide
+      const slideCount = element.querySelectorAll('.splide__slide').length;
+      
+      new Splide(element, {
+        type        : 'loop',
+        perPage     : 1,
+        autoplay    : true,
+        interval    : 4000,
+        pauseOnHover: true,
+        // Only show arrows and pagination if there are multiple slides
+        arrows      : slideCount > 1,
+        pagination  : slideCount > 1,
+      }).mount();
+    });
+  });
+</script>
 
 {% stylesheet %}
   .custom-featured-product__header {
@@ -141,49 +173,46 @@
     max-width: 600px;
     margin: 0 auto;
   }
-
   .custom-featured-product__list {
     display: flex;
     flex-direction: column;
-    gap: 80px; /* Space between product rows */
+    gap: 80px;
     padding: 0 1rem;
   }
-
   .custom-featured-product__item {
     display: grid;
-    grid-template-columns: 1fr; /* Mobile first: single column */
+    grid-template-columns: 1fr;
     gap: 40px;
     align-items: center;
   }
-
-  /* Desktop layout */
   @media (min-width: 769px) {
     .custom-featured-product__item:nth-child(odd) {
-      grid-template-columns: 1.4fr 1fr; /* Two columns on desktop */
+      grid-template-columns: 1.4fr 1fr;
       gap: 60px;
     }
     .custom-featured-product__item:nth-child(even) {
-      grid-template-columns: 1fr 1.4fr; /* Two columns on desktop */
+      grid-template-columns: 1fr 1.4fr;
       gap: 60px;
     }
     .custom-featured-product__item.layout--reversed .custom-featured-product__image-wrapper {
-      order: 2; /* Move image to the right */
+      order: 2;
     }
     .custom-featured-product__item.layout--reversed .custom-featured-product__info {
-      order: 1; /* Move info to the left */
+      order: 1;
     }
   }
-
   .custom-featured-product__image-wrapper {
     position: relative;
     border-radius: 10px;
     overflow: hidden;
   }
-  .custom-featured-product__image-wrapper img {
+  .custom-featured-product__image-wrapper img,
+  .custom-featured-product__image-wrapper .placeholder-svg {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    aspect-ratio: 1 / 1; /* Ensure images are square for consistency */
   }
   .custom-featured-product__badge {
     position: absolute;
@@ -196,12 +225,10 @@
     font-weight: 600;
     z-index: 2;
   }
-  /* Adjust badge for reversed layout */
   .layout--reversed .custom-featured-product__badge {
     left: auto;
     right: 20px;
   }
-
   .custom-featured-product__info h3 {
     font-size: 2.2rem;
     margin-bottom: 15px;
@@ -243,8 +270,6 @@
     display: flex;
     gap: 10px;
   }
-
-  /* Base button styles - adjust to your theme */
   .button {
     padding: 12px 24px;
     border-radius: 8px;
@@ -341,11 +366,6 @@
       "limit": 6,
       "settings": [
         {
-          "type": "image_picker",
-          "id": "featured_image",
-          "label": "选择图片"
-        },
-        {
           "type": "product",
           "id": "featured_product",
           "label": "选择产品"
@@ -372,7 +392,36 @@
           "type": "textarea",
           "id": "features_list",
           "label": "特性列表",
-          "info": "每行一个特性，用$$分隔"
+          "info": "用$$分隔"
+        },
+        {
+          "type": "header",
+          "content": "幻灯片图片 (最多5张)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "图片 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "图片 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "图片 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "图片 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_5",
+          "label": "图片 5"
         }
       ]
     }
@@ -380,7 +429,7 @@
   "presets": [
     {
       "name": "特色产品集合",
-      "blocks": [{ "type": "featured_product" }, { "type": "featured_product" }]
+      "blocks": [{ "type": "featured_product" }]
     }
   ]
 }
