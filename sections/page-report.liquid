@@ -57,28 +57,7 @@
             <div class="element-chart">
               <canvas id="elementChart"></canvas>
             </div>
-            <div class="element-legend">
-              <div class="element-item">
-                <span class="element-color earth"></span>
-                <span class="element-name">Earth</span>
-                <span class="element-value">20%</span>
-              </div>
-              <div class="element-item">
-                <span class="element-color water"></span>
-                <span class="element-name">Water</span>
-                <span class="element-value">20%</span>
-              </div>
-              <div class="element-item">
-                <span class="element-color air"></span>
-                <span class="element-name">Air</span>
-                <span class="element-value">20%</span>
-              </div>
-              <div class="element-item">
-                <span class="element-color fire"></span>
-                <span class="element-name">Fire</span>
-                <span class="element-value">40%</span>
-              </div>
-            </div>
+            <div class="element-legend"></div>
           </div>
 
           <!-- Analysis Text -->
@@ -301,22 +280,6 @@
     width: 16px;
     height: 16px;
     border-radius: 4px;
-  }
-
-  .element-color.earth {
-    background-color: #8b5a2b;
-  }
-
-  .element-color.water {
-    background-color: #4a90e2;
-  }
-
-  .element-color.air {
-    background-color: #ffd100;
-  }
-
-  .element-color.fire {
-    background-color: #4caf50;
   }
 
   .element-name {
@@ -585,6 +548,7 @@
 {{ 'chart.min.js' | asset_url | script_tag: text/javascript }}
 
 <script>
+  const configColors = ['#8B5A2B', '#4A90E2', '#FFD100', '#4CAF50'];
   window.addEventListener('load', function () {
     const spinner = document.getElementById('loading-spinner');
     // 其他功能
@@ -621,7 +585,7 @@
                   datasets: [
                     {
                       data: Object.values(param.data.itemScore),
-                      backgroundColor: ['#8B5A2B', '#4A90E2', '#FFD100', '#4CAF50'],
+                      backgroundColor: configColors,
                       borderWidth: 0,
                     },
                   ],
@@ -635,6 +599,19 @@
                   },
                 },
               });
+              const elementTags = document.querySelectorAll('.element-legend');
+              elementTags.innerHTML = '';
+              const htmlContent = '';
+              Object.keys(param.data.itemScore).forEach((key, index) => {
+                htmlContent += `
+                  <div class="element-item">
+                    <span class="element-color" style="background-color: ${configColors[index]}"></span>
+                    <span class="element-name">${key}</span>
+                    <span class="element-value">${param.data.itemScore[key]}%</span>
+                  </div>
+                `;
+              });
+              elementTags.innerHTML = htmlContent;
               const tableBody = document.getElementById('tableBody');
               tableBody.innerHTML = '';
               param.data.list.map((item, index) => {
