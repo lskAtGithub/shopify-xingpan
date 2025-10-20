@@ -15,7 +15,7 @@
     max-width: 1280px;
     margin: 0 auto;
   }
-  
+
   /* --- Splide.js Custom Styles --- */
   .splide__arrow {
     background-color: rgba(255, 255, 255, 0.8);
@@ -30,6 +30,22 @@
   .splide__pagination__page.is-active {
     background: #111;
     transform: scale(1.2);
+  }
+  .splide-{{ block.id }} .splide__slide {
+    /* 确保滑块容器的高度由其内容（图片）决定 */
+    height: auto;
+  }
+
+  .splide-{{ block.id }} .splide__slide img {
+    /* 这是关键：让图片宽度100%填充容器，高度自动按比例缩放 */
+    width: 100%;
+    height: auto;
+
+    /* 确保图片不会被奇怪地裁剪或拉伸 */
+    object-fit: contain;
+
+    /* 如果主题有 aspect-ratio: 1/1 之类的设置，用这个来覆盖 */
+    aspect-ratio: unset;
   }
 </style>
 
@@ -81,7 +97,7 @@
                         </li>
                       {% endif %}
                     {% endfor %}
-                    
+
                     {% comment %} Fallback if no images are selected {% endcomment %}
                     {% if has_images == false %}
                       <li class="splide__slide">
@@ -104,7 +120,14 @@
                   {% for feature in features %}
                     {% if feature != blank %}
                       <li>
-                        <svg class="icon-checkmark" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                        <svg
+                          class="icon-checkmark"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="15"
+                          height="15"
+                          viewBox="0 0 15 15"
+                          fill="none"
+                        >
                           <g clip-path="url(#clip0_1572_18)"><circle cx="7.5" cy="7.92969" r="7" fill="black"/><path d="M4 7.34644L5.51906 9.24526C5.95344 9.78823 6.76335 9.83309 7.25503 9.34141L11 5.59644" stroke="white" stroke-width="1.16667" stroke-linecap="round"/></g>
                           <defs><clipPath id="clip0_1572_18"><rect width="14" height="14" fill="white" transform="translate(0.5 0.929688)"/></clipPath></defs>
                         </svg>
@@ -118,12 +141,25 @@
                 <span class="price">{{ product.price | money }}</span>
                 <div class="buttons-wrapper">
                   {%- assign current_variant = product.selected_or_first_available_variant -%}
-                  <form method="post" action="/cart/add" accept-charset="UTF-8" enctype="multipart/form-data" novalidate="novalidate">
+                  <form
+                    method="post"
+                    action="/cart/add"
+                    accept-charset="UTF-8"
+                    enctype="multipart/form-data"
+                    novalidate="novalidate"
+                  >
                     <input type="hidden" name="id" value="{{ current_variant.id }}">
                     <button type="submit" class="button button--primary">Add to Cart</button>
                   </form>
                   <a href="{{ product.url }}" class="button button--secondary">
-                    <svg class="icon-eye" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
+                    <svg
+                      class="icon-eye"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="17"
+                      height="17"
+                      viewBox="0 0 17 17"
+                      fill="none"
+                    >
                       <g clip-path="url(#clip0_756_422)"><path d="M15.5162 8.1356C14.6096 6.72893 13.4762 5.67893 12.1163 4.9856C12.4762 5.59893 12.6562 6.2656 12.6562 6.9856C12.6562 8.09226 12.2662 9.0356 11.4862 9.8156C10.6996 10.5956 9.75625 10.9856 8.65625 10.9856C7.55625 10.9856 6.61292 10.5956 5.82625 9.8156C5.04625 9.0356 4.65625 8.09226 4.65625 6.9856C4.65625 6.2656 4.83625 5.59893 5.19625 4.9856C3.83625 5.67893 2.70292 6.72893 1.79625 8.1356C2.58958 9.3556 3.58292 10.3256 4.77625 11.0456C5.96958 11.7723 7.26292 12.1356 8.65625 12.1356C10.0496 12.1356 11.3429 11.7723 12.5363 11.0456C13.7296 10.3256 14.7229 9.3556 15.5162 8.1356ZM8.95625 5.0056C9.04292 4.9256 9.08625 4.8256 9.08625 4.7056C9.08625 4.5856 9.04292 4.48226 8.95625 4.3956C8.87625 4.3156 8.77625 4.2756 8.65625 4.2756C7.90958 4.2756 7.26958 4.54226 6.73625 5.0756C6.20958 5.60893 5.94625 6.2456 5.94625 6.9856C5.94625 7.1056 5.98625 7.20893 6.06625 7.2956C6.15292 7.3756 6.25292 7.4156 6.36625 7.4156C6.48625 7.4156 6.58958 7.3756 6.67625 7.2956C6.75625 7.20893 6.79625 7.1056 6.79625 6.9856C6.79625 6.47893 6.97958 6.04226 7.34625 5.6756C7.70625 5.3156 8.14292 5.1356 8.65625 5.1356C8.77625 5.1356 8.87625 5.09226 8.95625 5.0056ZM16.4762 7.5156C16.5962 7.72226 16.6562 7.92893 16.6562 8.1356C16.6562 8.3356 16.5962 8.53893 16.4762 8.7456C15.6429 10.1189 14.5229 11.2156 13.1163 12.0356C11.7096 12.8623 10.2229 13.2756 8.65625 13.2756C7.08958 13.2756 5.60292 12.8623 4.19625 12.0356C2.78958 11.2089 1.66958 10.1123 0.83625 8.7456C0.71625 8.53893 0.65625 8.3356 0.65625 8.1356C0.65625 7.92893 0.71625 7.72226 0.83625 7.5156C1.66958 6.1556 2.78958 5.06226 4.19625 4.2356C5.60292 3.40226 7.08958 2.9856 8.65625 2.9856C10.2229 2.9856 11.7096 3.40226 13.1163 4.2356C14.5229 5.06226 15.6429 6.1556 16.4762 7.5156Z" fill="black"></path></g>
                       <defs><clipPath id="clip0_756_422"><rect width="16" height="10.2857" fill="white" transform="translate(0.65625 2.98999)"/></clipPath></defs>
                     </svg>
@@ -141,41 +177,24 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const splideElements = document.querySelectorAll('.splide');
-    splideElements.forEach(element => {
+    splideElements.forEach((element) => {
       // Check if the slider has more than one slide
       const slideCount = element.querySelectorAll('.splide__slide').length;
-      
+
       new Splide(element, {
-        type        : 'loop',
-        perPage     : 1,
-        autoplay    : true,
-        interval    : 4000,
+        type: 'loop',
+        perPage: 1,
+        autoplay: true,
+        interval: 4000,
         pauseOnHover: true,
         // Only show arrows and pagination if there are multiple slides
-        arrows      : slideCount > 1,
-        pagination  : slideCount > 1,
+        arrows: slideCount > 1,
+        pagination: slideCount > 1,
       }).mount();
     });
   });
 </script>
-<style>
-  .splide-{{ block.id }} .splide__slide {
-    /* 确保滑块容器的高度由其内容（图片）决定 */
-    height: auto; 
-  }
 
-  .splide-{{ block.id }} .splide__slide img {
-    /* 这是关键：让图片宽度100%填充容器，高度自动按比例缩放 */
-    width: 100%;
-    height: auto;
-    
-    /* 确保图片不会被奇怪地裁剪或拉伸 */
-    object-fit: contain; 
-    
-    /* 如果主题有 aspect-ratio: 1/1 之类的设置，用这个来覆盖 */
-    aspect-ratio: unset; 
-  }
-</style>
 {% stylesheet %}
   .custom-featured-product__header {
     text-align: center;
@@ -306,7 +325,7 @@
   }
   .button--secondary {
     background-color: transparent;
-    border: 1px solid #111!important;
+    border: 1px solid #111 !important;
     padding: 10px;
     display: flex;
     align-items: center;
