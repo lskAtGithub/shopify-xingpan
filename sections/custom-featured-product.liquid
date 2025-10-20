@@ -31,12 +31,12 @@
     background: #111;
     transform: scale(1.2);
   }
-  .splide-{{ block.id }} .splide__slide {
+  .section-{{ section.id }} .splide .splide__slide {
     /* 确保滑块容器的高度由其内容（图片）决定 */
     height: auto;
   }
 
-  .splide-{{ block.id }} .splide__slide img {
+  .section-{{ section.id }} .splide .splide__slide img {
     /* 这是关键：让图片宽度100%填充容器，高度自动按比例缩放 */
     width: 100%;
     height: auto;
