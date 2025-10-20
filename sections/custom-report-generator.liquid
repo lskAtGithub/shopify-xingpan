@@ -1,0 +1,232 @@
+{{ 'section-custom-report-generator.css' | asset_url | stylesheet_tag }}
+
+<div class="report-generator-section color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width report-generator-container">
+    <div class="report-generator__content">
+      {%- if section.settings.image_pc != blank -%}
+        <div class="report-generator__image-wrapper">
+          <img 
+            src="{{ section.settings.image_pc | image_url: width: 1200 }}" 
+            alt="{{ section.settings.image_pc.alt | escape }}" 
+            class="report-generator__image-pc"
+            loading="lazy"
+            width="{{ section.settings.image_pc.width }}"
+            height="{{ section.settings.image_pc.height }}"
+          >
+          {%- if section.settings.image_mobile != blank -%}
+            <img 
+              src="{{ section.settings.image_mobile | image_url: width: 800 }}" 
+              alt="{{ section.settings.image_mobile.alt | escape }}" 
+              class="report-generator__image-mobile"
+              loading="lazy"
+              width="{{ section.settings.image_mobile.width }}"
+              height="{{ section.settings.image_mobile.height }}"
+            >
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      
+      <div class="report-generator__text">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="h1">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.description != blank -%}
+          <div class="rte">{{ section.settings.description }}</div>
+        {%- endif -%}
+         {%- if section.settings.sub_description != blank -%}
+          <p class="report-generator__sub-description">
+            <span class="icon-star">⭐</span> {{ section.settings.sub_description }}
+          </p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="report-generator__form-wrapper">
+      <form id="elemental-report-form" class="form">
+        <div class="field">
+          <label for="FullName">Full Name*</label>
+          <input type="text" id="FullName" name="full_name" placeholder="Enter your full name" required>
+        </div>
+        
+        <div class="field">
+          <label for="BirthDateTime">Birth date & Time*</label>
+          <input type="datetime-local" id="BirthDateTime" name="birth_date_time" required>
+        </div>
+
+        <div class="field">
+          <label>Birth Location*</label>
+          <div class="location-fields">
+            <div class="select">
+              <select id="CountrySelect" name="country" required>
+                <option value="" disabled selected>Select Country</option>
+              </select>
+            </div>
+            <div class="select">
+              <select id="StateSelect" name="state" required disabled>
+                <option value="" disabled selected>Select State/province</option>
+              </select>
+            </div>
+            <div class="select">
+              <select id="CitySelect" name="city" required disabled>
+                <option value="" disabled selected>Select City</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <button type="submit" class="button button--primary">
+          {{ section.settings.button_text | default: 'Get Your Free mini Report' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('elemental-report-form');
+    const countrySelect = document.getElementById('CountrySelect');
+    const stateSelect = document.getElementById('StateSelect');
+    const citySelect = document.getElementById('CitySelect');
+    
+    // 重要：请将 'https://your-api-domain.com' 替换为您的真实API域名
+    const API_BASE_URL = 'https://your-api-domain.com';
+
+    // 封装的API请求函数
+    async function fetchLocationData(endpoint, selectElement, placeholder) {
+      selectElement.disabled = true;
+      selectElement.innerHTML = `<option value="" disabled selected>Loading...</option>`;
+      try {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const result = await response.json();
+        
+        // 假设API成功返回的数据在 result.data 中，且是一个对象数组
+        const data = result.data || [];
+        selectElement.innerHTML = `<option value="" disabled selected>${placeholder}</option>`;
+        data.forEach(item => {
+          const option = document.createElement('option');
+          option.value = item.id; // 假设用id作为value
+          option.textContent = item.name; // 假设用name作为显示文本
+          selectElement.appendChild(option);
+        });
+        selectElement.disabled = false;
+      } catch (error) {
+        console.error('Failed to fetch location data:', error);
+        selectElement.innerHTML = `<option value="" disabled selected>Error loading data</option>`;
+      }
+    }
+    
+    // 1. 初始化国家列表
+    fetchLocationData('/city/getInfo', countrySelect, 'Select Country');
+
+    // 2. 监听国家选择，加载省份
+    countrySelect.addEventListener('change', function() {
+      const countryId = this.value;
+      citySelect.innerHTML = '<option value="" disabled selected>Select City</option>';
+      citySelect.disabled = true;
+      if (countryId) {
+        fetchLocationData(`/city/getInfo?countryId=${countryId}`, stateSelect, 'Select State/province');
+      }
+    });
+
+    // 3. 监听省份选择，加载城市
+    stateSelect.addEventListener('change', function() {
+      const stateId = this.value;
+      if (stateId) {
+        fetchLocationData(`/city/getInfo?stateId=${stateId}`, citySelect, 'Select City');
+      }
+    });
+    
+    // 4. 表单提交处理
+    form.addEventListener('submit', async function(event) {
+      event.preventDefault(); // 阻止表单默认提交
+      const submitButton = this.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Generating...';
+      
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      
+      console.log('Form Data Submitted:', data);
+      
+      // 在这里添加您处理表单数据的逻辑
+      // 例如：将数据发送到另一个API端点来生成报告
+      // ...
+      // 成功后，可以跳转到结果页面或显示成功信息
+      // window.location.href = '/pages/your-report-result';
+      
+      // 模拟一个延时
+      setTimeout(() => {
+        alert('Report request submitted! (This is a placeholder)');
+        submitButton.disabled = false;
+        submitButton.textContent = '{{ section.settings.button_text | default: 'Get Your Free mini Report' }}';
+        form.reset();
+        // 重置下拉菜单状态
+        stateSelect.disabled = true;
+        citySelect.disabled = true;
+      }, 1500);
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Custom Report Generator",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "Content Configuration"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Discover Your Elemental Energy"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Uncover your strongest & weakest elements–find your perfect crystal art to balance your energy.</p>"
+    },
+    {
+       "type": "text",
+       "id": "sub_description",
+       "label": "Sub Description (with star)",
+       "default": "Free personalized report for first-time visitors"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_pc",
+      "label": "Desktop Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Image (optional, if different from desktop)"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Get Your Free mini Report"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Report Generator"
+    }
+  ]
+}
+{% endschema %}

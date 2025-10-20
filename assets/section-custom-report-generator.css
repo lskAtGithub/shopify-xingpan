@@ -1,0 +1,109 @@
+/* section-custom-report-generator.css */
+
+.report-generator-section {
+  padding: 50px 0;
+}
+
+.report-generator-container {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.report-generator__content,
+.report-generator__form-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.report-generator__content {
+  text-align: left;
+}
+
+.report-generator__image-wrapper img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.report-generator__image-mobile {
+  display: none;
+}
+
+.report-generator__text .h1 {
+  margin-bottom: 15px;
+}
+
+.report-generator__text .rte {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.report-generator__sub-description {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+}
+
+.report-generator__form-wrapper .form .field {
+  margin-bottom: 20px;
+}
+
+.report-generator__form-wrapper .form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.report-generator__form-wrapper .form input,
+.report-generator__form-wrapper .form select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.report-generator__form-wrapper .form .location-fields {
+  display: flex;
+  gap: 10px;
+}
+
+.report-generator__form-wrapper .form .location-fields .select {
+  flex: 1;
+}
+
+.report-generator__form-wrapper .form button {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.1rem;
+}
+
+/* 响应式布局 - 移动端 */
+@media (max-width: 768px) {
+  .report-generator-container {
+    flex-direction: column;
+  }
+  
+  .report-generator__content {
+    text-align: center;
+  }
+
+  .report-generator__image-pc {
+     /* 如果有移动端图片，则隐藏PC端图片 */
+    display: var(--display-pc-image, block);
+  }
+  .report-generator__image-wrapper:has(.report-generator__image-mobile[src]) .report-generator__image-pc {
+    --display-pc-image: none;
+  }
+  
+  .report-generator__image-mobile {
+    display: block;
+  }
+
+  .report-generator__form-wrapper .form .location-fields {
+    flex-direction: column;
+  }
+}
