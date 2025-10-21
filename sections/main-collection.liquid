@@ -36,7 +36,11 @@
   %}
 
   {% comment %} 添加tags筛选器 {% endcomment %}
-  <div class="tags-filter-wrapper" style="margin-bottom: 20px;">
+  <div
+    class="tags-filter-wrapper"
+    id="tagsFilterWrapper"
+    style="padding: 20px 0;background-color: #fff;position: sticky;top: 0;z-index: 1;"
+  >
     <div class="tags-filter__list">
       {% comment %} All tags按钮 {% endcomment %}
       <button
@@ -100,6 +104,9 @@
     document.addEventListener(
       'DOMContentLoaded',
       () => {
+        $('#tagsFilterWrapper').css({
+          'top': $('#header-component').height() + 'px',
+        });
         const card = document.getElementById(url.hash.slice(1));
         if (card) {
           card.scrollIntoView({ behavior: 'instant' });
