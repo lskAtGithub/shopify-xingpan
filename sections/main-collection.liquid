@@ -104,9 +104,8 @@
     document.addEventListener(
       'DOMContentLoaded',
       () => {
-        $('#tagsFilterWrapper').css({
-          'top': $('#header-component>.header__row').clientHeight + 'px',
-        });
+        $('#tagsFilterWrapper').style.top = ($('#header-component>.header__row').clientHeight - 2) + 'px';
+
         const card = document.getElementById(url.hash.slice(1));
         if (card) {
           card.scrollIntoView({ behavior: 'instant' });
@@ -118,9 +117,7 @@
 
   // 新增：tags筛选功能
   document.addEventListener('DOMContentLoaded', function () {
-    $('#tagsFilterWrapper').css({
-      'top': $('#header-component>.header__row').clientHeight + 'px',
-    });
+     $('#tagsFilterWrapper').style.top = ($('#header-component>.header__row').clientHeight - 2) + 'px';
     const tagButtons = document.querySelectorAll('.tag-filter__item');
 
     tagButtons.forEach((button) => {
