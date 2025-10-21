@@ -876,6 +876,36 @@
           birthDateTimeInput.addEventListener('click', function() {
             this.setAttribute('lang', 'en');
           });
+          
+          // 添加额外的点击事件监听器，强制触发日期选择器
+          birthDateTimeInput.addEventListener('click', function() {
+            // 确保元素已聚焦
+            this.focus();
+            
+            // 使用现代浏览器支持的showPicker方法
+            if (typeof this.showPicker === 'function') {
+              try {
+                this.showPicker();
+              } catch (e) {
+                // 忽略可能的错误，如在某些设备上showPicker可能不被支持
+                console.log('showPicker method failed:', e);
+              }
+            }
+          });
+          
+          // 添加触摸事件支持，针对移动设备
+          birthDateTimeInput.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // 防止滚动
+            this.focus();
+            
+            if (typeof this.showPicker === 'function') {
+              try {
+                this.showPicker();
+              } catch (e) {
+                console.log('Touch showPicker failed:', e);
+              }
+            }
+          }, { passive: false });
         } catch (e) {
           console.log('Could not set locale for datetime input:', e);
         }
