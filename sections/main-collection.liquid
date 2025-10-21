@@ -53,7 +53,6 @@
         <button
           class="tag-filter__item tag-filter__item--all{% if current_tags == blank %} tag-filter__item--active{% endif %}"
           data-tag="all"
-          style="background: {% if current_tags == blank %}#000{% else %}#f5f5f5{% endif %}; color: {% if current_tags == blank %}#fff{% else %}#000{% endif %}; border: 1px solid #ddd; padding: 8px 16px; margin: 4px; border-radius: 4px; cursor: pointer;"
         >
           All
         </button>
@@ -70,7 +69,6 @@
           <button
             class="tag-filter__item{% if is_active %} tag-filter__item--active{% endif %}"
             data-tag="{{ tag | handleize }}"
-            style="background: {% if is_active %}#000{% else %}#f5f5f5{% endif %}; color: {% if is_active %}#fff{% else %}#000{% endif %}; border: 1px solid #ddd; padding: 8px 16px; margin: 4px; border-radius: 4px; cursor: pointer;"
           >
             {{ tag }}
           </button>
