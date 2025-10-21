@@ -1,0 +1,272 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign collection = section.settings.collection
+  assign products_per_page = section.settings.products_per_row | times: section.settings.rows_per_page
+-%}
+
+<div class="page-width" data-section-id="{{ section.id }}">
+  <h2 class="h2 center">{{ section.settings.heading | escape }}</h2>
+
+  <!-- 筛选器 Filter Buttons -->
+  <div class="product-filter-nav">
+    <button class="filter-button active" data-tag="all">All</button>
+    {%- for tag in collection.all_tags -%}
+      <button class="filter-button" data-tag="{{ tag | handle }}">{{ tag }}</button>
+    {%- endfor -%}
+  </div>
+
+  <!-- 产品网格 Product Grid -->
+  <div class="product-grid-container">
+    <ul class="grid grid--4-col-desktop grid--1-col-mobile product-grid">
+      {%- for product in collection.products limit: products_per_page -%}
+        <li class="grid__item">
+          {% render 'card-product', card_product: product %}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{%- comment -%}
+  card-product snippet (简化的产品卡片)
+  为了保证能运行，我在这里提供一个简化的 card-product snippet。
+  如果您的主题已经有 'card-product' 或类似的文件，请适配下面的逻辑，特别是 form 的部分。
+{%- endcomment -%}
+<script type="text/html" id="custom-card-product-template">
+  <div class="card-wrapper">
+    <div class="card card--standard">
+      <div class="card__inner">
+        <div class="card__media">
+          <img src="{{ product.featured_image | image_url: width: 550 }}" alt="{{ product.featured_image.alt | escape }}" loading="lazy" width="550" height="{{ 550 | divided_by: product.featured_image.aspect_ratio | round }}">
+        </div>
+        <div class="card__content">
+          <h3 class="card-information__text h5">
+            <a href="{{ product.url }}" class="full-unstyled-link">
+              {{ product.title | escape }}
+            </a>
+          </h3>
+          {%- render 'price', product: product -%}
+        </div>
+      </div>
+    </div>
+    <div class="card__footer">
+      {%- form 'product', product, class: 'product-form', data-product-id: product.id -%}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        <button type="submit" name="add" class="add-to-cart-button button button--primary">
+          Add To Cart
+        </button>
+      {%- endform -%}
+    </div>
+  </div>
+</script>
+
+
+<style>
+  .product-filter-nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+  .filter-button {
+    padding: 8px 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .filter-button:hover {
+    background-color: #f0f0f0;
+  }
+  .filter-button.active {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+  }
+
+  /* 这是为了简化，实际项目中请使用主题已有的 `card` 样式 */
+  .grid__item .card-wrapper {
+    position: relative;
+    overflow: hidden;
+  }
+  .grid__item .card__footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(5px);
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  .add-to-cart-button {
+    width: 100%;
+  }
+
+  /* PC Hover 效果 */
+  @media (min-width: 769px) {
+    .grid__item:hover .card__footer {
+      transform: translateY(0);
+    }
+  }
+  
+  /* 移动端固定显示 */
+  @media (max-width: 768px) {
+    .grid__item .card__footer {
+      position: relative; /* 恢复正常文档流 */
+      transform: translateY(0);
+      background: transparent;
+      backdrop-filter: none;
+      padding: 15px 0 0;
+    }
+  }
+
+  /* 简单的加载中效果 */
+  .product-grid-container.loading .product-grid {
+    opacity: 0.5;
+  }
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sectionId = document.querySelector('[data-section-id="{{ section.id }}"]').dataset.sectionId;
+  const filterNav = document.querySelector(`[data-section-id="${sectionId}"] .product-filter-nav`);
+  const gridContainer = document.querySelector(`[data-section-id="${sectionId}"] .product-grid-container`);
+
+  // --- 1. 筛选逻辑 ---
+  filterNav.addEventListener('click', function(event) {
+    if (event.target.matches('.filter-button')) {
+      event.preventDefault();
+
+      const clickedButton = event.target;
+      const tag = clickedButton.dataset.tag;
+
+      // 更新按钮激活状态
+      filterNav.querySelector('.active').classList.remove('active');
+      clickedButton.classList.add('active');
+      
+      // 添加加载中效果
+      gridContainer.classList.add('loading');
+      
+      let fetchUrl;
+      const collectionUrl = '{{ collection.url }}';
+
+      if (tag === 'all') {
+        fetchUrl = `${collectionUrl}?section_id=${sectionId}`;
+      } else {
+        fetchUrl = `${collectionUrl}/${tag}?section_id=${sectionId}`;
+      }
+
+      fetch(fetchUrl)
+        .then(response => response.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const newGrid = doc.querySelector(`[data-section-id="${sectionId}"] .product-grid-container`);
+          if (newGrid) {
+            gridContainer.innerHTML = newGrid.innerHTML;
+          }
+        })
+        .finally(() => {
+          // 移除加载中效果
+          gridContainer.classList.remove('loading');
+        });
+    }
+  });
+
+  // --- 2. AJAX 加入购物车 ---
+  // 使用事件委托，因为产品卡片会被动态替换
+  gridContainer.addEventListener('submit', function(event) {
+    if (event.target.matches('.product-form')) {
+      event.preventDefault();
+      
+      const form = event.target;
+      const submitButton = form.querySelector('button[type="submit"]');
+      const originalButtonText = submitButton.textContent;
+      
+      submitButton.textContent = 'Adding...';
+      submitButton.disabled = true;
+
+      const formData = new FormData(form);
+      
+      fetch('/cart/add.js', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status) {
+          // 处理错误，例如库存不足
+          alert(data.description || 'Could not add to cart.');
+          submitButton.textContent = originalButtonText;
+          submitButton.disabled = false;
+        } else {
+          // 成功
+          submitButton.textContent = 'Added!';
+          // 更新购物车角标等，这个需要调用您主题自己的方法
+          // 例如，调用一个全局的 updateCartCount() 函数
+          document.dispatchEvent(new CustomEvent('cart:updated', { bubbles: true, detail: data }));
+
+          setTimeout(() => {
+            submitButton.textContent = originalButtonText;
+            submitButton.disabled = false;
+          }, 1500);
+        }
+      })
+      .catch(e => {
+        console.error(e);
+        submitButton.textContent = originalButtonText;
+        submitButton.disabled = false;
+      });
+    }
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Custom Product Filter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Products per row (Desktop)",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "rows_per_page",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "label": "Rows",
+      "default": 3
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Product Filter"
+    }
+  ]
+}
+{% endschema %}
