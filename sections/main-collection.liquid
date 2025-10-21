@@ -118,6 +118,9 @@
 
   // 新增：tags筛选功能
   document.addEventListener('DOMContentLoaded', function () {
+    $('#tagsFilterWrapper').css({
+      'top': $('#header-component>.header__row').clientHeight + 'px',
+    });
     const tagButtons = document.querySelectorAll('.tag-filter__item');
 
     tagButtons.forEach((button) => {
