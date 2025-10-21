@@ -160,6 +160,7 @@
         "filter_group_8Teb7B",
         "filter_group_mmdCNe"
       ],
+      "disabled": true,
       "name": "Collection with Filters",
       "settings": {
         "collection": "zodiac-crystal-collections"
