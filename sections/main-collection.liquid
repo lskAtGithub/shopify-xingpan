@@ -28,54 +28,45 @@
   section-id="{{ section.id }}"
 >
   {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
+  {% content_for 'block',
+    type: 'filters',
+    id: 'filters',
+    results: collection,
+    results_size: collection.products_count
+  %}
+
+  {% comment %} 添加tags筛选器 {% endcomment %}
+  <div class="tags-filter-wrapper" style="margin-bottom: 20px;">
+    <div class="tags-filter__list">
+      {% comment %} All tags按钮 {% endcomment %}
+      <button
+        class="tag-filter__item tag-filter__item--all{% if current_tags == blank %} tag-filter__item--active{% endif %}"
+        data-tag="all"
+      >
+        All
+      </button>
+
+      {% comment %} 获取集合中的所有tags {% endcomment %}
+      {% assign all_tags = collection.all_tags %}
+      {% for tag in all_tags %}
+        {% comment %} 检查当前tag是否被选中 {% endcomment %}
+        {% assign is_active = false %}
+        {% if current_tags contains tag %}
+          {% assign is_active = true %}
+        {% endif %}
+
+        <button
+          class="tag-filter__item{% if is_active %} tag-filter__item--active{% endif %}"
+          data-tag="{{ tag | handleize }}"
+        >
+          {{ tag }}
+        </button>
+      {% endfor %}
+    </div>
+  </div>
   <div
     class="collection-wrapper gap-style"
   >
-    {% comment %} {% content_for 'block',
-      type: 'filters',
-      id: 'filters',
-      results: collection,
-      results_size: collection.products_count
-    %} {% endcomment %}
-    {% comment %} 在现有的filters区块后添加以下代码 {% endcomment %}
-
-      {% content_for 'block',
-        type: 'filters',
-        id: 'filters',
-        results: collection,
-        results_size: collection.products_count
-      %}
-
-    {% comment %} 添加tags筛选器 {% endcomment %}
-    <div class="tags-filter-wrapper" style="margin-bottom: 20px;">
-      <div class="tags-filter__list">
-        {% comment %} All tags按钮 {% endcomment %}
-        <button
-          class="tag-filter__item tag-filter__item--all{% if current_tags == blank %} tag-filter__item--active{% endif %}"
-          data-tag="all"
-        >
-          All
-        </button>
-
-        {% comment %} 获取集合中的所有tags {% endcomment %}
-        {% assign all_tags = collection.all_tags %}
-        {% for tag in all_tags %}
-          {% comment %} 检查当前tag是否被选中 {% endcomment %}
-          {% assign is_active = false %}
-          {% if current_tags contains tag %}
-            {% assign is_active = true %}
-          {% endif %}
-
-          <button
-            class="tag-filter__item{% if is_active %} tag-filter__item--active{% endif %}"
-            data-tag="{{ tag | handleize }}"
-          >
-            {{ tag }}
-          </button>
-        {% endfor %}
-      </div>
-    </div>
-
     {% paginate collection.products by 24 %}
       {% capture children %}
         {% for product in collection.products %}
