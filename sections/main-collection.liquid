@@ -105,7 +105,7 @@
     {% endpaginate %}
   </div>
 </results-list>
-{% javascript %}
+<script>
   // 现有的URL处理代码
   const url = new URL(window.location.href);
   if (url.hash) {
@@ -142,7 +142,7 @@
       });
     });
   });
-{% endjavascript %}
+</script>
 
 {% stylesheet %}
   /* 现有的样式保持不变 */
