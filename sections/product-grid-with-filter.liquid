@@ -1,0 +1,187 @@
+{{ 'section-product-grid-filter.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign collection = collections[section.settings.collection]
+  assign products = collection.products
+  if collection == blank
+    assign products = (1..8).map[forloop]
+  endif
+-%}
+
+<div class="page-width isolated-section">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="h2 text-center">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  {%- comment -%}
+    1. 筛选按钮
+    - 我们动态地从集合中的所有商品里提取出唯一的标签来创建按钮。
+    - 这样您未来新增标签时，按钮会自动出现。
+  {%- endcomment -%}
+  {%- assign all_tags = products | map: 'tags' | join: ', ' | split: ', ' | uniq | sort -%}
+  <div class="product-filter-buttons text-center">
+    <button class="button filter-button active" data-filter="all">All</button>
+    {%- for tag in all_tags -%}
+      {%- assign trimmed_tag = tag | strip -%}
+      {%- unless trimmed_tag == '' -%}
+        <button class="button filter-button" data-filter="{{ trimmed_tag | handle }}">{{ trimmed_tag }}</button>
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%}
+    2. 商品网格
+  {%- endcomment -%}
+  <div class="product-grid-container">
+    {%- for product in products -%}
+      <div class="product-card" data-tags="{{ product.tags | json | escape }}">
+        <div class="card-wrapper">
+          <div class="card-media">
+            <a href="{{ product.url }}">
+              <img src="{{ product.featured_image | image_url: width: 500 }}" 
+                   alt="{{ product.featured_image.alt | escape }}" 
+                   loading="lazy" 
+                   width="500" 
+                   height="{{ 500 | divided_by: product.featured_image.aspect_ratio | round }}">
+            </a>
+            {%- comment -%} 在图片左上角显示第一个标签作为分类徽章 {%- endcomment -%}
+            {%- if product.tags.first != blank -%}
+              <div class="category-badge">{{ product.tags.first }}</div>
+            {%- endif -%}
+          </div>
+          <div class="card-content">
+            <h3 class="h4"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+            <div class="card-description rte">
+              {{ product.description | strip_html | truncate: 150 }}
+            </div>
+            <div class="card-date">
+              {{ product.published_at | date: "%B %d, %Y" }}
+            </div>
+            
+            {%- comment -%}
+              3. 添加到购物车表单
+              - CSS将控制它在PC端hover显示，移动端固定显示
+            {%- endcomment -%}
+            {%- form 'product', product, class: 'add-to-cart-form', data-product-id: product.id -%}
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              <button type="submit" name="add" class="button button--primary add-to-cart-button">
+                Add To Cart
+              </button>
+            {%- endform -%}
+          </div>
+        </div>
+      </div>
+    {%- else -%}
+      <p>No products found in this collection.</p>
+    {%- endfor -%}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // --- 筛选逻辑 ---
+  const filterButtons = document.querySelectorAll('.filter-button');
+  const productCards = document.querySelectorAll('.product-card');
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // 更新按钮的激活状态
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      const filterValue = button.getAttribute('data-filter');
+
+      // 遍历所有商品卡片进行显示/隐藏
+      productCards.forEach(card => {
+        if (filterValue === 'all') {
+          card.style.display = 'block';
+          return;
+        }
+        
+        const tags = JSON.parse(card.getAttribute('data-tags'));
+        const handledTags = tags.map(tag => tag.toLowerCase().replace(/ /g, '-'));
+
+        if (handledTags.includes(filterValue)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // --- AJAX 添加到购物车逻辑 ---
+  const atcForms = document.querySelectorAll('.add-to-cart-form');
+  atcForms.forEach(form => {
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const button = form.querySelector('.add-to-cart-button');
+      const originalText = button.textContent;
+      button.textContent = 'Adding...';
+      button.disabled = true;
+
+      const formData = new FormData(form);
+      
+      try {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const cartData = await response.json();
+        
+        // 可选：给用户反馈
+        button.textContent = 'Added!';
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.disabled = false;
+        }, 1500);
+
+        // 触发一个全局事件，让主题的其他部分（如购物车角标）可以响应
+        document.dispatchEvent(new CustomEvent('cart:updated', { bubbles: true, detail: { cart: cartData }}));
+
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+        button.textContent = 'Error';
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.disabled = false;
+        }, 2000);
+      }
+    });
+  });
+});
+</script>
+
+
+{% schema %}
+{
+  "name": "Product Grid with Filter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Grid with Filter"
+    }
+  ]
+}
+{% endschema %}

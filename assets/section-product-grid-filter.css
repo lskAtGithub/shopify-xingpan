@@ -1,0 +1,143 @@
+/* section-product-grid-filter.css */
+
+.product-filter-buttons {
+  margin-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.filter-button {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.filter-button:hover {
+  background-color: #e0e0e0;
+}
+
+.filter-button.active {
+  background-color: #1a1a1a;
+  color: #fff;
+  border-color: #1a1a1a;
+}
+
+.product-grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.product-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* 为hover效果做准备 */
+}
+
+.card-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-media {
+  position: relative;
+}
+
+.card-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.category-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(36, 179, 111, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* 根据不同标签显示不同颜色 */
+[data-filter="earth"] + * .category-badge, .product-card[data-tags*='"Earth"'] .category-badge { background-color: #8B4513; }
+[data-filter="water"] + * .category-badge, .product-card[data-tags*='"Water"'] .category-badge { background-color: #1E90FF; }
+[data-filter="fire"] + * .category-badge, .product-card[data-tags*='"Fire"'] .category-badge { background-color: #FFD700; }
+
+.card-content {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-content h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.card-content .card-description {
+  margin-bottom: 15px;
+  flex-grow: 1;
+  color: #555;
+}
+
+.card-content .card-date {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+/* --- Add to Cart 按钮样式 --- */
+.add-to-cart-button {
+  width: 100%;
+  padding: 12px;
+  opacity: 0; /* PC端默认透明 */
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+/* PC端：Hover时显示按钮 */
+.product-card:hover .add-to-cart-button {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* --- 响应式布局 --- */
+
+/* 平板 */
+@media (max-width: 990px) {
+  .product-grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 移动端 */
+@media (max-width: 749px) {
+  .product-grid-container {
+    grid-template-columns: 1fr;
+  }
+  
+  /* 移动端：固定显示按钮 */
+  .add-to-cart-button {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
