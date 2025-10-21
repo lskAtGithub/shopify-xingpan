@@ -31,22 +31,20 @@
   <div
     class="collection-wrapper grid gap-style"
   >
-    {% content_for 'block',
+    {% comment %} {% content_for 'block',
       type: 'filters',
       id: 'filters',
       results: collection,
       results_size: collection.products_count
-    %}
+    %} {% endcomment %}
     {% comment %} 在现有的filters区块后添加以下代码 {% endcomment %}
 
-    {% comment %}
       {% content_for 'block',
         type: 'filters',
         id: 'filters',
         results: collection,
         results_size: collection.products_count
       %}
-    {% endcomment %}
 
     {% comment %} 添加tags筛选器 {% endcomment %}
     <div class="tags-filter-wrapper" style="margin-bottom: 20px;">
