@@ -10,7 +10,7 @@
 {
   "sections": {
     "main": {
-      "type": "product-grid-with-filter",
+      "type": "product-grid-with-filter"
     }
   },
   "order": [
