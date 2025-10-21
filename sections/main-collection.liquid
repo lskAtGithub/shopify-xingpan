@@ -39,7 +39,7 @@
   <div
     class="tags-filter-wrapper"
     id="tagsFilterWrapper"
-    style="padding: 20px 0;background-color: #fff;position: sticky;top: 0;z-index: 1;"
+    style="padding: 20px 0;background-color: #fff;position: sticky;z-index: 1;"
   >
     <div class="tags-filter__list">
       {% comment %} All tags按钮 {% endcomment %}
@@ -104,7 +104,6 @@
     document.addEventListener(
       'DOMContentLoaded',
       () => {
-        $('#tagsFilterWrapper').style.top = ($('#header-component>.header__row').clientHeight - 2) + 'px';
 
         const card = document.getElementById(url.hash.slice(1));
         if (card) {
@@ -117,7 +116,6 @@
 
   // 新增：tags筛选功能
   document.addEventListener('DOMContentLoaded', function () {
-     $('#tagsFilterWrapper').style.top = ($('#header-component>.header__row').clientHeight - 2) + 'px';
     const tagButtons = document.querySelectorAll('.tag-filter__item');
 
     tagButtons.forEach((button) => {
@@ -151,7 +149,7 @@
   /* 新增tags筛选器样式 */
   .tags-filter-wrapper {
     padding: 0 var(--page-margin);
-    top: calc(var(--header-height) + 20px);
+    top: calc(var(--header-height) - 2px);
   }
 
   .tags-filter__title {
