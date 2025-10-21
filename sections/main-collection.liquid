@@ -105,7 +105,7 @@
       'DOMContentLoaded',
       () => {
         $('#tagsFilterWrapper').css({
-          'top': $('#header-component').height() + 'px',
+          'top': $('#header-component>.header__row').clientHeight + 'px',
         });
         const card = document.getElementById(url.hash.slice(1));
         if (card) {
