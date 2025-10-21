@@ -1,5 +1,3 @@
-
-
 <script
   src="{{ 'results-list.js' | asset_url }}"
   type="module"
@@ -30,22 +28,6 @@
   section-id="{{ section.id }}"
 >
   {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
-  <div class="collection-header"> 
-    <div class="collection-tags">
-      <div class="collection-tags__wrapper"> 
-        <div class="collection-tags__wrapper--inner"> 
-          {% for tag in collection.tags %}
-            <a
-              class="collection-tag"
-              href="{{ collection.url | add_tag: tag }}"
-            >
-              {{ tag | split: '-' | join: ' ' | capitalize }}
-            </a>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-  </div>
   <div
     class="collection-wrapper grid gap-style"
   >
@@ -55,6 +37,49 @@
       results: collection,
       results_size: collection.products_count
     %}
+    {% comment %} 在现有的filters区块后添加以下代码 {% endcomment %}
+
+    {% comment %}
+      {% content_for 'block',
+        type: 'filters',
+        id: 'filters',
+        results: collection,
+        results_size: collection.products_count
+      %}
+    {% endcomment %}
+
+    {% comment %} 添加tags筛选器 {% endcomment %}
+    <div class="tags-filter-wrapper" style="margin-bottom: 20px;">
+      <h3 class="tags-filter__title" style="margin-bottom: 12px;">Filter by Tags</h3>
+      <div class="tags-filter__list">
+        {% comment %} All tags按钮 {% endcomment %}
+        <button
+          class="tag-filter__item tag-filter__item--all{% if current_tags == blank %} tag-filter__item--active{% endif %}"
+          data-tag="all"
+          style="background: {% if current_tags == blank %}#000{% else %}#f5f5f5{% endif %}; color: {% if current_tags == blank %}#fff{% else %}#000{% endif %}; border: 1px solid #ddd; padding: 8px 16px; margin: 4px; border-radius: 4px; cursor: pointer;"
+        >
+          All
+        </button>
+
+        {% comment %} 获取集合中的所有tags {% endcomment %}
+        {% assign all_tags = collection.all_tags %}
+        {% for tag in all_tags %}
+          {% comment %} 检查当前tag是否被选中 {% endcomment %}
+          {% assign is_active = false %}
+          {% if current_tags contains tag %}
+            {% assign is_active = true %}
+          {% endif %}
+
+          <button
+            class="tag-filter__item{% if is_active %} tag-filter__item--active{% endif %}"
+            data-tag="{{ tag | handleize }}"
+            style="background: {% if is_active %}#000{% else %}#f5f5f5{% endif %}; color: {% if is_active %}#fff{% else %}#000{% endif %}; border: 1px solid #ddd; padding: 8px 16px; margin: 4px; border-radius: 4px; cursor: pointer;"
+          >
+            {{ tag }}
+          </button>
+        {% endfor %}
+      </div>
+    </div>
 
     {% paginate collection.products by 24 %}
       {% capture children %}
@@ -82,8 +107,109 @@
     {% endpaginate %}
   </div>
 </results-list>
+{% javascript %}
+  // 现有的URL处理代码
+  const url = new URL(window.location.href);
+  if (url.hash) {
+    document.addEventListener(
+      'DOMContentLoaded',
+      () => {
+        const card = document.getElementById(url.hash.slice(1));
+        if (card) {
+          card.scrollIntoView({ behavior: 'instant' });
+        }
+      },
+      { once: true }
+    );
+  }
+
+  // 新增：tags筛选功能
+  document.addEventListener('DOMContentLoaded', function () {
+    const tagButtons = document.querySelectorAll('.tag-filter__item');
+
+    tagButtons.forEach((button) => {
+      button.addEventListener('click', function () {
+        const selectedTag = this.getAttribute('data-tag');
+        const currentUrl = new URL(window.location.href);
+
+        if (selectedTag === 'all') {
+          // 移除所有tags参数
+          currentUrl.searchParams.delete('constraint');
+          window.location.href = currentUrl.toString();
+        } else {
+          // 设置选中的tag
+          currentUrl.searchParams.set('constraint', selectedTag);
+          window.location.href = currentUrl.toString();
+        }
+      });
+    });
+  });
+{% endjavascript %}
 
 {% stylesheet %}
+  /* 现有的样式保持不变 */
+  .main-collection-grid {
+    grid-column: var(--grid-column--mobile);
+    @media screen and (min-width: 750px) {
+      grid-column: var(--grid-column--desktop);
+    }
+  }
+
+  /* 新增tags筛选器样式 */
+  .tags-filter-wrapper {
+    padding: 0 var(--page-margin);
+    margin-bottom: 24px;
+  }
+
+  .tags-filter__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: rgba(var(--color-foreground));
+  }
+
+  .tags-filter__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag-filter__item {
+    background: rgba(var(--color-background));
+    border: 1px solid rgba(var(--color-border));
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+  }
+
+  .tag-filter__item:hover {
+    background: rgba(var(--color-foreground), 0.05);
+    border-color: rgba(var(--color-foreground));
+  }
+
+  .tag-filter__item--active {
+    background: rgba(var(--color-foreground));
+    color: rgba(var(--color-background));
+    border-color: rgba(var(--color-foreground));
+  }
+
+  /* 响应式调整 */
+  @media screen and (max-width: 749px) {
+    .tags-filter-wrapper {
+      padding: 0 max(var(--padding-xs), var(--padding-inline-start));
+    }
+
+    .tags-filter__list {
+      gap: 6px;
+    }
+
+    .tag-filter__item {
+      padding: 6px 12px;
+      font-size: 0.8125rem;
+    }
+  }
   .main-collection-grid {
     grid-column: var(--grid-column--mobile);
 
