@@ -46,6 +46,8 @@
 >
   {%- if product != blank -%}
     {%- assign product_form_id = 'BuyButtons-ProductForm-' | append: section.id -%}
+    {%- assign buy_it_now_form_id = 'BuyItNow-ProductForm-' | append: section.id -%}
+    
     <product-form-component
       data-section-id="{{ section.id }}"
       data-product-id="{{ product.id }}"
@@ -106,14 +108,16 @@
       {%- endform -%}
     </product-form-component>
 
-    {% comment %} 新增：Buy it now 表单 {% endcomment %}
+    {% comment %} 新增：Buy it now 表单 - 使用正确的 product 表单类型 {% endcomment %}
     {% if show_buy_it_now and can_add_to_cart %}
-      {%- form 'product', product, id: product_form_id | append: '-buy-it-now', class: 'buy-it-now-form' -%}
+      {%- form 'product', product, id: buy_it_now_form_id, class: 'buy-it-now-form hidden' -%}
         <input
           type="hidden"
           name="id"
           value="{{ product.selected_or_first_available_variant.id }}"
+          class="buy-it-now-variant"
         >
+        <input type="hidden" name="quantity" value="1">
         <input type="hidden" name="return_to" value="/checkout">
       {%- endform -%}
     {% endif %}
@@ -156,7 +160,82 @@
   >
     {% if can_add_to_cart %}
       <dialog-component>
-        {# 原有的 pickup availability 代码 #}
+        <div class="pickup-availability__row">
+          <div class="pickup-availability__column">
+            <span class="svg-wrapper">
+              {% if pick_up_availabilities.first.available %}
+                {{- 'icon-available.svg' | inline_asset_content -}}
+              {% else %}
+                {{- 'icon-unavailable.svg' | inline_asset_content -}}
+              {% endif %}
+            </span>
+          </div>
+          <div class="pickup-availability__column">
+            {% if pick_up_availabilities.first.available %}
+              <p class="pickup-location__text-sm">
+                {{ 'content.pickup_available_at_html' | t: location: pick_up_availabilities.first.location.name }}
+              </p>
+              <p class="pickup-location__text-xs">
+                {{ 'content.pickup_ready_in' | t: pickup_time: pick_up_availabilities.first.pick_up_time }}
+              </p>
+            {% else %}
+              <p class="pickup-location__text-sm">
+                {{ 'content.pickup_not_available' | t }}
+              </p>
+            {% endif %}
+            <button
+              on:click="/showDialog"
+              class="button-unstyled pickup-location__button"
+            >
+              {{ 'actions.view_store_information' | t }}
+            </button>
+          </div>
+        </div>
+        <dialog
+          ref="dialog"
+          class="dialog-modal dialog-drawer pickup-location__dialog color-{{ settings.drawer_color_scheme }}"
+          scroll-lock
+        >
+          <div class="pickup-availability__dialog-row pickup-availability__header-container">
+            <div class="pickup-availability__column">
+              <h4 class="pickup-location__h4">{{ closest.product.title }}</h4>
+              <p class="pickup-location__text-sm">
+                {{ closest.product.selected_or_first_available_variant.title }}
+              </p>
+            </div>
+            <button
+              ref="closeButton"
+              on:click="/closeDialog"
+              class="button button-unstyled close-button pickup-location__close-button"
+              aria-label="{{ 'actions.close_dialog' | t }}"
+            >
+              <span class="svg-wrapper">
+                {{- 'icon-close.svg' | inline_asset_content -}}
+              </span>
+            </button>
+          </div>
+          {% for pick_up_availability in pick_up_availabilities %}
+            <div class="pickup-location__wrapper">
+              <p class="pickup-location__text-bold">{{ pick_up_availability.location.name }}</p>
+              <div class="pickup-location__address-wrapper">
+                <span class="pickup-location__availability-wrapper">
+                  {% if pick_up_availability.available %}
+                    {{- 'icon-available.svg' | inline_asset_content -}}
+                    {% assign pickup_time = pick_up_availability.pick_up_time | downcase %}
+                    {{ 'content.pickup_available_in' | t: pickup_time: pickup_time }}
+                  {% else %}
+                    {{- 'icon-unavailable.svg' | inline_asset_content -}}
+                    {{ 'content.pickup_not_available' | t }}
+                  {% endif %}
+                </span>
+                <address class="pickup-location__address">
+                  {{ pick_up_availability.location.address | format_address }}
+                  {{ pick_up_availability.location.address.phone }}
+                </address>
+              </div>
+            </div>
+          {% endfor %}
+        </dialog>
       </dialog-component>
     {% endif %}
   </local-pickup>
@@ -239,6 +318,10 @@
     border-radius: 50%;
     animation: spin 1s linear infinite;
     vertical-align: middle;
+  }
+
+  .buy-it-now-form.hidden {
+    display: none !important;
   }
 
   @keyframes spin {
@@ -394,6 +477,15 @@ document.addEventListener('DOMContentLoaded', function() {
       const form = document.querySelector('.buy-it-now-form');
       if (!form) return;
       
+      // 获取当前选中的变体ID
+      const mainForm = document.querySelector('[data-type="add-to-cart-form"]');
+      const variantInput = mainForm ? mainForm.querySelector('input[name="id"]') : null;
+      const buyItNowVariantInput = form.querySelector('.buy-it-now-variant');
+      
+      if (variantInput && buyItNowVariantInput) {
+        buyItNowVariantInput.value = variantInput.value;
+      }
+      
       // 显示加载状态
       const originalText = button.innerHTML;
       button.innerHTML = '处理中...';
@@ -402,7 +494,9 @@ document.addEventListener('DOMContentLoaded', function() {
       
       try {
         // 直接提交表单跳转到结账页面
-        form.submit();
+        setTimeout(() => {
+          form.submit();
+        }, 100);
       } catch (error) {
         console.error('Buy it now error:', error);
         // 恢复按钮状态
@@ -421,7 +515,7 @@ document.addEventListener('DOMContentLoaded', function() {
     variantSelects.forEach(select => {
       select.addEventListener('change', function() {
         const variantId = this.value;
-        const hiddenInput = buyItNowForm.querySelector('input[name="id"]');
+        const hiddenInput = buyItNowForm.querySelector('.buy-it-now-variant');
         if (hiddenInput && variantId) {
           hiddenInput.value = variantId;
         }
