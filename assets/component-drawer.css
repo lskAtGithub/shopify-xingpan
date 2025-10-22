@@ -2,7 +2,9 @@
   background-color: rgba(var(--color-overlay), 0.5);
   transition: visibility 300ms ease;
 }
-
+.cart-drawer__dialog {
+  
+}
 .drawer.active {
   visibility: visible;
 }
