@@ -1,0 +1,13 @@
+{% liquid
+  assign block_settings = block.settings
+  assign buy_it_now_text = block_settings.buy_it_now_text | default: 'Buy it now'
+%}
+
+<button
+  type="button"
+  class="button {{ block_settings.style_class }} buy-it-now-button"
+  name="buy-it-now"
+  {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+>
+  {{ buy_it_now_text }}
+</button>
