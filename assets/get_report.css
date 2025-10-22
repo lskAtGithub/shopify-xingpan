@@ -235,7 +235,7 @@ label.checkbox-label {
 }
 
 /* 表格容器 */
-table {
+.report-modal table {
   width: 100%;
   border-collapse: collapse;
   background: #fff;
@@ -246,15 +246,15 @@ table {
 }
 
 /* 表头样式 */
-thead {
+.report-modal thead {
   background: #fafafa;
 }
 
-thead tr {
+.report-modal thead tr {
   border-bottom: 1px solid #f0f0f0;
 }
 
-thead th {
+.report-modal thead th {
   position: relative;
   color: rgba(0, 0, 0, 0.88);
   font-weight: 600;
@@ -267,11 +267,11 @@ thead th {
   user-select: none;
 }
 
-thead th:last-child {
+.report-modal thead th:last-child {
   border-right: none;
 }
 
-thead th:hover {
+.report-modal thead th:hover {
   background: #f5f5f5;
 }
 
@@ -289,19 +289,19 @@ thead th:hover::after {
 } */
 
 /* 表体样式 */
-tbody {
+.report-modal tbody {
   background: #fff;
 }
 
-tbody tr {
+.report-modal tbody tr {
   transition: all 0.3s;
 }
 
-tbody tr:hover {
+.report-modal tbody tr:hover {
   background: #fafafa;
 }
 
-tbody td {
+.report-modal tbody td {
   padding: 16px;
   border-bottom: 1px solid #f0f0f0;
   word-break: break-word;
@@ -309,20 +309,20 @@ tbody td {
   transition: background 0.3s;
 }
 
-tbody td:last-child {
+.report-modal tbody td:last-child {
   border-right: none;
 }
 
-tbody tr:last-child td {
+.report-modal tbody tr:last-child td {
   border-bottom: none;
 }
 
 /* 斑马纹效果 - 通过属性选择器实现 */
-table[data-striped='true'] tbody tr:nth-child(even) {
+.report-modal table[data-striped='true'] tbody tr:nth-child(even) {
   background: #fafafa;
 }
 
-table[data-striped='true'] tbody tr:nth-child(even):hover {
+.report-modal table[data-striped='true'] tbody tr:nth-child(even):hover {
   background: #f0f0f0;
 }
 
@@ -365,7 +365,7 @@ table[data-striped='true'] tbody tr:nth-child(even):hover {
 }
 
 /* 表格标题区域 */
-caption {
+.report-modal caption {
   caption-side: top;
   padding: 16px;
   text-align: left;
@@ -377,12 +377,12 @@ caption {
 }
 
 /* 表格脚注 */
-tfoot {
+.report-modal tfoot {
   background: #fafafa;
   border-top: 1px solid #f0f0f0;
 }
 
-tfoot td {
+.report-modal tfoot td {
   padding: 12px 16px;
   color: rgba(0, 0, 0, 0.45);
   font-size: 14px;
@@ -513,22 +513,22 @@ select:hover {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-  thead th,
-  tbody td {
+  .report-modal thead th,
+  .report-modal tbody td {
     padding: 12px 8px;
     font-size: 13px;
   }
 
-  table {
+  .report-modal table {
     font-size: 13px;
   }
 
-  caption {
+  .report-modal caption {
     padding: 12px;
     font-size: 15px;
   }
 
-  button {
+  .report-modal button {
     padding: 2px 12px;
     font-size: 13px;
   }
@@ -541,132 +541,132 @@ select:hover {
 
 /* 小屏幕时隐藏某些列 */
 @media (max-width: 480px) {
-  thead th:nth-child(n + 4),
-  tbody td:nth-child(n + 4) {
+  .report-modal thead th:nth-child(n + 4),
+  .report-modal tbody td:nth-child(n + 4) {
     display: none;
   }
 }
 
 /* 打印样式 */
 @media print {
-  table {
+  .report-modal table {
     box-shadow: none;
     border: 1px solid #000;
   }
 
-  thead th {
+  .report-modal thead th {
     background: #fff !important;
     border: 1px solid #000;
   }
 
-  tbody td {
+  .report-modal tbody td {
     border: 1px solid #000;
   }
 
-  a {
+  .report-modal a {
     color: #000;
     text-decoration: underline;
   }
 
-  button {
+  .report-modal button {
     display: none;
   }
 }
 
 /* 高对比度模式 */
 @media (prefers-contrast: high) {
-  table {
+  .report-modal table {
     border: 2px solid #000;
   }
 
-  thead th {
+  .report-modal thead th {
     background: #000;
     color: #fff;
     border: 1px solid #fff;
   }
 
-  tbody td {
+  .report-modal tbody td {
     border: 1px solid #000;
   }
 
-  tbody tr:hover {
+  .report-modal tbody tr:hover {
     background: #f0f0f0;
   }
 }
 
 /* 深色模式支持 */
 @media (prefers-color-scheme: dark) {
-  body {
+   body {
     background: #141414;
     color: rgba(255, 255, 255, 0.85);
   }
 
-  table {
+  .report-modal table {
     background: #1f1f1f;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   }
 
-  thead {
+  .report-modal thead {
     background: #262626;
   }
 
-  thead th {
+  .report-modal thead th {
     color: rgba(255, 255, 255, 0.85);
     border-right: 1px solid rgba(255, 255, 255, 0.06);
   }
 
-  thead th:hover {
+  .report-modal thead th:hover {
     background: #303030;
   }
 
-  tbody td {
+  .report-modal tbody td {
     border-bottom: 1px solid #303030;
     border-right: 1px solid rgba(255, 255, 255, 0.06);
   }
 
-  tbody tr:hover {
+  .report-modal tbody tr:hover {
     background: #262626;
   }
 
-  table[data-striped='true'] tbody tr:nth-child(even) {
+  .report-modal table[data-striped='true'] tbody tr:nth-child(even) {
     background: #262626;
   }
 
-  table[data-striped='true'] tbody tr:nth-child(even):hover {
+  .report-modal table[data-striped='true'] tbody tr:nth-child(even):hover {
     background: #303030;
   }
 
-  caption,
-  tfoot {
+  .report-modal caption,
+  .report-modal tfoot {
     background: #262626;
     color: rgba(255, 255, 255, 0.65);
   }
 
-  button {
+  .report-modal button {
     background: #1f1f1f;
     border-color: #434343;
     color: rgba(255, 255, 255, 0.85);
   }
 
-  button:hover {
+  .report-modal button:hover {
     border-color: #177ddc;
     color: #177ddc;
   }
 
-  button[data-type='primary'] {
+  .report-modal button[data-type='primary'] {
     background: #177ddc;
     border-color: #177ddc;
   }
 
-  input,
-  select {
+  .report-modal input,
+  .report-modal select {
     background: #1f1f1f;
     border-color: #434343;
     color: rgba(255, 255, 255, 0.85);
   }
 
-  input:focus,
-  select:focus {
+  .report-modal input:focus,
+  .report-modal select:focus {
     border-color: #177ddc;
     box-shadow: 0 0 0 2px rgba(23, 125, 220, 0.2);
   }
