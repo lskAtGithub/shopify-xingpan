@@ -102,12 +102,6 @@
               </span>
             </span>
           {%- endunless -%}
-          {% comment %} {% content_for 'block',
-            type: 'accelerated-checkout',
-            id: 'accelerated-checkout',
-            can_add_to_cart: can_add_to_cart,
-            form_obj: form
-          %} {% endcomment %}
         </div>
       {%- endform -%}
     </product-form-component>
@@ -189,7 +183,7 @@
   }
 
   .product-form-buttons--stacked > *:not(.quantity-selector) {
-    flex-basis: 51%; /* Force the buttons to be on separate rows */
+    flex-basis: 51%;
   }
 
   .quantity-selector {
@@ -397,12 +391,12 @@ document.addEventListener('DOMContentLoaded', function() {
     button.addEventListener('click', function(e) {
       e.preventDefault();
       
-      const form = document.getElementById('{{ product_form_id }}-buy-it-now');
+      const form = document.querySelector('.buy-it-now-form');
       if (!form) return;
       
       // 显示加载状态
       const originalText = button.innerHTML;
-      button.innerHTML = '{{ "products.product.processing" | t }}...';
+      button.innerHTML = '处理中...';
       button.classList.add('loading');
       button.disabled = true;
       
@@ -541,10 +535,6 @@ document.addEventListener('DOMContentLoaded', function() {
           "settings": {
             "style_class": "buy-it-now-button"
           }
-        },
-        "accelerated-checkout": {
-          "type": "accelerated-checkout",
-          "static": true
         }
       }
     }

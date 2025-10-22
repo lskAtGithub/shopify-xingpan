@@ -11,3 +11,25 @@
 >
   {{ buy_it_now_text }}
 </button>
+
+{% schema %}
+{
+  "name": "Buy it now",
+  "class": "shopify--buy-it-now",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "buy_it_now_text",
+      "label": "按钮文字",
+      "default": "Buy it now"
+    },
+    {
+      "type": "text",
+      "id": "style_class",
+      "label": "CSS 类名",
+      "default": "button-primary"
+    }
+  ]
+}
+{% endschema %}
