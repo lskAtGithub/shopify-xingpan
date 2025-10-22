@@ -123,6 +123,7 @@
     },
     "bottom_section_8hMqLq": {
       "type": "bottom-section",
+      "disabled": true,
       "name": "Bottom Section",
       "settings": {}
     }
