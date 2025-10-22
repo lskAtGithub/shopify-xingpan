@@ -121,16 +121,6 @@
         "button_link": "shopify://collections/zodiac-crystal-collections"
       }
     },
-    "custom_product_filter_3VNeAh": {
-      "type": "custom-product-filter",
-      "name": "Custom Product Filter",
-      "settings": {
-        "heading": "Featured Products",
-        "collection": "zodiac-crystal-collections",
-        "products_per_row": 4,
-        "rows_per_page": 3
-      }
-    },
     "bottom_section_8hMqLq": {
       "type": "bottom-section",
       "name": "Bottom Section",
@@ -142,7 +132,6 @@
     "custom_featured_product_Win7PL",
     "four_elements_stories_9Ti4EU",
     "zodiac_collection_grid_f8JLgc",
-    "custom_product_filter_3VNeAh",
     "bottom_section_8hMqLq"
   ]
 }
