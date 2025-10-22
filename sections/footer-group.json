@@ -11,6 +11,11 @@
   "type": "footer",
   "name": "Footer",
   "sections": {
+    "bottom_section_hQbhE4": {
+      "type": "bottom-section",
+      "name": "Bottom Section",
+      "settings": {}
+    },
     "footer": {
       "type": "footer",
       "name": "Footer",
@@ -18,6 +23,7 @@
     }
   },
   "order": [
+    "bottom_section_hQbhE4",
     "footer"
   ]
 }
