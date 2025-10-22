@@ -464,66 +464,231 @@
   }
 {% endstylesheet %}
 
-{% comment %} 新增：Buy it now JavaScript {% endcomment %}
+{% comment %} 新增：Buy it now JavaScript - 完整版本 {% endcomment %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Buy it now 功能
-  const buyItNowButtons = document.querySelectorAll('.buy-it-now-button');
+  class BuyItNow {
+    constructor() {
+      this.init();
+    }
   
-  buyItNowButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
-      e.preventDefault();
+    init() {
+      document.addEventListener('DOMContentLoaded', () => {
+        this.setupBuyItNowButtons();
+        this.setupVariantListeners();
+      });
+    }
+  
+    setupBuyItNowButtons() {
+      const buyItNowButtons = document.querySelectorAll('.buy-it-now-button');
       
-      const form = document.querySelector('.buy-it-now-form');
-      if (!form) return;
-      
-      // 获取当前选中的变体ID
-      const mainForm = document.querySelector('[data-type="add-to-cart-form"]');
-      const variantInput = mainForm ? mainForm.querySelector('input[name="id"]') : null;
-      const buyItNowVariantInput = form.querySelector('.buy-it-now-variant');
-      
-      if (variantInput && buyItNowVariantInput) {
-        buyItNowVariantInput.value = variantInput.value;
-      }
-      
+      buyItNowButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.handleBuyItNow(button);
+        });
+      });
+    }
+  
+    async handleBuyItNow(button) {
       // 显示加载状态
       const originalText = button.innerHTML;
       button.innerHTML = '处理中...';
       button.classList.add('loading');
       button.disabled = true;
-      
+  
       try {
-        // 直接提交表单跳转到结账页面
-        setTimeout(() => {
-          form.submit();
-        }, 100);
+        const { variantId, quantity } = this.getProductData();
+        
+        if (!variantId) {
+          throw new Error('请选择商品选项');
+        }
+  
+        // 方法1: 使用Shopify快速结账链接（最推荐）
+        await this.redirectToFastCheckout(variantId, quantity);
+        
       } catch (error) {
         console.error('Buy it now error:', error);
+        this.showErrorMessage(error.message || '购买失败，请重试');
+      } finally {
         // 恢复按钮状态
         button.innerHTML = originalText;
         button.classList.remove('loading');
         button.disabled = false;
       }
-    });
-  });
+    }
   
-  // 监听变体变化，更新 Buy it now 表单
-  const variantSelects = document.querySelectorAll('select[name="id"], input[name="id"]');
-  const buyItNowForm = document.querySelector('.buy-it-now-form');
+    getProductData() {
+      const mainForm = document.querySelector('[data-type="add-to-cart-form"]');
+      const variantInput = mainForm ? mainForm.querySelector('input[name="id"]') : null;
+      const quantityInput = mainForm ? mainForm.querySelector('input[name="quantity"]') : null;
+      
+      const variantId = variantInput ? variantInput.value : '{{ product.selected_or_first_available_variant.id }}';
+      const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
   
-  if (variantSelects.length && buyItNowForm) {
-    variantSelects.forEach(select => {
-      select.addEventListener('change', function() {
-        const variantId = this.value;
-        const hiddenInput = buyItNowForm.querySelector('.buy-it-now-variant');
-        if (hiddenInput && variantId) {
-          hiddenInput.value = variantId;
+      return { variantId, quantity };
+    }
+  
+    // 方法1: 使用Shopify快速结账链接
+    async redirectToFastCheckout(variantId, quantity = 1) {
+      // 直接使用Shopify的快速结账URL格式
+      // 格式: /cart/{variant_id}:{quantity}
+      const checkoutUrl = `/cart/${variantId}:${quantity}`;
+      
+      console.log('Redirecting to fast checkout:', checkoutUrl);
+      window.location.href = checkoutUrl;
+    }
+  
+    // 方法2: 备用方案 - 使用AJAX清空购物车并添加商品
+    async redirectWithAjax(variantId, quantity = 1) {
+      try {
+        // 1. 先清空购物车
+        await this.clearCart();
+        
+        // 2. 添加当前商品到购物车
+        await this.addToCart(variantId, quantity);
+        
+        // 3. 跳转到结账页面
+        window.location.href = '/checkout';
+        
+      } catch (error) {
+        throw new Error('快速结账失败，请使用常规购买方式');
+      }
+    }
+  
+    // 清空购物车
+    async clearCart() {
+      try {
+        const response = await fetch('/cart/clear.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('清空购物车失败');
         }
+        
+        return await response.json();
+      } catch (error) {
+        console.warn('清空购物车失败:', error);
+        throw error;
+      }
+    }
+  
+    // 添加商品到购物车
+    async addToCart(variantId, quantity = 1) {
+      try {
+        const formData = {
+          items: [{
+            id: variantId,
+            quantity: quantity
+          }]
+        };
+  
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
+  
+        if (!response.ok) {
+          throw new Error('添加到购物车失败');
+        }
+  
+        return await response.json();
+      } catch (error) {
+        console.error('添加到购物车失败:', error);
+        throw error;
+      }
+    }
+  
+    // 显示错误消息
+    showErrorMessage(message) {
+      // 移除现有的错误消息
+      const existingError = document.querySelector('.buy-it-now-error-message');
+      if (existingError) {
+        existingError.remove();
+      }
+  
+      // 创建错误消息元素
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'buy-it-now-error-message';
+      errorDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #d32f2f;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        z-index: 10000;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        font-size: 14px;
+        animation: slideInDown 0.3s ease;
+      `;
+      errorDiv.textContent = message;
+      
+      document.body.appendChild(errorDiv);
+      
+      // 3秒后自动移除
+      setTimeout(() => {
+        if (document.body.contains(errorDiv)) {
+          errorDiv.style.animation = 'slideOutUp 0.3s ease';
+          setTimeout(() => {
+            if (document.body.contains(errorDiv)) {
+              document.body.removeChild(errorDiv);
+            }
+          }, 300);
+        }
+      }, 3000);
+    }
+  
+    setupVariantListeners() {
+      const variantSelects = document.querySelectorAll('select[name="id"], input[name="id"]');
+      
+      variantSelects.forEach(select => {
+        select.addEventListener('change', () => {
+          // 可以在这里处理变体变化的逻辑
+          console.log('Variant changed');
+        });
       });
-    });
+    }
   }
-});
-</script>
+  
+  // 添加动画样式
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideInDown {
+      from {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    @keyframes slideOutUp {
+      from {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+  
+  // 初始化
+  new BuyItNow();
+  </script>
 
 {% schema %}
 {
