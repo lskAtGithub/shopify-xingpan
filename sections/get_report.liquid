@@ -1058,7 +1058,7 @@
                 remark.innerHTML = marked.parse(reason);
               }
               scrollToBottom();
-              if(item.finish_reason && item.finish_reason === 'stop') {
+              if(choices[i].finish_reason && choices[i].finish_reason === 'stop') {
                 renderRecommendedProducts(data);
               }
             }
