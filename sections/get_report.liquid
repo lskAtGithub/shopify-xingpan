@@ -1036,7 +1036,7 @@
         modelContent.scrollTop = modelContent.scrollHeight;
       }
 
-      function getDoubaoNoUser() {
+      function getDoubaoNoUser(data) {
         const remark = document.getElementById('remark');
 
         const eventSource = new EventSource(`${BASE_URL}/astrology/doubaoNoUser?id=7&reportId=${reportId}`);
@@ -1060,6 +1060,10 @@
               scrollToBottom();
             }
           } catch (e) {}
+        };
+        eventSource.onerror = function (error) {
+          renderRecommendedProducts(data);
+          eventSource.close();
         };
       }
 
@@ -1213,8 +1217,8 @@
         {% comment %} const remark = document.getElementById('remark');
         remark.innerText = res.remark; {% endcomment %}
         // loadStream(res);
-        getDoubaoNoUser();
-        renderRecommendedProducts(res);
+        getDoubaoNoUser(res);
+        {% comment %} renderRecommendedProducts(res); {% endcomment %}
       }
 
       async function renderModal(data) {
