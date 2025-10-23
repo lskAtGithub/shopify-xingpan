@@ -1058,13 +1058,13 @@
                 remark.innerHTML = marked.parse(reason);
               }
               scrollToBottom();
-              console.log('[report is running]', json);
-              if(!choices){
-                console.log('[report is end]', json);
-              }
-              if(!choices.length && json === '[report is end]') { 
-                renderRecommendedProducts(data);
-              }
+            }
+            console.log('[report is running]', json);
+            if(!choices){
+              console.log('[report is end]', json);
+            }
+            if(!choices && json === '[report is end]') { 
+              renderRecommendedProducts(data);
             }
           } catch (e) {}
         };
