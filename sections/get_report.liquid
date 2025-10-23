@@ -1064,10 +1064,10 @@
             }
           } catch (e) {}
         };
-        {% comment %} eventSource.onerror = function (error) {
+        eventSource.onerror = function (error) {
           renderRecommendedProducts(data);
           eventSource.close();
-        }; {% endcomment %}
+        };
       }
 
       function loadStream(data) {
