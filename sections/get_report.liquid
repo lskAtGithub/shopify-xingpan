@@ -1003,7 +1003,7 @@
           userName: name,
         };
         if(window.customer && window.customer.id) {
-          payload.key = window.customer.id;
+          payload.key = ''; //window.customer.id;
         }
         const paramsForm = new URLSearchParams();
         Object.keys(payload).forEach((k) => {
@@ -1058,6 +1058,12 @@
                 remark.innerHTML = marked.parse(reason);
               }
               scrollToBottom();
+              if(!choices.length){
+                console.log('[report is end]', json);
+              }
+              if(!choices.length && json === '[report is end]') { 
+                renderRecommendedProducts(data);
+              }
             }
           } catch (e) {}
         };
@@ -1090,17 +1096,12 @@
                 markdownRea.innerHTML = marked.parse(reason);
               }
               scrollToBottom();
-              if(!choices.length){
-                console.log('[report is end]', json);
-              }
-              if(!choices.length && json === '[report is end]') { 
-                renderRecommendedProducts(data);
-              }
             }
           } catch (e) {}
         };
 
         eventSource.onerror = function (error) {
+          renderRecommendedProducts(data);
           eventSource.close();
         };
       }
