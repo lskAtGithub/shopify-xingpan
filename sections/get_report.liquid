@@ -1036,6 +1036,21 @@
         modelContent.scrollTop = modelContent.scrollHeight;
       }
 
+      function getDoubaoNoUser() {
+        const streamData = document.getElementById('streamData');
+        const markdownRea = document.getElementById('markdownRea');
+
+        const eventSource = new EventSource(`${BASE_URL}/astrology/doubaoNoUser?id=7&reportId=${reportId}`);
+        var content = '';
+        var reason = '';
+        eventSource.onmessage = function (eventStream) {
+          try {
+            var json = JSON.parse(eventStream.data);
+            console.log('doubaoNoUser---------', json);
+          } catch (e) {}
+        };
+      }
+
       function loadStream(data) {
         const streamData = document.getElementById('streamData');
         const markdownRea = document.getElementById('markdownRea');
@@ -1186,6 +1201,7 @@
         const remark = document.getElementById('remark');
         remark.innerText = res.remark;
         // loadStream(res);
+        getDoubaoNoUser();
         renderRecommendedProducts(res);
       }
 
