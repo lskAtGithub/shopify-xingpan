@@ -212,7 +212,7 @@
     color: var(--accent-color);
   }
 
-  /* Countdown circle styles */
+  /* Countdown circle styles - UPDATED */
   .countdown-circle {
     position: absolute;
     top: 0;
@@ -222,15 +222,27 @@
     transform: rotate(-90deg);
   }
   
-  .countdown-circle-progress {
-    stroke-dasharray: 88;
-    stroke-dashoffset: 88;
-    transition: stroke-dashoffset var(--rotation-interval) linear;
+  .countdown-circle-bg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    opacity: 0.2;
   }
   
+  .countdown-circle-progress {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-dasharray: 88;
+    stroke-dashoffset: 88;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+  }
+  
+  /* 激活状态下的转圈动画 */
   .pagination-dot.is-active .countdown-circle-progress {
-    stroke-dashoffset: 0;
-    animation: countdown var(--rotation-interval) linear forwards;
+    animation: countdown-rotate var(--rotation-interval) linear forwards;
   }
   
   .dot-number {
@@ -238,18 +250,64 @@
     z-index: 1;
   }
 
-  @keyframes countdown {
-    from {
+  /* 转圈动画关键帧 */
+  @keyframes countdown-rotate {
+    0% {
+      stroke-dashoffset: 88;
+      transform: rotate(-90deg);
+    }
+    100% {
+      stroke-dashoffset: 0;
+      transform: rotate(270deg); /* -90deg + 360deg = 270deg */
+    }
+  }
+
+  /* 替代方案：使用 transform 旋转动画 */
+  @keyframes countdown-spin {
+    0% {
+      transform: rotate(-90deg);
       stroke-dashoffset: 88;
     }
-    to {
+    50% {
+      stroke-dashoffset: 0;
+    }
+    100% {
+      transform: rotate(270deg);
       stroke-dashoffset: 0;
     }
   }
 
-  /* Pause animation on hover */
-  .philosophy-pagination:hover .countdown-circle-progress {
+  /* 更流畅的旋转动画版本 */
+  @keyframes countdown-smooth {
+    0% {
+      stroke-dashoffset: 88;
+      transform: rotate(0deg);
+    }
+    100% {
+      stroke-dashoffset: 0;
+      transform: rotate(360deg);
+    }
+  }
+
+  /* 使用平滑旋转动画 */
+  .pagination-dot.is-active .countdown-circle-progress {
+    animation: countdown-smooth var(--rotation-interval) linear forwards;
+  }
+
+  /* 暂停动画效果 */
+  .philosophy-pagination:hover .pagination-dot.is-active .countdown-circle-progress {
     animation-play-state: paused;
+  }
+
+  /* 非激活状态的样式 */
+  .pagination-dot:not(.is-active) .countdown-circle-progress {
+    opacity: 0;
+  }
+
+  /* 鼠标悬停效果 */
+  .pagination-dot:hover:not(.is-active) {
+    border-color: #ccc;
+    color: #666;
   }
 
   /* --- Part 2: Expert Section Styles (UNCHANGED) --- */
@@ -292,92 +350,120 @@
 {% endstylesheet %}
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const paginationContainer = document.getElementById('philosophy-pagination');
-  const slidesContainer = document.getElementById('philosophy-slides');
-  
-  if (!paginationContainer || !slidesContainer) return;
-  
-  const dots = paginationContainer.querySelectorAll('.pagination-dot');
-  const slides = slidesContainer.querySelectorAll('.philosophy-slide');
-  const rotationInterval = {{ section.settings.rotation_interval | default: 5 }} * 1000; // Convert to milliseconds
-  
-  let currentSlide = 0;
-  let autoRotateTimer;
-  let isPaused = false;
-
-  // Function to switch to a specific slide
-  function goToSlide(slideIndex) {
-    // Reset all slides and dots
-    slides.forEach(slide => slide.classList.remove('is-active'));
-    dots.forEach(dot => dot.classList.remove('is-active'));
+  document.addEventListener('DOMContentLoaded', () => {
+    const paginationContainer = document.getElementById('philosophy-pagination');
+    const slidesContainer = document.getElementById('philosophy-slides');
     
-    // Activate target slide and dot
-    slides[slideIndex].classList.add('is-active');
-    dots[slideIndex].classList.add('is-active');
+    if (!paginationContainer || !slidesContainer) return;
     
-    currentSlide = slideIndex;
-  }
-
-  // Function to go to next slide
-  function nextSlide() {
-    const nextIndex = (currentSlide + 1) % slides.length;
-    goToSlide(nextIndex);
-  }
-
-  // Function to start auto rotation
-  function startAutoRotation() {
-    if (slides.length <= 1) return; // No need for rotation if only one slide
+    const dots = paginationContainer.querySelectorAll('.pagination-dot');
+    const slides = slidesContainer.querySelectorAll('.philosophy-slide');
+    const rotationInterval = {{ section.settings.rotation_interval | default: 5 }} * 1000; // Convert to milliseconds
     
-    autoRotateTimer = setInterval(() => {
-      if (!isPaused) {
-        nextSlide();
+    let currentSlide = 0;
+    let autoRotateTimer;
+    let isPaused = false;
+  
+    // Function to switch to a specific slide
+    function goToSlide(slideIndex) {
+      // Reset all slides and dots
+      slides.forEach(slide => slide.classList.remove('is-active'));
+      dots.forEach(dot => {
+        dot.classList.remove('is-active');
+        // 重置动画
+        const progressCircle = dot.querySelector('.countdown-circle-progress');
+        if (progressCircle) {
+          progressCircle.style.animation = 'none';
+          void progressCircle.offsetWidth; // 触发重绘
+        }
+      });
+      
+      // Activate target slide and dot
+      slides[slideIndex].classList.add('is-active');
+      dots[slideIndex].classList.add('is-active');
+      
+      // 重新启动动画
+      const activeProgressCircle = dots[slideIndex].querySelector('.countdown-circle-progress');
+      if (activeProgressCircle) {
+        activeProgressCircle.style.animation = `countdown-smooth ${rotationInterval}ms linear forwards`;
       }
-    }, rotationInterval);
-  }
-
-  // Function to stop auto rotation
-  function stopAutoRotation() {
-    if (autoRotateTimer) {
-      clearInterval(autoRotateTimer);
+      
+      currentSlide = slideIndex;
     }
-  }
-
-  // Click handler for pagination dots
-  paginationContainer.addEventListener('click', (event) => {
-    const targetDot = event.target.closest('.pagination-dot');
-    if (!targetDot) return;
-    
-    const targetId = parseInt(targetDot.dataset.targetId) - 1;
-    goToSlide(targetId);
-    
-    // Restart auto rotation after manual interaction
-    stopAutoRotation();
+  
+    // Function to go to next slide
+    function nextSlide() {
+      const nextIndex = (currentSlide + 1) % slides.length;
+      goToSlide(nextIndex);
+    }
+  
+    // Function to start auto rotation
+    function startAutoRotation() {
+      if (slides.length <= 1) return; // No need for rotation if only one slide
+      
+      autoRotateTimer = setInterval(() => {
+        if (!isPaused) {
+          nextSlide();
+        }
+      }, rotationInterval);
+    }
+  
+    // Function to stop auto rotation
+    function stopAutoRotation() {
+      if (autoRotateTimer) {
+        clearInterval(autoRotateTimer);
+      }
+    }
+  
+    // Click handler for pagination dots
+    paginationContainer.addEventListener('click', (event) => {
+      const targetDot = event.target.closest('.pagination-dot');
+      if (!targetDot) return;
+      
+      const targetId = parseInt(targetDot.dataset.targetId) - 1;
+      goToSlide(targetId);
+      
+      // Restart auto rotation after manual interaction
+      stopAutoRotation();
+      startAutoRotation();
+    });
+  
+    // Pause auto rotation when user hovers over slider or pagination
+    const sliderArea = document.querySelector('.philosophy-slider');
+    if (sliderArea) {
+      sliderArea.addEventListener('mouseenter', () => {
+        isPaused = true;
+        // 暂停所有动画
+        dots.forEach(dot => {
+          const progressCircle = dot.querySelector('.countdown-circle-progress');
+          if (progressCircle) {
+            progressCircle.style.animationPlayState = 'paused';
+          }
+        });
+      });
+      
+      sliderArea.addEventListener('mouseleave', () => {
+        isPaused = false;
+        // 恢复动画
+        dots.forEach(dot => {
+          const progressCircle = dot.querySelector('.countdown-circle-progress');
+          if (progressCircle && dot.classList.contains('is-active')) {
+            progressCircle.style.animationPlayState = 'running';
+          }
+        });
+      });
+    }
+  
+    // Initialize
+    goToSlide(0);
     startAutoRotation();
-  });
-
-  // Pause auto rotation when user hovers over slider or pagination
-  const sliderArea = document.querySelector('.philosophy-slider');
-  if (sliderArea) {
-    sliderArea.addEventListener('mouseenter', () => {
-      isPaused = true;
+  
+    // Clean up on page unload
+    window.addEventListener('beforeunload', () => {
+      stopAutoRotation();
     });
-    
-    sliderArea.addEventListener('mouseleave', () => {
-      isPaused = false;
-    });
-  }
-
-  // Initialize
-  goToSlide(0);
-  startAutoRotation();
-
-  // Clean up on page unload
-  window.addEventListener('beforeunload', () => {
-    stopAutoRotation();
   });
-});
-</script>
+  </script>
 
 {% schema %}
 {
