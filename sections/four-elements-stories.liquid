@@ -46,7 +46,7 @@
         {% comment %} --- Story Block 2: Water --- {% endcomment %}
         {%- assign water_article = articles[section.settings.water_article] -%}
         {% if water_article != blank %}
-          <a href="{{ water_article.url }}" class="story-block story-block--water">
+          <a href="blogs/blog-center?tags=water" class="story-block story-block--water">
             <div class="story-block__icon">
               {% render 'icon-water' %}
             </div>
@@ -61,7 +61,7 @@
         {% comment %} --- Story Block 3: Earth --- {% endcomment %}
         {%- assign earth_article = articles[section.settings.earth_article] -%}
         {% if earth_article != blank %}
-          <a href="{{ earth_article.url }}" class="story-block story-block--earth">
+          <a href="blogs/blog-center?tags=earth" class="story-block story-block--earth">
             <div class="story-block__icon">
               {% render 'icon-earth' %}
             </div>
@@ -76,7 +76,7 @@
         {% comment %} --- Story Block 4: Air --- {% endcomment %}
         {%- assign air_article = articles[section.settings.air_article] -%}
         {% if air_article != blank %}
-          <a href="{{ air_article.url }}" class="story-block story-block--air">
+          <a href="blogs/blog-center?tags=air" class="story-block story-block--air">
             <div class="story-block__icon">
               {% render 'icon-air' %}
             </div>
