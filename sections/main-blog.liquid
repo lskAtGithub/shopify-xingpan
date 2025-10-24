@@ -236,6 +236,12 @@
       const tags = card.getAttribute('data-tags');
       if (filter === 'all' || (tags && tags.includes(filter))) {
         card.style.display = 'flex';
+        filterButtons.forEach((btn) => btn.classList.remove('active'));
+        filterButtons.forEach((btn) => {
+          if (btn.getAttribute('data-filter') === filter) {
+            btn.classList.add('active');
+          }
+        });
       } else {
         card.style.display = 'none';
       }
