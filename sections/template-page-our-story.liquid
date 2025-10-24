@@ -2,13 +2,17 @@
   Our Story Page Template Section (Optimized Part 1)
   - Part 1 (Philosophy) is redesigned to match the new UI.
   - Part 2 (Expert) remains unchanged.
+  - Added auto-rotation with configurable interval
+  - Added countdown animation for pagination dots
 {% endcomment %}
+
 <style>
   .our-story-page.section-{{ section.id }} {
     max-width: 1280px;
     margin: 0 auto 2rem;
   }
 </style>
+
 <div class="our-story-page section-{{ section.id }}">
   <!-- Part 1: Business Philosophy (REDESIGNED) -->
   <div class="story-part philosophy-section">
@@ -31,7 +35,6 @@
                 <div class="quote-container">
                   <div class="quote-decorator">
                     <span class="line"></span>
-                    {% comment %} <svg class="quote-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M9.983 3v7.391c0 2.908-2.355 5.264-5.263 5.264s-5.264-2.356-5.264-5.264V3h10.527zm14.017 0v7.391c0 2.908-2.355 5.264-5.263 5.264s-5.264-2.356-5.264-5.264V3h10.527z"/></svg> {% endcomment %}
                     <svg class="quote-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48" fill="currentColor"><path xmlns="http://www.w3.org/2000/svg" d="M20.3125 14.1875C17.4375 14.7292 15.4167 16.8125 14.25 20.4375C13.6667 22.2292 13.375 24 13.375 25.75C13.375 25.9583 13.375 26.1458 13.375 26.3125C13.4167 26.4375 13.4583 26.75 13.5 27.25H20.3125V40.875H7V28.3125C7 22.1458 8.22917 17.3958 10.6875 14.0625C13.1458 10.7292 16.3542 8.8125 20.3125 8.3125V14.1875ZM41.375 14.1875C39.0833 14.5625 37.3333 15.8542 36.125 18.0625C34.9583 20.2708 34.375 22.8125 34.375 25.6875C34.375 25.9375 34.375 26.1875 34.375 26.4375C34.4167 26.6875 34.4792 26.9583 34.5625 27.25H41.375V40.875H28V28.3125C28 23.3542 29.0417 18.9375 31.125 15.0625C33.2083 11.1458 36.625 8.89583 41.375 8.3125V14.1875Z" fill="black"></path></svg>
                     <span class="line"></span>
                   </div>
@@ -46,7 +49,11 @@
           <div class="philosophy-pagination" id="philosophy-pagination">
             {% for block in section.blocks %}
               <button type="button" class="pagination-dot {% if forloop.first %}is-active{% endif %}" data-target-id="{{ forloop.index }}">
-                {{ forloop.index | prepend: '0' }}
+                <span class="dot-number">{{ forloop.index | prepend: '0' }}</span>
+                <svg class="countdown-circle" width="32" height="32" viewBox="0 0 32 32">
+                  <circle class="countdown-circle-bg" cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.2"/>
+                  <circle class="countdown-circle-progress" cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" transform="rotate(-90 16 16)" stroke-dasharray="88" stroke-dashoffset="88"/>
+                </svg>
               </button>
             {% endfor %}
           </div>
@@ -68,7 +75,7 @@
         </div>
         <div class="story-grid__content">
           <h2 class="h1-style">{{ section.settings.expert_title }}</h2>
-          <p class="expert-quote">“{{ section.settings.expert_quote | escape }}”</p>
+          <p class="expert-quote">"{{ section.settings.expert_quote | escape }}"</p>
           <span class="expert-name">— {{ section.settings.expert_name | escape }}</span>
         </div>
       </div>
@@ -81,6 +88,7 @@
     --text-color: #555;
     --heading-color: #111;
     --accent-color: #333;
+    --rotation-interval: {{ section.settings.rotation_interval | default: 5 }}s;
     color: var(--text-color);
   }
   .story-part {
@@ -97,8 +105,8 @@
     }
   }
   .h1-style {
-    font-size: 3.5rem; /* Larger font size */
-    font-weight: 400; /* Lighter font weight */
+    font-size: 3.5rem;
+    font-weight: 400;
     color: var(--heading-color);
     margin-bottom: 3rem;
     line-height: 1.2;
@@ -124,7 +132,7 @@
   .philosophy-section {
   }
   .philosophy-image {
-    box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1); /* Subtle shadow */
+    box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1);
   }
   .philosophy-slider {
     position: relative;
@@ -197,10 +205,51 @@
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
+    position: relative;
   }
   .pagination-dot.is-active {
     border-color: var(--accent-color);
     color: var(--accent-color);
+  }
+
+  /* Countdown circle styles */
+  .countdown-circle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+  
+  .countdown-circle-progress {
+    stroke-dasharray: 88;
+    stroke-dashoffset: 88;
+    transition: stroke-dashoffset var(--rotation-interval) linear;
+  }
+  
+  .pagination-dot.is-active .countdown-circle-progress {
+    stroke-dashoffset: 0;
+    animation: countdown var(--rotation-interval) linear forwards;
+  }
+  
+  .dot-number {
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes countdown {
+    from {
+      stroke-dashoffset: 88;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* Pause animation on hover */
+  .philosophy-pagination:hover .countdown-circle-progress {
+    animation-play-state: paused;
   }
 
   /* --- Part 2: Expert Section Styles (UNCHANGED) --- */
@@ -220,6 +269,14 @@
   /* --- Responsive Layout --- */
   @media (max-width: 768px) {
     .h1-style { font-size: 2.5rem; }
+    .philosophy-pagination {
+      gap: 0.5rem;
+    }
+    .pagination-dot {
+      width: 28px;
+      height: 28px;
+      font-size: 0.75rem;
+    }
   }
 
   @media (min-width: 769px) {
@@ -235,24 +292,91 @@
 {% endstylesheet %}
 
 <script>
-  // JavaScript is unchanged and remains valid.
-  document.addEventListener('DOMContentLoaded', () => {
-    const paginationContainer = document.getElementById('philosophy-pagination');
-    const slidesContainer = document.getElementById('philosophy-slides');
-    if (!paginationContainer || !slidesContainer) return;
-    const dots = paginationContainer.querySelectorAll('.pagination-dot');
-    const slides = slidesContainer.querySelectorAll('.philosophy-slide');
-    paginationContainer.addEventListener('click', (event) => {
-      const targetDot = event.target.closest('.pagination-dot');
-      if (!targetDot) return;
-      const targetId = targetDot.dataset.targetId;
-      dots.forEach(dot => dot.classList.remove('is-active'));
-      targetDot.classList.add('is-active');
-      slides.forEach(slide => {
-        slide.classList.toggle('is-active', slide.dataset.slideId === targetId);
-      });
-    });
+document.addEventListener('DOMContentLoaded', () => {
+  const paginationContainer = document.getElementById('philosophy-pagination');
+  const slidesContainer = document.getElementById('philosophy-slides');
+  
+  if (!paginationContainer || !slidesContainer) return;
+  
+  const dots = paginationContainer.querySelectorAll('.pagination-dot');
+  const slides = slidesContainer.querySelectorAll('.philosophy-slide');
+  const rotationInterval = {{ section.settings.rotation_interval | default: 5 }} * 1000; // Convert to milliseconds
+  
+  let currentSlide = 0;
+  let autoRotateTimer;
+  let isPaused = false;
+
+  // Function to switch to a specific slide
+  function goToSlide(slideIndex) {
+    // Reset all slides and dots
+    slides.forEach(slide => slide.classList.remove('is-active'));
+    dots.forEach(dot => dot.classList.remove('is-active'));
+    
+    // Activate target slide and dot
+    slides[slideIndex].classList.add('is-active');
+    dots[slideIndex].classList.add('is-active');
+    
+    currentSlide = slideIndex;
+  }
+
+  // Function to go to next slide
+  function nextSlide() {
+    const nextIndex = (currentSlide + 1) % slides.length;
+    goToSlide(nextIndex);
+  }
+
+  // Function to start auto rotation
+  function startAutoRotation() {
+    if (slides.length <= 1) return; // No need for rotation if only one slide
+    
+    autoRotateTimer = setInterval(() => {
+      if (!isPaused) {
+        nextSlide();
+      }
+    }, rotationInterval);
+  }
+
+  // Function to stop auto rotation
+  function stopAutoRotation() {
+    if (autoRotateTimer) {
+      clearInterval(autoRotateTimer);
+    }
+  }
+
+  // Click handler for pagination dots
+  paginationContainer.addEventListener('click', (event) => {
+    const targetDot = event.target.closest('.pagination-dot');
+    if (!targetDot) return;
+    
+    const targetId = parseInt(targetDot.dataset.targetId) - 1;
+    goToSlide(targetId);
+    
+    // Restart auto rotation after manual interaction
+    stopAutoRotation();
+    startAutoRotation();
   });
+
+  // Pause auto rotation when user hovers over slider or pagination
+  const sliderArea = document.querySelector('.philosophy-slider');
+  if (sliderArea) {
+    sliderArea.addEventListener('mouseenter', () => {
+      isPaused = true;
+    });
+    
+    sliderArea.addEventListener('mouseleave', () => {
+      isPaused = false;
+    });
+  }
+
+  // Initialize
+  goToSlide(0);
+  startAutoRotation();
+
+  // Clean up on page unload
+  window.addEventListener('beforeunload', () => {
+    stopAutoRotation();
+  });
+});
 </script>
 
 {% schema %}
@@ -273,6 +397,16 @@
       "id": "philosophy_title",
       "label": "Title",
       "default": "Business Philosophy"
+    },
+    {
+      "type": "range",
+      "id": "rotation_interval",
+      "label": "轮播间隔时间（秒）",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "unit": "s"
     },
     {
       "type": "header",
