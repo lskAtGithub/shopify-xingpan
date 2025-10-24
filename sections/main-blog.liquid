@@ -230,6 +230,16 @@
   document.addEventListener('DOMContentLoaded', () => {
     const filterButtons = document.querySelectorAll('.filter-button');
     const articleCards = document.querySelectorAll('.article-card');
+    const urlParams = new URLSearchParams(window.location.search);
+    const filter = urlParams.get('tags') || 'all';
+    articleCards.forEach((card) => {
+      const tags = card.getAttribute('data-tags');
+      if (filter === 'all' || (tags && tags.includes(filter))) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
 
     filterButtons.forEach((button) => {
       button.addEventListener('click', () => {

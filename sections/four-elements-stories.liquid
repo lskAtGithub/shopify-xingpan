@@ -31,7 +31,7 @@
         {% comment %} --- Story Block 1: Fire --- {% endcomment %}
         {%- assign fire_article = articles[section.settings.fire_article] -%}
         {% if fire_article != blank %}
-          <a href="{{ fire_article.url }}" class="story-block story-block--fire">
+          <a href="blogs/blog-center?tags=fire" class="story-block story-block--fire">
             <div class="story-block__icon">
               {% render 'icon-fire' %}
             </div>
