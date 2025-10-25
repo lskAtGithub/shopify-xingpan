@@ -831,7 +831,7 @@
       }
     }
     .spinner-container {
-      display: none;
+      display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -885,6 +885,8 @@
 
       const overlay = loginPromptModal.querySelector('.modal-overlay');
       const loginPromptModalCloseBtn = loginPromptModal.querySelector('.modal-close-btn');
+
+      spinner.style.display = 'none';
 
       // --- Function to open the modal ---
       window.openLoginPromptModal = function() {
@@ -1236,13 +1238,13 @@
                 remark.innerHTML = marked.parse(reason);
               } {% endcomment %}
               if(choices[i].finish_reason && choices[i].finish_reason === 'stop') {
-                spinner.style.display = 'flex';
+                spinner.style.display = 'none';
                 renderRecommendedProducts(data);
               }
               scrollToBottom();
             }
           } catch (e) {
-            spinner.style.display = 'flex';
+            spinner.style.display = 'none';
           }
         };
         eventSource.onerror = function (error) {
