@@ -129,7 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!pageContainer) return; // Not on the right page or not logged in
 
   const customerId = pageContainer.dataset.customerId;
-  const API_ENDPOINT = '/order/getOrderList';
+  const BASE_URL = 'https://api.11starsastro.com';
+  const API_ENDPOINT = BASE_URL + '/order/getOrderList';
   const ITEMS_PER_PAGE = 10;
 
   const loader = document.querySelector('.loading-spinner');
