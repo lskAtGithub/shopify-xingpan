@@ -124,6 +124,13 @@
       <span class="report-close">&times;</span>
       <h2 class="modal-heading">✨ Your Elemental Report</h2>
 
+      <div class="canvas-box element-chart-section">
+        <div class="element-chart">
+          <canvas id="chartCanvas"></canvas>
+        </div>
+        <div class="element-legend"></div>
+    </div>
+
       <div class="table-responsive-wrapper">
         <table class="report-table" id="report-table">
           <thead>
@@ -142,11 +149,7 @@
           <tbody></tbody>
         </table>
       </div>
-
-      <div class="canvas-box">
-        <div id="tooltip"></div>
-        <canvas id="chartCanvas"></canvas>
-      </div>
+      
       <div id="remark"></div>
 
       <div id="stream-container">
@@ -462,6 +465,44 @@
       display: none;
       z-index: 10;
     }
+    .element-chart {
+      width: 100%;
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .element-legend {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .element-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .element-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+    }
+
+    .element-name {
+      color: #333;
+    }
+
+    .element-value {
+      font-weight: bold;
+      color: #333;
+    }
+
+
     #stream-container {
       font-size: 1rem;
       color: #444;
@@ -689,6 +730,8 @@
     }
   {% endstylesheet %}
 
+<!-- 引入Chart.js和自定义脚本 -->
+{{ 'chart.min.js' | asset_url | script_tag: text/javascript }}
   <script>
     window.customer = {% if customer %}
       {
@@ -1109,13 +1152,52 @@
         };
       }
 
+      function newRenderElementChart(res) {
+        const configColors = ['#8B5A2B', '#4A90E2', '#FFD100', '#4CAF50'];
+        const canvas = document.getElementById('chartCanvas');
+        const myChart = new window.Chart(canvas, {
+          type: 'doughnut',
+          data: {
+            labels: Object.keys(res.data.itemScore),
+            datasets: [
+              {
+                data: Object.values(res.data.itemScore),
+                backgroundColor: configColors,
+                borderWidth: 0,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '60%',
+            plugins: {
+              legend: { display: false },
+            },
+          },
+        });
+        const elementTags = document.querySelectorAll('.element-legend');
+        elementTags.innerHTML = '';
+        const htmlContent = '';
+        Object.keys(res.data.itemScore).forEach((key, index) => {
+          htmlContent += `
+            <div class="element-item">
+              <span class="element-color" style="background-color: ${configColors[index]}"></span>
+              <span class="element-name">${key}</span>
+              <span class="element-value">${res.data.itemScore[key]}%</span>
+            </div>
+          `;
+        });
+        elementTags.innerHTML = htmlContent;
+      }
+
       function renderCanvas(res) {
         const data = res.itemScore;
         const baseColors = ['#059bff', '#ff6384', '#ff9f40', '#ffcd56']; // 原始颜色
 
         const canvas = document.getElementById('chartCanvas');
         const ctx = canvas.getContext('2d');
-        const tooltip = document.getElementById('tooltip');
+        {% comment %} const tooltip = document.getElementById('tooltip'); {% endcomment %}
 
         const total = Object.values(data).reduce((a, b) => a + b, 0);
         const centerX = canvas.width / 2;
@@ -1264,7 +1346,8 @@
           </td>
         </tr>`;
         }
-        renderCanvas(data);
+        newRenderElementChart(data);
+        {% comment %} renderCanvas(data); {% endcomment %}
       }
 
       /**
