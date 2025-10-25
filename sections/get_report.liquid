@@ -158,15 +158,15 @@
         <table class="report-table" id="report-table">
           <thead>
             <tr>
-              <th>Constellation</th>
+              <th>Zodiac Sign</th>
               <th>Planet</th>
-              <th>Dignity</th>
-              <th>Element</th>
-              <th>Planet Score</th>
-              <th>Dignity Score</th>
-              <th>House</th>
+              <th>Domicile/Exaltation</th>
+              <th>Zodiac Element</th>
+              <th>Planet Element Score</th>
+              <th>Domicile/Exaltation Bonus</th>
+              <th>House the Planet is in</th>
               <th>House Element</th>
-              <th>House Score</th>
+              <th>House Element Score</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -1306,13 +1306,21 @@
             configColors.push('#4CAF50');
           }
         })
+        let pointsSum = Object.values(res.itemScore).reduce((a, b) => a + b, 0);
+        let pointPercent = Object.values(res.itemScore).map(item => item / pointsSum);
+        Object.keys(res.itemScore).forEach((key, index) => {
+          points.push({
+            x: index,
+            y: res.itemScore[key],
+          });
+        });
         const myChart = new window.Chart(canvas, {
           type: 'doughnut',
           data: {
             labels: Object.keys(res.itemScore),
             datasets: [
               {
-                data: Object.values(res.itemScore),
+                data: pointPercent,
                 backgroundColor: configColors,
                 borderWidth: 0,
               },
@@ -1471,15 +1479,15 @@
           data.list.forEach((item, index) => {
             const miaoWang =
               item.miao === 0 && item.wang === 0
-                ? '无'
-                : (item.miao > 0 ? '庙' : '') +
+                ? 'none'
+                : (item.miao > 0 ? 'Domicile' : '') +
                   (item.miao > 0 && item.wang > 0 ? '/' : '') +
-                  (item.wang > 0 ? '旺' : '');
+                  (item.wang > 0 ? 'Exalted' : '');
 
             const row = `
           <tr class="${index % 2 === 1 ? 'even-row' : ''}">
-            <td>${item.constellationCN}</td>
-            <td>${item.starNameCN}</td>
+            <td>${item.constellation}</td>
+            <td>${item.starName}</td>
             <td>${miaoWang}</td>
             <td>${item.zodiacSigns}</td>
             <td>${item.starScore}</td>
