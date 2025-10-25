@@ -1558,7 +1558,7 @@
       async function renderRecommendedProducts(res) {
         const container = document.getElementById('recommended-products');
         const productsMap = res.scoreProduct
-        container.inerHTML = '';
+        container.innerHTML  = '';
         for (const key in productsMap) {
           const productTitle = productsMap[key].title;
           const bodyHtml = productsMap[key].bodyHtml;
