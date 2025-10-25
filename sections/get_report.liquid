@@ -1307,7 +1307,7 @@
           }
         })
         let pointsSum = Object.values(res.itemScore).reduce((a, b) => a + b, 0);
-        let pointPercent = Object.values(res.itemScore).map(item => item / pointsSum);
+        let pointPercent = Object.values(res.itemScore).map(item => item / pointsSum * 100);
         const myChart = new window.Chart(canvas, {
           type: 'doughnut',
           data: {
@@ -1337,7 +1337,7 @@
             <div class="report-element-item">
               <span class="element-color" style="background-color: ${configColors[index]}"></span>
               <span class="element-name">${key}</span>
-              <span class="element-value">${res.itemScore[key]}%</span>
+              <span class="element-value">${pointPercent[key]}%</span>
             </div>
           `;
         });
