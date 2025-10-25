@@ -544,7 +544,7 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
     }
-
+    
     .element-item {
       display: flex;
       align-items: center;
@@ -604,7 +604,7 @@
     .card-right .button {
       width: 100%;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
       .flex-wrap > .left-content,
       .flex-wrap > .form-container,
       .form-container {
@@ -793,6 +793,19 @@
     }
     .modal-actions .btn--primary:hover {
       background-color: #374151;
+    }
+    @media (max-width: 767px) {
+      .report-content-wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .element-legend {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+      .element-legend .legend-item:nth-child(odd) {
+        justify-content: flex-end;
+      }
     }
   {% endstylesheet %}
 
