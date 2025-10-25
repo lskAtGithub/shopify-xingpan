@@ -120,6 +120,12 @@
     </div>
   </div>
 
+  <!-- Loading Spinner -->
+  <div id="loading-spinner" class="spinner-container">
+    <div class="spinner"></div>
+    <p>Loading your reports...</p>
+  </div>
+
   <!-- 🔹 弹窗结构 -->
   <div id="report-modal" class="report-modal">
     <div class="report-modal-content" id="modelContent">
@@ -824,6 +830,23 @@
         padding: 0;
       }
     }
+    .spinner-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 40vh;
+      gap: 1.5rem;
+    }
+    .spinner {
+      width: 48px; height: 48px;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
   {% endstylesheet %}
 
 
@@ -852,6 +875,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       const countrySelect = document.getElementById('country');
       const stateSelect = document.getElementById('state');
+      const spinner = document.getElementById('loading-spinner');
       const citySelect = document.getElementById('city');
 
       const API_URL = BASE_URL + '/city/getInfo';
@@ -1153,7 +1177,7 @@
         Object.keys(payload).forEach((k) => {
           paramsForm.append(k, payload[k]);
         });
-        
+        spinner.style.display = 'flex';
         try {
           const res = await fetch(`${BASE_URL}/sysUser/creatReport`, {
             method: 'POST',
@@ -1176,6 +1200,7 @@
           renderModal(data.data);
         } catch (err) {
           alert('请求失败，请稍后再试');
+          spinner.style.display = 'none';
         }
         return false;
       });
@@ -1214,8 +1239,11 @@
                 renderRecommendedProducts(data);
               }
               scrollToBottom();
+              spinner.style.display = 'flex';
             }
-          } catch (e) {}
+          } catch (e) {
+            spinner.style.display = 'flex';
+          }
         };
         eventSource.onerror = function (error) {
           {% comment %} renderRecommendedProducts(data); {% endcomment %}
