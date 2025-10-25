@@ -132,15 +132,17 @@
       </div>
 
       <div class="canvas-box element-chart-section">
+        <div class="element-chart-title">Elemental Balance</div>
         <div class="element-chart">
           <canvas id="chartCanvas"></canvas>
         </div>
-        <div class="element-legend"></div>
+        <div id="elementLegend" class="element-legend"></div>
     </div>
 
     <div id="remark"></div>
 
       <div class="table-responsive-wrapper">
+        <div class="table-title">Chart Details</div>
         <table class="report-table" id="report-table">
           <thead>
             <tr>
@@ -409,7 +411,7 @@
     }
     .report-modal-content {
       background: #fff;
-      padding: 1.5rem;
+      /* padding: 1.5rem; */
       border-radius: 12px;
       width: 100%;
       height: 90%;
@@ -437,12 +439,13 @@
       top: 0;
       z-index: 9999;
       color: white;
-      padding: 0.5rem;
+      padding: 2rem 1.5rem;
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       border-radius: 12px;
+      margin-bottom: 2rem;
     }
     .rm-header .close-div{}
     .rm-header .close-div .report-close{}
@@ -609,7 +612,7 @@
       .report-modal-content {
         width: 85%;
         height: 85%;
-        padding: 2rem;
+        /* padding: 2rem; */
       }
       .modal-heading {
         font-size: 1.8rem;
@@ -1228,7 +1231,7 @@
             },
           },
         });
-        const elementTags = document.querySelectorAll('.element-legend');
+        const elementTags = document.getElementById('elementLegend');
         elementTags.innerHTML = '';
         let htmlContent = '';
         Object.keys(res.itemScore).forEach((key, index) => {
