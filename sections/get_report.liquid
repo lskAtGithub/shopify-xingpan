@@ -427,11 +427,19 @@
     }
     .report-close {
       position: absolute;
-      right: 15px;
-      top: 10px;
+      left: 20px;
+      top: 26px;
       font-size: 28px;
       cursor: pointer;
       color: #888;
+      width: 2.25rem;
+      height: 2.25rem;
+      display: flex
+  ;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, .5);
+      border-radius: 59%;
     }
     .modal-heading {
       font-size: 1.5rem;
@@ -459,6 +467,7 @@
       font-size: 1.5rem;
       color: white;
       font-weight: 600;
+      margin-top: 1.5rem;
     }
     .rm-header .rmh-desc{
       font-size: 1rem;
@@ -1171,10 +1180,10 @@
                 reason += item.reasoning_content;
                 remark.innerHTML = marked.parse(reason);
               } {% endcomment %}
-              scrollToBottom();
               if(choices[i].finish_reason && choices[i].finish_reason === 'stop') {
                 renderRecommendedProducts(data);
               }
+              scrollToBottom();
             }
           } catch (e) {}
         };
