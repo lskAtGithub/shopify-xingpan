@@ -1,0 +1,294 @@
+{% comment %}
+  确保用户已登录
+{% endcomment %}
+{% unless customer %}
+  <div class="page-width center">
+    <h1 class="h2">Please log in</h1>
+    <p>You must be logged in to view your reports.</p>
+    <a href="{{ routes.account_login_url }}" class="button">Log In</a>
+  </div>
+{% else %}
+  <div class="page-width order-report-page" data-customer-id="{{ customer.id }}">
+    
+    <!-- 1. 顶部通知栏 -->
+    <div class="order-report-notification">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+      <span>You can get a professional in-depth report when your order is confirmed</span>
+    </div>
+
+    <!-- 2. 加载状态 Spinner -->
+    <div class="loading-spinner" style="display: none;">
+      <div class="spinner"></div>
+    </div>
+    
+    <!-- 3. 订单列表容器 (JS 将在此处填充内容) -->
+    <div class="order-list-container">
+      <!-- PC Table View (initially empty) -->
+      <table class="order-table responsive-table">
+        <thead class="responsive-table-header">
+          <tr>
+            <th>Order number</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody class="order-table-body"></tbody>
+      </table>
+      
+      <!-- Mobile Card View (initially empty) -->
+      <div class="order-card-list"></div>
+    </div>
+
+    <!-- 4. 分页容器 (JS 将在此处填充内容) -->
+    <nav class="pagination-wrapper" style="display: none;"></nav>
+
+    <!-- 5. 空状态 (默认隐藏) -->
+    <div class="empty-state-container" style="display: none;">
+      <div class="empty-state-content">
+        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzIiIGhlaWdodD0iNzIiIHZpZXdCb3g9IjAgMCA3MiA3MiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTM2IDJDNDkuMjUzMyAyIDYwIDEyLjc0NjcgNjAgMjZDNjAgMzkuMjUzMyA0OS4yNTMzIDUwIDM2IDUwQzIyLjc0NjcgNTAgMTIgMzkuMjUzMyAxMiAyNkMxMiAxMi43NDY3IDIyLjc0NjcgMiAzNiAyWiIgc3Ryb2tlPSIjMkMyQzJDIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1kYXNoYXJyYXk9IjQgNCIvPgo8cGF0aCBkPSJNMzYgMTdMMzkuNjU3NCAyOC4zNDI2TDUxIDMyTDQxLjY1NzQgMzUuNjU3NEwzNiA0N0wzMC4zNDI2IDM1LjY1NzRM MTkgMzJMMzAuMzQyNiAyOC4zNDI2TDM2IDE3WiIgZmlsbD0iIzJDMkMyQyIvPgo8cGF0aCBkPSJNNjIgMjNMNjQuMzQzMSAyOC42NTY5TDcwIDMxTDY0LjM0MzEgMzMuMzQzMUw2MiAzOUw1OS42NTY5IDMzLjM0MzFMNjQgMzFMNTAgMjdMNjIgMjNaIiBmaWxsPSIjMkMyQzJDIi8+CjxwYXRoIGQ9Ik0xNyA0MUwxOC4xNCA0NC40NkwyMiA0NkwxOC4xNCA0Ny41NEwxNyA1MVY0N0wxNS44NiA0NC40NkwxMiA0NkwxNS44NiA0Mi40NkwxNyA0MVoiIGZpbGw9IiMyQzJDMkMiLz4KPC9zdmc+Cg==" alt="Star icon" class="empty-state-icon">
+        <p class="empty-state-text">You don’t have an energy report yet, go test it</p>
+        <a href="/pages/test-page" class="button empty-state-button">Go test</a>
+      </div>
+    </div>
+  </div>
+{% endunless %}
+
+<style>
+  .order-report-page { max-width: 1200px; margin: 0 auto; padding: 20px; }
+  .order-report-notification { display: flex; align-items: center; justify-content: center; background-color: #f0f5ff; border: 1px solid #d6e4ff; color: #595959; padding: 12px; border-radius: 8px; margin-bottom: 24px; font-size: 14px; }
+  .order-report-notification svg { margin-right: 8px; }
+
+  /* Table Styles */
+  .order-table { width: 100%; border-collapse: collapse; border: 1px solid #e8e8e8; border-radius: 8px; overflow: hidden; }
+  .order-table th, .order-table td { padding: 16px; text-align: left; }
+  .order-table thead { background-color: #fafafa; }
+  .order-table th { color: #595959; font-weight: 500; }
+  .order-table tbody tr { border-top: 1px solid #e8e8e8; }
+  .order-table tbody tr:hover { background-color: #f9f9f9; }
+
+  /* Status Badges */
+  .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; text-align: center; }
+  .status--fulfilled { background-color: #e6f7ff; color: #1890ff; }
+  .status--unfulfilled { background-color: #fffbe6; color: #faad14; }
+  .status--canceled { background-color: #fff1f0; color: #f5222d; }
+  
+  /* Action Buttons */
+  .action-button { padding: 8px 16px; border-radius: 6px; border: 1px solid transparent; cursor: pointer; font-weight: 500; transition: all 0.3s; }
+  .action-button.primary { background-color: #2c2c2c; color: #fff; }
+  .action-button.primary:hover { opacity: 0.8; }
+  .action-button.disabled { background-color: #d9d9d9; color: #8c8c8c; cursor: not-allowed; }
+  
+  /* Mobile Card List */
+  .order-card-list { display: none; flex-direction: column; gap: 16px; }
+  .order-card { background-color: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 16px; display: grid; grid-template-areas: "number status" "customer price" "date date" "action action"; grid-template-columns: 1fr auto; gap: 8px 16px; }
+  .order-card .order-number { grid-area: number; font-weight: 600; font-size: 16px; }
+  .order-card .status-badge { grid-area: status; justify-self: end; }
+  .order-card .customer-name { grid-area: customer; color: #595959; }
+  .order-card .total-price { grid-area: price; font-weight: 600; font-size: 18px; justify-self: end; }
+  .order-card .order-date { grid-area: date; color: #8c8c8c; font-size: 14px; }
+  .order-card .action-button { grid-area: action; width: 100%; text-align: center; margin-top: 8px; }
+
+  /* Empty State */
+  .empty-state-container { padding: 60px 20px; text-align: center; }
+  .empty-state-content { max-width: 400px; margin: 0 auto; }
+  .empty-state-icon { margin-bottom: 24px; width: 72px; height: 72px; }
+  .empty-state-text { font-size: 18px; color: #595959; margin-bottom: 24px; }
+  .empty-state-button { background-color: #2c2c2c; color: #fff; padding: 12px 24px; }
+
+  /* Pagination */
+  .pagination-wrapper { display: flex; justify-content: center; margin-top: 32px; }
+  .pagination-button { padding: 8px 14px; margin: 0 4px; border: 1px solid #d9d9d9; background-color: #fff; border-radius: 6px; cursor: pointer; }
+  .pagination-button:hover { border-color: #1890ff; color: #1890ff; }
+  .pagination-button.active { background-color: #1890ff; color: #fff; border-color: #1890ff; }
+  .pagination-button:disabled { cursor: not-allowed; opacity: 0.5; }
+
+  /* Loading Spinner */
+  .loading-spinner { display: flex; justify-content: center; padding: 50px; }
+  .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+  /* Responsive Breakpoints */
+  /* Hide table on mobile */
+  @media (max-width: 768px) {
+    .order-table { display: none; }
+    .order-card-list { display: flex; }
+  }
+  /* Show table on screens larger than mobile */
+  @media (min-width: 769px) {
+    .order-table { display: table; }
+    .order-card-list { display: none; }
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const pageContainer = document.querySelector('.order-report-page');
+  if (!pageContainer) return; // Not on the right page or not logged in
+
+  const customerId = pageContainer.dataset.customerId;
+  const API_ENDPOINT = '/order/getOrderList';
+  const ITEMS_PER_PAGE = 10;
+
+  const loader = document.querySelector('.loading-spinner');
+  const listContainer = document.querySelector('.order-list-container');
+  const tableBody = document.querySelector('.order-table-body');
+  const cardList = document.querySelector('.order-card-list');
+  const emptyStateContainer = document.querySelector('.empty-state-container');
+  const paginationContainer = document.querySelector('.pagination-wrapper');
+
+  // --- Helper Functions ---
+  const getStatusBadge = (status) => {
+    const statusText = status || 'Unknown';
+    const statusClass = `status--${statusText.toLowerCase()}`;
+    return `<span class="status-badge ${statusClass}">${statusText}</span>`;
+  };
+  
+  const getActionButton = (order) => {
+    // This logic needs to be adapted based on your business rules
+    if (order.report_available) { // Assuming a field like `report_available` exists
+        return `<a href="/pages/report/${order.id}" class="action-button primary">View Report</a>`;
+    }
+    if (order.status === 'Fulfilled') {
+        return `<button class="action-button primary" data-order-id="${order.id}">Get the in-depth report</button>`;
+    }
+    return `<button class="action-button disabled" disabled>Get the in-depth report</button>`;
+  };
+
+  // --- Rendering Functions ---
+  const renderOrders = (orders) => {
+    // Clear previous content
+    tableBody.innerHTML = '';
+    cardList.innerHTML = '';
+
+    if (!orders || orders.length === 0) {
+      listContainer.style.display = 'none';
+      emptyStateContainer.style.display = 'block';
+      return;
+    }
+
+    listContainer.style.display = 'block';
+    emptyStateContainer.style.display = 'none';
+
+    orders.forEach(order => {
+      // NOTE: Adjust these field names to match your actual API response!
+      // Example: order.order_number, order.created_at, etc.
+      const orderData = {
+        id: order.id || '#',
+        number: order.order_number || 'N/A',
+        date: new Date(order.date || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        customer: order.customer_name || 'N/A',
+        total: `$${(order.total || 0).toFixed(2)}`,
+        status: order.status || 'N/A',
+        report_available: order.report_available || false
+      };
+      
+      // Render Table Row
+      const tableRow = `
+        <tr>
+          <td>${orderData.number}</td>
+          <td>${orderData.date}</td>
+          <td>${orderData.customer}</td>
+          <td>${orderData.total}</td>
+          <td>${getStatusBadge(orderData.status)}</td>
+          <td>${getActionButton(orderData)}</td>
+        </tr>`;
+      tableBody.insertAdjacentHTML('beforeend', tableRow);
+
+      // Render Mobile Card
+      const mobileCard = `
+        <div class="order-card">
+          <span class="order-number">${orderData.number}</span>
+          ${getStatusBadge(orderData.status)}
+          <span class="customer-name">${orderData.customer}</span>
+          <span class="total-price">${orderData.total}</span>
+          <span class="order-date">${orderData.date}</span>
+          ${getActionButton(orderData)}
+        </div>`;
+      cardList.insertAdjacentHTML('beforeend', mobileCard);
+    });
+  };
+
+  const renderPagination = (totalCount, currentPage) => {
+      paginationContainer.innerHTML = '';
+      const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+
+      if (totalPages <= 1) {
+          paginationContainer.style.display = 'none';
+          return;
+      }
+      paginationContainer.style.display = 'flex';
+      
+      for (let i = 1; i <= totalPages; i++) {
+          const button = document.createElement('button');
+          button.textContent = i;
+          button.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+          button.dataset.page = i;
+          paginationContainer.appendChild(button);
+      }
+  };
+
+  // --- API Fetch Function ---
+  const fetchOrders = async (page = 1) => {
+    loader.style.display = 'flex';
+    listContainer.style.display = 'none';
+    emptyStateContainer.style.display = 'none';
+    paginationContainer.style.display = 'none';
+
+    try {
+      const response = await fetch(`${API_ENDPOINT}?customerId=${customerId}&limit=${ITEMS_PER_PAGE}&page=${page}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        // The API doc is slightly ambiguous. If query params don't work,
+        // the body might be expected instead.
+        // body: JSON.stringify({ customerId: customerId, limit: ITEMS_PER_PAGE, page: page })
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+
+      if (result.code !== 0) {
+        throw new Error(result.message || 'API returned an error');
+      }
+
+      // IMPORTANT: The API response has "data": {}. We assume the actual list is in `result.data.orders` or similar.
+      // You MUST adjust `result.data.orders` to match the real response structure.
+      const orders = result.data.list || []; // Example: using result.data.list
+      const totalCount = result.totalCount || 0;
+
+      renderOrders(orders);
+      renderPagination(totalCount, page);
+
+    } catch (error) {
+      console.error('Failed to fetch orders:', error);
+      listContainer.style.display = 'none';
+      emptyStateContainer.style.display = 'block'; // Show empty state on error
+    } finally {
+      loader.style.display = 'none';
+    }
+  };
+
+  // --- Event Listeners ---
+  paginationContainer.addEventListener('click', (event) => {
+    if (event.target.matches('.pagination-button') && !event.target.disabled) {
+      const page = parseInt(event.target.dataset.page, 10);
+      fetchOrders(page);
+    }
+  });
+
+  // Initial fetch
+  fetchOrders(1);
+});
+</script>
+
+{% schema %}
+{
+  "name": "Order Report List",
+  "tag": "section"
+}
+{% endschema %}
