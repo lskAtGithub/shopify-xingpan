@@ -468,7 +468,7 @@
     .table-responsive-wrapper {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-      margin-bottom: 2rem;
+      margin: 2rem 4rem;
     }
     .table-responsive-wrapper .table-title{
       font-size: 1.5rem;
@@ -562,12 +562,13 @@
     #stream-container {
       font-size: 1rem;
       color: #444;
+      margin: 2rem 4rem;
       line-height: 1.6;
     }
 
     /* Recommended Product Styles */
     #recommended-products {
-      margin-top: 2rem;
+      margin: 2rem 4rem;
     }
     .recommended-card {
       display: flex;
@@ -1178,7 +1179,7 @@
           } catch (e) {}
         };
         eventSource.onerror = function (error) {
-          renderRecommendedProducts(data);
+          {% comment %} renderRecommendedProducts(data); {% endcomment %}
           eventSource.close();
         };
       }
