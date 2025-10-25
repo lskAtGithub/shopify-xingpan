@@ -1208,7 +1208,7 @@
           renderModal(data.data);
         } catch (err) {
           alert('请求失败，请稍后再试');
-          spinner.style.display = 'none';
+          {% comment %} spinner.style.display = 'none'; {% endcomment %}
         }
         return false;
       });
