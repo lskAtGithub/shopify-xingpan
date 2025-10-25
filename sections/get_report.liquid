@@ -1160,10 +1160,10 @@
         const myChart = new window.Chart(canvas, {
           type: 'doughnut',
           data: {
-            labels: Object.keys(res.data.itemScore),
+            labels: Object.keys(res.itemScore),
             datasets: [
               {
-                data: Object.values(res.data.itemScore),
+                data: Object.values(res.itemScore),
                 backgroundColor: configColors,
                 borderWidth: 0,
               },
@@ -1181,12 +1181,12 @@
         const elementTags = document.querySelectorAll('.element-legend');
         elementTags.innerHTML = '';
         const htmlContent = '';
-        Object.keys(res.data.itemScore).forEach((key, index) => {
+        Object.keys(res.itemScore).forEach((key, index) => {
           htmlContent += `
             <div class="element-item">
               <span class="element-color" style="background-color: ${configColors[index]}"></span>
               <span class="element-name">${key}</span>
-              <span class="element-value">${res.data.itemScore[key]}%</span>
+              <span class="element-value">${res.itemScore[key]}%</span>
             </div>
           `;
         });
