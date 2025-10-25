@@ -1043,7 +1043,7 @@
         const address = cityLabel ? `${cityLabel},${stateLabel},${countryLabel}` : `${stateLabel},${countryLabel}`;
         const payload = {
           tid: 7,
-          us: 'zh-CN',
+          us: '',
           userBirthday: time,
           userCity: address,
           userEmail: window.customer ? window.customer.email : '',
@@ -1157,13 +1157,13 @@
         let configColors = [];  //'#8B5A2B', '#4A90E2', '#FFD100', '#4CAF50'
         const canvas = document.getElementById('chartCanvas');
         Object.keys(res.itemScore).forEach((key, index) => {
-          if(key === '水') {
+          if(key === '水' || key === 'water') {
             configColors.push('#4A90E2');
-          } else if(key === '火') {
+          } else if(key === '火' || key === 'fire') {
             configColors.push('#FFD100');
-          } else if(key === '土') {
+          } else if(key === '土' || key === 'earth') {
             configColors.push('#8B5A2B');
-          } else if(key === '风') {
+          } else if(key === '风' || key === 'air') {
             configColors.push('#4CAF50');
           }
         })
