@@ -129,57 +129,56 @@
   <!-- 🔹 弹窗结构 -->
   <div id="report-modal" class="report-modal">
     <div class="report-modal-content" id="modelContent">
-
       <div class="rm-header">
         <div class="close-div">
           <span class="report-close">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
               <path fill-rule="evenodd" clip-rule="evenodd" d="M9.70679 16.707C9.51926 16.8945 9.26495 16.9998 8.99979 16.9998C8.73462 16.9998 8.48032 16.8945 8.29279 16.707L2.29279 10.707C2.10532 10.5195 2 10.2652 2 10C2 9.73488 2.10532 9.48057 2.29279 9.29304L8.29279 3.29304C8.48139 3.11088 8.73399 3.01009 8.99619 3.01237C9.25838 3.01465 9.5092 3.11981 9.69461 3.30522C9.88001 3.49063 9.98518 3.74144 9.98746 4.00364C9.98974 4.26584 9.88895 4.51844 9.70679 4.70704L5.41379 9.00004H16.9998C17.265 9.00004 17.5194 9.1054 17.7069 9.29293C17.8944 9.48047 17.9998 9.73482 17.9998 10C17.9998 10.2653 17.8944 10.5196 17.7069 10.7071C17.5194 10.8947 17.265 11 16.9998 11H5.41379L9.70679 15.293C9.89426 15.4806 9.99957 15.7349 9.99957 16C9.99957 16.2652 9.89426 16.5195 9.70679 16.707Z" fill="white"/>
-              </svg>
+            </svg>
           </span>
         </div>
         <div id="reportTitle" class="rmh-title">Jason's Report</div>
         <div id="reportDatetime" class="rmh-desc">February 5，1994 05:15</div>
         <div id="reportAddress" class="rmh-desc">Shantou，guangdong，china</div>
       </div>
-
-      <div class="canvas-box element-chart-section">
-        <div class="element-chart-title">Elemental Balance</div>
-        <div class="element-chart">
-          <canvas id="chartCanvas"></canvas>
+      <div class="rm-content">
+        <div class="canvas-box element-chart-section">
+          <div class="element-chart-title">Elemental Balance</div>
+          <div class="element-chart">
+            <canvas id="chartCanvas"></canvas>
+          </div>
+          <div id="elementLegend" class="report-element-legend"></div>
         </div>
-        <div id="elementLegend" class="report-element-legend"></div>
-    </div>
 
-    <div id="remark"></div>
+        <div id="remark"></div>
 
-      <div class="table-responsive-wrapper">
-        <div class="table-title">Chart Details</div>
-        <table class="report-table" id="report-table">
-          <thead>
-            <tr>
-              <th>Zodiac Sign</th>
-              <th>Planet</th>
-              <th>Domicile/Exaltation</th>
-              <th>Zodiac Element</th>
-              <th>Planet Element Score</th>
-              <th>Domicile/Exaltation Bonus</th>
-              <th>House the Planet is in</th>
-              <th>House Element</th>
-              <th>House Element Score</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="table-responsive-wrapper">
+          <div class="table-title">Chart Details</div>
+          <table class="report-table" id="report-table">
+            <thead>
+              <tr>
+                <th>Zodiac Sign</th>
+                <th>Planet</th>
+                <th>Domicile/Exaltation</th>
+                <th>Zodiac Element</th>
+                <th>Planet Element Score</th>
+                <th>Domicile/Exaltation Bonus</th>
+                <th>House the Planet is in</th>
+                <th>House Element</th>
+                <th>House Element Score</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div id="stream-container">
+          <div class="stream-content" id="markdownRea"></div>
+          <div class="stream-content" id="streamData"></div>
+        </div>
+
+        <div id="recommended-products"></div>
       </div>
-      
-
-      <div id="stream-container">
-        <div class="stream-content" id="markdownRea"></div>
-        <div class="stream-content" id="streamData"></div>
-      </div>
-
-      <div id="recommended-products"></div>
     </div>
   </div>
 
@@ -427,9 +426,10 @@
       border-radius: 12px;
       width: 100%;
       height: 90%;
-      overflow-y: auto;
       position: relative;
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
     }
     .report-close {
       position: absolute;
@@ -440,11 +440,10 @@
       color: #888;
       width: 2.25rem;
       height: 2.25rem;
-      display: flex
-  ;
+      display: flex;
       align-items: center;
       justify-content: center;
-      background-color: rgba(255, 255, 255, .5);
+      background-color: rgba(255, 255, 255, 0.5);
       border-radius: 59%;
     }
     .modal-heading {
@@ -453,7 +452,7 @@
       margin-bottom: 1.5rem;
     }
 
-    .rm-header{
+    .rm-header {
       background-color: #000000;
       position: sticky;
       top: 0;
@@ -467,15 +466,21 @@
       border-radius: 12px;
       margin-bottom: 2rem;
     }
-    .rm-header .close-div{}
-    .rm-header .close-div .report-close{}
-    .rm-header .rmh-title{
+    .rm-content{
+      flex: 1;
+      overflow-y: auto;
+    }
+    .rm-header .close-div {
+    }
+    .rm-header .close-div .report-close {
+    }
+    .rm-header .rmh-title {
       font-size: 1.5rem;
       color: white;
       font-weight: 600;
       margin-top: 1.5rem;
     }
-    .rm-header .rmh-desc{
+    .rm-header .rmh-desc {
       font-size: 1rem;
       color: #999999;
     }
@@ -485,7 +490,7 @@
       -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
       margin: 2rem 4rem;
     }
-    .table-responsive-wrapper .table-title{
+    .table-responsive-wrapper .table-title {
       font-size: 1.5rem;
       color: #000000;
       font-weight: 600;
@@ -550,7 +555,7 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
     }
-    
+
     .report-element-item {
       display: flex;
       align-items: center;
@@ -572,7 +577,6 @@
       font-weight: bold;
       color: #333;
     }
-
 
     #stream-container {
       font-size: 1rem;
@@ -607,25 +611,25 @@
       font-weight: 700;
       margin-bottom: 1rem;
     }
-    .product-desc{
+    .product-desc {
       font-size: 0.9rem;
-      color: #848A9C;
+      color: #848a9c;
       margin: 0.875rem 0;
     }
-    .pay-tips{
+    .pay-tips {
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #FFF8E5;
+      background-color: #fff8e5;
       border-radius: 4px;
       padding: 0.35rem;
     }
-    .pay-tips .pay-tips-icon{
+    .pay-tips .pay-tips-icon {
       width: 12px;
       height: 12px;
     }
-    .pay-tips .pay-tips-text{
-      color: #FF2424;
+    .pay-tips .pay-tips-text {
+      color: #ff2424;
       font-size: 0.9rem;
       margin-left: 2px;
     }
@@ -834,10 +838,11 @@
       .report-element-item:nth-child(odd) {
         justify-content: flex-end;
       }
-      .table-responsive-wrapper, #stream-container {
+      .table-responsive-wrapper,
+      #stream-container {
         margin: 2rem 2.5rem;
       }
-      #recommended-products{
+      #recommended-products {
         margin: 2rem;
       }
       .report-modal-content {
@@ -865,20 +870,26 @@
       transform: translate(-50%, -50%);
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, .2);
+      background-color: rgba(0, 0, 0, 0.2);
       color: #fff;
     }
     .report-spinner {
-      width: 48px; height: 48px;
+      width: 48px;
+      height: 48px;
       border: 5px solid #f3f3f3;
       border-top: 5px solid #3498db;
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
   {% endstylesheet %}
-
 
   <script>
     window.customer = {% if customer %}
