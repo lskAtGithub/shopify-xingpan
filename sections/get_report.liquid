@@ -125,7 +125,13 @@
     <div class="report-modal-content" id="modelContent">
 
       <div class="rm-header">
-        <div class="close-div"><span class="report-close">&times;</span></div>
+        <div class="close-div">
+          <span class="report-close">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M9.70679 16.707C9.51926 16.8945 9.26495 16.9998 8.99979 16.9998C8.73462 16.9998 8.48032 16.8945 8.29279 16.707L2.29279 10.707C2.10532 10.5195 2 10.2652 2 10C2 9.73488 2.10532 9.48057 2.29279 9.29304L8.29279 3.29304C8.48139 3.11088 8.73399 3.01009 8.99619 3.01237C9.25838 3.01465 9.5092 3.11981 9.69461 3.30522C9.88001 3.49063 9.98518 3.74144 9.98746 4.00364C9.98974 4.26584 9.88895 4.51844 9.70679 4.70704L5.41379 9.00004H16.9998C17.265 9.00004 17.5194 9.1054 17.7069 9.29293C17.8944 9.48047 17.9998 9.73482 17.9998 10C17.9998 10.2653 17.8944 10.5196 17.7069 10.7071C17.5194 10.8947 17.265 11 16.9998 11H5.41379L9.70679 15.293C9.89426 15.4806 9.99957 15.7349 9.99957 16C9.99957 16.2652 9.89426 16.5195 9.70679 16.707Z" fill="white"/>
+              </svg>
+          </span>
+        </div>
         <div id="reportTitle" class="rmh-title">Jason's Report</div>
         <div id="reportDatetime" class="rmh-desc">February 5，1994 05:15</div>
         <div id="reportAddress" class="rmh-desc">Shantou，guangdong，china</div>
@@ -464,6 +470,13 @@
       -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
       margin-bottom: 2rem;
     }
+    .table-responsive-wrapper .table-title{
+      font-size: 1.5rem;
+      color: #000000;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
     .report-table {
       width: 100%;
       min-width: 800px; /* Force scroll on small screens */
@@ -485,6 +498,13 @@
       width: 100%;
       max-width: 400px;
       margin: 0 auto 2rem auto;
+    }
+    .element-chart-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #000000;
+      text-align: center;
     }
     #chartCanvas {
       width: 100%;
@@ -1244,6 +1264,7 @@
           `;
         });
         elementTags.innerHTML = htmlContent;
+        getDoubaoNoUser(res);
       }
 
       function renderCanvas(res) {
