@@ -1314,7 +1314,7 @@
             item = basePoints;
           } else {
             item = (item / pointsSum * 100).toFixed(2);
-            basePoints -= (item / pointsSum * 100).toFixed(2);
+            basePoints -= item;
           }
           pointPercent.push(item);
         });
