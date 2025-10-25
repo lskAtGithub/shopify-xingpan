@@ -1251,7 +1251,6 @@
               scrollToBottom();
             }
           } catch (e) {
-            spinner.style.display = 'none';
           }
         };
         eventSource.onerror = function (error) {
@@ -1525,7 +1524,7 @@
       async function renderRecommendedProducts(res) {
         const container = document.getElementById('recommended-products');
         const productsMap = res.scoreProduct
-        container.empty();
+        container.inerHTML = '';
         for (const key in productsMap) {
           const productTitle = productsMap[key].title;
           try {
