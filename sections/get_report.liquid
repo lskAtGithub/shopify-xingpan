@@ -1228,6 +1228,7 @@
         const eventSource = new EventSource(`${BASE_URL}/astrology/doubaoNoUser?id=7&reportId=${reportId}`);
         var content = '';
         var reason = '';
+        streamData.innerHTML = '';
         eventSource.onmessage = function (eventStream) {
           try {
             var json = JSON.parse(eventStream.data);
@@ -1524,6 +1525,7 @@
       async function renderRecommendedProducts(res) {
         const container = document.getElementById('recommended-products');
         const productsMap = res.scoreProduct
+        container.empty();
         for (const key in productsMap) {
           const productTitle = productsMap[key].title;
           try {
@@ -1557,6 +1559,7 @@
               </div>
             `;
             container.appendChild(card);
+            scrollToBottom();
           } catch (e) {
             console.error('Failed to load product', productTitle, e);
           }
