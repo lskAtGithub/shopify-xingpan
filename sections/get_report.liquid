@@ -607,6 +607,21 @@
       font-weight: 700;
       margin-bottom: 1rem;
     }
+    .pay-tips{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #FFF8E5;
+      border-radius: 4px;
+    }
+    .pay-tips .pay-tips-icon{
+      width: 12px;
+      height: 12px;
+    }
+    .pay-tips .pay-tips-text{
+      color: #FF2424;
+      font-size: 0.9rem;
+    }
     .card-right .button {
       width: 100%;
     }
@@ -1245,7 +1260,7 @@
                 remark.innerHTML = marked.parse(reason);
               } {% endcomment %}
               if(choices[i].finish_reason && choices[i].finish_reason === 'stop') {
-                spinner.style.display = 'none';
+                
                 renderRecommendedProducts(data);
               }
               scrollToBottom();
@@ -1551,6 +1566,14 @@
                 <span class="product-tag">${product.tags}</span>
                 <p class="product-price" style="font-size: 2rem;font-weight: 700; color: #333333;">$${product.variants[0].price}</p>
                 <p class="product-desc">${product.body_html || ''}</p>
+                <div class="pay-tips">
+                  <svg class="pay-tips-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <g id="Frame">
+                      <path id="Vector" d="M9.95621 8.36025C10.0547 8.35557 10.1519 8.38135 10.2351 8.43525C9.89645 8.21846 9.69137 7.84463 9.69254 7.4415V5.10947C9.69254 3.39971 8.45387 1.97354 6.79918 1.62314V1.53877C6.79918 1.104 6.44645 0.752441 6.01168 0.752441H6.01051C5.57575 0.752441 5.22184 1.10518 5.22184 1.53994V1.62197C3.56598 1.97354 2.32848 3.39854 2.32848 5.10947V7.44268C2.32848 7.86104 2.11051 8.22666 1.78473 8.43643C1.86676 8.38252 1.9652 8.35557 2.06364 8.36143C1.77418 8.35088 1.53043 8.57705 1.51989 8.8665C1.50934 9.15596 1.73551 9.39971 2.02496 9.41025H9.95387C10.2433 9.41143 10.4789 9.17588 10.48 8.88643C10.4812 8.5958 10.2468 8.36025 9.95621 8.36025ZM6.01168 11.2478C6.73825 11.2478 7.32653 10.6595 7.32653 9.93643H4.69567C4.69567 10.6595 5.28395 11.2478 6.01168 11.2478Z" fill="#FF2424"/>
+                    </g>
+                  </svg>
+                  <span class="pay-tips-text">After purchase you will get a professional report</span>
+                </div>
                 <form method="post" action="/cart/add" accept-charset="UTF-8" enctype="multipart/form-data" novalidate="novalidate">
                    <input type="hidden" name="id" value="${product.id}">
                    <button type="submit" class="button button--primary">Add to Cart</button>
@@ -1559,6 +1582,7 @@
             `;
             container.appendChild(card);
             scrollToBottom();
+            spinner.style.display = 'none';
           } catch (e) {
             console.error('Failed to load product', productTitle, e);
           }
