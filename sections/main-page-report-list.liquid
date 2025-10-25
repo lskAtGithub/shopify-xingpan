@@ -29,6 +29,10 @@
         <div id="reports-grid" class="reports-grid">
           <!-- Report cards will be injected here by JavaScript -->
         </div>
+
+        <!-- Empty Report List -->
+        <div id="empty-report-message" style="display: none;">
+        </div>
         
         <!-- Error Message -->
         <div id="error-message" class="message-container" style="display: none;"></div>
@@ -223,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const spinner = document.getElementById('loading-spinner');
   const errorMsg = document.getElementById('error-message');
   const reportCountEl = document.getElementById('report-count');
+  const emptyReportMsg = document.getElementById('empty-report-message');
 
   const BASE_URL = 'https://api.11starsastro.com';
 
@@ -240,9 +245,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (result.code === 0 && result.data && result.data.length > 0) {
         reportCountEl.textContent = `You have ${result.data.length} reports.`;
+        emptyReportMsg.style.display = 'none';
         renderReports(result.data);
       } else {
-        grid.innerHTML = '<div class="message-container"><p>You don\'t have any reports yet. Go create your first one!</p></div>';
+        emptyReportMsg.innerHTML = '<div class="message-container"><p>You don\'t have any reports yet. Go create your first one!</p></div>';
+        emptyReportMsg.style.display = 'block';
       }
 
     } catch (error) {
