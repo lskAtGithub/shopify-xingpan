@@ -1296,13 +1296,13 @@
         let configColors = [];  //'#8B5A2B', '#4A90E2', '#FFD100', '#4CAF50'
         const canvas = document.getElementById('chartCanvas');
         Object.keys(res.itemScore).forEach((key, index) => {
-          if(key === '水' || key === 'water') {
+          if(key === '水' || key === 'Water') {
             configColors.push('#4A90E2');
-          } else if(key === '火' || key === 'fire') {
+          } else if(key === '火' || key === 'Fire') {
             configColors.push('#FFD100');
-          } else if(key === '土' || key === 'earth') {
+          } else if(key === '土' || key === 'Earth') {
             configColors.push('#8B5A2B');
-          } else if(key === '风' || key === 'air') {
+          } else if(key === '风' || key === 'Air') {
             configColors.push('#4CAF50');
           }
         })
