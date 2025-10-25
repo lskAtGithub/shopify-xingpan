@@ -1308,12 +1308,13 @@
         })
         let pointsSum = Object.values(res.itemScore).reduce((a, b) => a + b, 0);
         let basePoints = 100;
-        let pointPercent = Object.values(res.itemScore).map((item, index)) => {
+        let pointPercent = [];
+        Object.values(res.itemScore).forEach((item, index)) => {
           basePoints -= (item / pointsSum * 100).toFixed(2);
           if (index === Object.keys(res.itemScore).length - 1) {
             item = basePoints;
           }
-          return item;
+          pointPercent.push(item);
         });
         const myChart = new window.Chart(canvas, {
           type: 'pie',
