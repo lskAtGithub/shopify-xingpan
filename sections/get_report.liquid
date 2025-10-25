@@ -1309,7 +1309,7 @@
         let pointsSum = Object.values(res.itemScore).reduce((a, b) => a + b, 0);
         let basePoints = 100;
         let pointPercent = [];
-        Object.values(res.itemScore).forEach((item, index)) => {
+        Object.values(res.itemScore).forEach((item, index) => {
           basePoints -= (item / pointsSum * 100).toFixed(2);
           if (index === Object.keys(res.itemScore).length - 1) {
             item = basePoints;
