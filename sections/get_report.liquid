@@ -121,8 +121,8 @@
   </div>
 
   <!-- Loading Spinner -->
-  <div id="loading-spinner" class="spinner-container">
-    <div class="spinner"></div>
+  <div id="loading-spinner" class="report-spinner-container">
+    <div class="report-spinner"></div>
     <p>Loading your reports...</p>
   </div>
 
@@ -830,15 +830,23 @@
         padding: 0;
       }
     }
-    .spinner-container {
+    .report-spinner-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 40vh;
       gap: 1.5rem;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, .2);
+      color: #fff;
     }
-    .spinner {
+    .report-spinner {
       width: 48px; height: 48px;
       border: 5px solid #f3f3f3;
       border-top: 5px solid #3498db;
