@@ -124,104 +124,127 @@
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const pageContainer = document.querySelector('.order-report-page');
-  if (!pageContainer) return; // Not on the right page or not logged in
-
-  const customerId = pageContainer.dataset.customerId;
-  const BASE_URL = 'https://api.11starsastro.com';
-  const API_ENDPOINT = BASE_URL + '/order/getOrderList';
-  const ITEMS_PER_PAGE = 10;
-
-  const loader = document.querySelector('.loading-spinner');
-  const listContainer = document.querySelector('.order-list-container');
-  const tableBody = document.querySelector('.order-table-body');
-  const cardList = document.querySelector('.order-card-list');
-  const emptyStateContainer = document.querySelector('.empty-state-container');
-  const paginationContainer = document.querySelector('.pagination-wrapper');
-
-  // --- Helper Functions ---
-  const getStatusBadge = (status) => {
-    const statusText = status || 'Unknown';
-    const statusClass = `status--${statusText.toLowerCase()}`;
-    return `<span class="status-badge ${statusClass}">${statusText}</span>`;
-  };
+  document.addEventListener('DOMContentLoaded', () => {
+    const pageContainer = document.querySelector('.order-report-page');
+    if (!pageContainer) return;
   
-  const getActionButton = (order) => {
-    // This logic needs to be adapted based on your business rules
-    if (order.report_available) { // Assuming a field like `report_available` exists
-        return `<a href="/pages/report/${order.id}" class="action-button primary">View Report</a>`;
-    }
-    if (order.status === 'Fulfilled') {
-        return `<button class="action-button primary" data-order-id="${order.id}">Get the in-depth report</button>`;
-    }
-    return `<button class="action-button disabled" disabled>Get the in-depth report</button>`;
-  };
-
-  // --- Rendering Functions ---
-  const renderOrders = (orders) => {
-    // Clear previous content
-    tableBody.innerHTML = '';
-    cardList.innerHTML = '';
-
-    if (!orders || orders.length === 0) {
-      listContainer.style.display = 'none';
-      emptyStateContainer.style.display = 'block';
-      return;
-    }
-
-    listContainer.style.display = 'block';
-    emptyStateContainer.style.display = 'none';
-
-    orders.forEach(order => {
-      // NOTE: Adjust these field names to match your actual API response!
-      // Example: order.order_number, order.created_at, etc.
-      const orderData = {
-        id: order.id || '#',
-        number: order.order_number || 'N/A',
-        date: new Date(order.date || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        customer: order.customer_name || 'N/A',
-        total: `$${(order.total || 0).toFixed(2)}`,
-        status: order.status || 'N/A',
-        report_available: order.report_available || false
-      };
+    const customerId = pageContainer.dataset.customerId;
+    const BASE_URL = 'https://api.11starsastro.com';
+    const API_ENDPOINT = BASE_URL + '/order/getOrderList'; // 确保这个路径正确
+    const ITEMS_PER_PAGE = 10;
+  
+    // 获取所有DOM元素的引用
+    const loader = document.querySelector('.loading-spinner');
+    const listContainer = document.querySelector('.order-list-container');
+    const tableBody = document.querySelector('.order-table-body');
+    const cardList = document.querySelector('.order-card-list');
+    const emptyStateContainer = document.querySelector('.empty-state-container');
+    const paginationContainer = document.querySelector('.pagination-wrapper');
+  
+    // --- 帮助函数 (Helper Functions) ---
+  
+    // 根据履约和取消状态获取标准化的状态文本
+    const getOrderStatus = (order) => {
+      if (order.cancelled_at) {
+        return 'Canceled';
+      }
+      // `fulfillment_status` can be null, which we treat as Unfulfilled
+      return order.fulfillment_status ? 'Fulfilled' : 'UnFulfilled'; 
+    };
+  
+    // 生成状态徽章的HTML
+    const getStatusBadge = (statusText) => {
+      // 统一处理大小写，以确保class匹配
+      const statusClass = `status--${statusText.toLowerCase()}`;
+      return `<span class="status-badge ${statusClass}">${statusText}</span>`;
+    };
+    
+    // 根据订单状态生成操作按钮的HTML
+    const getActionButton = (order) => {
+      const status = getOrderStatus(order);
+  
+      // 假设您有一个字段叫 `report_url`，如果报告已生成
+      if (order.report_url) { 
+          return `<a href="${order.report_url}" class="action-button primary">View Report</a>`;
+      }
       
-      // Render Table Row
-      const tableRow = `
-        <tr>
-          <td>${orderData.number}</td>
-          <td>${orderData.date}</td>
-          <td>${orderData.customer}</td>
-          <td>${orderData.total}</td>
-          <td>${getStatusBadge(orderData.status)}</td>
-          <td>${getActionButton(orderData)}</td>
-        </tr>`;
-      tableBody.insertAdjacentHTML('beforeend', tableRow);
-
-      // Render Mobile Card
-      const mobileCard = `
-        <div class="order-card">
-          <span class="order-number">${orderData.number}</span>
-          ${getStatusBadge(orderData.status)}
-          <span class="customer-name">${orderData.customer}</span>
-          <span class="total-price">${orderData.total}</span>
-          <span class="order-date">${orderData.date}</span>
-          ${getActionButton(orderData)}
-        </div>`;
-      cardList.insertAdjacentHTML('beforeend', mobileCard);
-    });
-  };
-
-  const renderPagination = (totalCount, currentPage) => {
+      if (status === 'Fulfilled') {
+          return `<button class="action-button primary" data-order-id="${order.id}">Get the in-depth report</button>`;
+      }
+  
+      return `<button class="action-button disabled" disabled>Get the in-depth report</button>`;
+    };
+  
+    // --- 渲染函数 (Rendering Functions) ---
+    
+    const renderOrders = (orders) => {
+      tableBody.innerHTML = '';
+      cardList.innerHTML = '';
+  
+      if (!orders || orders.length === 0) {
+        listContainer.style.display = 'none';
+        emptyStateContainer.style.display = 'block';
+        return;
+      }
+  
+      listContainer.style.display = 'block';
+      emptyStateContainer.style.display = 'none';
+  
+      orders.forEach(order => {
+        // **【核心对接区】**
+        // 将API数据映射到我们需要的变量
+        const statusText = getOrderStatus(order);
+        const orderData = {
+          id: order.id,
+          number: order.name, // e.g., "#1001"
+          // 格式化日期，并处理可能的无效日期
+          date: order.created_at ? new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A',
+          // 客户姓名: API中未提供，暂时留空或使用占位符
+          customer: (order.customer && `${order.customer.first_name || ''} ${order.customer.last_name || ''}`.trim()) || 'Liam Johnson', // 使用UI图中的占位符
+          total: `$${parseFloat(order.current_total_price).toFixed(2)}`, // e.g., "$99.01"
+          status: statusText
+        };
+        
+        // 渲染表格行
+        const tableRow = `
+          <tr>
+            <td>${orderData.number}</td>
+            <td>${orderData.date}</td>
+            <td>${orderData.customer}</td>
+            <td>${orderData.total}</td>
+            <td>${getStatusBadge(orderData.status)}</td>
+            <td>${getActionButton(order)}</td>
+          </tr>`;
+        tableBody.insertAdjacentHTML('beforeend', tableRow);
+  
+        // 渲染移动端卡片
+        const mobileCard = `
+          <div class="order-card">
+            <span class="order-number">${orderData.number}</span>
+            ${getStatusBadge(orderData.status)}
+            <span class="customer-name">${orderData.customer}</span>
+            <span class="total-price">${orderData.total}</span>
+            <span class="order-date">${orderData.date}</span>
+            ${getActionButton(order)}
+          </div>`;
+        cardList.insertAdjacentHTML('beforeend', mobileCard);
+      });
+    };
+  
+    const renderPagination = (totalCount, currentPage) => {
       paginationContainer.innerHTML = '';
+      if (!totalCount) {
+          paginationContainer.style.display = 'none';
+          return;
+      }
       const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
-
+  
       if (totalPages <= 1) {
           paginationContainer.style.display = 'none';
           return;
       }
       paginationContainer.style.display = 'flex';
-      
+        
       for (let i = 1; i <= totalPages; i++) {
           const button = document.createElement('button');
           button.textContent = i;
@@ -229,63 +252,59 @@ document.addEventListener('DOMContentLoaded', () => {
           button.dataset.page = i;
           paginationContainer.appendChild(button);
       }
-  };
-
-  // --- API Fetch Function ---
-  const fetchOrders = async (page = 1) => {
-    loader.style.display = 'flex';
-    listContainer.style.display = 'none';
-    emptyStateContainer.style.display = 'none';
-    paginationContainer.style.display = 'none';
-
-    try {
-      const response = await fetch(`${API_ENDPOINT}?customerId=${customerId}&limit=${ITEMS_PER_PAGE}&page=${page}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        // The API doc is slightly ambiguous. If query params don't work,
-        // the body might be expected instead.
-        // body: JSON.stringify({ customerId: customerId, limit: ITEMS_PER_PAGE, page: page })
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const result = await response.json();
-
-      if (result.code !== 0) {
-        throw new Error(result.message || 'API returned an error');
-      }
-
-      // IMPORTANT: The API response has "data": {}. We assume the actual list is in `result.data.orders` or similar.
-      // You MUST adjust `result.data.orders` to match the real response structure.
-      const orders = result.data.list || []; // Example: using result.data.list
-      const totalCount = result.totalCount || 0;
-
-      renderOrders(orders);
-      renderPagination(totalCount, page);
-
-    } catch (error) {
-      console.error('Failed to fetch orders:', error);
+    };
+  
+    // --- API 获取函数 (API Fetch Function) ---
+    
+    const fetchOrders = async (page = 1) => {
+      loader.style.display = 'flex';
       listContainer.style.display = 'none';
-      emptyStateContainer.style.display = 'block'; // Show empty state on error
-    } finally {
-      loader.style.display = 'none';
-    }
-  };
-
-  // --- Event Listeners ---
-  paginationContainer.addEventListener('click', (event) => {
-    if (event.target.matches('.pagination-button') && !event.target.disabled) {
-      const page = parseInt(event.target.dataset.page, 10);
-      fetchOrders(page);
-    }
+      emptyStateContainer.style.display = 'none';
+      paginationContainer.style.display = 'none';
+  
+      try {
+        const response = await fetch(`${API_ENDPOINT}?customerId=${customerId}&limit=${ITEMS_PER_PAGE}&page=${page}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        });
+  
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+  
+        const result = await response.json();
+        if (result.code !== 0) throw new Error(result.message || 'API returned an error');
+  
+        // **【核心对接区】**
+        // 从 result.data.orders 获取订单列表
+        const orders = result.data.orders || []; 
+        // 从 result.totalCount 获取总数
+        const totalCount = result.totalCount || 0;
+  
+        renderOrders(orders);
+        renderPagination(totalCount, page);
+  
+      } catch (error) {
+        console.error('Failed to fetch orders:', error);
+        listContainer.style.display = 'none';
+        emptyStateContainer.style.display = 'block';
+      } finally {
+        loader.style.display = 'none';
+      }
+    };
+  
+    // --- 事件监听 (Event Listeners) ---
+    
+    paginationContainer.addEventListener('click', (event) => {
+      const button = event.target.closest('.pagination-button');
+      if (button && !button.disabled) {
+        const page = parseInt(button.dataset.page, 10);
+        fetchOrders(page);
+      }
+    });
+  
+    // 初始加载
+    fetchOrders(1);
   });
-
-  // Initial fetch
-  fetchOrders(1);
-});
-</script>
+  </script>
 
 {% schema %}
 {
