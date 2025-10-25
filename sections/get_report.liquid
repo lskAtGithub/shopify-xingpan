@@ -1318,7 +1318,7 @@
           }
           pointPercent.push(item);
         });
-        if(myChart instanceof window.Chart) {
+        if(myChart && myChart instanceof window.Chart) {
           myChart.destroy();
         }
         const myChart = new window.Chart(canvas, {
