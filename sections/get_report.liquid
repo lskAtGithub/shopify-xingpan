@@ -141,7 +141,7 @@
         <div id="reportDatetime" class="rmh-desc">February 5，1994 05:15</div>
         <div id="reportAddress" class="rmh-desc">Shantou，guangdong，china</div>
       </div>
-      <div class="rm-content">
+      <div id="rmContent" class="rm-content">
         <div class="canvas-box element-chart-section">
           <div class="element-chart-title">Elemental Balance</div>
           <div class="element-chart">
@@ -1248,11 +1248,12 @@
 
       const modal = document.getElementById('report-modal');
       const modelContent = document.getElementById('modelContent');
+      const rmContent = document.getElementById('rmContent');
       const closeBtn = document.querySelector('.report-close');
       const tableBody = document.querySelector('#report-table tbody');
 
       function scrollToBottom() {
-        modelContent.scrollTop = modelContent.scrollHeight;
+        rmContent.scrollTop = rmContent.scrollHeight;
       }
 
       function getDoubaoNoUser(data) {
@@ -1560,6 +1561,7 @@
         container.inerHTML = '';
         for (const key in productsMap) {
           const productTitle = productsMap[key].title;
+          const bodyHtml = productsMap[key].bodyHtml;
           try {
             // Shopify 前端通过 title 获取 handle，再请求 JSON
             const handle = productTitle
@@ -1583,7 +1585,7 @@
                 <h3 style="font-size: 2.2rem;margin-bottom: 15px;">${product.title}</h3>
                 <span class="product-tag">${product.tags}</span>
                 <p class="product-price" style="font-size: 2rem;font-weight: 700; color: #333333;">$${product.variants[0].price}</p>
-                <p class="product-desc">${product.bodyHtml || ''}</p>
+                <p class="product-desc">${bodyHtml || ''}</p>
                 <div class="pay-tips">
                   <svg class="pay-tips-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
                     <g id="Frame">
