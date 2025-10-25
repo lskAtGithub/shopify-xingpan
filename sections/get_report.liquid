@@ -1236,10 +1236,10 @@
                 remark.innerHTML = marked.parse(reason);
               } {% endcomment %}
               if(choices[i].finish_reason && choices[i].finish_reason === 'stop') {
+                spinner.style.display = 'flex';
                 renderRecommendedProducts(data);
               }
               scrollToBottom();
-              spinner.style.display = 'flex';
             }
           } catch (e) {
             spinner.style.display = 'flex';
