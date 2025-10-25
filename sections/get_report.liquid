@@ -1572,7 +1572,7 @@
             const res = await fetch(`/products/${handle}.js`);
             if (!res.ok) continue;
             const product = await res.json();
-
+            console.log('product----', product);
             // 构建HTML
             const card = document.createElement('div');
 
