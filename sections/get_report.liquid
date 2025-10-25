@@ -1190,7 +1190,7 @@
         });
         const elementTags = document.querySelectorAll('.element-legend');
         elementTags.innerHTML = '';
-        const htmlContent = '';
+        let htmlContent = '';
         Object.keys(res.itemScore).forEach((key, index) => {
           htmlContent += `
             <div class="element-item">
