@@ -2,17 +2,28 @@
   确保用户已登录
 {% endcomment %}
 {% unless customer %}
-  <div class="page-width center">
+  <div class="page-width login-container">
     <h1 class="h2">Please log in</h1>
     <p>You must be logged in to view your reports.</p>
     <a href="{{ routes.account_login_url }}" class="button">Log In</a>
   </div>
 {% else %}
   <div class="page-width order-report-page" data-customer-id="{{ customer.id }}">
-    
     <!-- 1. 顶部通知栏 -->
-    <div class="order-report-notification">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+    <div class="order-report-notification" style="display: none;">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+      </svg>
       <span>You can get a professional in-depth report when your order is confirmed</span>
     </div>
 
@@ -20,7 +31,7 @@
     <div class="loading-spinner" style="display: none;">
       <div class="spinner"></div>
     </div>
-    
+
     <!-- 3. 订单列表容器 (JS 将在此处填充内容) -->
     <div class="order-list-container">
       <!-- PC Table View (initially empty) -->
@@ -37,7 +48,7 @@
         </thead>
         <tbody class="order-table-body"></tbody>
       </table>
-      
+
       <!-- Mobile Card View (initially empty) -->
       <div class="order-card-list"></div>
     </div>
@@ -48,78 +59,281 @@
     <!-- 5. 空状态 (默认隐藏) -->
     <div class="empty-state-container" style="display: none;">
       <div class="empty-state-content">
-        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzIiIGhlaWdodD0iNzIiIHZpZXdCb3g9IjAgMCA3MiA3MiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTM2IDJDNDkuMjUzMyAyIDYwIDEyLjc0NjcgNjAgMjZDNjAgMzkuMjUzMyA0OS4yNTMzIDUwIDM2IDUwQzIyLjc0NjcgNTAgMTIgMzkuMjUzMyAxMiAyNkMxMiAxMi43NDY3IDIyLjc0NjcgMiAzNiAyWiIgc3Ryb2tlPSIjMkMyQzJDIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1kYXNoYXJyYXk9IjQgNCIvPgo8cGF0aCBkPSJNMzYgMTdMMzkuNjU3NCAyOC4zNDI2TDUxIDMyTDQxLjY1NzQgMzUuNjU3NEwzNiA0N0wzMC4zNDI2IDM1LjY1NzRM MTkgMzJMMzAuMzQyNiAyOC4zNDI2TDM2IDE3WiIgZmlsbD0iIzJDMkMyQyIvPgo8cGF0aCBkPSJNNjIgMjNMNjQuMzQzMSAyOC42NTY5TDcwIDMxTDY0LjM0MzEgMzMuMzQzMUw2MiAzOUw1OS42NTY5IDMzLjM0MzFMNjQgMzFMNTAgMjdMNjIgMjNaIiBmaWxsPSIjMkMyQzJDIi8+CjxwYXRoIGQ9Ik0xNyA0MUwxOC4xNCA0NC40NkwyMiA0NkwxOC4xNCA0Ny41NEwxNyA1MVY0N0wxNS44NiA0NC40NkwxMiA0NkwxNS44NiA0Mi40NkwxNyA0MVoiIGZpbGw9IiMyQzJDMkMiLz4KPC9zdmc+Cg==" alt="Star icon" class="empty-state-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+          <g id="Frame" clip-path="url(#clip0_2450_205)">
+          <path id="Vector" d="M37.4699 64C35.9339 64 34.4406 63.36 33.4166 62.1653L24.9259 52.5653C24.4566 52.0533 23.8166 51.712 23.1339 51.6693L10.3766 50.4747C8.49925 50.304 6.87791 49.1947 6.06725 47.5307C5.25658 45.8667 5.29925 43.904 6.23791 42.2827L12.7659 31.232C13.1072 30.6347 13.2352 29.952 13.0646 29.2693L10.2486 16.768C9.82191 14.9333 10.3766 13.056 11.6992 11.7333C13.0219 10.4107 14.8992 9.85599 16.7339 10.2827L29.2352 13.0987C29.9179 13.2693 30.6006 13.1413 31.1979 12.8L42.2486 6.27199C43.8699 5.33332 45.7899 5.24799 47.4966 6.10132C49.1606 6.95466 50.2699 8.57599 50.4406 10.4107L51.6352 23.168C51.7206 23.8507 52.0192 24.4907 52.5312 24.96L62.1312 33.4507C63.5392 34.688 64.1792 36.5227 63.9232 38.3573C63.6246 40.192 62.4299 41.7707 60.7232 42.496L48.9472 47.5733C48.3072 47.8293 47.7952 48.3413 47.5392 48.9813L42.4619 60.7573C41.7366 62.464 40.1579 63.6587 38.3232 63.9573C38.0672 63.9573 37.7686 64 37.4699 64ZM15.5392 12.8427C14.8139 12.8427 14.1739 13.0987 13.6192 13.6533C12.9366 14.336 12.6806 15.232 12.8939 16.1707L15.7099 28.672C16.0086 30.0373 15.7952 31.4453 15.0699 32.64L8.54191 43.6907C8.07258 44.5013 8.02991 45.44 8.45658 46.2933C8.88325 47.1467 9.69391 47.6587 10.6326 47.744L23.3899 48.9387C24.7552 49.0667 26.0352 49.7067 26.9739 50.7733L35.4646 60.3733C36.1046 61.0987 37.0006 61.3973 37.9392 61.2693C38.8779 61.1413 39.6459 60.544 39.9872 59.648L45.0646 47.872C45.6193 46.592 46.6006 45.6107 47.8806 45.056L59.6566 39.9787C60.5099 39.5947 61.1073 38.8693 61.2779 37.9307C61.4059 36.992 61.1073 36.096 60.3819 35.456L50.7819 26.9653C49.7579 26.0693 49.1179 24.7893 48.9472 23.424L47.7526 10.6667C47.6672 9.72799 47.1126 8.91732 46.3019 8.49065C45.4486 8.06399 44.5099 8.10666 43.6992 8.57599L32.6059 15.104C31.4112 15.8293 30.0032 16.0427 28.6379 15.744L16.1366 12.928C15.9659 12.8853 15.7526 12.8427 15.5392 12.8427Z" fill="#2C2C2C"/>
+          <path id="Vector_2" d="M56.7121 58.0692C56.3708 58.0692 56.0295 57.9412 55.7735 57.6852L46.3015 48.2132C45.7895 47.7012 45.7895 46.8052 46.3015 46.2932C46.8135 45.7812 47.7095 45.7812 48.2215 46.2932L57.6935 55.7652C58.2055 56.2772 58.2055 57.1732 57.6935 57.6852C57.3948 57.8985 57.0535 58.0692 56.7121 58.0692Z" fill="#2C2C2C"/>
+          <path id="Vector_3" d="M26.6322 38.3573L28.7655 36.224C28.9789 36.0107 28.9789 35.6693 28.7655 35.456L24.7122 31.4027C24.4989 31.1893 24.1575 31.1893 23.9442 31.4027L21.8109 33.536C21.5975 33.7493 21.5975 34.0907 21.8109 34.304L25.8642 38.3573C26.1202 38.5707 26.4189 38.5707 26.6322 38.3573Z" fill="#2C2C2C"/>
+          <path id="Vector_4" d="M26.2913 39.1251C25.4379 39.1251 24.6273 38.8265 23.9873 38.1865L22.0246 36.2238C21.4273 35.6265 21.0859 34.7731 21.0859 33.9198C21.0859 33.0665 21.4273 32.2131 22.0246 31.6158C23.3473 30.3358 25.3953 30.3358 26.6753 31.5731L28.6379 33.5358C29.2353 34.1331 29.5766 34.9865 29.5766 35.8398C29.5766 36.6931 29.2353 37.5465 28.6379 38.1438L28.5953 38.1865C27.9553 38.8265 27.1019 39.1251 26.2913 39.1251ZM24.3713 33.1518C24.1579 33.1518 23.9873 33.2371 23.8166 33.3651C23.6459 33.5358 23.5606 33.7491 23.5606 33.9198C23.5606 34.1331 23.6459 34.3038 23.7739 34.4745L25.7366 36.4371C26.0353 36.7358 26.5046 36.7358 26.8459 36.4371L26.8886 36.3945C27.0166 36.2665 27.1019 36.0531 27.1019 35.8398C27.1019 35.6265 27.0166 35.4558 26.8886 35.2851L24.9259 33.3225C24.7553 33.1945 24.5419 33.1518 24.3713 33.1518Z" fill="#2C2C2C"/>
+          <path id="Vector_5" d="M36.2323 28.7572L38.3656 26.6239C38.579 26.4106 38.579 26.0692 38.3656 25.8559L34.3123 21.8026C34.099 21.5892 33.7576 21.5892 33.5443 21.8026L31.411 23.9359C31.1976 24.1492 31.1976 24.4906 31.411 24.7039L35.4643 28.7572C35.6776 28.9706 36.019 28.9706 36.2323 28.7572Z" fill="#2C2C2C"/>
+          <path id="Vector_6" d="M35.8484 29.568C34.9951 29.568 34.1844 29.2693 33.5444 28.6293L31.5817 26.6667C30.9844 26.0693 30.6431 25.216 30.6431 24.3627C30.6431 23.5093 30.9844 22.656 31.5817 22.0587C32.8617 20.7787 34.9951 20.7787 36.2324 22.016L38.1951 23.9787C39.4751 25.2587 39.4751 27.3067 38.1951 28.5867L38.1524 28.6293C37.5551 29.2267 36.7017 29.568 35.8484 29.568ZM33.9284 23.552C33.7151 23.552 33.5444 23.6373 33.3737 23.7653C33.2031 23.936 33.1177 24.1493 33.1177 24.32C33.1177 24.5333 33.2031 24.704 33.3311 24.8747L35.2937 26.8373C35.5924 27.136 36.0617 27.136 36.4031 26.8373L36.4457 26.7947C36.7444 26.496 36.7444 25.984 36.4457 25.6853L34.4831 23.7227C34.3551 23.6373 34.1417 23.552 33.9284 23.552ZM35.2511 41.8987C34.0137 41.8987 32.8617 41.5573 31.9231 41.0453C31.4111 40.7467 31.2404 40.1067 31.4964 39.6373C31.7951 39.1253 32.4351 38.9547 32.9044 39.2107C33.4164 39.4667 36.0191 40.7467 38.3657 38.4427C39.9871 36.8213 40.2857 34.9867 39.1337 32.9813C38.8351 32.4693 39.0484 31.8293 39.5177 31.5733C40.0297 31.2747 40.6697 31.488 40.9257 31.9573C42.5044 34.7733 42.1204 37.632 39.7737 39.936C38.4511 41.344 36.7871 41.8987 35.2511 41.8987Z" fill="#2C2C2C"/>
+          <path id="Vector_7" d="M27.955 0.170742L29.5337 3.02941L29.6617 3.15741L32.5204 4.73608C32.7337 4.86408 32.7337 5.16274 32.5204 5.24808L29.6617 6.82674L29.5337 6.95474L27.955 9.81341C27.827 10.0267 27.5284 10.0267 27.443 9.81341L25.8644 6.95474L25.7364 6.82674L22.8777 5.24808C22.6644 5.12008 22.6644 4.82141 22.8777 4.73608L25.7364 3.15741L25.8644 3.02941L27.443 0.170742C27.571 -0.0425911 27.8697 -0.0425911 27.955 0.170742ZM21.8964 54.6987L22.323 57.9414C22.323 57.9841 22.3657 58.0694 22.4084 58.1121L24.499 60.6294C24.6697 60.8001 24.5417 61.0987 24.3284 61.0987L21.0857 61.5254C21.043 61.5254 20.9577 61.5681 20.915 61.6107L18.3977 63.7014C18.227 63.8721 17.9284 63.7441 17.9284 63.5307L17.5017 60.2881C17.5017 60.2454 17.459 60.1601 17.4164 60.1174L15.3257 57.6001C15.155 57.4294 15.283 57.1307 15.4964 57.1307L18.739 56.7041C18.7817 56.7041 18.867 56.6614 18.9097 56.6187L21.427 54.5281C21.5977 54.3574 21.8537 54.4854 21.8964 54.6987ZM4.10437 28.8001L3.63504 30.5921V30.6774L4.1897 32.4694C4.23237 32.5974 4.10437 32.7254 3.97637 32.6827L2.18437 32.2134H2.09904L0.307036 32.7681C0.179036 32.8107 0.0510359 32.6827 0.0937025 32.5547L0.563036 30.7201V30.6347L0.00836918 28.8427C-0.0342975 28.7147 0.0937025 28.5867 0.221703 28.6294L2.0137 29.0987H2.09904L3.89104 28.5867C4.01904 28.5441 4.14704 28.6294 4.10437 28.8001ZM62.1737 19.2001L61.7044 20.9921V21.0774L62.259 22.8694C62.3017 22.9974 62.1737 23.1254 62.0457 23.0827L60.2537 22.6134H60.1684L58.3764 23.1681C58.2484 23.2107 58.1204 23.0827 58.163 22.9547L58.6324 21.1627V21.0774L58.0777 19.2854C58.035 19.1574 58.163 19.0294 58.291 19.0721L60.083 19.5414H60.1684L61.9604 18.9867C62.0884 18.9441 62.2164 19.0721 62.1737 19.2001Z" fill="#2C2C2C"/>
+          </g>
+          <defs>
+          <clipPath id="clip0_2450_205">
+          <rect width="64" height="64" fill="white"/>
+          </clipPath>
+          </defs>
+        </svg>
         <p class="empty-state-text">You don’t have an energy report yet, go test it</p>
-        <a href="/pages/test-page" class="button empty-state-button">Go test</a>
+        <a href="https://www.11starsastro.com/" class="button empty-state-button">Go test</a>
       </div>
     </div>
   </div>
 {% endunless %}
 
 <style>
-  .order-report-page { max-width: 1200px; margin: 0 auto; padding: 20px; }
-  .order-report-notification { display: flex; align-items: center; justify-content: center; background-color: #f0f5ff; border: 1px solid #d6e4ff; color: #595959; padding: 12px; border-radius: 8px; margin-bottom: 24px; font-size: 14px; }
-  .order-report-notification svg { margin-right: 8px; }
+  .order-report-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  .login-container { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    height: 443px;
+    justify-content: center;
+  }
+  .login-container button { 
+    height: 3.5rem;
+    width: 10rem;
+    border-radius: 4px;
+    margin-top: 20px;
+  }
+  .order-report-notification {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f5ff;
+    border: 1px solid #d6e4ff;
+    color: #595959;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    font-size: 14px;
+  }
+  .order-report-notification svg {
+    margin-right: 8px;
+  }
 
   /* Table Styles */
-  .order-table { width: 100%; border-collapse: collapse; border: 1px solid #e8e8e8; border-radius: 8px; overflow: hidden; }
-  .order-table th, .order-table td { padding: 16px; text-align: left; }
-  .order-table thead { background-color: #fafafa; }
-  .order-table th { color: #595959; font-weight: 500; }
-  .order-table tbody tr { border-top: 1px solid #e8e8e8; }
-  .order-table tbody tr:hover { background-color: #f9f9f9; }
+  .order-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .order-table th,
+  .order-table td {
+    padding: 16px;
+    text-align: left;
+  }
+  .order-table thead {
+    background-color: #fafafa;
+  }
+  .order-table th {
+    color: #595959;
+    font-weight: 500;
+  }
+  .order-table tbody tr {
+    border-top: 1px solid #e8e8e8;
+  }
+  .order-table tbody tr:hover {
+    background-color: #f9f9f9;
+  }
 
   /* Status Badges */
-  .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; text-align: center; }
-  .status--fulfilled { background-color: #e6f7ff; color: #1890ff; }
-  .status--unfulfilled { background-color: #fffbe6; color: #faad14; }
-  .status--canceled { background-color: #fff1f0; color: #f5222d; }
-  
+  .status-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+  }
+  .status--fulfilled {
+    background-color: #e6f7ff;
+    color: #1890ff;
+  }
+  .status--unfulfilled {
+    background-color: #fffbe6;
+    color: #faad14;
+  }
+  .status--canceled {
+    background-color: #fff1f0;
+    color: #f5222d;
+  }
+
   /* Action Buttons */
-  .action-button { padding: 8px 16px; border-radius: 6px; border: 1px solid transparent; cursor: pointer; font-weight: 500; transition: all 0.3s; }
-  .action-button.primary { background-color: #2c2c2c; color: #fff; }
-  .action-button.primary:hover { opacity: 0.8; }
-  .action-button.disabled { background-color: #d9d9d9; color: #8c8c8c; cursor: not-allowed; }
-  
+  .action-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+  .action-button.primary {
+    background-color: #2c2c2c;
+    color: #fff;
+  }
+  .action-button.primary:hover {
+    opacity: 0.8;
+  }
+  .action-button.disabled {
+    background-color: #d9d9d9;
+    color: #8c8c8c;
+    cursor: not-allowed;
+  }
+
   /* Mobile Card List */
-  .order-card-list { display: none; flex-direction: column; gap: 16px; }
-  .order-card { background-color: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 16px; display: grid; grid-template-areas: "number status" "customer price" "date date" "action action"; grid-template-columns: 1fr auto; gap: 8px 16px; }
-  .order-card .order-number { grid-area: number; font-weight: 600; font-size: 16px; }
-  .order-card .status-badge { grid-area: status; justify-self: end; }
-  .order-card .customer-name { grid-area: customer; color: #595959; }
-  .order-card .total-price { grid-area: price; font-weight: 600; font-size: 18px; justify-self: end; }
-  .order-card .order-date { grid-area: date; color: #8c8c8c; font-size: 14px; }
-  .order-card .action-button { grid-area: action; width: 100%; text-align: center; margin-top: 8px; }
+  .order-card-list {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .order-card {
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    padding: 16px;
+    display: grid;
+    grid-template-areas: 'number status' 'customer price' 'date date' 'action action';
+    grid-template-columns: 1fr auto;
+    gap: 8px 16px;
+  }
+  .order-card .order-number {
+    grid-area: number;
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .order-card .status-badge {
+    grid-area: status;
+    justify-self: end;
+  }
+  .order-card .customer-name {
+    grid-area: customer;
+    color: #595959;
+  }
+  .order-card .total-price {
+    grid-area: price;
+    font-weight: 600;
+    font-size: 18px;
+    justify-self: end;
+  }
+  .order-card .order-date {
+    grid-area: date;
+    color: #8c8c8c;
+    font-size: 14px;
+  }
+  .order-card .action-button {
+    grid-area: action;
+    width: 100%;
+    text-align: center;
+    margin-top: 8px;
+  }
 
   /* Empty State */
-  .empty-state-container { padding: 60px 20px; text-align: center; }
-  .empty-state-content { max-width: 400px; margin: 0 auto; }
-  .empty-state-icon { margin-bottom: 24px; width: 72px; height: 72px; }
-  .empty-state-text { font-size: 18px; color: #595959; margin-bottom: 24px; }
-  .empty-state-button { background-color: #2c2c2c; color: #fff; padding: 12px 24px; }
+  .empty-state-container {
+    padding: 60px 20px;
+    text-align: center;
+  }
+  .empty-state-content {
+    max-width: 400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .empty-state-icon {
+    margin-bottom: 24px;
+    width: 72px;
+    height: 72px;
+  }
+  .empty-state-text {
+    font-size: 18px;
+    color: #595959;
+    margin-bottom: 24px;
+  }
+  .empty-state-button {
+    background-color: #2c2c2c;
+    color: #fff;
+    padding: 12px 24px;
+  }
 
   /* Pagination */
-  .pagination-wrapper { display: flex; justify-content: center; margin-top: 32px; }
-  .pagination-button { padding: 8px 14px; margin: 0 4px; border: 1px solid #d9d9d9; background-color: #fff; border-radius: 6px; cursor: pointer; }
-  .pagination-button:hover { border-color: #1890ff; color: #1890ff; }
-  .pagination-button.active { background-color: #1890ff; color: #fff; border-color: #1890ff; }
-  .pagination-button:disabled { cursor: not-allowed; opacity: 0.5; }
+  .pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+  }
+  .pagination-button {
+    padding: 8px 14px;
+    margin: 0 4px;
+    border: 1px solid #d9d9d9;
+    background-color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .pagination-button:hover {
+    border-color: #1890ff;
+    color: #1890ff;
+  }
+  .pagination-button.active {
+    background-color: #1890ff;
+    color: #fff;
+    border-color: #1890ff;
+  }
+  .pagination-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 
   /* Loading Spinner */
-  .loading-spinner { display: flex; justify-content: center; padding: 50px; }
-  .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 50px;
+  }
+  .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 
   /* Responsive Breakpoints */
   /* Hide table on mobile */
   @media (max-width: 768px) {
-    .order-table { display: none; }
-    .order-card-list { display: flex; }
+    .order-table {
+      display: none;
+    }
+    .order-card-list {
+      display: flex;
+    }
   }
   /* Show table on screens larger than mobile */
   @media (min-width: 769px) {
-    .order-table { display: table; }
-    .order-card-list { display: none; }
+    .order-table {
+      display: table;
+    }
+    .order-card-list {
+      display: none;
+    }
   }
 </style>
 
@@ -127,70 +341,73 @@
   document.addEventListener('DOMContentLoaded', () => {
     const pageContainer = document.querySelector('.order-report-page');
     if (!pageContainer) return;
-  
+
     const customerId = pageContainer.dataset.customerId;
     const BASE_URL = 'https://api.11starsastro.com';
     const API_ENDPOINT = BASE_URL + '/order/getOrderList'; // 确保这个路径正确
     const ITEMS_PER_PAGE = 10;
-  
+
     // 获取所有DOM元素的引用
     const loader = document.querySelector('.loading-spinner');
     const listContainer = document.querySelector('.order-list-container');
     const tableBody = document.querySelector('.order-table-body');
     const cardList = document.querySelector('.order-card-list');
     const emptyStateContainer = document.querySelector('.empty-state-container');
+    const orderReportNotification = document.querySelector('.order-report-notification');
     const paginationContainer = document.querySelector('.pagination-wrapper');
-  
+
     // --- 帮助函数 (Helper Functions) ---
-  
+
     // 根据履约和取消状态获取标准化的状态文本
     const getOrderStatus = (order) => {
       if (order.cancelled_at) {
         return 'Canceled';
       }
       // `fulfillment_status` can be null, which we treat as Unfulfilled
-      return order.fulfillment_status ? 'Fulfilled' : 'UnFulfilled'; 
+      return order.fulfillment_status ? 'Fulfilled' : 'UnFulfilled';
     };
-  
+
     // 生成状态徽章的HTML
     const getStatusBadge = (statusText) => {
       // 统一处理大小写，以确保class匹配
       const statusClass = `status--${statusText.toLowerCase()}`;
       return `<span class="status-badge ${statusClass}">${statusText}</span>`;
     };
-    
+
     // 根据订单状态生成操作按钮的HTML
     const getActionButton = (order) => {
       const status = getOrderStatus(order);
-  
+
       // 假设您有一个字段叫 `report_url`，如果报告已生成
-      if (order.report_url) { 
-          return `<a href="${order.report_url}" class="action-button primary">View Report</a>`;
+      if (order.report_url) {
+        return `<a href="${order.report_url}" class="action-button primary">View Report</a>`;
       }
-      
+
       if (status === 'Fulfilled') {
-          return `<button class="action-button primary" data-order-id="${order.id}">Get the in-depth report</button>`;
+        return `<button class="action-button primary" data-order-id="${order.id}">Get the in-depth report</button>`;
       }
-  
+
       return `<button class="action-button disabled" disabled>Get the in-depth report</button>`;
     };
-  
+
     // --- 渲染函数 (Rendering Functions) ---
-    
+
     const renderOrders = (orders) => {
       tableBody.innerHTML = '';
       cardList.innerHTML = '';
-  
+
       if (!orders || orders.length === 0) {
+        orderReportNotification.style.display = 'none';
         listContainer.style.display = 'none';
         emptyStateContainer.style.display = 'block';
         return;
       }
-  
+
+      orderReportNotification.style.display = 'block';
       listContainer.style.display = 'block';
       emptyStateContainer.style.display = 'none';
-  
-      orders.forEach(order => {
+
+      orders.forEach((order) => {
         // **【核心对接区】**
         // 将API数据映射到我们需要的变量
         const statusText = getOrderStatus(order);
@@ -198,13 +415,21 @@
           id: order.id,
           number: order.name, // e.g., "#1001"
           // 格式化日期，并处理可能的无效日期
-          date: order.created_at ? new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A',
+          date: order.created_at
+            ? new Date(order.created_at).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+              })
+            : 'N/A',
           // 客户姓名: API中未提供，暂时留空或使用占位符
-          customer: (order.customer && `${order.customer.first_name || ''} ${order.customer.last_name || ''}`.trim()) || 'Liam Johnson', // 使用UI图中的占位符
+          customer:
+            (order.customer && `${order.customer.first_name || ''} ${order.customer.last_name || ''}`.trim()) ||
+            'Liam Johnson', // 使用UI图中的占位符
           total: `$${parseFloat(order.current_total_price).toFixed(2)}`, // e.g., "$99.01"
-          status: statusText
+          status: statusText,
         };
-        
+
         // 渲染表格行
         const tableRow = `
           <tr>
@@ -216,7 +441,7 @@
             <td>${getActionButton(order)}</td>
           </tr>`;
         tableBody.insertAdjacentHTML('beforeend', tableRow);
-  
+
         // 渲染移动端卡片
         const mobileCard = `
           <div class="order-card">
@@ -230,58 +455,58 @@
         cardList.insertAdjacentHTML('beforeend', mobileCard);
       });
     };
-  
+
     const renderPagination = (totalCount, currentPage) => {
       paginationContainer.innerHTML = '';
       if (!totalCount) {
-          paginationContainer.style.display = 'none';
-          return;
+        paginationContainer.style.display = 'none';
+        return;
       }
       const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
-  
+
       if (totalPages <= 1) {
-          paginationContainer.style.display = 'none';
-          return;
+        paginationContainer.style.display = 'none';
+        return;
       }
       paginationContainer.style.display = 'flex';
-        
+
       for (let i = 1; i <= totalPages; i++) {
-          const button = document.createElement('button');
-          button.textContent = i;
-          button.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
-          button.dataset.page = i;
-          paginationContainer.appendChild(button);
+        const button = document.createElement('button');
+        button.textContent = i;
+        button.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+        button.dataset.page = i;
+        paginationContainer.appendChild(button);
       }
     };
-  
+
     // --- API 获取函数 (API Fetch Function) ---
-    
+
     const fetchOrders = async (page = 1) => {
       loader.style.display = 'flex';
       listContainer.style.display = 'none';
+      orderReportNotification.style.display = 'none';
       emptyStateContainer.style.display = 'none';
       paginationContainer.style.display = 'none';
-  
+
       try {
         const response = await fetch(`${API_ENDPOINT}?customerId=${customerId}&limit=${ITEMS_PER_PAGE}&page=${page}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
         });
-  
+
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-  
+
         const result = await response.json();
         if (result.code !== 0) throw new Error(result.message || 'API returned an error');
-  
+
         // **【核心对接区】**
         // 从 result.data.orders 获取订单列表
-        const orders = result.data.orders || []; 
+        const orders = result.data.orders || [];
         // 从 result.totalCount 获取总数
         const totalCount = result.totalCount || 0;
-  
+
         renderOrders(orders);
         renderPagination(totalCount, page);
-  
       } catch (error) {
         console.error('Failed to fetch orders:', error);
         listContainer.style.display = 'none';
@@ -290,9 +515,9 @@
         loader.style.display = 'none';
       }
     };
-  
+
     // --- 事件监听 (Event Listeners) ---
-    
+
     paginationContainer.addEventListener('click', (event) => {
       const button = event.target.closest('.pagination-button');
       if (button && !button.disabled) {
@@ -300,11 +525,11 @@
         fetchOrders(page);
       }
     });
-  
+
     // 初始加载
     fetchOrders(1);
   });
-  </script>
+</script>
 
 {% schema %}
 {
