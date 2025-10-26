@@ -466,7 +466,7 @@
       border-radius: 12px;
       margin-bottom: 2rem;
     }
-    .rm-content {
+    .rm-content{
       flex: 1;
       overflow-y: auto;
     }
@@ -1382,15 +1382,11 @@
           }, {% endcomment %}
           data: chartData,
           options: {
-            responsive: true, // 设置图表为响应式，根据屏幕窗口变化而变化
-            maintainAspectRatio: false,// 保持图表原有比例
-            scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero:true
-                }
-              }]
-            }
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+            },
           },
         });
         const elementTags = document.getElementById('elementLegend');
