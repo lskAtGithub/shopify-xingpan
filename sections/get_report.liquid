@@ -1573,6 +1573,7 @@
             if (!res.ok) continue;
             const product = await res.json();
             console.log('product----', product);
+            const variants_id = product.variants.find(variant => variant.available).id;
             // 构建HTML
             const card = document.createElement('div');
 
@@ -1595,7 +1596,7 @@
                   <span class="pay-tips-text">After purchase you will get a professional report</span>
                 </div>
                 <form method="post" action="/cart/add" accept-charset="UTF-8" enctype="multipart/form-data" novalidate="novalidate">
-                   <input type="hidden" name="id" value="${product.id}">
+                   <input type="hidden" name="id" value="${variants_id}">
                    <button type="submit" class="button button--primary">Add to Cart</button>
                 </form>
               </div>
