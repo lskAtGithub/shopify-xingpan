@@ -1163,6 +1163,7 @@
       });
       //  提交表单
       const form = document.querySelector('#report-form');
+      let myChart = null;
       form.addEventListener('submit', async function (e) {
         e.preventDefault();
         const name = document.getElementById('name').value.trim();
@@ -1239,6 +1240,11 @@
           const reportAddress = document.getElementById('reportAddress');
           reportAddress.innerHTML = '';
           reportAddress.innerHTML = `${address}`;
+          const container = document.getElementById('recommended-products');
+          container.innerHTML  = '';
+          if(myChart && myChart instanceof window.Chart) {
+            myChart.destroy();
+          }
           renderModal(data.data);
         } catch (err) {
           alert('请求失败，请稍后再试');
@@ -1324,7 +1330,6 @@
           eventSource.close();
         };
       }
-      let myChart = null;
       function newRenderElementChart(res) {
         let configColors = [];  //'#8B5A2B', '#4A90E2', '#FFD100', '#4CAF50'
         const canvas = document.getElementById('chartCanvas');
