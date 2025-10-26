@@ -489,7 +489,7 @@
       paginationContainer.style.display = 'none';
 
       try {
-        const response = await fetch(`${API_ENDPOINT}?customerId=${customerId}&limit=${ITEMS_PER_PAGE}&pageInfo=${page}`, {
+        const response = await fetch(`${API_ENDPOINT}?customerId=${customerId}&limit=${ITEMS_PER_PAGE}&page=${page}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
         });
