@@ -143,7 +143,7 @@
   
     const customerId = pageContainer.dataset.customerId;
     const baseUrl = 'https://api.11starsastro.com';
-    const API_ENDPOINT = '/order/getOrderList';
+    const API_ENDPOINT = baseUrl + '/order/getOrderList';
     const ITEMS_PER_PAGE = 10;
   
     // --- State Management for Pagination ---
@@ -159,15 +159,6 @@
     const cardList = document.querySelector('.order-card-list');
     const emptyStateContainer = document.querySelector('.empty-state-container');
     const paginationContainer = document.querySelector('.pagination-wrapper');
-  
-    // --- Helper & Rendering Functions (Mostly unchanged) ---
-    const getOrderStatus = (order) => { /* ... (same as before) ... */ };
-    const getStatusBadge = (statusText) => { /* ... (same as before) ... */ };
-    const getActionButton = (order) => { /* ... (same as before) ... */ };
-    // (Copy the unchanged helper functions from the previous version here to keep it clean)
-    // ...
-    const renderOrders = (orders) => { /* ... (same as before, but it will now get a slice of allOrders) ... */ };
-  
   
     // --- NEW Pagination UI Rendering ---
     const renderPagination = () => {
