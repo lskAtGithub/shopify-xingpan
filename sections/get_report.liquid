@@ -872,6 +872,7 @@
       height: 100%;
       background-color: rgba(0, 0, 0, 0.2);
       color: #fff;
+      z-index: 10000;
     }
     .report-spinner {
       width: 48px;
@@ -1241,7 +1242,6 @@
           renderModal(data.data);
         } catch (err) {
           alert('请求失败，请稍后再试');
-          {% comment %} spinner.style.display = 'none'; {% endcomment %}
         }
         return false;
       });
@@ -1279,7 +1279,6 @@
                 remark.innerHTML = marked.parse(reason);
               } {% endcomment %}
               if(choices[i].finish_reason && choices[i].finish_reason === 'stop') {
-                
                 renderRecommendedProducts(data);
               }
               scrollToBottom();
