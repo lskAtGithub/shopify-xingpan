@@ -126,7 +126,7 @@
     <p>Loading your reports...</p>
   </div>
   <!-- From Uiverse.io by dexter-st -->
-  <div id="loading-spinner" class="loader-wrapper">
+  <div id="loading-spinner" class="loader-wrapper" style="display: none;">
     <span class="loader-letter">L</span>
     <span class="loader-letter">o</span>
     <span class="loader-letter">a</span>
@@ -234,7 +234,11 @@
   {% stylesheet %}
     /* From Uiverse.io by dexter-st */
     .loader-wrapper {
-      position: relative;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10000;
       display: flex;
       align-items: center;
       justify-content: center;
