@@ -87,7 +87,7 @@
     </div>
   </div>
   </div>
-  <div class="report-container">
+  <div id="report-form-element" class="report-container">
     <div class="bg-gradient-to-br">
       <div class="flex-wrap">
         <!-- 右侧表单 -->
@@ -148,7 +148,7 @@
             </div>
 
             <button id="submit-btn" type="submit" class="gradient-btn">
-              <span>Get Your Free  mini Report</span>
+              <span>Get Your Free mini Report</span>
               <i class="fa fa-arrow-right"></i>
             </button>
           </form>
@@ -822,6 +822,7 @@
 </style>
 
 <script>
+  let orderNo = '';
   document.addEventListener('DOMContentLoaded', () => {
     const pageContainer = document.querySelector('.order-report-page');
     if (!pageContainer) return;
@@ -961,7 +962,7 @@
         return `<a href="${order.report_url}" class="action-button primary">View Report</a>`;
       }
       if (status === 'Fulfilled') {
-        return `<button class="action-button primary" data-order-id="${order.id}">Get the in-depth report</button>`;
+        return `<button class="action-button primary get-report-btn" data-order-id="${order.id}">Get the in-depth report</button>`;
       }
       return `<button class="action-button disabled" disabled>Get the in-depth report</button>`;
     };
@@ -1282,6 +1283,7 @@
           lat: lat,
           lon: lon,
           userName: name,
+          orderNo,
         };
         if(window.customer && window.customer.id) {
           payload.key = ''; //window.customer.id;
@@ -1320,6 +1322,14 @@
           alert('请求失败，请稍后再试');
         }
         return false;
+      });
+      const reportFormEle = document.getElementById('report-form-element');
+      const getReportBtn = document.querySelectorAll('.get-report-btn');
+      filterButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          orderNo = button.dataset.orderId;
+          reportFormEle.style.display = 'flex';
+        });
       });
   });
 </script>
