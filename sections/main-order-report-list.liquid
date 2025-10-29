@@ -999,6 +999,14 @@
         }</span>${getActionButton(order)}</div>`;
         cardList.insertAdjacentHTML('beforeend', mobileCard);
       });
+      const reportFormEle = document.getElementById('report-form-element');
+      const getReportBtn = document.querySelectorAll('.get-report-btn');
+      getReportBtn.forEach((button) => {
+        button.addEventListener('click', () => {
+          orderNo = button.dataset.orderId;
+          reportFormEle.style.display = 'flex';
+        });
+      });
     };
 
     window.customer = {% if customer %}
@@ -1323,14 +1331,7 @@
         }
         return false;
       });
-      const reportFormEle = document.getElementById('report-form-element');
-      const getReportBtn = document.querySelectorAll('.get-report-btn');
-      getReportBtn.forEach((button) => {
-        button.addEventListener('click', () => {
-          orderNo = button.dataset.orderId;
-          reportFormEle.style.display = 'flex';
-        });
-      });
+      
   });
 </script>
 
