@@ -1,6 +1,7 @@
 {% comment %}
   确保用户已登录
 {% endcomment %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.js"></script>
 {% assign page_title = 'Your Reports' %}
 {% unless customer %}
   <div class="page-width login-container">
@@ -85,9 +86,293 @@
       </div>
     </div>
   </div>
+  <div class="report-container">
+    <div class="bg-gradient-to-br">
+      <div class="flex-wrap">
+        <!-- 右侧表单 -->
+        <div class="form-container">
+          <form id="report-form">
+            <div class="form-group">
+              <label for="name">Full Name <span class="required">*</span></label>
+              <input class="ipt" type="text" id="name" name="name" placeholder="Enter your full name" required value="">
+            </div>
+            <!-- 日期时间选择器 -->
+            <div class="form-group">
+              <label for="birth-datetime">Birth Date & Time <span class="required">*</span></label>
+              <input
+                class="ipt datetime-local-en"
+                type="datetime-local"
+                lang="en"
+                id="birth-datetime"
+                name="birth_datetime"
+                required
+                value=""
+                placeholder="Select date and time"
+              >
+              <p style="font-size: 12px; color: #666;">
+                tips：If you don't know the exact time, choose the one you think is possible.
+              </p>
+            </div>
+
+            <!-- 国家选择器 -->
+            <div class="form-group">
+              <label>Birth Location <span class="required">*</span></label>
+              <div class="grid-cols-responsive">
+                <div>
+                  <label for="country">Country</label>
+                  <select id="country" name="country" required>
+                    <option value="">Select Country</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="state">State/Province</label>
+                  <select id="state" name="state" disabled required>
+                    <option value="">Select State</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="city">City</label>
+                  <select id="city" name="city" disabled required>
+                    <option value="">Select City</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input class="ipt" type="checkbox" id="daylight-saving" name="daylight_saving">
+                <span class="checkbox-check-text">Daylight Saving Time was in effect at birth</span>
+              </label>
+            </div>
+
+            <button id="submit-btn" type="submit" class="gradient-btn">
+              <span>{{ section.settings.button_text }}</span>
+              <i class="fa fa-arrow-right"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- From Uiverse.io by dexter-st -->
+  <div id="loading-spinner" class="loader-wrapper" style="display: none;">
+    <span class="loader-letter">L</span>
+    <span class="loader-letter">o</span>
+    <span class="loader-letter">a</span>
+    <span class="loader-letter">d</span>
+    <span class="loader-letter">i</span>
+    <span class="loader-letter">n</span>
+    <span class="loader-letter">g</span>
+
+    <div class="loader-bg-1"></div>
+    <div class="loader-bg-2"></div>
+
+    <div class="loader"></div>
+  </div>
 {% endunless %}
 
 <style>
+  /* From Uiverse.io by dexter-st */
+  .loader-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 180px;
+    aspect-ratio: 1 / 1;
+    font-family: 'Jura', sans-serif;
+    font-size: 1.6em;
+    font-weight: 700;
+    border-radius: 50%;
+    background-color: #0005;
+    user-select: none;
+  }
+
+  .loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: inherit;
+    z-index: 1;
+
+    background-color: #c4d0cc22;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    box-shadow: 0 0 10px 0 #fffa inset, 0 0 12px 4px #238bbb73 inset, 8px 0 8px 0px #fff inset,
+      -8px 0 16px 2px #000 inset, 0 0 20px 2px #0006, 0 0 24px 4px #000000d8, 0 12px 200px 0px #2effdc9d;
+    animation: rotate-anim 4s linear infinite;
+    -webkit-animation: rotate-anim 4s linear infinite;
+  }
+
+  @keyframes rotate-anim {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes rotate-anim {
+    0% {
+      -webkit-transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  .loader-bg-1,
+  .loader-bg-2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    opacity: 0.5;
+    background-color: #482892a1;
+    filter: blur(40px);
+    -webkit-filter: blur(40px);
+    z-index: 0;
+    animation: bg-transform 4s linear infinite;
+    -webkit-animation: bg-transform 4s linear infinite;
+  }
+  .loader-bg-2 {
+    background-color: #0c8653;
+    animation: bg-transform 6s linear infinite reverse;
+    -webkit-animation: bg-transform 6s linear infinite reverse;
+  }
+
+  @keyframes bg-transform {
+    0%,
+    100% {
+      transform: translate(-80%, 0%);
+      clip-path: circle(50% at 130% 50%);
+    }
+    25% {
+      transform: translate(0%, -80%);
+      clip-path: circle(50% at 50% 130%);
+    }
+    50% {
+      transform: translate(80%, 0%);
+      clip-path: circle(50% at -30% 50%);
+    }
+    75% {
+      transform: translate(0%, 80%);
+      clip-path: circle(50% at 50% -30%);
+    }
+  }
+  @-webkit-keyframes bg-transform {
+    0%,
+    100% {
+      -webkit-transform: translate(-80%, 0%);
+      clip-path: circle(50% at 130% 50%);
+    }
+    25% {
+      -webkit-transform: translate(0%, -80%);
+      clip-path: circle(50% at 50% 130%);
+    }
+    50% {
+      -webkit-transform: translate(80%, 0%);
+      clip-path: circle(50% at -30% 50%);
+    }
+    75% {
+      -webkit-transform: translate(0%, 80%);
+      clip-path: circle(50% at 50% -30%);
+    }
+  }
+
+  .loader-letter {
+    display: inline-block;
+    opacity: 0.7;
+    transform: translateY(0);
+    animation: loader-letter-anim 1.8s infinite ease;
+    -webkit-animation: loader-letter-anim 1.8s infinite ease;
+    z-index: 2;
+
+    color: #0004;
+    text-shadow: 0 -1px 0 #eeffdd;
+    filter: drop-shadow(0 6px 3px #000);
+  }
+
+  .loader-letter:nth-child(1) {
+    animation-delay: 0s;
+    -webkit-animation-delay: 0s;
+  }
+  .loader-letter:nth-child(2) {
+    animation-delay: 0.1s;
+    -webkit-animation-delay: 0.1s;
+  }
+  .loader-letter:nth-child(3) {
+    animation-delay: 0.2s;
+    -webkit-animation-delay: 0.2s;
+  }
+  .loader-letter:nth-child(4) {
+    animation-delay: 0.3s;
+    -webkit-animation-delay: 0.3s;
+  }
+  .loader-letter:nth-child(5) {
+    animation-delay: 0.4s;
+    -webkit-animation-delay: 0.4s;
+  }
+  .loader-letter:nth-child(6) {
+    animation-delay: 0.5s;
+    -webkit-animation-delay: 0.5s;
+  }
+  .loader-letter:nth-child(7) {
+    animation-delay: 0.6s;
+    -webkit-animation-delay: 0.6s;
+  }
+  .loader-letter:nth-child(8) {
+    animation-delay: 0.7s;
+    -webkit-animation-delay: 0.7s;
+  }
+  .loader-letter:nth-child(9) {
+    animation-delay: 0.8s;
+    -webkit-animation-delay: 0.8s;
+  }
+  .loader-letter:nth-child(10) {
+    animation-delay: 0.9s;
+    -webkit-animation-delay: 0.9s;
+  }
+
+  @keyframes loader-letter-anim {
+    0%,
+    100% {
+      opacity: 0.5;
+      transform: none;
+    }
+    30% {
+      opacity: 0.5;
+      transform: translateX(-3px) rotate(-1deg);
+    }
+    40% {
+      opacity: 0.9;
+      transform: translateX(2px) rotate(3deg) scale(1.06);
+    }
+  }
+  @-webkit-keyframes loader-letter-anim {
+    0%,
+    100% {
+      opacity: 0.5;
+      transform: none;
+    }
+    30% {
+      opacity: 0.5;
+      transform: translateX(-3px) rotate(-1deg);
+    }
+    40% {
+      opacity: 0.9;
+      transform: translateX(2px) rotate(3deg) scale(1.06);
+    }
+  }
   /* --- Previous styles remain the same --- */
   .order-report-page {
     max-width: 1200px;
@@ -338,6 +623,202 @@
       display: none;
     }
   }
+
+  .report-container {
+    {% comment %} max-width: 1280px; {% endcomment %}
+    {% comment %} margin: 0 auto; {% endcomment %}
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+  }
+  .bg-gradient-to-br {
+    background: linear-gradient(to bottom right, #f9fafb, #f3f4f6);
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+  .flex-wrap {
+    display: flex;
+    flex-direction: column; /* Mobile first: stack columns */
+  }
+  .left-content,
+  .form-container {
+    padding: 1.5rem;
+  }
+  .left-content {
+    text-align: center;
+  }
+  .form-container {
+    background-color: #fff;
+  }
+  .get-report-section .report-container .heading {
+    font-weight: 700;
+    color: #1c1c1c;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    font-size: 2.75rem; /* 30px */
+  }
+
+  /* 日期时间选择器样式 */
+  .get-report-section input[type='datetime-local'] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background-color: #fff;
+  }
+
+  .get-report-section input[type='datetime-local']:focus {
+    outline: none;
+    border-color: #f97316;
+    box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+  }
+
+  /* 移动端优化 */
+  @media (max-width: 768px) {
+    .get-report-section input[type='datetime-local'] {
+      font-size: 16px; /* 防止iOS缩放 */
+    }
+  }
+
+  /* 确保日期时间选择器使用英文显示 */
+  .datetime-local-en {
+    /* 强制使用英文语言环境 */
+    --webkit-calendar-picker-color: #333;
+  }
+
+  /* 针对Webkit浏览器的日期时间选择器样式 */
+  .datetime-local-en::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: invert(0.5);
+  }
+
+  /* 设置日期时间选择器的语言环境 */
+  .datetime-local-en::-webkit-datetime-edit-text {
+    color: #333;
+    padding: 0 0.3em;
+  }
+
+  .datetime-local-en::-webkit-datetime-edit-month-field {
+    color: #333;
+  }
+
+  .datetime-local-en::-webkit-datetime-edit-day-field {
+    color: #333;
+  }
+
+  .datetime-local-en::-webkit-datetime-edit-year-field {
+    color: #333;
+  }
+  .get-report-section p.subheading {
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .note-line {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+  }
+  .get-report-section .note-line p {
+    color: #666;
+    margin: 0;
+  }
+  .note-line .icon-star {
+    position: relative;
+    top: 4px;
+  }
+  .note-line i {
+    color: #f97316;
+  }
+  .top-img-container {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  .top-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Form Styles */
+  #report-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  .grid-cols-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .grid-cols-responsive {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+  }
+  .form-group .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ipt,
+  select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    font-size: 1rem;
+  }
+  .ipt:focus,
+  select:focus {
+    outline: none;
+    border-color: #f97316;
+    box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+  }
+  .ipt[type='checkbox'] {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  .gradient-btn {
+    /* background: linear-gradient(90deg, #ffd100, #4a90e2, #8b5a2b, #4caf50); */
+    background-color: #333;
+    background-size: 300% 100%;
+    color: #fff;
+    font-weight: 600;
+    padding: 0.875rem 1.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+    transition: background-position 0.5s ease;
+    cursor: pointer;
+    border: none;
+    gap: 8px;
+  }
+  .gradient-btn:hover {
+    background-color: #000;
+  }
 </style>
 
 <script>
@@ -518,6 +999,347 @@
         cardList.insertAdjacentHTML('beforeend', mobileCard);
       });
     };
+
+    let lat = '';
+    let lon = '';
+    let reportId = '';
+    const BASE_URL = 'https://api.11starsastro.com';
+    const countrySelect = document.getElementById('country');
+      const stateSelect = document.getElementById('state');
+      const spinner = document.getElementById('loading-spinner');
+      const citySelect = document.getElementById('city');
+
+      const API_URL = BASE_URL + '/city/getInfo';
+
+      const loginPromptModal = document.getElementById('login-prompt-modal');
+      if (!loginPromptModal) return;
+
+      const overlay = loginPromptModal.querySelector('.modal-overlay');
+      const loginPromptModalCloseBtn = loginPromptModal.querySelector('.modal-close-btn');
+
+      // --- Function to open the modal ---
+      window.openLoginPromptModal = function() {
+        loginPromptModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+          loginPromptModal.classList.add('is-open');
+          loginPromptModal.setAttribute('aria-hidden', 'false');
+        }, 10); // Small delay to allow CSS transition
+      };
+
+      // --- Function to close the modal ---
+      window.closeLoginPromptModal = function() {
+        loginPromptModal.classList.remove('is-open');
+        loginPromptModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+          loginPromptModal.style.display = 'none';
+        }, 300); // Wait for transition to finish
+      };
+
+      // Event listeners for closing
+      loginPromptModalCloseBtn.addEventListener('click', window.closeLoginPromptModal);
+      overlay.addEventListener('click', window.closeLoginPromptModal);
+      
+      // Close on 'Escape' key press
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && loginPromptModal.classList.contains('is-open')) {
+          window.closeLoginPromptModal();
+        }
+      });
+
+      const PLACEHOLDERS = {
+        country: 'Select Country',
+        state: 'Select State/Province',
+        city: 'Select City',
+      };
+
+      function createOption(text, value = '') {
+        const opt = document.createElement('option');
+        opt.value = value;
+        opt.textContent = text;
+        return opt;
+      }
+
+      function resetSelect(select, placeholder) {
+        select.innerHTML = '';
+        select.appendChild(createOption(placeholder, ''));
+        select.disabled = true;
+      }
+
+      function setLoading(select) {
+        select.innerHTML = '';
+        select.appendChild(createOption('Loading...', ''));
+        select.disabled = true;
+      }
+
+      function populateSelectWithObjects(select, items, textKey = 'name', valueKey = 'id') {
+        select.innerHTML = '';
+        select.appendChild(
+          createOption(
+            select === countrySelect
+              ? PLACEHOLDERS.country
+              : select === stateSelect
+              ? PLACEHOLDERS.state
+              : PLACEHOLDERS.city,
+            ''
+          )
+        );
+        if (!items || !items.length) {
+          select.disabled = true;
+          return;
+        }
+        items.forEach((item) => {
+          const text = (item && (item[textKey] || item.name || String(item))) || '';
+          const value =
+            (item && (item[valueKey] !== undefined ? item[valueKey] : item.id !== undefined ? item.id : item)) || '';
+          const opt = createOption(text, value);
+          select.appendChild(opt);
+          opt.dataset.latitude = item.latitude;
+          opt.dataset.longitude = item.longitude;
+        });
+        select.disabled = false;
+      }
+
+      async function fetchFromApi(params = {}) {
+        // 构造带查询串的 URL
+        const url = new URL(API_URL);
+        Object.keys(params).forEach((k) => {
+          if (params[k] !== undefined && params[k] !== null && params[k] !== '') url.searchParams.append(k, params[k]);
+        });
+
+        try {
+          const res = await fetch(url.toString(), { method: 'GET', mode: 'cors' });
+          if (!res.ok) {
+            throw new Error('HTTP ' + res.status);
+          }
+          const json = await res.json();
+          // 兼容：返回包裹 { code, message, data: [...] } 的情形
+          if (json && Array.isArray(json.data)) {
+            return json.data;
+          }
+          // 有些接口可能直接返回数组
+          if (Array.isArray(json)) {
+            return json;
+          }
+          // 兜底返回空数组
+          return [];
+        } catch (err) {
+          return [];
+        }
+      }
+
+      // 初始化日期时间选择器的范围和语言
+      const birthDateTimeInput = document.getElementById('birth-datetime');
+      if (birthDateTimeInput) {
+        // 设置最大值为当前时间
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const maxDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+        birthDateTimeInput.max = maxDateTime;
+        
+        // 设置最小值为1900年1月1日
+        birthDateTimeInput.min = '1900-01-01T00:00';
+        
+        // 尝试设置语言环境为英文
+        try {
+          // 对于支持该属性的浏览器
+          birthDateTimeInput.setAttribute('lang', 'en');
+          birthDateTimeInput.setAttribute('data-locale', 'en-US');
+          
+          // 尝试通过Intl API设置日期格式
+          const options = { 
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          };
+          const formatter = new Intl.DateTimeFormat('en-US', options);
+          
+          // 添加事件监听器，确保选择器使用英文
+          birthDateTimeInput.addEventListener('focus', function() {
+            this.setAttribute('lang', 'en');
+          });
+          
+          birthDateTimeInput.addEventListener('click', function() {
+            this.setAttribute('lang', 'en');
+          });
+          
+          // 添加额外的点击事件监听器，强制触发日期选择器
+          birthDateTimeInput.addEventListener('click', function() {
+            // 确保元素已聚焦
+            this.focus();
+            
+            // 使用现代浏览器支持的showPicker方法
+            if (typeof this.showPicker === 'function') {
+              try {
+                this.showPicker();
+              } catch (e) {
+                // 忽略可能的错误，如在某些设备上showPicker可能不被支持
+                console.log('showPicker method failed:', e);
+              }
+            }
+          });
+          
+          // 添加触摸事件支持，针对移动设备
+          birthDateTimeInput.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // 防止滚动
+            this.focus();
+            
+            if (typeof this.showPicker === 'function') {
+              try {
+                this.showPicker();
+              } catch (e) {
+                console.log('Touch showPicker failed:', e);
+              }
+            }
+          }, { passive: false });
+        } catch (e) {
+          console.log('Could not set locale for datetime input:', e);
+        }
+      }
+      
+      // 初始化：清空下级
+      resetSelect(stateSelect, PLACEHOLDERS.state);
+      resetSelect(citySelect, PLACEHOLDERS.city);
+
+      // 加载国家列表（页面加载时）
+      (async function loadCountries() {
+        setLoading(countrySelect);
+        const countries = await fetchFromApi(); // 不传参数 => 返回国家列表
+        populateSelectWithObjects(countrySelect, countries, 'name', 'id');
+      })();
+
+      // 当国家改变时，加载州/省
+      countrySelect.addEventListener('change', async function () {
+        const countryId = this.value;
+        // 清空州和市
+        resetSelect(stateSelect, PLACEHOLDERS.state);
+        resetSelect(citySelect, PLACEHOLDERS.city);
+        if (!countryId) return;
+
+        setLoading(stateSelect);
+        const states = await fetchFromApi({ countryId: countryId });
+        const opt = this.options[this.selectedIndex];
+        lat = opt.dataset.latitude;
+        lon = opt.dataset.longitude;
+        populateSelectWithObjects(stateSelect, states, 'name', 'id');
+      });
+
+      // 当州/省改变时，加载城市
+      stateSelect.addEventListener('change', async function () {
+        const stateId = this.value;
+        const countryId = countrySelect.value;
+        resetSelect(citySelect, PLACEHOLDERS.city);
+        if (!countryId || !stateId) return;
+        const opt = this.options[this.selectedIndex];
+        lat = opt.dataset.latitude;
+        lon = opt.dataset.longitude;
+        setLoading(citySelect);
+        const cities = await fetchFromApi({ countryId: '', stateId: stateId });
+        populateSelectWithObjects(citySelect, cities, 'name', 'id');
+      });
+      citySelect.addEventListener('change', async function () {
+        const opt = this.options[this.selectedIndex];
+        lat = opt.dataset.latitude;
+        lon = opt.dataset.longitude;
+      });
+      //  提交表单
+      const form = document.querySelector('#report-form');
+      let myChart = null;
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const birthDateTime = document.getElementById('birth-datetime').value;
+        const country = document.getElementById('country').value;
+        const state = document.getElementById('state').value;
+        const city = document.getElementById('city').value;
+        
+        // 获取label文本内容
+        const countryLabel = countrySelect.options[countrySelect.selectedIndex]?.text || '';
+        const stateLabel = stateSelect.options[stateSelect.selectedIndex]?.text || '';
+        const cityLabel = citySelect.options[citySelect.selectedIndex]?.text || '';
+        
+        // 验证必填字段
+        if (!name) {
+          alert('Please enter your full name');
+          return false;
+        }
+        
+        if (!birthDateTime) {
+          alert('Please select your birth date and time');
+          return false;
+        }
+        
+        if (!country || !state || !city) {
+          alert('Please select your birth location');
+          return false;
+        }
+        
+        // 将datetime-local格式转换为所需的格式
+        const date = new Date(birthDateTime);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hour = String(date.getHours()).padStart(2, '0');
+        const minute = String(date.getMinutes()).padStart(2, '0');
+        const time = `${year}-${month}-${day} ${hour}:${minute}:00`;
+        const address = cityLabel ? `${cityLabel},${stateLabel},${countryLabel}` : `${stateLabel},${countryLabel}`;
+        const payload = {
+          tid: 7,
+          us: 'en',
+          userBirthday: time,
+          userCity: address,
+          userEmail: window.customer ? window.customer.email : '',
+          ztime: 8,
+          lat: lat,
+          lon: lon,
+          userName: name,
+        };
+        if(window.customer && window.customer.id) {
+          payload.key = ''; //window.customer.id;
+        }
+        const paramsForm = new URLSearchParams();
+        Object.keys(payload).forEach((k) => {
+          paramsForm.append(k, payload[k]);
+        });
+        spinner.style.display = 'flex';
+        try {
+          const res = await fetch(`${BASE_URL}/sysUser/creatReport`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: paramsForm,
+          });
+          const data = await res.json();
+          reportId = data.data.reportId;
+          const reportTitle = document.getElementById('reportTitle');
+          reportTitle.innerHTML = '';
+          reportTitle.innerHTML = `${name}'s Report`;
+          const reportDatetime = document.getElementById('reportDatetime');
+          reportDatetime.innerHTML = '';
+          reportDatetime.innerHTML = `${time}`;
+          const reportAddress = document.getElementById('reportAddress');
+          reportAddress.innerHTML = '';
+          reportAddress.innerHTML = `${address}`;
+          const container = document.getElementById('recommended-products');
+          container.innerHTML  = '';
+          if(myChart && myChart instanceof window.Chart) {
+            myChart.destroy();
+          }
+          {% comment %} renderModal(data.data); {% endcomment %}
+        } catch (err) {
+          alert('请求失败，请稍后再试');
+        }
+        return false;
+      });
   });
 </script>
 
