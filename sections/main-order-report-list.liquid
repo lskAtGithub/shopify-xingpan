@@ -1325,7 +1325,7 @@
       });
       const reportFormEle = document.getElementById('report-form-element');
       const getReportBtn = document.querySelectorAll('.get-report-btn');
-      filterButtons.forEach((button) => {
+      getReportBtn.forEach((button) => {
         button.addEventListener('click', () => {
           orderNo = button.dataset.orderId;
           reportFormEle.style.display = 'flex';
