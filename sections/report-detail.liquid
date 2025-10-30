@@ -147,16 +147,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('chart-legend-container').innerHTML = legendHTML;
 
         const ctx = document.getElementById('elementalPieChart');
-        new window.Chart(ctx, {
+        const reportDetailsChart = new window.Chart(ctx, {
             type: 'pie',
             data: {
-                labels: chartLabels,
-                datasets: [{
-                    data: chartData,
-                    backgroundColor: chartColors,
-                    borderColor: '#ffffff',
-                    borderWidth: 2
-                }]
+              labels: chartLabels,
+              datasets: [{
+                  label: '',
+                  data: chartData,
+                  backgroundColor: chartColors,
+                  hoverOffset: 4
+              }]
             },
             options: {
                 responsive: true,
