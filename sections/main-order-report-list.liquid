@@ -1448,6 +1448,10 @@
   const stopwatchDisplay = document.querySelector('.stream-stopwatch');
   const streamOutput = document.getElementById('stream-output');
   const streamStatus = document.getElementById('stream-status');
+  // State for stopwatch and stream
+  let stopwatchInterval = null;
+  let stopwatchStartTime = 0;
+  let eventSourceInstance = null;
 
   // --- Stopwatch Module ---
   const formatTime = (ms) => {
