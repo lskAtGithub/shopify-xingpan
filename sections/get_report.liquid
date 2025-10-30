@@ -1588,16 +1588,6 @@
         };
         myChart = new window.Chart(canvas, {
           type: 'pie',
-          {% comment %} data: {
-            labels: Object.keys(res.itemScore),
-            datasets: [
-              {
-                data: pointPercent,
-                backgroundColor: configColors,
-                borderWidth: 0,
-              },
-            ],
-          }, {% endcomment %}
           data: chartData,
           options: {
             responsive: true,
