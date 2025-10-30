@@ -1292,10 +1292,9 @@
           lon: lon,
           userName: name,
           orderNo,
-          key: window.customer ? window.customer.id : '',
         };
         if(window.customer && window.customer.id) {
-          payload.key = ''; //window.customer.id;
+          payload.key = window.customer.id;; //window.customer.id;
         }
         const paramsForm = new URLSearchParams();
         Object.keys(payload).forEach((k) => {
