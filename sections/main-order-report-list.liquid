@@ -1282,7 +1282,7 @@
         const time = `${year}-${month}-${day} ${hour}:${minute}:00`;
         const address = cityLabel ? `${cityLabel},${stateLabel},${countryLabel}` : `${stateLabel},${countryLabel}`;
         const payload = {
-          tid: 7,
+          tid: 4,
           us: 'en',
           userBirthday: time,
           userCity: address,
@@ -1292,6 +1292,7 @@
           lon: lon,
           userName: name,
           orderNo,
+          key: window.customer ? window.customer.id : '',
         };
         if(window.customer && window.customer.id) {
           payload.key = ''; //window.customer.id;
@@ -1316,7 +1317,9 @@
         }
         return false;
       });
-      
+      function loadStream(data) {
+        const eventSource = new EventSource(`${BASE_URL}/astrology/doubao?id=4&reportId=${reportId}`);
+      }
   });
 </script>
 
