@@ -1,0 +1,216 @@
+<div id="report-container" class="report-page-container">
+  <!-- Loading State -->
+  <div id="report-loader">
+    <p>Loading your report, please wait...</p>
+  </div>
+
+  <!-- Report content (hidden until loaded) -->
+  <div id="report-content" style="display: none;">
+    <!-- Top Bar -->
+    <div class="report-header">
+      <div class="report-info">
+        <svg class="report-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        <div>
+          <span class="report-for">Report for <strong id="report-user-name">...</strong></span>
+          <span id="report-date" class="report-date">...</span>
+        </div>
+      </div>
+      <a id="download-pdf-link" href="#" class="download-pdf-button" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        <span>Download PDF</span>
+      </a>
+    </div>
+
+    <!-- Main Report Content -->
+    <div class="report-body">
+      <!-- Black Info Box -->
+      <div class="jason-report-box">
+        <h2 id="report-user-name-box">...</h2>
+        <p id="report-birthday">...</p>
+        <p id="report-address">...</p>
+      </div>
+
+      <!-- Elemental Balance Chart -->
+      <div class="elemental-balance-section">
+          <h3>Elemental Balance</h3>
+          <div class="chart-container">
+              <div class="pie-chart-wrapper">
+                  <canvas id="elementalPieChart"></canvas>
+              </div>
+              <div id="chart-legend-container" class="chart-legend">
+                  <!-- Legend will be dynamically inserted here -->
+              </div>
+          </div>
+      </div>
+      
+      <!-- The main content from API -->
+      <div id="report-dynamic-content" class="report-dynamic-content">
+          <!-- The 'content' HTML from the API will be injected here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* --- STYLES ARE UNCHANGED FROM THE PREVIOUS VERSION --- */
+#report-loader { text-align: center; padding: 100px 20px; font-size: 1.2em; color: #555; }
+.report-page-container { max-width: 900px; margin: 0 auto; padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333; }
+.report-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #e8e8e8; }
+.report-info { display: flex; align-items: center; gap: 15px; }
+.report-icon { width: 48px; height: 48px; color: #555; background-color: #f0f0f0; border-radius: 50%; padding: 10px; }
+.report-info div { display: flex; flex-direction: column; }
+.report-for { font-size: 16px; }
+.report-date { font-size: 14px; color: #888; }
+.download-pdf-button { display: flex; align-items: center; gap: 8px; padding: 12px 20px; background-color: #2c2c2c; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; transition: background-color 0.3s; text-decoration: none; }
+.download-pdf-button:hover { background-color: #444; }
+.report-body h2, .report-body h3 { font-weight: 600; margin-bottom: 1em; }
+.jason-report-box { background-color: #121212; color: #fff; padding: 30px; border-radius: 12px; text-align: center; margin-bottom: 40px; }
+.jason-report-box h2 { font-size: 28px; margin: 0 0 10px 0; }
+.jason-report-box p { margin: 5px 0 0 0; color: #aaa; }
+.elemental-balance-section { text-align: center; margin-bottom: 50px; }
+.chart-container { display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; }
+.pie-chart-wrapper { max-width: 200px; max-height: 200px; }
+.chart-legend { text-align: left; font-size: 16px; }
+.legend-item { display: flex; align-items: center; margin-bottom: 10px; }
+.legend-color { width: 16px; height: 16px; border-radius: 50%; margin-right: 10px; }
+.report-dynamic-content { line-height: 1.7; }
+.report-dynamic-content .head .title { font-size: 22px; font-weight: 600; margin-bottom: 1em; text-align: center; }
+.report-dynamic-content .head .text { font-size: 16px; color: #555; margin-bottom: 40px; }
+.report-dynamic-content .tltle1, .report-dynamic-content .title2, .report-dynamic-content .title3 { font-size: 24px; font-weight: 600; margin-top: 50px; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+.report-dynamic-content .item11, .report-dynamic-content .item12, .report-dynamic-content .item13 { margin-bottom: 20px; }
+.report-dynamic-content .subtitle { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+.report-dynamic-content .item2 { padding: 20px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e8e8e8; }
+.report-dynamic-content .title31 { font-size: 20px; font-weight: 600; margin-top: 30px; margin-bottom: 20px; }
+.report-dynamic-content .item3 { border: 1px solid #4A90E2; padding: 20px; border-radius: 12px; margin-bottom: 15px; }
+.report-dynamic-content .title311 { font-weight: 600; color: #0056b3; margin-bottom: 8px; }
+@media (max-width: 768px) { .report-page-container { padding: 20px 15px; } .report-header { flex-direction: column; gap: 20px; } .jason-report-box h2 { font-size: 24px; } .chart-container { flex-direction: column; } }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const loader = document.getElementById('report-loader');
+    const content = document.getElementById('report-content');
+    const container = document.getElementById('report-container');
+
+    const API_BASE_URL = 'https://api.11starsastro.com';
+
+    // A mapping for Chinese keys to English names and colors for the chart
+    const elementMap = {
+        '水': { name: 'Water', color: '#4A90E2' },
+        '风': { name: 'Air', color: '#52B788' },
+        '土': { name: 'Earth', color: '#8B5E34' },
+        '火': { name: 'Fire', color: '#FFC914' }
+    };
+
+    const renderReport = (data) => {
+        // --- 1. Parse the 'param' JSON string ---
+        const params = JSON.parse(data.param).data;
+
+        // --- 2. Populate Header and Info Box ---
+        const reportDate = new Date(data.cTime).toLocaleString();
+        document.getElementById('report-user-name').textContent = data.userName;
+        document.getElementById('report-user-name-box').textContent = `${data.userName}'s Report`;
+        document.getElementById('report-date').textContent = reportDate;
+        document.getElementById('report-birthday').textContent = new Date(data.birthday).toLocaleString();
+        document.getElementById('report-address').textContent = data.address;
+        document.getElementById('download-pdf-link').href = API_BASE_URL + data.pdfPath;
+
+        // --- 3. Inject the Main HTML Content ---
+        document.getElementById('report-dynamic-content').innerHTML = data.content;
+
+        // --- 4. Prepare Data and Render the Pie Chart ---
+        const scores = params.itemScore;
+        const totalScore = Object.values(scores).reduce((sum, score) => sum + score, 0);
+
+        const chartLabels = [];
+        const chartData = [];
+        const chartColors = [];
+        let legendHTML = '';
+
+        Object.entries(scores).forEach(([key, score]) => {
+            const element = elementMap[key];
+            if (element) {
+                const percentage = totalScore > 0 ? ((score / totalScore) * 100).toFixed(2) : 0;
+                chartLabels.push(element.name);
+                chartData.push(percentage);
+                chartColors.push(element.color);
+
+                legendHTML += `
+                    <div class="legend-item">
+                        <span class="legend-color" style="background-color: ${element.color};"></span>
+                        ${element.name}: ${percentage}%
+                    </div>`;
+            }
+        });
+        
+        document.getElementById('chart-legend-container').innerHTML = legendHTML;
+
+        const ctx = document.getElementById('elementalPieChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    data: chartData,
+                    backgroundColor: chartColors,
+                    borderColor: '#ffffff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => `${context.label}: ${context.parsed}%`
+                        }
+                    }
+                }
+            }
+        });
+    };
+
+    const fetchReport = async () => {
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const reportId = urlParams.get('id');
+
+            if (!reportId) {
+                throw new Error('Report ID is missing from the URL.');
+            }
+
+            const response = await fetch(`${API_BASE_URL}/report/getById?id=${reportId}`);
+            if (!response.ok) {
+                throw new Error(`API request failed with status ${response.status}`);
+            }
+
+            const result = await response.json();
+            if (result.code !== 0) {
+                throw new Error(result.message || 'An unknown API error occurred.');
+            }
+            
+            renderReport(result.data);
+            
+            // Show content and hide loader
+            loader.style.display = 'none';
+            content.style.display = 'block';
+
+        } catch (error) {
+            console.error('Failed to load report:', error);
+            container.innerHTML = `<div style="text-align: center; padding: 50px;"><h2>Could not load report</h2><p>${error.message}</p></div>`;
+        }
+    };
+
+    fetchReport();
+});
+</script>
+
+{% schema %}
+{
+  "name": "Main Report Detail",
+  "tag": "section",
+  "class": "section"
+}
+{% endschema %}
