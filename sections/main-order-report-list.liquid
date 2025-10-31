@@ -948,6 +948,7 @@
 <script>
   let orderNo = '';
   document.addEventListener('DOMContentLoaded', () => {
+    const reportFormEle = document.getElementById('report-form-element');
     const pageContainer = document.querySelector('.order-report-page');
     if (!pageContainer) return;
 
@@ -1129,7 +1130,6 @@
         }</span>${getActionButton(order)}</div>`;
         cardList.insertAdjacentHTML('beforeend', mobileCard);
       });
-      const reportFormEle = document.getElementById('report-form-element');
       const getReportBtn = document.querySelectorAll('.get-report-btn');
       getReportBtn.forEach((button) => {
         button.addEventListener('click', () => {
