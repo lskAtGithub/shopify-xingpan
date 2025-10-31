@@ -2,6 +2,8 @@
 <!-- 引入Chart.js和自定义脚本 -->
 {% comment %} <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script> {% endcomment %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 <section class="get-report-section section-{{ section.id }}">
   <div class="report-container">
     <div class="bg-gradient-to-br">
@@ -102,6 +104,31 @@
                 </div>
               </div>
             </div>
+            {% comment %}
+              <div class="form-group">
+                <label>Birth Location <span class="required">*</span></label>
+                <div class="grid-cols-responsive">
+                  <div>
+                    <label for="country">Country</label>
+                    <select id="country" name="country" required>
+                      <option value="">Select Country</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="state">State/Province</label>
+                    <select id="state" name="state" disabled required>
+                      <option value="">Select State</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="city">City</label>
+                    <select id="city" name="city" disabled required>
+                      <option value="">Select City</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            {% endcomment %}
 
             <div class="form-group">
               <label class="checkbox-label">
@@ -232,7 +259,25 @@
   </div>
 
   {% stylesheet %}
-    .stream-content>p:first-child {
+    .choices {
+      margin-top: 5px;
+    }
+    .choices__inner {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 6px 10px;
+    }
+    .choices__list--dropdown {
+      border-radius: 4px;
+    }
+    .choices[data-type*='select-one']::after {
+      border-color: #333 transparent transparent;
+    }
+    .choices.is-open[data-type*='select-one']::after {
+      border-color: transparent transparent #333;
+    }
+    .stream-content > p:first-child {
       font-size: 1.5rem;
       color: #000000;
       font-weight: 600;
@@ -1145,6 +1190,23 @@
       const spinner = document.getElementById('loading-spinner');
       const citySelect = document.getElementById('city');
 
+       // --- 1. 初始化 Choices.js 实例 ---
+      const commonConfig = {
+        searchEnabled: true,
+        searchPlaceholderValue: 'Search...',
+        removeItemButton: false,
+        itemSelectText: 'Press to select',
+        shouldSort: false // 保持API返回的顺序
+    };
+
+    const countryEl = document.getElementById('country');
+    const stateEl = document.getElementById('state');
+    const cityEl = document.getElementById('city');
+
+    const countryChoices = new Choices(countryEl, { ...commonConfig, placeholder: true, placeholderValue: 'Select a country' });
+    const stateChoices = new Choices(stateEl, { ...commonConfig, placeholder: true, placeholderValue: 'Select a state' });
+    const cityChoices = new Choices(cityEl, { ...commonConfig, placeholder: true, placeholderValue: 'Select a city' });
+
       const API_URL = BASE_URL + '/city/getInfo';
 
       const loginPromptModal = document.getElementById('login-prompt-modal');
@@ -1345,8 +1407,132 @@
       resetSelect(stateSelect, PLACEHOLDERS.state);
       resetSelect(citySelect, PLACEHOLDERS.city);
 
+       // --- API 调用函数 ---
+    const fetchFromApi = async (params = {}) => {
+      const query = new URLSearchParams(params).toString();
+      const url = `${API_BASE_URL}${query ? '?' + query : ''}`;
+      try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+          const result = await response.json();
+          if (result.code !== 0) throw new Error(result.message || 'API returned an error');
+          return result.data;
+      } catch (error) {
+          console.error('Failed to fetch location data:', error);
+          // 在这里可以添加UI错误提示
+          return []; // 返回空数组以避免后续代码出错
+      }
+  };
+  
+  // --- 联动逻辑 ---
+
+  const loadCountries = async () => {
+      countryChoices.clearStore();
+      stateChoices.disable();
+      cityChoices.disable();
+      countryChoices.setChoices([{ value: '', label: 'Loading countries...', disabled: true, selected: true }], 'value', 'label', true);
+      
+      const countries = await fetchFromApi();
+      
+      // 关键: 格式化数据以包含自定义属性
+      const choicesData = countries.map(item => ({
+          value: item.id,
+          label: item.name,
+          customProperties: {
+              latitude: item.latitude,
+              longitude: item.longitude
+          }
+      }));
+      
+      countryChoices.setChoices(choicesData, 'value', 'label', true);
+  };
+
+  countryEl.addEventListener('change', async (event) => {
+      const countryId = event.detail.value;
+      const choice = event.detail.choice;
+
+      // 清空并禁用下级
+      stateChoices.clearStore();
+      cityChoices.clearStore();
+      cityChoices.disable();
+      
+      // 更新经纬度
+      if (choice && choice.customProperties) {
+          lat = choice.customProperties.latitude;
+          lon = choice.customProperties.longitude;
+      } else {
+          lat = null;
+          lon = null;
+      }
+
+      if (!countryId) {
+        stateChoices.disable();
+        return;
+      }
+      
+      stateChoices.enable();
+      stateChoices.setChoices([{ value: '', label: 'Loading states...', disabled: true, selected: true }], 'value', 'label', true);
+      
+      const states = await fetchFromApi({ countryId: countryId });
+      
+      const choicesData = states.map(item => ({
+          value: item.id,
+          label: item.name,
+          customProperties: {
+              latitude: item.latitude,
+              longitude: item.longitude
+          }
+      }));
+      
+      stateChoices.setChoices(choicesData, 'value', 'label', true);
+  });
+
+  stateEl.addEventListener('change', async (event) => {
+      const stateId = event.detail.value;
+      const choice = event.detail.choice;
+
+      cityChoices.clearStore();
+      
+      if (choice && choice.customProperties) {
+          lat = choice.customProperties.latitude;
+          lon = choice.customProperties.longitude;
+      }
+
+      if (!stateId) {
+          cityChoices.disable();
+          return;
+      }
+
+      cityChoices.enable();
+      cityChoices.setChoices([{ value: '', label: 'Loading cities...', disabled: true, selected: true }], 'value', 'label', true);
+      
+      const cities = await fetchFromApi({ stateId: stateId });
+      
+      const choicesData = cities.map(item => ({
+          value: item.id,
+          label: item.name,
+          customProperties: {
+              latitude: item.latitude,
+              longitude: item.longitude
+          }
+      }));
+      
+      cityChoices.setChoices(choicesData, 'value', 'label', true);
+  });
+
+  cityEl.addEventListener('change', (event) => {
+      const choice = event.detail.choice;
+      if (choice && choice.customProperties) {
+          lat = choice.customProperties.latitude;
+          lon = choice.customProperties.longitude;
+      }
+  });
+
+  // 初始加载
+  loadCountries();
+
       // 加载国家列表（页面加载时）
-      (async function loadCountries() {
+      {% comment %} (async function loadCountries() {
         setLoading(countrySelect);
         const countries = await fetchFromApi(); // 不传参数 => 返回国家列表
         populateSelectWithObjects(countrySelect, countries, 'name', 'id');
@@ -1385,7 +1571,7 @@
         const opt = this.options[this.selectedIndex];
         lat = opt.dataset.latitude;
         lon = opt.dataset.longitude;
-      });
+      }); {% endcomment %}
       //  提交表单
       const form = document.querySelector('#report-form');
       let myChart = null;
