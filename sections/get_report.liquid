@@ -1966,7 +1966,7 @@
             if (!res.ok) continue;
             const product = await res.json();
             console.log('product----', product);
-            const variants_id = product.variants.find(variant => variant.available).id;
+            const variants_id = product.variants[0].id;
             // 构建HTML
             const card = document.createElement('div');
 
