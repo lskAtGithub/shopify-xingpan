@@ -49,9 +49,11 @@
         width: block_settings.image.width,
         widths: widths,
         height: block_settings.image.height,
-        class: 'image-block__image border-style',
+        class: 'image-block__image border-style image-lazy-load',
         style: image_border_style,
-        sizes: sizes
+        sizes: sizes,
+        loading: 'lazy',
+        data-block-id: block.id
     }}
   {%- else -%}
     <div class="placeholder-image border-style size-style" style="{{ image_border_style }}">
@@ -79,6 +81,70 @@
   </a>
 {% endif %}
 
+{% javascript %}
+  // 为当前图片块添加懒加载淡入效果
+  (function() {
+    // 确保只初始化一次图片懒加载逻辑
+    if (window.imageLazyLoadInitialized !== true) {
+      window.imageLazyLoadInitialized = true;
+      console.log('图片懒加载系统初始化');
+      
+      // 设置Intersection Observer来监测图片进入视口
+      const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            console.log(`图片开始加载 - 块ID: ${img.dataset.blockId}`);
+            
+            // 图片加载完成后添加loaded类以触发淡入效果
+            img.onload = function() {
+              console.log(`图片加载完成 - 块ID: ${img.dataset.blockId}, 开始300ms淡入`);
+              // 使用setTimeout确保CSS过渡效果正确触发
+              setTimeout(() => {
+                img.classList.add('loaded');
+              }, 10);
+            };
+            
+            // 处理图片加载失败的情况
+            img.onerror = function() {
+              console.log(`图片加载失败 - 块ID: ${img.dataset.blockId}`);
+              img.classList.add('loaded'); // 即使加载失败也显示占位符
+            };
+            
+            // 停止观察已处理的图片
+            imageObserver.unobserve(img);
+          }
+        });
+      }, {
+        rootMargin: '200px', // 提前200px开始监测
+        threshold: 0.01      // 只要1%可见就触发
+      });
+      
+      // 处理已存在的图片
+      const processExistingImages = () => {
+        const lazyImages = document.querySelectorAll('.image-lazy-load:not(.loaded)');
+        console.log(`发现 ${lazyImages.length} 张需要懒加载的图片`);
+        lazyImages.forEach(img => {
+          imageObserver.observe(img);
+        });
+      };
+      
+      // 立即处理
+      processExistingImages();
+      
+      // 监听DOM变化，处理动态加载的图片
+      const mutationObserver = new MutationObserver(() => {
+        processExistingImages();
+      });
+      
+      mutationObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    }
+  })();
+{% endjavascript %}
+
 {% stylesheet %}
   .placeholder-image {
     position: relative;
@@ -98,6 +164,23 @@
     /* When the image is nested in a group, section, etc, respect the parent's horizontal alignment */
     justify-content: var(--horizontal-alignment, 'inline-start');
   }
+  
+  /* 懒加载图片淡入效果 */
+  .image-lazy-load {
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
+  }
+  
+  .image-lazy-load.loaded {
+    opacity: 1;
+  }
+  
+  /* 图片容器确保适当的定位 */
+  .image-block {
+    position: relative;
+    overflow: hidden;
+  }
+{% endstylesheet %}
 
   .image-block--height-fill .image-block__image {
     height: 100%;
