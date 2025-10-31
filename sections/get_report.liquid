@@ -1299,7 +1299,7 @@
         select.disabled = false;
       }
 
-      async function fetchFromApi(params = {}) {
+      {% comment %} async function fetchFromApi(params = {}) {
         // 构造带查询串的 URL
         const url = new URL(API_URL);
         Object.keys(params).forEach((k) => {
@@ -1325,7 +1325,7 @@
         } catch (err) {
           return [];
         }
-      }
+      } {% endcomment %}
 
       // 初始化日期时间选择器的范围和语言
       const birthDateTimeInput = document.getElementById('birth-datetime');
@@ -1573,7 +1573,7 @@
         lon = opt.dataset.longitude;
       }); {% endcomment %}
 
-      
+
       //  提交表单
       const form = document.querySelector('#report-form');
       let myChart = null;
