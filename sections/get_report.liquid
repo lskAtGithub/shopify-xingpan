@@ -1404,8 +1404,8 @@
       }
       
       // 初始化：清空下级
-      resetSelect(stateSelect, PLACEHOLDERS.state);
-      resetSelect(citySelect, PLACEHOLDERS.city);
+      {% comment %} resetSelect(stateSelect, PLACEHOLDERS.state);
+      resetSelect(citySelect, PLACEHOLDERS.city); {% endcomment %}
 
        // --- API 调用函数 ---
     const fetchFromApi = async (params = {}) => {
