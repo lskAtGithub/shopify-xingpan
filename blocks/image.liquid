@@ -49,9 +49,11 @@
         width: block_settings.image.width,
         widths: widths,
         height: block_settings.image.height,
-        class: 'image-block__image border-style',
+        class: 'image-block__image border-style image-lazy-load',
         style: image_border_style,
-        sizes: sizes
+        sizes: sizes,
+        loading: 'lazy',
+        data-block-id: block.id
     }}
   {%- else -%}
     <div class="placeholder-image border-style size-style" style="{{ image_border_style }}">
@@ -79,6 +81,93 @@
   </a>
 {% endif %}
 
+{% javascript %}
+  // 优化的图片懒加载淡入效果
+  (function() {
+    // 确保只初始化一次图片懒加载逻辑
+    if (window.imageLazyLoadInitialized !== true) {
+      window.imageLazyLoadInitialized = true;
+      
+      // 设置Intersection Observer来监测图片进入视口
+      const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            
+            // 如果图片已经加载完成，直接添加loaded类
+            if (img.complete && img.naturalHeight !== 0) {
+              img.classList.add('loaded');
+              imageObserver.unobserve(img);
+              return;
+            }
+            
+            // 图片加载完成后添加loaded类以触发淡入效果
+            const handleLoad = function() {
+              img.classList.add('loaded');
+              img.removeEventListener('load', handleLoad);
+              img.removeEventListener('error', handleError);
+            };
+            
+            // 处理图片加载失败的情况
+            const handleError = function() {
+              img.classList.add('loaded'); // 即使加载失败也显示占位符
+              img.removeEventListener('load', handleLoad);
+              img.removeEventListener('error', handleError);
+            };
+            
+            img.addEventListener('load', handleLoad);
+            img.addEventListener('error', handleError);
+            
+            // 停止观察已处理的图片
+            imageObserver.unobserve(img);
+          }
+        });
+      }, {
+        rootMargin: '50px', // 提前50px开始监测，减少不必要的预加载
+        threshold: 0.01     // 只要1%可见就触发
+      });
+      
+      // 处理已存在的图片
+      const processExistingImages = () => {
+        const lazyImages = document.querySelectorAll('.image-lazy-load:not(.loaded)');
+        lazyImages.forEach(img => {
+          imageObserver.observe(img);
+        });
+      };
+      
+      // 使用requestAnimationFrame确保DOM完全加载后再处理
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', processExistingImages);
+      } else {
+        processExistingImages();
+      }
+      
+      // 监听DOM变化，处理动态加载的图片
+      const mutationObserver = new MutationObserver((mutations) => {
+        let shouldProcess = false;
+        mutations.forEach(mutation => {
+          if (mutation.type === 'childList') {
+            mutation.addedNodes.forEach(node => {
+              if (node.nodeType === 1 && (node.classList?.contains('image-lazy-load') || node.querySelector?.('.image-lazy-load'))) {
+                shouldProcess = true;
+              }
+            });
+          }
+        });
+        
+        if (shouldProcess) {
+          requestAnimationFrame(processExistingImages);
+        }
+      });
+      
+      mutationObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    }
+  })();
+{% endjavascript %}
+
 {% stylesheet %}
   .placeholder-image {
     position: relative;
@@ -86,7 +175,7 @@
     overflow: hidden;
   }
 
-  placeholder-image img {
+  .placeholder-image img {
     width: 100%;
     height: 100%;
     aspect-ratio: var(--ratio);
@@ -94,9 +183,22 @@
 
   .image-block {
     display: flex;
+    position: relative;
+    overflow: hidden;
 
     /* When the image is nested in a group, section, etc, respect the parent's horizontal alignment */
     justify-content: var(--horizontal-alignment, 'inline-start');
+  }
+  
+  /* 懒加载图片淡入效果 */
+  .image-lazy-load {
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
+    will-change: opacity;
+  }
+  
+  .image-lazy-load.loaded {
+    opacity: 1;
   }
 
   .image-block--height-fill .image-block__image {
