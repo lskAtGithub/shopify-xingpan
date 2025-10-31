@@ -182,12 +182,15 @@
         </div>
         <div class="stream-modal-body">
           <div class="stream-stopwatch-container">
-            <span class="stream-stopwatch">00:00:00</span>
+            <span class="stream-stopwatch"
+              >In-depth reports take a long time to process; please wait for an email notification of the results.</span
+            >
           </div>
           <pre id="stream-output" class="stream-output"></pre>
         </div>
         <div class="stream-modal-footer">
-          <p id="stream-status">Connecting to stream...</p>
+          <p id="stream-status"></p>
+          {% comment %} <p id="stream-status">Connecting to stream...</p> {% endcomment %}
         </div>
       </div>
     </div>
@@ -1083,6 +1086,12 @@
         return `<a href="${order.report_url}" class="action-button primary">View Report</a>`;
       }
       if (status === 'Fulfilled') {
+        if(order.report_info && order.report_info.id && !order.report_info.pdfPath) {
+          return `<button class="action-button disabled" disabled>In-depth report being generated</button>`;
+        }
+        if(order.report_info && order.report_info.id && order.report_info.pdfPath) {
+          return `<a href="pages/report?id${order.report_info.uuid}" class="action-button primary">View Report</a>`;
+        }
         return `<button class="action-button primary get-report-btn" data-order-id="${order.order_number}">Get the in-depth report</button>`;
       }
       return `<button class="action-button disabled" disabled>Get the in-depth report</button>`;
@@ -1522,7 +1531,7 @@
         eventSourceInstance = new EventSource(streamUrl);
         
         // Start stopwatch as soon as the connection is opened
-        eventSourceInstance.onopen = () => {
+        {% comment %} eventSourceInstance.onopen = () => {
           startStopwatch();
           streamStatus.textContent = 'Generating report, please wait...';
         };
@@ -1541,7 +1550,7 @@
         eventSourceInstance.onerror = (error) => {
           console.error('EventSource failed:', error);
           handleStreamEnd(true);
-        };
+        }; {% endcomment %}
       }
       closeModalButton.addEventListener('click', closeModal);
       modalOverlay.addEventListener('click', closeModal);
