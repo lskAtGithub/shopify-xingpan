@@ -1486,7 +1486,7 @@
       
       stateChoices.setChoices(choicesData, 'value', 'label', true);
   });
-  const cityData = [];
+  let cityData = [];
   stateEl.addEventListener('change', async (event) => {
       const stateId = event.detail.value;
       const choice = event.detail.choice;
