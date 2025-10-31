@@ -84,7 +84,6 @@
 {% javascript %}
   // 优化的图片懒加载淡入效果
   (function() {
-    console.log('图片懒加载系统初始化');
     // 确保只初始化一次图片懒加载逻辑
     if (window.imageLazyLoadInitialized !== true) {
       window.imageLazyLoadInitialized = true;
@@ -94,11 +93,9 @@
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const img = entry.target;
-            console.log(`图片进入视口，块ID: ${img.dataset.blockId}`);
             
             // 如果图片已经加载完成，直接添加loaded类
             if (img.complete && img.naturalHeight !== 0) {
-              console.log(`图片已加载完成，直接显示，块ID: ${img.dataset.blockId}`);
               img.classList.add('loaded');
               imageObserver.unobserve(img);
               return;
@@ -106,7 +103,6 @@
             
             // 图片加载完成后添加loaded类以触发淡入效果
             const handleLoad = function() {
-              console.log(`图片加载完成，开始淡入，块ID: ${img.dataset.blockId}`);
               img.classList.add('loaded');
               img.removeEventListener('load', handleLoad);
               img.removeEventListener('error', handleError);
@@ -114,7 +110,6 @@
             
             // 处理图片加载失败的情况
             const handleError = function() {
-              console.log(`图片加载失败，块ID: ${img.dataset.blockId}`);
               img.classList.add('loaded'); // 即使加载失败也显示占位符
               img.removeEventListener('load', handleLoad);
               img.removeEventListener('error', handleError);
@@ -135,19 +130,15 @@
       // 处理已存在的图片
       const processExistingImages = () => {
         const lazyImages = document.querySelectorAll('.image-lazy-load:not(.loaded)');
-        console.log(`找到 ${lazyImages.length} 张需要懒加载的图片`);
         lazyImages.forEach(img => {
-          console.log(`开始观察图片，块ID: ${img.dataset.blockId}`);
           imageObserver.observe(img);
         });
       };
       
       // 使用requestAnimationFrame确保DOM完全加载后再处理
       if (document.readyState === 'loading') {
-        console.log('DOM正在加载，等待DOMContentLoaded事件');
         document.addEventListener('DOMContentLoaded', processExistingImages);
       } else {
-        console.log('DOM已加载完成，立即处理图片');
         processExistingImages();
       }
       
@@ -165,7 +156,6 @@
         });
         
         if (shouldProcess) {
-          console.log('检测到DOM变化，重新处理图片');
           requestAnimationFrame(processExistingImages);
         }
       });
@@ -174,8 +164,6 @@
         childList: true,
         subtree: true
       });
-    } else {
-      console.log('图片懒加载系统已初始化，跳过');
     }
   })();
 {% endjavascript %}
