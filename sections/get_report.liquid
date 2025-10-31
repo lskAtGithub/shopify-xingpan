@@ -1486,7 +1486,7 @@
       
       stateChoices.setChoices(choicesData, 'value', 'label', true);
   });
-
+  const cityData = [];
   stateEl.addEventListener('change', async (event) => {
       const stateId = event.detail.value;
       const choice = event.detail.choice;
@@ -1516,12 +1516,21 @@
               longitude: item.longitude
           }
       }));
-      
+      cityData = choicesData;
       cityChoices.setChoices(choicesData, 'value', 'label', true);
   });
 
   cityEl.addEventListener('change', (event) => {
       const choice = event.detail.choice;
+      const val = event.detail.value;
+      if(val) {
+        cityData.forEach(item => {
+            if(item.value == val) {
+                lat = item.customProperties.latitude;
+                lon = item.customProperties.longitude;
+            }
+        });
+      }
       if (choice && choice.customProperties) {
           lat = choice.customProperties.latitude;
           lon = choice.customProperties.longitude;
