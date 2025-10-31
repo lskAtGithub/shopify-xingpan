@@ -1939,7 +1939,7 @@
       }
 
       async function renderModal(data) {
-        modal.style.display = 'flex';
+        
         tableBody.innerHTML = '';
         if (data.list.length > 0) {
           data.list.forEach((item, index) => {
@@ -2029,6 +2029,7 @@
             container.appendChild(card);
             scrollToBottom();
             spinner.style.display = 'none';
+            modal.style.display = 'flex';
           } catch (e) {
             console.error('Failed to load product', productTitle, e);
           }
