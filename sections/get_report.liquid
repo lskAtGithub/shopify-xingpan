@@ -1410,7 +1410,7 @@
        // --- API 调用函数 ---
     const fetchFromApi = async (params = {}) => {
       const query = new URLSearchParams(params).toString();
-      const url = `${API_BASE_URL}${query ? '?' + query : ''}`;
+      const url = `${API_URL}${query ? '?' + query : ''}`;
       try {
           const response = await fetch(url);
           if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
