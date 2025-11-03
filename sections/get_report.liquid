@@ -868,6 +868,9 @@
       .form-container {
         padding: 1rem !important;
       }
+      .grid-cols-responsive {
+        grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+      }
     }
     /* --- Tablet Styles (768px - 1024px) --- */
     @media (min-width: 768px) {
@@ -1383,7 +1386,7 @@
       countryChoices.clearStore();
       stateChoices.disable();
       cityChoices.disable();
-      countryChoices.setChoices([{ value: '', label: 'select countries', disabled: true, selected: true }], 'value', 'label', true);
+      countryChoices.setChoices([{ value: '', label: 'Select countries', disabled: true, selected: true }], 'value', 'label', true);
       
       const countries = await fetchFromApi();
       
@@ -1424,7 +1427,7 @@
       }
       
       stateChoices.enable();
-      stateChoices.setChoices([{ value: '', label: 'Loading states...', disabled: true, selected: true }], 'value', 'label', true);
+      stateChoices.setChoices([{ value: '', label: 'Select states', disabled: true, selected: true }], 'value', 'label', true);
       
       const states = await fetchFromApi({ countryId: countryId });
       
@@ -1457,7 +1460,7 @@
       }
 
       cityChoices.enable();
-      cityChoices.setChoices([{ value: '', label: 'Loading cities...', disabled: true, selected: true }], 'value', 'label', true);
+      cityChoices.setChoices([{ value: '', label: 'Select cities', disabled: true, selected: true }], 'value', 'label', true);
       
       const cities = await fetchFromApi({ stateId: stateId });
       
