@@ -1383,7 +1383,7 @@
       countryChoices.clearStore();
       stateChoices.disable();
       cityChoices.disable();
-      countryChoices.setChoices([{ value: '', label: 'Loading countries...', disabled: true, selected: true }], 'value', 'label', true);
+      countryChoices.setChoices([{ value: '', label: 'select countries', disabled: true, selected: true }], 'value', 'label', true);
       
       const countries = await fetchFromApi();
       
