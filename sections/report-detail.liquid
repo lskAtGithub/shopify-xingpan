@@ -46,22 +46,24 @@
 
       <div class="report-table-wrapper">
         <h3 style="text-align: center;">Chart Details</h3>
-        <table class="report-details-table" id="report-details-table">
-          <thead>
-            <tr>
-              <th>Zodiac Sign</th>
-              <th>Planet</th>
-              <th>Domicile/Exaltation</th>
-              <th>Zodiac Element</th>
-              <th>Planet Element Score</th>
-              <th>Domicile/Exaltation Bonus</th>
-              <th>House the Planet is in</th>
-              <th>House Element</th>
-              <th>House Element Score</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div style="overflow-x: auto;-webkit-overflow-scrolling: touch;">
+          <table class="report-details-table" id="report-details-table">
+            <thead>
+              <tr>
+                <th>Zodiac Sign</th>
+                <th>Planet</th>
+                <th>Domicile/Exaltation</th>
+                <th>Zodiac Element</th>
+                <th>Planet Element Score</th>
+                <th>Domicile/Exaltation Bonus</th>
+                <th>House the Planet is in</th>
+                <th>House Element</th>
+                <th>House Element Score</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
       
       <!-- The main content from API -->
@@ -106,8 +108,7 @@
 .report-dynamic-content .title311 { font-weight: 600; color: #0056b3; margin-bottom: 8px; }
 @media (max-width: 768px) { .report-page-container { padding: 20px 15px; width: 100%; } .report-header { flex-direction: column; gap: 20px; } .jason-report-box h2 { font-size: 24px; } .chart-container { flex-direction: column; } }
 .report-table-wrapper {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+   /* Smooth scrolling on iOS */
   margin: 2rem 0;
 }
 .report-table-wrapper .table-title {
