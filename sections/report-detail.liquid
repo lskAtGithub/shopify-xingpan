@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('download-pdf-link').href = API_BASE_URL + data.pdfPath;
 
         // --- 3. Inject the Main HTML Content ---
-        document.getElementById('report-dynamic-content').innerHTML = data.content;
+        document.getElementById('report-dynamic-content').innerHTML = data.content.replace('### Astrological Element Report  \n\n\n', '');
 
         // --- 4. Prepare Data and Render the Pie Chart ---
         const scores = params.itemScore;
