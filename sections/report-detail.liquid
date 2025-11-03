@@ -44,9 +44,9 @@
           </div>
       </div>
 
-      <div class="table-responsive-wrapper">
-        <div class="table-title">Chart Details</div>
-        <table class="report-table" id="report-table">
+      <div class="report-table-wrapper">
+        <h3 style="text-align: center;">Chart Details</h3>
+        <table class="report-details-table" id="report-details-table">
           <thead>
             <tr>
               <th>Zodiac Sign</th>
@@ -105,30 +105,30 @@
 .report-dynamic-content .item3 { border: 1px solid #4A90E2; padding: 20px; border-radius: 12px; margin-bottom: 15px; }
 .report-dynamic-content .title311 { font-weight: 600; color: #0056b3; margin-bottom: 8px; }
 @media (max-width: 768px) { .report-page-container { padding: 20px 15px; } .report-header { flex-direction: column; gap: 20px; } .jason-report-box h2 { font-size: 24px; } .chart-container { flex-direction: column; } }
-.table-responsive-wrapper {
+.report-table-wrapper {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-  margin: 2rem 4rem;
+  margin: 2rem 0;
 }
-.table-responsive-wrapper .table-title {
+.report-table-wrapper .table-title {
   font-size: 1.5rem;
   color: #000000;
   font-weight: 600;
   margin-bottom: 1rem;
   text-align: center;
 }
-.report-table {
+.report-details-table {
   width: 100%;
   min-width: 800px; /* Force scroll on small screens */
   border-collapse: collapse;
 }
-.report-table th,
-.report-table td {
+.report-details-table th,
+.report-details-table td {
   border: 1px solid #ddd;
   padding: 10px;
   text-align: left;
 }
-.report-table th {
+.report-details-table th {
   background: #f8f8f8;
   font-weight: 600;
 }
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loader = document.getElementById('report-loader');
     const content = document.getElementById('report-content');
     const container = document.getElementById('report-container');
-    const tableBody = document.querySelector('#report-table tbody');
+    const tableBody = document.querySelector('#report-details-table tbody');
 
     const API_BASE_URL = 'https://api.11starsastro.com';
 
