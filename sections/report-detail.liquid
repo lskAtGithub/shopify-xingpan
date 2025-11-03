@@ -43,6 +43,26 @@
               </div>
           </div>
       </div>
+
+      <div class="table-responsive-wrapper">
+        <div class="table-title">Chart Details</div>
+        <table class="report-table" id="report-table">
+          <thead>
+            <tr>
+              <th>Zodiac Sign</th>
+              <th>Planet</th>
+              <th>Domicile/Exaltation</th>
+              <th>Zodiac Element</th>
+              <th>Planet Element Score</th>
+              <th>Domicile/Exaltation Bonus</th>
+              <th>House the Planet is in</th>
+              <th>House Element</th>
+              <th>House Element Score</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
       
       <!-- The main content from API -->
       <div id="report-dynamic-content" class="report-dynamic-content">
@@ -85,6 +105,33 @@
 .report-dynamic-content .item3 { border: 1px solid #4A90E2; padding: 20px; border-radius: 12px; margin-bottom: 15px; }
 .report-dynamic-content .title311 { font-weight: 600; color: #0056b3; margin-bottom: 8px; }
 @media (max-width: 768px) { .report-page-container { padding: 20px 15px; } .report-header { flex-direction: column; gap: 20px; } .jason-report-box h2 { font-size: 24px; } .chart-container { flex-direction: column; } }
+.table-responsive-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  margin: 2rem 4rem;
+}
+.table-responsive-wrapper .table-title {
+  font-size: 1.5rem;
+  color: #000000;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.report-table {
+  width: 100%;
+  min-width: 800px; /* Force scroll on small screens */
+  border-collapse: collapse;
+}
+.report-table th,
+.report-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+.report-table th {
+  background: #f8f8f8;
+  font-weight: 600;
+}
 </style>
 
 <script>
@@ -92,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loader = document.getElementById('report-loader');
     const content = document.getElementById('report-content');
     const container = document.getElementById('report-container');
+    const tableBody = document.querySelector('#report-table tbody');
 
     const API_BASE_URL = 'https://api.11starsastro.com';
 
@@ -171,6 +219,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+
+        tableBody.innerHTML = '';
+        if (params.list.length > 0) {
+          params.list.forEach((item, index) => {
+            const miaoWang =
+              item.miao === 0 && item.wang === 0
+                ? 'none'
+                : (item.miao > 0 ? 'Domicile' : '') +
+                  (item.miao > 0 && item.wang > 0 ? '/' : '') +
+                  (item.wang > 0 ? 'Exalted' : '');
+
+            const row = `
+          <tr class="${index % 2 === 1 ? 'even-row' : ''}">
+            <td>${item.constellation}</td>
+            <td>${item.starName}</td>
+            <td>${miaoWang}</td>
+            <td>${item.zodiacSigns}</td>
+            <td>${item.starScore}</td>
+            <td>${item.miao + item.wang}</td>
+            <td>${item.houses ? item.houses : '/'}</td>
+            <td>${item.houses ? item.housesName : '/'}</td>
+            <td>${item.houses ? item.housesScore : '/'}</td>
+          </tr>`;
+            tableBody.insertAdjacentHTML('beforeend', row);
+          });
+        } else {
+          tableBody.innerHTML = `
+        <tr>
+          <td colspan="9" style="text-align: center; color: #999;">
+            没有找到匹配的数据
+          </td>
+        </tr>`;
+        }
     };
 
     const fetchReport = async () => {
