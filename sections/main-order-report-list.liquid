@@ -197,22 +197,17 @@
   </div>
   <!-- NEW: Info Modal for "Get Report" Click -->
   <div id="info-modal" class="info-modal" style="display: none;">
-    <div class="modal-overlay"></div>
-    <div class="modal-content">
+    <div class="info-modal-overlay"></div>
+    <div class="info-modal-content">
       <div class="modal-icon">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="64"
-          height="64"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 16 14"></polyline>
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+          <path d="M32 7C18.1932 7 7 18.1932 7 32C7 45.8068 18.1932 57 32 57C45.8068 57 57 45.8068 57 32C57 18.1932 45.8068 7 32 7ZM43.3613 36.5454H29.7296C29.1272 36.5454 28.5495 36.3063 28.1234 35.8806C27.6972 35.4548 27.4575 34.8774 27.4569 34.275V18.3636C27.4754 17.7735 27.7229 17.2138 28.1469 16.803C28.5709 16.3921 29.1381 16.1624 29.7285 16.1624C30.3189 16.1624 30.8861 16.3921 31.3101 16.803C31.734 17.2138 31.9815 17.7735 32 18.3636V32H43.3637C43.9664 32 44.5445 32.2394 44.9707 32.6657C45.3969 33.0919 45.6364 33.6699 45.6364 34.2727C45.6364 34.8755 45.3969 35.4535 44.9707 35.8797C44.5445 36.306 43.9664 36.5454 43.3637 36.5454H43.3614H43.3613Z" fill="url(#paint0_linear_3032_104)"/>
+          <defs>
+          <linearGradient id="paint0_linear_3032_104" x1="32" y1="7" x2="32" y2="57" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#222222"/>
+          <stop offset="1" stop-color="#666666"/>
+          </linearGradient>
+          </defs>
         </svg>
       </div>
       <p class="modal-text">
@@ -988,7 +983,7 @@
     padding: 15px;
   }
 
-  .info-modal .modal-overlay {
+  .info-modal .info-modal-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -998,7 +993,7 @@
     backdrop-filter: blur(3px); /* Optional: nice blur effect */
   }
 
-  .info-modal .modal-content {
+  .info-modal .info-modal-content {
     position: relative;
     background-color: #fff;
     padding: 40px 24px 24px;
@@ -1061,7 +1056,7 @@
     const pageContainer = document.querySelector('.order-report-page');
     const infoModal = document.getElementById('info-modal');
     const closeInfoModalButton = document.getElementById('close-info-modal-button');
-    const modalOverlay = infoModal.querySelector('.modal-overlay');
+    const modalOverlay = infoModal.querySelector('.info-modal-overlay');
 
     const openInfoModal = () => {
       infoModal.style.display = 'flex';
