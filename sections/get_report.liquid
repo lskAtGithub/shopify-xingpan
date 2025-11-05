@@ -65,16 +65,18 @@
             <!-- 日期时间选择器 -->
             <div class="form-group">
               <label for="birth-datetime">Birth Date & Time <span class="required">*</span></label>
-              <input
-                class="ipt datetime-local-en"
-                type="datetime-local"
-                lang="en"
-                id="birth-datetime"
-                name="birth_datetime"
-                required
-                value=""
-                placeholder="Select date and time"
-              >
+              <div class="datetime-local-container">
+                <input
+                  class="ipt datetime-local-en"
+                  type="datetime-local"
+                  lang="en"
+                  id="birth-datetime"
+                  name="birth_datetime"
+                  required
+                  value=""
+                  placeholder="Select date and time"
+                >
+              </div>
               <p style="font-size: 12px; color: #666;">
                 tips：If you don't know the exact time, choose the one you think is possible.
               </p>
@@ -480,7 +482,7 @@
 
     /* 日期时间选择器样式 */
     .get-report-section input[type='datetime-local'] {
-      width: 100%;
+      width: auto;
       padding: 0.75rem;
       border: 1px solid #d1d5db;
       border-radius: 0.5rem;
@@ -488,8 +490,12 @@
       transition: all 0.2s;
       background-color: #fff;
       box-sizing: border-box;
+      flex: 1;
     }
-
+    .datetime-local-container {
+      display: flex;
+      width: 100%;
+    }
     .get-report-section input[type='datetime-local']:focus {
       outline: none;
       border-color: #f97316;
