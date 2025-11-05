@@ -236,7 +236,7 @@
           </div>
         {% endcomment %}
 
-        <div class="chart-details-wrapper page-width">
+        <div class="chart-details-wrapper gr-chart-details-wrapper">
           <h3 class="chart-details-title">Chart Details</h3>
 
           <!-- The grid will be populated by JavaScript -->
@@ -833,11 +833,10 @@
       background: #f8f8f8;
       font-weight: 600;
     }
-
+    
     .canvas-box {
       position: relative;
-      width: 100%;
-      margin: 0 auto 2rem auto;
+      margin: 2rem 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -909,7 +908,7 @@
     }
 
     /* Recommended Product Styles */
-    #recommended-products {
+    #recommended-products, .gr-chart-details-wrapper {
       margin: 2rem 4rem;
     }
     .recommended-card {
@@ -1172,8 +1171,8 @@
       #stream-container {
         margin: 2rem 2.5rem;
       }
-      #recommended-products {
-        margin: 2rem;
+      #recommended-products, .gr-chart-details-wrapper, #stream-container {
+        margin: 2rem 20px;
       }
       .report-modal-content {
         width: 100%;
@@ -1219,6 +1218,15 @@
       100% {
         transform: rotate(360deg);
       }
+    }
+    #recommended-products, 
+    .gr-chart-details-wrapper, 
+    #stream-container,
+    .canvas-box {
+      margin: 2rem 20px;
+      padding: 20px;
+      border: 1px solid #eaeaea;
+      border-radius: 16px;
     }
   {% endstylesheet %}
 
