@@ -65,6 +65,15 @@
           </table>
         </div>
       </div>
+
+      <div class="chart-details-wrapper page-width" data-section-id="{{ section.id }}">
+        <h2 class="chart-details-title">Chart Details</h2>
+      
+        <!-- The grid will be populated by JavaScript -->
+        <div id="chart-details-grid-{{ section.id }}" class="chart-details-grid">
+          
+        </div>
+      </div>
       
       <!-- The main content from API -->
       <div id="report-dynamic-content" class="report-dynamic-content">
@@ -132,6 +141,76 @@
 .report-details-table th {
   background: #f8f8f8;
   font-weight: 600;
+}
+
+.chart-details-wrapper {
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.chart-details-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 30px 0;
+  color: #333;
+}
+.chart-details-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  min-height: 150px; /* Give it some height for the spinner */
+  align-items: center;
+  justify-content: center;
+}
+.element-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #EAEAEA;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.element-table th {
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #111;
+}
+.element-table td {
+  padding: 10px 12px;
+  border-top: 1px solid #EAEAEA;
+  color: #555;
+  font-size: 14px;
+}
+.element-table .score-value {
+  text-align: right;
+  font-weight: 500;
+  color: #333;
+}
+/* Loading Spinner */
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  grid-column: 1 / -1; /* Center the spinner across all columns */
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.error-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #d9534f;
+}
+
+@media (max-width: 768px) {
+  .chart-details-wrapper { padding: 20px; }
+  .chart-details-grid { grid-template-columns: repeat(2, 1fr); }
+  .chart-details-title { font-size: 20px; }
 }
 </style>
 
@@ -223,6 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tableBody.innerHTML = '';
         if (params.list.length > 0) {
+          renderTables(params.list)
           params.list.forEach((item, index) => {
             const miaoWang =
               item.miao === 0 && item.wang === 0
@@ -246,6 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tableBody.insertAdjacentHTML('beforeend', row);
           });
         } else {
+          gridContainer.innerHTML = `<p class="error-message">Could not load chart details. Please try again later.</p>`;
           tableBody.innerHTML = `
         <tr>
           <td colspan="9" style="text-align: center; color: #999;">
@@ -253,6 +334,51 @@ document.addEventListener('DOMContentLoaded', () => {
           </td>
         </tr>`;
         }
+    };
+    const gridContainer = document.getElementById(`chart-details-grid-${sectionId}`);
+    const renderTables = (scoreMap) => {
+      let html = '';
+      
+      // The order might not be guaranteed, so you can define it if needed.
+      const elementOrder = ['Earth', 'Air', 'Water', 'Fire'];
+      
+      elementOrder.forEach(elementName => {
+        const scores = scoreMap[elementName];
+        if (!scores) return;
+  
+        const colors = elementColors[elementName] || elementColors.default;
+        
+        let tableRows = '';
+        scores.forEach(scoreObject => {
+          const [key, value] = Object.entries(scoreObject)[0];
+          tableRows += `
+            <tr>
+              <td>${capitalizeFirstLetter(key)}</td>
+              <td class="score-value">${value}</td>
+            </tr>`;
+        });
+  
+        html += `
+          <div class="element-table-container">
+            <table class="element-table">
+              <thead>
+                <tr style="background-color: ${colors.header};">
+                  <th colspan="2">${elementName}</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tableRows}
+              </tbody>
+            </table>
+          </div>`;
+      });
+      
+      // Clear the loader and inject the new HTML
+      gridContainer.innerHTML = html;
+    };
+  
+    const capitalizeFirstLetter = (string) => {
+      return string.charAt(0).toUpperCase() + string.slice(1);
     };
 
     const fetchReport = async () => {
