@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tableBody.innerHTML = '';
         if (params.list.length > 0) {
-          renderTables(params.list)
+          renderTables(data.scoreMap)
           params.list.forEach((item, index) => {
             const miaoWang =
               item.miao === 0 && item.wang === 0
