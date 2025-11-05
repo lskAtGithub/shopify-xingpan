@@ -16,7 +16,7 @@
 {% else %}
   <div class="page-width order-report-page" data-customer-id="{{ customer.id }}">
     <!-- 1. 顶部通知栏 -->
-    <div id="order-report-notification" class="order-report-notification">
+    <div id="order-report-notification" class="order-report-notification" style="display: none;">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -1112,6 +1112,7 @@
     const fetchOrders = async (direction) => {
       loader.style.display = 'flex';
       listContainer.style.display = 'none';
+      orderReportNotification.style.display = 'none';
       paginationContainer.style.display = 'none';
 
       let pageInfoToSend = '';
@@ -1159,12 +1160,14 @@
         } else {
           emptyStateContainer.style.display = 'none';
           listContainer.style.display = 'block';
+          orderReportNotification.style.display = 'flex';
           renderOrders(orders); // Re-render with the new page's data
           renderPagination();
         }
       } catch (error) {
         console.error('Failed to fetch orders:', error);
         listContainer.style.display = 'none';
+        orderReportNotification.style.display = 'none';
         emptyStateContainer.style.display = 'block';
       } finally {
         loader.style.display = 'none';
