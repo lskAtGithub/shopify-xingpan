@@ -70,7 +70,7 @@
         <h2 class="chart-details-title">Chart Details</h2>
       
         <!-- The grid will be populated by JavaScript -->
-        <div id="chart-details-grid-{{ section.id }}" class="chart-details-grid">
+        <div id="chart-details-grid" class="chart-details-grid">
           
         </div>
       </div>
@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </tr>`;
         }
     };
-    const gridContainer = document.getElementById(`chart-details-grid-${sectionId}`);
+    const gridContainer = document.getElementById(`chart-details-grid`);
     const renderTables = (scoreMap) => {
       let html = '';
       
