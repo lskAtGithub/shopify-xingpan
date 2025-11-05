@@ -335,6 +335,13 @@ document.addEventListener('DOMContentLoaded', () => {
         </tr>`;
         }
     };
+    const elementColors = {
+      'Earth': { header: '#F5F1ED', border: '#DCD3CB' },
+      'Air': { header: '#EAF7EE', border: '#C9E4D0' },
+      'Water': { header: '#E9F1FA', border: '#C8D9EA' },
+      'Fire': { header: '#FFF9E0', border: '#F2E3B3' },
+      'default': { header: '#F0F0F0', border: '#DDDDDD' }
+    };
     const gridContainer = document.getElementById(`chart-details-grid`);
     const renderTables = (scoreMap) => {
       let html = '';
