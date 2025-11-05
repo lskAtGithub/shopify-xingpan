@@ -482,7 +482,6 @@
 
     /* 日期时间选择器样式 */
     .get-report-section input[type='datetime-local'] {
-      width: auto;
       padding: 0.75rem;
       border: 1px solid #d1d5db;
       border-radius: 0.5rem;
@@ -490,11 +489,13 @@
       transition: all 0.2s;
       background-color: #fff;
       box-sizing: border-box;
-      flex: 1;
+      width: 100%;
+      box-sizing: border-box;
     }
     .datetime-local-container {
-      display: flex;
+      display: grid;
       width: 100%;
+      grid-template-columns: 1fr; /* 单列占满 */
     }
     .get-report-section input[type='datetime-local']:focus {
       outline: none;
