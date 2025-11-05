@@ -402,6 +402,12 @@
       font-size: 20px;
     }
   }
+    /* --- Mobile Layout Styles (Single Table) --- */
+    .chart-details-table-mobile { width: 100%; border-collapse: collapse; border-radius: 8px; overflow: hidden; border: 1px solid #EAEAEA; }
+    .chart-details-table-mobile thead th { background-color: #111; color: #fff; padding: 12px; text-align: left; font-weight: 500; }
+    .chart-details-table-mobile tbody td { padding: 12px; border-top: 1px solid #EAEAEA; font-size: 14px; }
+    .chart-details-table-mobile .element-cell { font-weight: 600; text-align: center; vertical-align: middle; width: 30%; }
+    .chart-details-table-mobile .score-cell { text-align: right; }
 </style>
 
 <script>
@@ -491,7 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if(data.scoreMap) {
-          renderTables(data.scoreMap)
+          renderContent(data.scoreMap)
         } else {
           gridContainer.innerHTML = `<p class="error-message">Could not load chart details. Please try again later.</p>`;
         }
@@ -538,6 +544,34 @@ document.addEventListener('DOMContentLoaded', () => {
       'default': { header: '#F0F0F0', border: '#DDDDDD' }
     };
     const gridContainer = document.getElementById(`chart-details-grid`);
+    const generateMobileLayout = (scoreMap) => {
+      let tableRows = '';
+      const elementOrder = ['Earth', 'Air', 'Water', 'Fire'];
+  
+      elementOrder.forEach(elementName => {
+        const scores = scoreMap[elementName];
+        if (!scores || scores.length === 0) return;
+        const colors = elementColors[elementName] || elementColors.default;
+        
+        scores.forEach((scoreObject, index) => {
+          const [key, value] = Object.entries(scoreObject)[0];
+          tableRows += '<tr>';
+          if (index === 0) {
+            tableRows += `<td class="element-cell" rowspan="${scores.length}" style="background-color: ${colors.header};">${elementName}</td>`;
+          }
+          tableRows += `<td>${capitalizeFirstLetter(key)}</td><td class="score-cell">${value}</td>`;
+          tableRows += '</tr>';
+        });
+      });
+  
+      return `
+        <table class="chart-details-table-mobile">
+          <thead>
+            <tr><th>Element</th><th>Zodiac Sign</th><th>Score</th></tr>
+          </thead>
+          <tbody>${tableRows}</tbody>
+        </table>`;
+    };
     const renderTables = (scoreMap) => {
       let html = '';
       
@@ -577,6 +611,17 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Clear the loader and inject the new HTML
       gridContainer.innerHTML = html;
+    };
+
+    const renderContent = (loadedData) => {
+      if (!loadedData) return; // Don't render if data isn't loaded yet
+      
+      // Check screen size and render the correct layout
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        gridContainer.innerHTML = generateMobileLayout(loadedData);
+      } else {
+        renderTables(loadedData);
+      }
     };
   
     const capitalizeFirstLetter = (string) => {
