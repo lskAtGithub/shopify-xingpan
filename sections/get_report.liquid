@@ -2018,6 +2018,28 @@
         }
       }
 
+      function fixDateTimeLocalWidth() {
+        const datetimeInputs = document.querySelectorAll('input[type="datetime-local"]');
+        
+        datetimeInputs.forEach(input => {
+          // 获取父级实际宽度
+          const parentWidth = input.parentElement.offsetWidth;
+          
+          // 设置输入框宽度为父级宽度
+          input.style.width = parentWidth + 'px';
+          
+          // 监听窗口大小变化
+          const resizeObserver = new ResizeObserver(entries => {
+            for (let entry of entries) {
+              const newWidth = entry.contentRect.width;
+              input.style.width = newWidth + 'px';
+            }
+          });
+          
+          resizeObserver.observe(input.parentElement);
+        });
+      }
+      fixDateTimeLocalWidth();
       // 关闭弹窗
       closeBtn.addEventListener('click', function () {
         spinner.style.display = 'none';
