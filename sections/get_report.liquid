@@ -2102,7 +2102,7 @@
         return string.charAt(0).toUpperCase() + string.slice(1);
       };
       async function renderModal(data) {
-        renderTables(data.scoreMapData)
+        renderContent(data.scoreMapData)
         {% comment %} tableBody.innerHTML = '';
         if (data.list.length > 0) {
           data.list.forEach((item, index) => {
