@@ -497,39 +497,12 @@
     /* 移动端优化 */
     @media (max-width: 768px) {
       .get-report-section input[type='datetime-local'] {
-        font-size: 16px; /* 防止iOS缩放 */
+        font-size: 1rem; /* 防止iOS缩放 */
       }
     }
 
     /* 确保日期时间选择器使用英文显示 */
-    .datetime-local-en {
-      /* 强制使用英文语言环境 */
-      --webkit-calendar-picker-color: #333;
-    }
-
-    /* 针对Webkit浏览器的日期时间选择器样式 */
-    .datetime-local-en::-webkit-calendar-picker-indicator {
-      cursor: pointer;
-      filter: invert(0.5);
-    }
-
-    /* 设置日期时间选择器的语言环境 */
-    .datetime-local-en::-webkit-datetime-edit-text {
-      color: #333;
-      padding: 0 0.3em;
-    }
-
-    .datetime-local-en::-webkit-datetime-edit-month-field {
-      color: #333;
-    }
-
-    .datetime-local-en::-webkit-datetime-edit-day-field {
-      color: #333;
-    }
-
-    .datetime-local-en::-webkit-datetime-edit-year-field {
-      color: #333;
-    }
+    
     .get-report-section p.subheading {
       color: #333;
       font-size: 1rem;
