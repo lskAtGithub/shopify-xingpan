@@ -214,24 +214,33 @@
 
         <div id="remark"></div>
 
-        <div class="table-responsive-wrapper">
-          <div class="table-title">Chart Details</div>
-          <table class="report-table" id="report-table">
-            <thead>
-              <tr>
-                <th>Zodiac Sign</th>
-                <th>Planet</th>
-                <th>Domicile/Exaltation</th>
-                <th>Zodiac Element</th>
-                <th>Planet Element Score</th>
-                <th>Domicile/Exaltation Bonus</th>
-                <th>House the Planet is in</th>
-                <th>House Element</th>
-                <th>House Element Score</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+        {% comment %}
+          <div class="table-responsive-wrapper">
+            <div class="table-title">Chart Details</div>
+            <table class="report-table" id="report-table">
+              <thead>
+                <tr>
+                  <th>Zodiac Sign</th>
+                  <th>Planet</th>
+                  <th>Domicile/Exaltation</th>
+                  <th>Zodiac Element</th>
+                  <th>Planet Element Score</th>
+                  <th>Domicile/Exaltation Bonus</th>
+                  <th>House the Planet is in</th>
+                  <th>House Element</th>
+                  <th>House Element Score</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        {% endcomment %}
+
+        <div class="chart-details-wrapper page-width">
+          <h3 class="chart-details-title">Chart Details</h3>
+
+          <!-- The grid will be populated by JavaScript -->
+          <div id="chart-details-grid" class="chart-details-grid"></div>
         </div>
 
         <div id="stream-container">
@@ -279,6 +288,74 @@
   </div>
 
   {% stylesheet %}
+    .chart-details-wrapper,
+    .elemental-balance-section,
+    .report-dynamic-content {
+      background-color: #ffffff;
+      border-radius: 16px;
+      padding: 30px;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid #eeeeee;
+    }
+    .chart-details-title {
+      text-align: center;
+      font-weight: 600;
+      margin: 0 0 30px 0;
+      color: #333;
+    }
+    .chart-details-grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(4, 1fr);
+      min-height: 150px; /* Give it some height for the spinner */
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .grid-element-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #eaeaea;
+      overflow: hidden;
+    }
+    .grid-element-table th {
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 600;
+      color: #111;
+    }
+    .grid-element-table td {
+      padding: 10px 12px;
+      border-top: 1px solid #eaeaea;
+      color: #555;
+      font-size: 14px;
+    }
+    .grid-element-table .score-value {
+      text-align: right;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .error-message {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: #d9534f;
+    }
+
+    @media (max-width: 768px) {
+      .chart-details-wrapper,
+      .elemental-balance-section,
+      .report-dynamic-content {
+        padding: 20px;
+      }
+      .chart-details-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .chart-details-title {
+        font-size: 20px;
+      }
+    }
+
     .choices {
       margin-top: 5px;
     }
@@ -1661,7 +1738,7 @@
       const modelContent = document.getElementById('modelContent');
       const rmContent = document.getElementById('rmContent');
       const closeBtn = document.querySelector('.report-close');
-      const tableBody = document.querySelector('#report-table tbody');
+      {% comment %} const tableBody = document.querySelector('#report-table tbody'); {% endcomment %}
 
       function scrollToBottom() {
         rmContent.scrollTop = rmContent.scrollHeight;
@@ -1921,9 +1998,58 @@
         {% comment %} renderRecommendedProducts(res); {% endcomment %}
       }
 
-      async function renderModal(data) {
+      const elementColors = {
+        'Earth': { header: '#EEE6DF', border: '#EEE6DF' },
+        'Air': { header: '#E4F3E5', border: '#E4F3E5' },
+        'Water': { header: '#E4EFFB', border: '#E4EFFB' },
+        'Fire': { header: '#FFF8D9', border: '#FFF8D9' },
+        'default': { header: '#F0F0F0', border: '#DDDDDD' }
+      };
+      const gridContainer = document.getElementById(`chart-details-grid`);
+      const renderTables = (scoreMap) => {
+        let html = '';
         
-        tableBody.innerHTML = '';
+        // The order might not be guaranteed, so you can define it if needed.
+        const elementOrder = ['Earth', 'Air', 'Water', 'Fire'];
+        
+        elementOrder.forEach(elementName => {
+          const scores = scoreMap[elementName];
+          if (!scores) return;
+    
+          const colors = elementColors[elementName] || elementColors.default;
+          
+          let tableRows = '';
+          scores.forEach(scoreObject => {
+            const [key, value] = Object.entries(scoreObject)[0];
+            tableRows += `
+              <tr>
+                <td>${capitalizeFirstLetter(key)}</td>
+                <td class="score-value">${value}</td>
+              </tr>`;
+          });
+    
+          html += `
+            <div class="element-table-container">
+              <table class="grid-element-table">
+                <thead>
+                  <tr style="background-color: ${colors.header};">
+                    <th colspan="2">${elementName}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${tableRows}
+                </tbody>
+              </table>
+            </div>`;
+        });
+        
+        // Clear the loader and inject the new HTML
+        gridContainer.innerHTML = html;
+      };
+
+      async function renderModal(data) {
+        renderTables(data.scoreMap)
+        {% comment %} tableBody.innerHTML = '';
         if (data.list.length > 0) {
           data.list.forEach((item, index) => {
             const miaoWang =
@@ -1954,7 +2080,7 @@
             没有找到匹配的数据
           </td>
         </tr>`;
-        }
+        } {% endcomment %}
         newRenderElementChart(data);
         {% comment %} renderCanvas(data); {% endcomment %}
       }
