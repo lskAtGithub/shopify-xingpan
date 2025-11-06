@@ -1781,6 +1781,7 @@
                 remark.innerHTML = marked.parse(reason);
               } {% endcomment %}
               if(choices[i].finish_reason && choices[i].finish_reason === 'stop') {
+                streamData.textContent = streamData.replace(/[\u4e00-\u9fa5]/g, '');
                 renderRecommendedProducts(data);
               }
               scrollToBottom();

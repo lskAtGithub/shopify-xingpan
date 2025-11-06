@@ -440,6 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('report-address').textContent = data.address;
         document.getElementById('download-pdf-link').href = API_BASE_URL + data.pdfPath;
 
+        data.content = data.content.replace(/[\u4e00-\u9fa5]/g, '');
         document.getElementById('report-dynamic-content').innerHTML = data.content.replace('### Astrological Element Report  \n\n\n', '');
         const subtitleElementColors = [
           { name: 'Water Element', color: '#E5EFFB' },
