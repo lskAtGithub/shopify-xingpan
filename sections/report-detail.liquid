@@ -405,7 +405,7 @@
     /* --- Mobile Layout Styles (Single Table) --- */
     .chart-details-table-mobile { width: 100%; border-collapse: collapse; border-radius: 8px; overflow: hidden; border: 1px solid #EAEAEA; }
     .chart-details-table-mobile thead th { background-color: #111; color: #fff; padding: 12px; text-align: left; font-weight: 500; }
-    .chart-details-table-mobile tbody td { padding: 12px; border-top: 1px solid #EAEAEA; font-size: 14px; }
+    .chart-details-table-mobile tbody td { padding: 5px 12px; border-top: 1px solid #EAEAEA; font-size: 14px; }
     .chart-details-table-mobile .element-cell { font-weight: 600; text-align: center; vertical-align: middle; width: 30%; }
     .chart-details-table-mobile .score-cell { text-align: right; }
 </style>
@@ -440,9 +440,22 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('report-address').textContent = data.address;
         document.getElementById('download-pdf-link').href = API_BASE_URL + data.pdfPath;
 
-        // --- 3. Inject the Main HTML Content ---
         document.getElementById('report-dynamic-content').innerHTML = data.content.replace('### Astrological Element Report  \n\n\n', '');
-
+        const subtitleElementColors = [
+          { name: 'Water Element', color: '#E5EFFB' },
+          { name: 'Air Element', color: '#E5F3E5' },
+          { name: 'Earth Element', color: '#EDE6DF' },
+          { name: 'Fire Element', color: '#FEF8D9' }
+        ];
+        // --- 3. Inject the Main HTML Content ---
+        const subTitleDiv = document.querySelectorAll('#report-dynamic-content .div2 .subtitle');
+        subTitleDiv.forEach(div => { 
+          subtitleElementColors.forEach(color => { 
+            if(div.textContent.includes(color.name)) { 
+              div.parentElement.style.backgroundColor = color.color; 
+            }
+          });
+        });
         // --- 4. Prepare Data and Render the Pie Chart ---
         const scores = params.itemScore;
         const totalScore = Object.values(scores).reduce((sum, score) => sum + score, 0);
