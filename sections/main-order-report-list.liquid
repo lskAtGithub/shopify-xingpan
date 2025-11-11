@@ -1214,7 +1214,11 @@
         }
         return `<button class="action-button primary get-report-btn" data-order-id="${order.order_number}">Get the in-depth report</button>`;
       }
-      return `<button class="action-button disabled" disabled>Get the in-depth report</button>`;
+      if(order.report_info && order.report_info.id) {
+        return `<button class="action-button disabled" disabled>View Report</button>`;
+      }
+      return `<button class="action-button primary get-report-btn" data-order-id="${order.order_number}">Get the in-depth report</button>`;
+      {% comment %} return `<button class="action-button disabled" disabled>Get the in-depth report</button>`; {% endcomment %}
     };
     const renderOrders = (orders) => {
       tableBody.innerHTML = '';
