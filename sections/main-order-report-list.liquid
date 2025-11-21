@@ -82,7 +82,7 @@
           </defs>
         </svg>
         <p class="empty-state-text">You don’t have an energy report yet, go test it</p>
-        <a href="https://www.11starsastro.com/" class="button empty-state-button">Go test</a>
+        <a href="https://www.11astrelle.com/" class="button empty-state-button">Go test</a>
       </div>
     </div>
   </div>
@@ -1210,7 +1210,7 @@
           return `<button class="action-button disabled" disabled>In-depth report being generated</button>`;
         }
         if(order.report_info && order.report_info.id && order.report_info.pdfPath) {
-          return `<a target="_blank" href="https://www.11starsastro.com/pages/report?id=${order.report_info.uuid}" class="action-button primary">View Report</a>`;
+          return `<a target="_blank" href="https://www.11astrelle.com/pages/report?id=${order.report_info.uuid}" class="action-button primary">View Report</a>`;
         }
         return `<button class="action-button primary get-report-btn" data-order-id="${order.order_number}">Get the in-depth report</button>`;
       }
