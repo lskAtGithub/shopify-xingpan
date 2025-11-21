@@ -9,8 +9,8 @@
  */
 {
   "current": {
-    "logo": "shopify://shop_images/Group_12_5283e408-ed78-4042-bea6-428afaccc335.svg",
-    "favicon": "shopify://shop_images/ico.png",
+    "logo": "shopify://shop_images/logo2.svg",
+    "favicon": "shopify://shop_images/ico_386626d9-f27d-49a9-b63d-f4389ec7de9b.png",
     "type_body_font": "inter_n4",
     "type_subheading_font": "inter_n5",
     "type_heading_font": "inter_n7",
@@ -97,11 +97,6 @@
           "button_vertical_position": "lowest",
           "greeting_message": "Hey there! 👋Welcome to 11starts. What can I do for you?😉"
         }
-      },
-      "pagefly-page-builder": {
-        "type": "shopify://apps/pagefly-page-builder/blocks/app-embed/83e179f7-59a0-4589-8c66-c0dddf959200",
-        "disabled": false,
-        "settings": {}
       }
     },
     "color_schemes": {
