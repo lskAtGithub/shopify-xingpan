@@ -8,12 +8,12 @@
 <footer class="section-{{ section.id }} footer bg-gray-900 text-gray-300">
   <div class="footer-container">
     <div class="footer-content-box">
-
       <!-- Column 1: Brand Info (Always visible) -->
       <div class="footer-column footer-column--brand">
         <h3 class="text-white font-bold text-lg mb-6">11Astrelle</h3>
         <p class="footer-description mb-6">
-          Blending ancient astrological wisdom with the healing power of natural crystals to create unique art pieces that resonate with your elemental energy.
+          Blending ancient astrological wisdom with the healing power of natural crystals to create unique art pieces
+          that resonate with your elemental energy.
         </p>
         <div class="footer-social flex space-x-4">
           <a href="#" class="text-gray-400 hover:text-fire transition-colors"><i class="fa fa-instagram"></i></a>
@@ -28,8 +28,26 @@
         <button type="button" class="footer-accordion-trigger">
           <h3 class="text-white font-bold text-lg">Shop</h3>
           <span class="icon-wrapper">
-            <svg class="icon-plus" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-            <svg class="icon-minus" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" /></svg>
+            <svg
+              class="icon-plus"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            <svg
+              class="icon-minus"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+            </svg>
           </span>
         </button>
         <div class="footer-accordion-content">
@@ -49,8 +67,26 @@
         <button type="button" class="footer-accordion-trigger">
           <h3 class="text-white font-bold text-lg">About</h3>
           <span class="icon-wrapper">
-            <svg class="icon-plus" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-            <svg class="icon-minus" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" /></svg>
+            <svg
+              class="icon-plus"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            <svg
+              class="icon-minus"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+            </svg>
           </span>
         </button>
         <div class="footer-accordion-content">
@@ -70,8 +106,26 @@
         <button type="button" class="footer-accordion-trigger">
           <h3 class="text-white font-bold text-lg">Customer Service</h3>
           <span class="icon-wrapper">
-            <svg class="icon-plus" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-            <svg class="icon-minus" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" /></svg>
+            <svg
+              class="icon-plus"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            <svg
+              class="icon-minus"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+            </svg>
           </span>
         </button>
         <div class="footer-accordion-content">
@@ -87,14 +141,17 @@
       </div>
     </div>
 
-     {%- comment -%}
-      --- DYNAMIC FOOTER BOTTOM ---
+    {%- comment -%}
+      --- DYNAMIC AND CORRECTED FOOTER BOTTOM ---
       This block is now controlled by the settings in the schema.
     {%- endcomment -%}
     {%- if section.settings.show_footer_bottom -%}
       <div class="footer-bottom" style="opacity: {{ section.settings.bottom_opacity | divided_by: 100.0 }};">
         <p>
           {%- assign current_year = 'now' | date: '%Y' -%}
+          {%- comment -%}
+            CORRECTION: The string '{year}' needs to be enclosed in quotes for the replace filter.
+          {%- endcomment -%}
           {{ section.settings.copyright_text | replace: '{year}', current_year }}
         </p>
         {%- if section.settings.tagline_text != blank -%}
@@ -146,7 +203,7 @@
      .footer-social {
       justify-content: center;
     }
-    
+
     /* --- Accordion Styles (Mobile < 768px) --- */
     .footer-accordion-trigger {
       width: 100%;
@@ -193,7 +250,7 @@
     .footer-accordion-item.active .footer-accordion-content {
       max-height: 300px; /* Adjust if you have more links */
     }
-    @media (max-width: 767px) { 
+    @media (max-width: 767px) {
       .footer-accordion-item.active .footer-accordion-content{
         border-bottom: 1px solid #374151;
       }
@@ -261,11 +318,11 @@
   document.addEventListener('DOMContentLoaded', () => {
     const accordionItems = document.querySelectorAll('.footer-accordion-item');
 
-    accordionItems.forEach(item => {
+    accordionItems.forEach((item) => {
       const trigger = item.querySelector('.footer-accordion-trigger');
       trigger.addEventListener('click', () => {
         // Close other open items
-        accordionItems.forEach(otherItem => {
+        accordionItems.forEach((otherItem) => {
           if (otherItem !== item) {
             otherItem.classList.remove('active');
           }
