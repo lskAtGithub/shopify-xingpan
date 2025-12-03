@@ -15,25 +15,25 @@
         "philosophy_item_G8AdyP": {
           "type": "philosophy_item",
           "settings": {
-            "quote": "We believe that true luxury lies in the meticulous details and the artist's touch. Every piece is handcrafted, ensuring that the natural beauty of the crystals and the integrity of the design are honored from start to finish."
+            "quote": "Every birth is a unique cosmic event. In that precise moment, the stars align into a pattern that belongs only to you, and minerals crystallize deep within the earth in your honor. This is your astral chart and birthstone—a coordinate of life woven by time and space."
           }
         },
         "philosophy_item_HFez4A": {
           "type": "philosophy_item",
           "settings": {
-            "quote": "Our goal is to create more than just art; we aim to craft an experience that resonates on a deeper level. The fusion of astrological insight and elemental energy is designed to evoke a sense of connection and personal alignment."
+            "quote": "At 11Astrelle, we believe true home aesthetics are more than spatial decoration; they are nourishment for life. Much like the ancient North American folk practice of hanging stones or star charts representing family memory on the porch to connect heaven and earth and safeguard the home, we are dedicated to translating this profound humanistic care into objects that accompany your daily life."
           }
         },
         "philosophy_item_UTaHng": {
           "type": "philosophy_item",
           "settings": {
-            "quote": "Each collection is a testament to individuality, inspired by the unique cosmic blueprint that makes each of us who we are. We're committed to offering artwork that is not only beautiful but also deeply personal and meaningful."
+            "quote": "Our inspiration springs from the four fundamental elements that compose the world—Earth, Water, Fire, and Air. Using natural crystals and minerals corresponding to each element, we create our \"Elemental Crystal Art.\" These pieces are not merely art; they are anchors of energy. Whether you seek the stability and abundance of \"Earth,\" the flow and purification of \"Water,\" the passion and creativity of \"Fire,\" or the clarity and inspiration of \"Air,\" you can find harmonious resonance within your home."
           }
         },
         "philosophy_item_tDEPFk": {
           "type": "philosophy_item",
           "settings": {
-            "quote": "The standard for our materials is uncompromising. We source only the finest natural crystals and premium components, ensuring that each piece possesses a timeless quality designed to be cherished for years to come."
+            "quote": "Our \"Celestial Calendar,\" meanwhile, is a map of time drawn personally for you. It goes beyond marking dates; by aligning with the energetic flow of your birth chart, it offers guidance for connecting with your birthstone and lucky stones. It helps you replenish energy that may be lacking, move with the natural currents of life, and embrace good fortune in your everyday moments."
           }
         }
       },
@@ -44,8 +44,9 @@
         "philosophy_item_tDEPFk"
       ],
       "settings": {
-        "philosophy_image": "shopify://shop_images/02-min.png",
-        "philosophy_title": "Business Philosophy",
+        "philosophy_image": "shopify://shop_images/B0FK34W2YT.PT02.jpg",
+        "philosophy_title": "11Astrelle - Your Personal Order from the Cosmos",
+        "rotation_interval": 5,
         "expert_image": "shopify://shop_images/01-min.png",
         "expert_title": "Meet Our Trade Expert",
         "expert_quote": "I have a passion for art and am honored to be able to connect astrological signs with beautiful works of art. As a Trade Account Manager at 11starts, my goal is to create a memorable product experience for you and help you achieve a better mood and life.",
