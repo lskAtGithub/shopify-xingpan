@@ -2,6 +2,7 @@
   Optimized Footer Section
   - Implements a responsive layout for Desktop, Tablet, and Mobile.
   - Adds an accordion effect for menu columns on mobile devices (< 768px).
+  - The footer-bottom section is now configurable via the Theme Editor.
 {% endcomment %}
 
 <footer class="section-{{ section.id }} footer bg-gray-900 text-gray-300">
@@ -86,10 +87,21 @@
       </div>
     </div>
 
-    <div class="footer-bottom" style="opacity: 0.5;">
-      <p>&copy; {%- assign year = 'now' | date: '%Y' -%}{{ year }} 11STARS Crystal Art. All rights reserved.</p>
-      <p class="mt-2">Handcrafted with love and cosmic energy.</p>
-    </div>
+     {%- comment -%}
+      --- DYNAMIC FOOTER BOTTOM ---
+      This block is now controlled by the settings in the schema.
+    {%- endcomment -%}
+    {%- if section.settings.show_footer_bottom -%}
+      <div class="footer-bottom" style="opacity: {{ section.settings.bottom_opacity | divided_by: 100.0 }};">
+        <p>
+          {%- assign current_year = 'now' | date: '%Y' -%}
+          {{ section.settings.copyright_text | replace: '{year}', current_year }}
+        </p>
+        {%- if section.settings.tagline_text != blank -%}
+          <p class="mt-2">{{ section.settings.tagline_text }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
   </div>
 
   <style>
@@ -264,3 +276,52 @@
     });
   });
 </script>
+{%- comment -%}
+  --- NEW SCHEMA SECTION ---
+  This defines the settings that will appear in the Theme Editor.
+{%- endcomment -%}
+{% schema %}
+{
+  "name": "Configurable Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Footer Bottom Configuration"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_footer_bottom",
+      "label": "Show footer bottom section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright Text",
+      "default": "&copy; {year} 11STARS Crystal Art. All rights reserved.",
+      "info": "Use {year} to automatically display the current year."
+    },
+    {
+      "type": "text",
+      "id": "tagline_text",
+      "label": "Tagline",
+      "default": "Handcrafted with love and cosmic energy."
+    },
+    {
+      "type": "range",
+      "id": "bottom_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Bottom Section Opacity",
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "Configurable Footer"
+    }
+  ]
+}
+{% endschema %}
