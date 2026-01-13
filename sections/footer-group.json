@@ -19,7 +19,12 @@
     "footer": {
       "type": "footer",
       "name": "Footer",
-      "settings": {}
+      "settings": {
+        "show_footer_bottom": true,
+        "copyright_text": "© $year$ 11Astrelle Crystal Art. All rights reserved.",
+        "tagline_text": "Handcrafted with love and cosmic energy.",
+        "bottom_opacity": 50
+      }
     }
   },
   "order": [
