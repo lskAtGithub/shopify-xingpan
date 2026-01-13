@@ -2153,10 +2153,7 @@
           const bodyHtml = productsMap[key].bodyHtml;
           try {
             // Shopify 前端通过 title 获取 handle，再请求 JSON
-            const handle = productTitle
-              .toLowerCase()
-              .replace(/\s+/g, '-')
-              .replace(/[^a-z0-9-]/g, '');
+            const handle = productsMap[key].handle;
             
             const res = await fetch(`/products/${handle}.js`);
             if (!res.ok) continue;
